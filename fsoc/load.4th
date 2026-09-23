@@ -10,3 +10,4 @@ s" ../designs/blinky.4th" included
 s" blinky.4th" included
 s" soc/csr.4th" included
 s" soc/cores.4th" included
+s" soc.4th" included

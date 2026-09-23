@@ -52,9 +52,14 @@ fsoc --build
 
 ## Minimal SoC
 
-CSR export stays a library word (`csr-export-4th`, `csr-export-json` into `build/soc/software`). There is no builder command for it.
+`projects/soc_emul` is a builder task. `fsoc --build` assembles a short J1 program with the Forth assembler in `firmware/`, loads `firmware.hex` into the vendored J1 core, and runs Verilator until Ctrl+C. The core executes that image; the console then prints `t=<ns> uart tx o` and `t=<ns> uart tx k`. CSR files (`csr.4th`, `csr.json`) are written in the project directory.
 
-J1 simulation prints a Forth `ok` prompt (`cpu/j1/tb_prompt.v`).
+```bash
+cd projects/soc_emul
+fsoc --build
+```
+
+The next step is to build and boot a full Forth system on this core. `cpu/j1/j1_prompt.v` remains a separate Icarus check of the old UART model.
 
 ## Boards
 

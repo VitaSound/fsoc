@@ -10,3 +10,4 @@ s" ../designs/blinky.4th" included
 s" ../fsoc/blinky.4th" included
 s" ../fsoc/soc/csr.4th" included
 s" ../fsoc/soc/cores.4th" included
+s" ../fsoc/soc.4th" included

@@ -20,7 +20,7 @@ Full module bodies on Forth (fhdlgen expr-AST, structural `always`, no string RH
 
 ## Next
 
-- Vendor full J1a RTL from swapforth and boot swapforth under Icarus
+- Build and boot a full Forth system on the J1 core (`projects/soc_emul` already executes an assembled image that prints `ok`)
 - UART-compatible `emit`/`key` on J1; USB-UART on EP4CE10
 - Host CSR bridge (litex_server analogue)
 - Import more boards from litex-boards

@@ -4,6 +4,7 @@
 
 ### Added
 
+- SoC emulation `projects/soc_emul`: a Forth assembler builds a J1 image, the vendored core executes it, and the console prints `ok`.
 - Blinky emulation `main` lives in `fsoc/blinky_main.cpp`. `emu/` keeps only the shared `con` console.
 - `designs/blinky_top.4th` writes `top.v` only to the path the caller passes in `FSOC_BLINKY_TOP`.
 - Builder runs from the project directory: `fsoc --build`, `fsoc --load`, `fsoc --build --load`. Task and board come from `projects/*/target.4th`.

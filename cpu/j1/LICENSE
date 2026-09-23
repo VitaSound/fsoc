@@ -1,4 +1,4 @@
 J1 / J1a originally by James Bowman (swapforth), BSD-3-Clause.
-This directory ships a simulation wrapper and prompt model for fsoc.
-Full J1a RTL can be vendored from https://github.com/jamesbowman/swapforth
-when building a hardware image.
+`j1.v`, `stack2.v`, and `uart.v` are vendored from that project.
+`j1_wrap.v` loads `firmware.hex` and runs that core.
+`j1_prompt.v` is a separate UART model kept for its Icarus test.
