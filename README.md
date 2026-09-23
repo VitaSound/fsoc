@@ -13,10 +13,18 @@ cd fsoc && fmix packages.get
 fmix test
 ```
 
+Shell (see [feco shell-setup](https://github.com/VitaSound/feco/blob/main/docs/shell-setup.md)):
+
+```bash
+export FSOC_HOME="$HOME/fsoc"
+export PATH="$FSOC_HOME/bin:$PATH"
+fsoc version
+```
+
 ## Blinky
 
 ```bash
-FSOC_CMD=blinky gforth fsoc.4th
+fsoc blinky
 # or: gforth targets/blinky.4th
 iverilog -o tb build/blinky/blinky.v build/blinky/tb.v && vvp tb
 # Quartus project: build/blinky/blinky.qsf (needs Quartus Prime Lite)
@@ -25,7 +33,7 @@ iverilog -o tb build/blinky/blinky.v build/blinky/tb.v && vvp tb
 ## Minimal SoC
 
 ```bash
-FSOC_CMD=soc gforth fsoc.4th
+fsoc soc
 # software/csr.4th and csr.json in build/soc/software
 ```
 

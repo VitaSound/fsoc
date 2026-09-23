@@ -18,9 +18,9 @@ tools/fterm.4th line terminal (wait for ok)
 ```bash
 fmix packages.get
 fmix test
-gforth fsoc.4th          # help
-FSOC_CMD=blinky gforth fsoc.4th
-FSOC_CMD=soc gforth fsoc.4th
+fsoc version             # needs FSOC_HOME + PATH (see feco shell-setup)
+fsoc blinky
+fsoc soc
 ```
 
 Quartus is optional (often missing in WSL). Icarus covers blinky and the J1 prompt.

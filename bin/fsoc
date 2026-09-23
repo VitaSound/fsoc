@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# fsoc launcher (same pattern as fhdlgen bin/fhdlgen)
+: "${FSOC_HOME:=$HOME/fsoc}"
+GFORTH="${GFORTH:-gforth}"
+cd "$FSOC_HOME" || exit 1
+
+reset_tty() {
+    local tty_path
+    tty_path=$(tty 2>/dev/null || true)
+
+    if [ -n "$tty_path" ] && [ "$tty_path" != "not a tty" ] && [ -r "$tty_path" ] && [ -w "$tty_path" ]; then
+        stty sane < "$tty_path" 2>/dev/null || true
+        printf '\033[?2004l' > "$tty_path" 2>/dev/null || true
+        local _ch
+        while IFS= read -r -s -t 0.02 -n 1 _ch < "$tty_path"; do
+            :
+        done
+    else
+        stty sane 2>/dev/null || true
+        printf '\033[?2004l' 2>/dev/null || true
+    fi
+}
+
+reset_tty
+
+if [ $# -eq 0 ]; then
+    FSOC_CMD=help
+    FSOC_PARAM=
+else
+    FSOC_CMD=$1
+    shift
+    FSOC_PARAM=$*
+fi
+export FSOC_CMD FSOC_PARAM
+
+set +e
+"$GFORTH" "$FSOC_HOME/fsoc.4th"
+status=$?
+set -e
+
+reset_tty
+
+exit "$status"

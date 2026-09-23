@@ -1,10 +1,10 @@
-\ fsoc/load.4th — package-root relative (CLI). Tests use tests/load.4th.
+\ fsoc/load.4th — paths relative to this file (fsoc/)
 
-s" forth-packages/fenum/0.1.1/fenum-bs.4th" included
-s" fsoc/utils.4th" included
-s" fsoc/platform.4th" included
-s" fsoc/toolchains/quartus.4th" included
-s" fsoc/toolchains/icarus.4th" included
-s" fsoc/blinky.4th" included
-s" fsoc/soc/csr.4th" included
-s" fsoc/soc/cores.4th" included
+s" ../forth-packages/fenum/0.1.1/fenum-bs.4th" included
+s" utils.4th" included
+s" platform.4th" included
+s" toolchains/quartus.4th" included
+s" toolchains/icarus.4th" included
+s" blinky.4th" included
+s" soc/csr.4th" included
+s" soc/cores.4th" included
