@@ -11,8 +11,8 @@
 ## Blinky architecture (current)
 
 - Task: leaf [`rtl/blinky.v`](../rtl/blinky.v) (`clk` / `led`, `LED_BIT` default 25) plus [`designs/blinky_top.4th`](../designs/blinky_top.4th)
-- Build `emulation`: [`targets/emulation.4th`](../targets/emulation.4th) uses `LED_BIT=25` and Verilator in realtime until Ctrl+C. [`emu/con.h`](../emu/con.h) prints `t=<ns> pin led <value>` only on change (`con_uart` is the same channel for a decoded serial byte). `fsoc blinky` loads the task here
-- Build per board: [`targets/quartus.4th`](../targets/quartus.4th) `<board>` writes `build/blinky/<board>/` (`.qsf` maps `clk50` to `clk` and `user_led` to `led`). Boards: `vitasound_ep4ce10`, `rz_easyfpga`
+- Working solutions under [`projects/`](../projects/): `blinky_emul` (Verilator realtime until Ctrl+C; [`emu/con.h`](../emu/con.h) prints `t=<ns> pin led <value>` on change), `blinky_vitasound_ep4ce10`, `blinky_rz_easyfpga`
+- Emit: from `projects/blinky_emul`, `fsoc --build` (sim.sh from [`targets/emulation.4th`](../targets/emulation.4th), then Verilator until Ctrl+C); from `projects/blinky_<board>`, `fsoc --build` (`.qsf` from [`targets/quartus.4th`](../targets/quartus.4th); the task maps `clk50`→`clk` and `user_led`→`led`). Task and board are in `target.4th`
 
 ## Path 1 — later (not a blinky blocker)
 

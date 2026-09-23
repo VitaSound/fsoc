@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # fsoc launcher (same pattern as fhdlgen bin/fhdlgen)
 : "${FSOC_HOME:=$HOME/fsoc}"
+FSOC_HOME=$(cd "$FSOC_HOME" && pwd) || exit 1
+export FSOC_HOME
 GFORTH="${GFORTH:-gforth}"
-cd "$FSOC_HOME" || exit 1
 
 reset_tty() {
     local tty_path
@@ -21,23 +22,17 @@ reset_tty() {
     fi
 }
 
-reset_tty
-
-if [ $# -eq 0 ]; then
-    FSOC_CMD=help
-    FSOC_PARAM=
-else
-    FSOC_CMD=$1
-    shift
-    FSOC_PARAM=$*
+if [ -t 0 ] && [ -t 1 ]; then
+    reset_tty
 fi
-export FSOC_CMD FSOC_PARAM
 
 set +e
-"$GFORTH" "$FSOC_HOME/fsoc.4th"
+"$GFORTH" "$FSOC_HOME/fsoc.4th" "$@"
 status=$?
 set -e
 
-reset_tty
+if [ -t 0 ] && [ -t 1 ]; then
+    reset_tty
+fi
 
 exit "$status"

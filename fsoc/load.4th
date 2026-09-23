@@ -2,6 +2,7 @@
 
 s" ../forth-packages/fenum/0.1.1/fenum-bs.4th" included
 s" utils.4th" included
+s" ../targets/emulation.4th" included
 s" platform.4th" included
 s" toolchains/quartus.4th" included
 s" toolchains/icarus.4th" included

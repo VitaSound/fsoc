@@ -2,16 +2,12 @@
 \
 \ Leaf logic stays in rtl/blinky.v. This file only includes that module,
 \ declares its ports, and instantiates it as top.
-\ Output path: FSOC_BLINKY_TOP if set (emit dir), else build/blinky or
-\ ../build/blinky depending on cwd (repo root / tests vs targets/).
+\ The caller supplies the output path in FSOC_BLINKY_TOP. This design
+\ does not name a project directory or a launch method.
 
 : blinky-top-out@ ( - c-addr u )
-    s" FSOC_BLINKY_TOP" getenv dup IF EXIT THEN
-    2drop
-    s" build/blinky" file-status nip 0= IF
-        s" build/blinky/top.v" EXIT
-    THEN
-    s" ../build/blinky/top.v" ;
+    s" FSOC_BLINKY_TOP" getenv
+    dup 0= IF true abort" FSOC_BLINKY_TOP unset" THEN ;
 
 : blinky-maybe-led-bit ( - )
     s" FSOC_BLINKY_LED_BIT" getenv dup IF

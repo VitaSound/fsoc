@@ -1,4 +1,8 @@
 build/
+projects/*
+!projects/*/
+projects/*/*
+!projects/*/target.4th
 forth-packages/
 .fcov/
 .fmcp/

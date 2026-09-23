@@ -23,35 +23,36 @@ fsoc version
 
 ## Blinky
 
-Blinky is one task. The leaf is [`rtl/blinky.v`](rtl/blinky.v) (`clk` / `led`, `LED_BIT` defaults to 25). [`designs/blinky_top.4th`](designs/blinky_top.4th) includes that file and instantiates it as `top`. Each load is its own directory:
+Blinky is one task. The leaf is [`rtl/blinky.v`](rtl/blinky.v) (`clk` / `led`, `LED_BIT` defaults to 25). [`designs/blinky_top.4th`](designs/blinky_top.4th) includes that file and instantiates it as `top`. Working solutions (each with its own copies of `top.v` / `blinky.v` and a committed `target.4th`) live under [`projects/`](projects/):
 
 ```text
-build/blinky/emulation/            Verilator realtime, LED_BIT=25, console pin events
-build/blinky/vitasound_ep4ce10/    Quartus .qsf
-build/blinky/rz_easyfpga/          Quartus .qsf
+projects/blinky_emul/                  Verilator realtime, LED_BIT=25, console pin events
+projects/blinky_vitasound_ep4ce10/     Quartus .qsf
+projects/blinky_rz_easyfpga/           Quartus .qsf
 ```
 
-Emulation is Verilator. It runs in realtime (50 MHz wall pace) until Ctrl+C. The console prints one line per event, not per clock: `t=<ns> pin led <value>` when `led` changes (`LED_BIT=25`, ~0.67 s). The same printer is `con_uart` for a future serial decoder (one line per received byte).
+Run `fsoc` from the project directory. The task and the board are in `target.4th`, not on the command line.
+
+Emulation is Verilator. `fsoc --build` emits the project and runs in realtime (50 MHz wall pace) until Ctrl+C. The console prints one line per event, not per clock: `t=<ns> pin led <value>` when `led` changes (`LED_BIT=25`, ~0.67 s). The same printer is `con_uart` for a future serial decoder (one line per received byte).
 
 ```bash
-fsoc blinky
-cd build/blinky/emulation && sh sim.sh
+cd projects/blinky_emul
+fsoc --build
 ```
 
-Quartus (one target, board name picks the directory and the pins; Quartus itself is not run here):
+Quartus (`--build` writes the project files and does not run Quartus; the task maps `clk50`→`clk` and `user_led`→`led`). `--load` programs the board. On emulation `--load` does nothing.
 
 ```bash
-cd targets
-gforth quartus.4th vitasound_ep4ce10
-gforth quartus.4th rz_easyfpga
+cd projects/blinky_vitasound_ep4ce10
+fsoc --build
+fsoc --build --load
+cd ../blinky_rz_easyfpga
+fsoc --build
 ```
 
 ## Minimal SoC
 
-```bash
-fsoc soc
-# software/csr.4th and csr.json in build/soc/software
-```
+CSR export stays a library word (`csr-export-4th`, `csr-export-json` into `build/soc/software`). There is no builder command for it.
 
 J1 simulation prints a Forth `ok` prompt (`cpu/j1/tb_prompt.v`).
 

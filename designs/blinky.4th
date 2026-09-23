@@ -8,11 +8,21 @@
     2swap 2dup file-status nip 0= IF 2swap 2drop EXIT THEN
     2drop ;
 
+\ First existing file wins. far is ../../ (project dir), mid is ../ (tests/),
+\ near is a bare path (repo root).
+: blinky-pick3 ( far-a far-u mid-a mid-u near-a near-u - c-addr u )
+    2>r 2>r
+    2dup file-status nip 0= IF 2r> 2drop 2r> 2drop EXIT THEN
+    2drop
+    2r> 2dup file-status nip 0= IF 2r> 2drop EXIT THEN
+    2drop
+    2r> ;
+
 : blinky-rtl@ ( - c-addr u )
-    s" ../rtl/blinky.v" s" rtl/blinky.v" blinky-pick-path ;
+    s" ../../rtl/blinky.v" s" ../rtl/blinky.v" s" rtl/blinky.v" blinky-pick3 ;
 
 : blinky-tb@ ( - c-addr u )
-    s" ../rtl/tb_blinky.v" s" rtl/tb_blinky.v" blinky-pick-path ;
+    s" ../../rtl/tb_blinky.v" s" ../rtl/tb_blinky.v" s" rtl/tb_blinky.v" blinky-pick3 ;
 
 : blinky-modname ( - c-addr u )
     s" blinky" ;

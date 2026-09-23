@@ -10,11 +10,40 @@ context: |
   Правила агента: AGENTS.md.
   Проверка: fmix test, flint, fcov.
 
+  Слои:
+  - rtl/ — лист Verilog
+  - designs/ — топ fhdlgen
+  - boards/ — платформа
+  - targets/ — тулчейн без имени задачи
+  - emu/ — консоль pin/uart
+  - projects/<задача>_<эмуляция-или-плата>/ — рабочая копия
+  - fsoc — билдер; задача и плата в target.4th, не в аргументах команды
+
+  Уже сделано:
+  - rtl/blinky.v с LED_BIT=25 и счётчиком = 0
+  - топ из designs/blinky_top.4th
+  - каталоги blinky_emul, blinky_vitasound_ep4ce10, blinky_rz_easyfpga со своими копиями top.v
+  - эмуляция Verilator 4.038, такт 50 МГц из C++ (полупериод 10 нс), реалтайм до Ctrl+C
+  - консоль печатает t=<ns> pin led <значение> только при смене уровня
+  - uart того же вида (t=<ns> uart <имя> <байт>), blinky этот канал не вызывает
+  - clk50→clk, user_led→led
+  - VitaSound: PIN_23 и PIN_86, DEVICE EP4CE10E22C8
+  - RZ-EasyFPGA: PIN_87, DEVICE EP4CE6E22C8
+
 rules:
   specs:
     - Scenario формулировать через Forth-DSL и ожидаемые артефакты (.v, .qsf, csr.4th)
   design:
     - Не сплющивать дизайн в один Verilog; иерархия через файлы и инстансы
+    - Абстракции не просачиваются. designs/ не называет каталог проекта, плату и способ запуска: путь выходного файла задаёт вызывающий. targets/ не знает имя задачи. boards/ не знает задачу. emu/ — только общая консоль pin/uart; main задачи лежит рядом с задачей. Нижний слой не подставляет каталог верхнего, если путь не передан
+    - Таргет не знает имя задачи (blinky). Имя задачи и плата живут в target.4th
+    - setenv в Gforth не вызывать: вызов падает. FSOC_* передавать в строке system; оболочка может экспортировать переменные до старта Gforth
+    - Путь брать через get-dir. expand-file ищет по Forth-пути и может взять чужой файл
+    - included платы и request сорят стек: каталог проекта сохранить в буфер до include
+    - IF и abort" только внутри определения
+    - next-arg сразу копировать в свой буфер: следующий разбор затирает строку аргумента
+    - fhdlgen вызывать как ${FHDLGEN_HOME:-$HOME/fhdlgen}/bin/fhdlgen
+    - Путь склеивать через fsoc-append по фактической длине префикса. Запись префикса ../projects/blinky_ длиной 19 со смещением 18 затирала _ и давала каталоги blinkyvitasound_ep4ce10 и blinkyrz_easyfpga
   tasks:
     - Новое поведение покрывать fmix test
 

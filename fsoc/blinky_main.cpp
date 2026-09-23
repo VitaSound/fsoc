@@ -1,4 +1,5 @@
-// Blinky emulation main. Clocks top from C++ (Verilator 4 ignores #delays).
+// Blinky task emulation main. Lives with the task, not in emu/.
+// emu/con.h is the shared console. Clocks top from C++ (Verilator 4 ignores #delays).
 // led is reported through con_pin, so only changes reach the console.
 //
 // Runs until Ctrl+C. Wall pace matches sim time at each pin event
