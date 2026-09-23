@@ -1,0 +1,24 @@
+schema: spec-driven
+
+context: |
+  Language: Russian
+  All artifacts must be written in Russian.
+  Keep OpenSpec structural headings and SHALL/MUST keywords in English.
+
+  Проект: fsoc — Forth-native SoC builder (аналог LiteX): платы, тулчейны, CSR, J1, прошивка.
+  Ядро HDL — fhdlgen. Ядра звука/MIDI — hdl-modules.
+  Правила агента: AGENTS.md.
+  Проверка: fmix test, flint, fcov.
+
+rules:
+  specs:
+    - Scenario формулировать через Forth-DSL и ожидаемые артефакты (.v, .qsf, csr.4th)
+  design:
+    - Не сплющивать дизайн в один Verilog; иерархия через файлы и инстансы
+  tasks:
+    - Новое поведение покрывать fmix test
+
+operations:
+  apply:
+    guidance:
+      - Перед завершением прогонять fmix test; обновлять CHANGELOG.md

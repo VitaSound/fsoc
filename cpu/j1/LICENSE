@@ -1,0 +1,4 @@
+J1 / J1a originally by James Bowman (swapforth), BSD-3-Clause.
+This directory ships a simulation wrapper and prompt model for fsoc.
+Full J1a RTL can be vendored from https://github.com/jamesbowman/swapforth
+when building a hardware image.

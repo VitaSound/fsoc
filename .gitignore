@@ -1,0 +1,7 @@
+build/
+forth-packages/
+.fcov/
+.fmcp/
+*.o
+out.vcd
+/tmp/
