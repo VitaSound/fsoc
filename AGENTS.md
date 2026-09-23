@@ -7,15 +7,16 @@ Forth-native SoC builder (LiteX analogue) for VitaSound. Host language is **Gfor
 ```
 fsoc/           IR + DSL + emit
 boards/         vitasound_ep4ce10, rz_easyfpga, ep2c5_mini
-designs/        Forth design units (path to RTL files; no Verilog body strings)
+designs/        Forth design units (fhdlgen top; leaf RTL stays a .v file)
+emu/            Verilator console: con_pin (level changes), con_uart (decoded bytes)
 rtl/            Pure Verilog (blinky.v, …)
-targets/        blinky, base_soc
+targets/        emulation, quartus (base_soc is still a bundled SoC script)
 cpu/j1/         J1a wrapper, prompt UART model, LICENSE
 firmware/       csr HAL export, hex2readmem, FOOTSWITCH-SCAN
 tools/fterm.4th line terminal (wait for ok)
 ```
 
-Blinky (path 2): logic in `rtl/blinky.v`; `designs/blinky.4th` + targets only wire board/toolchain. Full Forth generation of `always` (path 1) waits on fhdlgen expr-AST.
+Blinky is one task (`rtl/blinky.v` + fhdlgen `top`). Builds: `build/blinky/emulation` (Verilator realtime until Ctrl+C; `emu/con` prints `t=<ns> pin led <value>` on change; `con_uart` for a future decoded serial byte), `build/blinky/vitasound_ep4ce10` and `build/blinky/rz_easyfpga` (Quartus `.qsf`, default `LED_BIT` 25). `targets/quartus.4th` takes the board name. `always` is not generated from Forth strings.
 ## Commands
 
 ```bash

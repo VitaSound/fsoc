@@ -1,4 +1,5 @@
-\ fsoc/blinky.4th — emit build dir from rtl/*.v (path 2: RTL files only)
+\ fsoc/blinky.4th — blinky task: copy rtl/blinky.v and emit top.v
+\ Targets call blinky-emit-emulation or blinky-emit-quartus.
 
 variable b-dir-a
 variable b-dir-u
@@ -55,8 +56,8 @@ variable cp-mid-u
     s" set_global_assignment -name FAMILY Cyclone IV E" bq-put bq-nl
     s" set_global_assignment -name DEVICE " bq-put
     plat.device@ bq-put bq-nl
-    s" set_global_assignment -name TOP_LEVEL_ENTITY blinky" bq-put bq-nl
-    s" set_global_assignment -name VERILOG_FILE blinky.v" bq-put bq-nl
+    s" set_global_assignment -name TOP_LEVEL_ENTITY top" bq-put bq-nl
+    s" set_global_assignment -name VERILOG_FILE top.v" bq-put bq-nl
     s" clk50" 0 s" clk" blinky-qsf-pin
     s" user_led" 0 s" led" blinky-qsf-pin
     bq-buf @ bq-len @ fsoc-write-file ;
@@ -74,13 +75,55 @@ variable cp-mid-u
     fsoc-write-file ;
 
 : blinky-write-sim-sh ( c-addr-path u - )
-    s\" #!/bin/sh\nset -e\niverilog -o tb blinky.v tb.v\nvvp tb\n"
+    s\" #!/bin/sh\nset -e\ncd \"$(dirname \"$0\")\"\nverilator -cc --exe -Mdir obj_dir -CFLAGS \"-I..\" --top-module top top.v blinky_main.cpp con.cc >build.log 2>&1 || { cat build.log >&2; exit 1; }\nmake -C obj_dir -f Vtop.mk -j >>build.log 2>&1 || { cat build.log >&2; exit 1; }\n./obj_dir/Vtop\n"
     fsoc-write-file ;
 
-: blinky-write-lint-sh ( c-addr-path u - )
-    s\" #!/bin/sh\nset -e\nverilator --lint-only blinky.v\n"
-    fsoc-write-file ;
+: blinky-emu-file ( c-addr u - c-addr u )
+    2dup s" ../emu/" 2swap fsoc-append
+    2dup file-status nip 0= IF 2nip EXIT THEN
+    2drop
+    s" emu/" 2swap fsoc-append ;
 
+\ fhdlgen build of designs/blinky_top.4th. Out path is the emit dir.
+\ cwd + relative path. expand-file searches the Forth path and can
+\ pick a stale file from another directory instead of this process's cwd.
+create blinky-cwd-buf 1024 allot
+
+: blinky-cwd@ ( - c-addr u )
+    blinky-cwd-buf 1024 get-dir ;
+
+: blinky-abs ( c-addr u - c-addr u )
+    dup 0= IF EXIT THEN
+    over c@ [char] / = IF EXIT THEN
+    blinky-cwd@ s" /" fsoc-append
+    2swap fsoc-append ;
+
+: blinky-top-src@ ( - c-addr u )
+    s" ../designs/blinky_top.4th" s" designs/blinky_top.4th" blinky-pick-path
+    blinky-abs ;
+
+variable blinky-led-a
+variable blinky-led-u
+
+: blinky-led-clear ( - )  0 blinky-led-u ! ;
+
+: blinky-gen-top ( - )
+    blinky-led-u @ IF
+        s" FSOC_BLINKY_LED_BIT=" blinky-led-a @ blinky-led-u @ fsoc-append
+        s"  " fsoc-append
+    ELSE
+        s" "
+    THEN
+    s" FSOC_BLINKY_TOP=" fsoc-append
+    b-dir-a @ b-dir-u @ s" /top.v" fsoc-append
+    blinky-abs fsoc-append
+    s"  ${FHDLGEN_HOME:-$HOME/fhdlgen}/bin/fhdlgen build " fsoc-append
+    blinky-top-src@ fsoc-append
+    2dup system
+    fsoc-str-free
+    $? 0= 0= IF abort" fhdlgen build blinky top failed" THEN ;
+
+\ Task only: blinky.v, tb.v, top.v. No board, no toolchain scripts.
 : blinky-emit-dir ( c-addr-dir u - )
     b-dir-u ! b-dir-a !
     s" mkdir -p " b-dir-a @ b-dir-u @ fsoc-append
@@ -88,9 +131,35 @@ variable cp-mid-u
     fsoc-str-free
     blinky-rtl@ s" /blinky.v" blinky-cp
     blinky-tb@ s" /tb.v" blinky-cp
-    s" /sim.sh" blinky-join blinky-write-sim-sh
-    s" /lint.sh" blinky-join blinky-write-lint-sh
+    blinky-gen-top ;
+
+\ Target emulation: Verilator clocks the design. con_pin prints led changes.
+\ Default LED_BIT=25 (~0.67 s blink at 50 MHz). Preset blinky-led-* to override.
+: blinky-emit-emulation ( c-addr-dir u - )
+    blinky-led-u @ 0= IF s" 25" blinky-led-u ! blinky-led-a ! THEN
+    blinky-emit-dir
+    blinky-led-clear
+    s" con.h" blinky-emu-file s" /con.h" blinky-cp
+    s" con.cc" blinky-emu-file s" /con.cc" blinky-cp
+    s" blinky_main.cpp" blinky-emu-file s" /blinky_main.cpp" blinky-cp
+    s" /sim.sh" blinky-join blinky-write-sim-sh ;
+
+\ Target quartus: task Verilog (default LED_BIT) plus project files.
+\ Board must already be requested.
+: blinky-emit-quartus ( c-addr-dir u - )
+    blinky-led-clear
+    blinky-emit-dir
     s" /blinky.qsf" blinky-join blinky-write-qsf
     s" /blinky.sdc" blinky-join blinky-write-sdc
     s" /build.sh" blinky-join blinky-write-build-sh
     s" /load.sh" blinky-join blinky-write-load-sh ;
+
+\ Include boards/<name>.4th. file-status uses cwd; included gets an absolute path.
+: blinky-load-board ( c-addr u - )
+    2dup s" ../boards/" 2swap fsoc-append
+    s" .4th" fsoc-append
+    2dup file-status nip 0= IF 2nip blinky-abs included EXIT THEN
+    2drop
+    s" boards/" 2swap fsoc-append
+    s" .4th" fsoc-append
+    blinky-abs included ;

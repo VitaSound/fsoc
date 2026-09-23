@@ -8,15 +8,15 @@
 - CSR + uart/gpio/timer/ctrl
 - J1 wrapper, prompt sim, fterm, FOOTSWITCH-SCAN host
 
-## Blinky architecture (path 2 — current)
+## Blinky architecture (current)
 
-- Logic: pure [`rtl/blinky.v`](../rtl/blinky.v) (`clk` / `led`)
-- Forth: [`designs/blinky.4th`](../designs/blinky.4th) names the file; targets copy it and emit tooling
-- Board pins mapped in `.qsf` (`clk50`→`clk`, `user_led`→`led`); no Verilog body as Forth strings
+- Task: leaf [`rtl/blinky.v`](../rtl/blinky.v) (`clk` / `led`, `LED_BIT` default 25) plus [`designs/blinky_top.4th`](../designs/blinky_top.4th)
+- Build `emulation`: [`targets/emulation.4th`](../targets/emulation.4th) uses `LED_BIT=25` and Verilator in realtime until Ctrl+C. [`emu/con.h`](../emu/con.h) prints `t=<ns> pin led <value>` only on change (`con_uart` is the same channel for a decoded serial byte). `fsoc blinky` loads the task here
+- Build per board: [`targets/quartus.4th`](../targets/quartus.4th) `<board>` writes `build/blinky/<board>/` (`.qsf` maps `clk50` to `clk` and `user_led` to `led`). Boards: `vitasound_ep4ce10`, `rz_easyfpga`
 
 ## Path 1 — later (not a blinky blocker)
 
-Full module generation on Forth (fhdlgen expr-AST, structural `always`, no string RHS). Until then path 2 is the canon: **logic = `.v` file, project/target = Forth**.
+Full module bodies on Forth (fhdlgen expr-AST, structural `always`, no string RHS). Blinky logic stays a `.v` file; only `top` is generated.
 
 ## Next
 

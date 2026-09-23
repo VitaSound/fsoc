@@ -2,8 +2,10 @@
 module tb;
     reg  clk;
     wire led;
+    reg  prev;
+    integer edges;
 
-    blinky dut (
+    top dut (
         .clk(clk),
         .led(led)
     );
@@ -14,8 +16,17 @@ module tb;
     initial begin
         $dumpfile("out.vcd");
         $dumpvars(0, tb);
-        #200;
-        $display("blinky sim ok led=%b", led);
+        edges = 0;
+        @(posedge clk);
+        prev = led;
+        while (edges < 2) begin
+            @(posedge clk);
+            if (led !== prev) begin
+                $display("t=%0t led %b -> %b", $time, prev, led);
+                edges = edges + 1;
+                prev = led;
+            end
+        end
         $finish;
     end
 endmodule

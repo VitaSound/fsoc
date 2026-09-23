@@ -23,15 +23,28 @@ fsoc version
 
 ## Blinky
 
-Logic is a pure Verilog file [`rtl/blinky.v`](rtl/blinky.v) (ports `clk` / `led`). Forth only names that file and the board target:
+Blinky is one task. The leaf is [`rtl/blinky.v`](rtl/blinky.v) (`clk` / `led`, `LED_BIT` defaults to 25). [`designs/blinky_top.4th`](designs/blinky_top.4th) includes that file and instantiates it as `top`. Each load is its own directory:
+
+```text
+build/blinky/emulation/            Verilator realtime, LED_BIT=25, console pin events
+build/blinky/vitasound_ep4ce10/    Quartus .qsf
+build/blinky/rz_easyfpga/          Quartus .qsf
+```
+
+Emulation is Verilator. It runs in realtime (50 MHz wall pace) until Ctrl+C. The console prints one line per event, not per clock: `t=<ns> pin led <value>` when `led` changes (`LED_BIT=25`, ~0.67 s). The same printer is `con_uart` for a future serial decoder (one line per received byte).
 
 ```bash
 fsoc blinky
-# copies rtl/blinky.v → build/blinky/, writes .qsf (PIN → clk/led), tb, scripts
-iverilog -o tb build/blinky/blinky.v build/blinky/tb.v && vvp tb
+cd build/blinky/emulation && sh sim.sh
 ```
 
-Quartus: `build/blinky/blinky.qsf` (needs Quartus Prime Lite). Same RTL on other boards by changing the target/`request` mapping, not the `.v`.
+Quartus (one target, board name picks the directory and the pins; Quartus itself is not run here):
+
+```bash
+cd targets
+gforth quartus.4th vitasound_ep4ce10
+gforth quartus.4th rz_easyfpga
+```
 
 ## Minimal SoC
 

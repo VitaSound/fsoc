@@ -28,19 +28,16 @@ s" 0.1.0" pkg-version 2!
     cr s" fsoc v" type pkg-version 2@ type cr
     s"   version" type cr
     s"   help" type cr
-    s"   blinky   emit blinky + quartus + icarus into build/blinky" type cr
+    s"   blinky   load blinky onto emulation (build/blinky/emulation)" type cr
     s"   soc      emit CSR HAL into build/soc" type cr ;
 
 : fsoc.version
     cr s" fsoc v" type pkg-version 2@ type cr ;
 
 : fsoc.blinky
-    s" boards/vitasound_ep4ce10.4th" included
-    s" clk50" 0 request
-    s" user_led" 0 request
-    s" mkdir -p build/blinky" system
-    s" build/blinky" blinky-emit-dir
-    cr s" blinky emitted to build/blinky (from rtl/blinky.v)" type cr ;
+    s" mkdir -p build/blinky/emulation" system
+    s" build/blinky/emulation" blinky-emit-emulation
+    cr s" blinky emulation: build/blinky/emulation" type cr ;
 
 : fsoc.soc
     cores-minimal-soc
