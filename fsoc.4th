@@ -40,8 +40,7 @@ s" 0.1.0" pkg-version 2!
     s" user_led" 0 request
     s" mkdir -p build/blinky" system
     s" build/blinky" blinky-emit-dir
-    s" build/blinky" quartus-emit
-    cr s" blinky emitted to build/blinky" type cr ;
+    cr s" blinky emitted to build/blinky (from rtl/blinky.v)" type cr ;
 
 : fsoc.soc
     cores-minimal-soc

@@ -23,12 +23,15 @@ fsoc version
 
 ## Blinky
 
+Logic is a pure Verilog file [`rtl/blinky.v`](rtl/blinky.v) (ports `clk` / `led`). Forth only names that file and the board target:
+
 ```bash
 fsoc blinky
-# or: gforth targets/blinky.4th
+# copies rtl/blinky.v → build/blinky/, writes .qsf (PIN → clk/led), tb, scripts
 iverilog -o tb build/blinky/blinky.v build/blinky/tb.v && vvp tb
-# Quartus project: build/blinky/blinky.qsf (needs Quartus Prime Lite)
 ```
+
+Quartus: `build/blinky/blinky.qsf` (needs Quartus Prime Lite). Same RTL on other boards by changing the target/`request` mapping, not the `.v`.
 
 ## Minimal SoC
 

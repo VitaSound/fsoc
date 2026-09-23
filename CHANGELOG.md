@@ -5,6 +5,7 @@
 ### Added
 
 - `bin/fsoc` launcher (`FSOC_HOME` + `PATH`), same pattern as fhdlgen.
+- Blinky path 2: pure [`rtl/blinky.v`](rtl/blinky.v) + [`designs/blinky.4th`](designs/blinky.4th); emit copies RTL and maps board pins in `.qsf` (no Verilog module body as Forth strings).
 
 ## [0.1.0] - 2026-09-23
 

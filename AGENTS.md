@@ -7,12 +7,15 @@ Forth-native SoC builder (LiteX analogue) for VitaSound. Host language is **Gfor
 ```
 fsoc/           IR + DSL + emit
 boards/         vitasound_ep4ce10, rz_easyfpga, ep2c5_mini
+designs/        Forth design units (path to RTL files; no Verilog body strings)
+rtl/            Pure Verilog (blinky.v, …)
 targets/        blinky, base_soc
 cpu/j1/         J1a wrapper, prompt UART model, LICENSE
 firmware/       csr HAL export, hex2readmem, FOOTSWITCH-SCAN
 tools/fterm.4th line terminal (wait for ok)
 ```
 
+Blinky (path 2): logic in `rtl/blinky.v`; `designs/blinky.4th` + targets only wire board/toolchain. Full Forth generation of `always` (path 1) waits on fhdlgen expr-AST.
 ## Commands
 
 ```bash
