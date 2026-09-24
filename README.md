@@ -1,7 +1,7 @@
 # fsoc
 
 [![License](https://img.shields.io/badge/License-COPL-red.svg)](LICENSE)
-[![Ver](https://img.shields.io/badge/Ver-0.1.0-green.svg)](https://github.com/VitaSound/fsoc)
+[![Ver](https://img.shields.io/badge/Ver-0.1.1-green.svg)](https://github.com/VitaSound/fsoc)
 
 Forth-native SoC builder: **boards**, **Quartus/Icarus toolchains**, **CSR**, **J1 firmware**, **fterm**. Analogue of LiteX `build` + `soc` on Gforth. Verilog modules come from [fhdlgen](https://github.com/VitaSound/fhdlgen) and [hdl-modules](https://github.com/VitaSound/hdl-modules).
 

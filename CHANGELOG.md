@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-24
+
 ### Added
 
 - SoC `--build` prints `fsoc: <project> - Start build`, then `Hardware` and `Software`. fhdlgen prints each Verilog include from the top fragment as `fhdlgen: <file>`. The log then says `Hardware complete`, lists the firmware sources and size, says `Software complete`, and `Start emulation` before `sim.sh`. Ctrl+C then prints `Emulation stopped`.

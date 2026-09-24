@@ -19,7 +19,7 @@ variable fsoc-lib-u
 fsoc-include-lib
 
 2VARIABLE pkg-version
-s" 0.1.0" pkg-version 2!
+s" 0.1.1" pkg-version 2!
 
 create fsoc-task-buf 64 allot
 variable fsoc-task-u

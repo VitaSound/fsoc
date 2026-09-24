@@ -2,7 +2,7 @@
 \   https://theforth.net/guidelines
 forth-package
     key-value name fsoc
-    key-value version 0.1.0
+    key-value version 0.1.1
     key-value license COPL
     key-value description Forth-native SoC builder: boards, toolchains, CSR, J1
     key-value main fsoc.4th
