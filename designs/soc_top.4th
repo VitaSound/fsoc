@@ -22,16 +22,19 @@ hdl-project
   s" j1_wrap" hdl-blackbox
     s" clk" in-port
     s" rst" in-port
+    s" uart_rx" in-port
     s" uart_tx" out-port
   hdl-endmodule
 
   s" top" hdl-module
     s" clk" in-port
     s" rst" in-port
+    s" uart_rx" in-port
     s" uart_tx" out-port
     s" u" s" j1_wrap" hdl-instance
       s" clk" s" clk" inst-connect
       s" rst" s" rst" inst-connect
+      s" uart_rx" s" uart_rx" inst-connect
       s" uart_tx" s" uart_tx" inst-connect
     hdl-endinstance
   hdl-endmodule

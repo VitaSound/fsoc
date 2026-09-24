@@ -20,8 +20,7 @@ Full module bodies on Forth (fhdlgen expr-AST, structural `always`, no string RH
 
 ## Next
 
-- Build and boot a full Forth system on the J1 core (`projects/soc_emul` already executes an assembled image that prints `ok`)
-- UART-compatible `emit`/`key` on J1; USB-UART on EP4CE10
+- USB-UART on EP4CE10 (`projects/soc_emul` already boots SwapForth J1a and answers a line)
 - Host CSR bridge (litex_server analogue)
 - Import more boards from litex-boards
 - yosys/nextpnr (iCE40/ECP5/Gowin) and Vivado

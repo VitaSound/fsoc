@@ -79,9 +79,49 @@ soc-asm-include
     soc-abs fsoc-append
     s"  ${FHDLGEN_HOME:-$HOME/fhdlgen}/bin/fhdlgen build " fsoc-append
     soc-top-src@ fsoc-append
+    s"  >fhdlgen.log 2>&1" fsoc-append
     2dup system
     fsoc-str-free
-    $? 0= 0= IF true abort" fhdlgen build soc top failed" THEN ;
+    $? 0= 0= IF
+        s" cat fhdlgen.log >&2" system
+        true abort" fhdlgen build soc top failed"
+    THEN
+    cr ." Verilog: top.v" cr ;
+
+: soc-swap@ ( c-addr-name u - c-addr u )
+    soc-nm-u ! soc-nm-a !
+    s" ../../cpu/j1/swapforth/" soc-prefixed
+    s" ../cpu/j1/swapforth/" soc-prefixed
+    s" cpu/j1/swapforth/" soc-prefixed
+    soc-pick3
+    soc-abs ;
+
+: soc-sh ( c-addr u c-addr-msg u - )
+    2swap
+    2dup system
+    fsoc-str-free
+    $? 0= IF 2drop EXIT THEN
+    type cr
+    true abort" command failed" ;
+
+: soc-cross ( - )
+    s" cd "
+    s" j1a" soc-swap@ fsoc-append
+    s"  && mkdir -p build && gforth cross.fs basewords.fs nuc.fs >build/cross.out" fsoc-append
+    s"  || { cat build/cross.out >&2; exit 1; }" fsoc-append
+    s\"  && awk '{ for (i = 1; i <= NF; i++) if ($i == \"tdp\") printf \"SwapForth nucleus: dictionary at $%s bytes of 8192, code pointer %s\\n\", $(i+1), $(i+3) }' build/cross.out" fsoc-append
+    s" swapforth cross failed" soc-sh
+    s" cp -f "
+    s" j1a/build/nuc.hex" soc-swap@ fsoc-append
+    s"  " fsoc-append
+    s" /firmware.hex" soc-join fsoc-append
+    s" copy nucleus hex failed" soc-sh ;
+
+: soc-feed ( - )
+    s" env -u FSOC_EMU_UART_IN -u FSOC_EMU_UART_BYTES FSOC_EMU_FAST=1 FSOC_EMU_SNAPSHOT=1 FSOC_EMU_FEED="
+    s" j1a/swapforth.fs" soc-swap@ fsoc-append
+    s"  sh sim.sh >feed.log" fsoc-append
+    s" swapforth feed failed" soc-sh ;
 
 : soc-emit-emulation ( c-addr-dir u - )
     s-dir-u ! s-dir-a !
@@ -99,6 +139,7 @@ soc-asm-include
     cores-minimal-soc
     s" /csr.4th" soc-join csr-export-4th
     s" /csr.json" soc-join csr-export-json
-    s" /firmware.hex" soc-join j1-asm-ok
     soc-gen-top
-    s" /sim.sh" soc-join emu-write-sim-sh ;
+    s" /sim.sh" soc-join emu-write-sim-sh
+    soc-cross
+    soc-feed ;

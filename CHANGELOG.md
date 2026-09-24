@@ -4,7 +4,8 @@
 
 ### Added
 
-- SoC emulation `projects/soc_emul`: a Forth assembler builds a J1 image, the vendored core executes it, and the console prints `ok`.
+- SoC emulation `projects/soc_emul` boots SwapForth J1a. The dictionary is its ANS CORE set without `environment?`, and a line on the UART is answered with ` ok`.
+- UART console: `FSOC_EMU_CON=term` writes the byte stream as text. On a tty ncurses shows that text above a host input row; Enter sends the row. `FSOC_EMU_CON=log` keeps `t=<ns> uart <name> <byte>`. Unset follows stdout: a terminal is text, a file stays the log.
 - Blinky emulation `main` lives in `fsoc/blinky_main.cpp`. `emu/` keeps only the shared `con` console.
 - `designs/blinky_top.4th` writes `top.v` only to the path the caller passes in `FSOC_BLINKY_TOP`.
 - Builder runs from the project directory: `fsoc --build`, `fsoc --load`, `fsoc --build --load`. Task and board come from `projects/*/target.4th`.

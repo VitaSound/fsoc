@@ -52,14 +52,14 @@ fsoc --build
 
 ## Minimal SoC
 
-`projects/soc_emul` is a builder task. `fsoc --build` assembles a short J1 program with the Forth assembler in `firmware/`, loads `firmware.hex` into the vendored J1 core, and runs Verilator until Ctrl+C. The core executes that image; the console then prints `t=<ns> uart tx o` and `t=<ns> uart tx k`. CSR files (`csr.4th`, `csr.json`) are written in the project directory.
+`projects/soc_emul` is a builder task. `fsoc --build` cross-compiles SwapForth J1a, loads `firmware.hex` into the vendored J1 core, and runs Verilator until Ctrl+C. The image is that system's ANS CORE dictionary without `environment?`. On a terminal the session is an ncurses screen: UART text scrolls above, and the bottom row is the host line. Characters, including non-ASCII, appear there as they are typed; Enter sends that line. The reply ends with ` ok`. `FSOC_EMU_CON=log` prints each UART byte as `t=<ns> uart tx <byte>`. `FSOC_EMU_CON=term` forces the text view. A redirected run stays on the byte log unless `term` is set. CSR files (`csr.4th`, `csr.json`) are written in the project directory.
 
 ```bash
 cd projects/soc_emul
 fsoc --build
 ```
 
-The next step is to build and boot a full Forth system on this core. `cpu/j1/j1_prompt.v` remains a separate Icarus check of the old UART model.
+`cpu/j1/j1_prompt.v` remains a separate Icarus check of the old UART model.
 
 ## Boards
 
