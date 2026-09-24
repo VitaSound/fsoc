@@ -23,81 +23,13 @@
 #include <cstring>
 #include <deque>
 #include <fstream>
-#include <locale.h>
-#include <ncursesw/ncurses.h>
-#include <poll.h>
 #include <string>
 #include <thread>
-#include <unistd.h>
 #include <vector>
 
 static volatile sig_atomic_t g_stop;
 
 static void on_sigint(int) { g_stop = 1; }
-
-static int g_panel = 0;
-static std::string g_line;
-
-static void restore_tty(void) {
-    if (!g_panel) return;
-    endwin();
-    g_panel = 0;
-}
-
-static void panel_draw(void) {
-    if (!g_panel) return;
-    int y, x;
-    getyx(stdscr, y, x);
-    if (y > LINES - 2) y = LINES - 2;
-    if (y < 0) y = 0;
-    if (x >= COLS) x = COLS > 0 ? COLS - 1 : 0;
-    if (x < 0) x = 0;
-    move(LINES - 1, 0);
-    clrtoeol();
-    attron(A_REVERSE);
-    addstr("> ");
-    addnstr(g_line.c_str(), COLS > 2 ? COLS - 2 : 0);
-    attroff(A_REVERSE);
-    move(y, x);
-    refresh();
-}
-
-static void term_out(unsigned byte) {
-    if (!g_panel) return;
-    // Forth sends CR then LF. A CR parks the cursor in column 0, and the
-    // following newline clears that whole line, so the text just printed vanishes.
-    if (byte == '\r') return;
-    if (byte == '\n') addch('\n');
-    else if (byte < 32 || byte == 127) addch((chtype)byte | A_REVERSE);
-    else addch(byte);
-    panel_draw();
-}
-
-static void acc_erase(std::string& acc) {
-    if (acc.empty()) return;
-    acc.erase(acc.size() - 1);
-    while (!acc.empty() && ((unsigned char)acc[acc.size() - 1] & 0xc0) == 0x80)
-        acc.erase(acc.size() - 1);
-}
-
-// ncurses: UART text scrolls in the upper window, the host line is the last row.
-static void host_tty(int panel) {
-    if (!panel || !con_term() || !isatty(0) || !isatty(1)) return;
-    setlocale(LC_ALL, "");
-    initscr();
-    cbreak();
-    noecho();
-    scrollok(stdscr, TRUE);
-    setscrreg(0, LINES - 2);
-    idlok(stdscr, FALSE);
-    keypad(stdscr, TRUE);
-    nodelay(stdscr, TRUE);
-    wtimeout(stdscr, 0);
-    move(0, 0);
-    g_panel = 1;
-    std::atexit(restore_tty);
-    panel_draw();
-}
 
 static int env_int(const char* name, int fallback) {
     const char* s = std::getenv(name);
@@ -290,7 +222,7 @@ int main(int argc, char** argv) {
     else if (in_text) split_lines(in_text, lines);
     const int scripted = feed || in_text;
     const int capture = !scripted && byte_limit > 0;
-    host_tty(!scripted && !capture);
+    con_panel_open(!scripted && !capture);
 
     unsigned long long t = 0;
     unsigned long long cycles = 0;
@@ -302,7 +234,6 @@ int main(int argc, char** argv) {
     int want_ok = 0;
     int q_gap = 0;
     int stdin_eof = 0;
-    std::string acc;
     std::string window;
     RxShift rx;
     TxDec txdec;
@@ -332,8 +263,7 @@ int main(int argc, char** argv) {
         unsigned gotb = 0;
         int tx = top->uart_tx ? 1 : 0;
         if (txdec.take(tx, &gotb)) {
-            if (g_panel) term_out(gotb);
-            else con_uart("tx", t, gotb);
+            con_uart("tx", t, gotb);
             bytes++;
             window.push_back((char)gotb);
             if (window.size() > 16) window.erase(0, window.size() - 16);
@@ -411,39 +341,13 @@ int main(int argc, char** argv) {
                     rx.push_line(lines[line_i]);
                     want_ok = 1;
                 } else phase = 5;
-            } else if (g_panel) {
-                wint_t wc = 0;
-                int wr = wget_wch(stdscr, &wc);
-                if (wr == ERR) {
-                } else if (wc == (wint_t)'\n' || wc == (wint_t)'\r' || wc == (wint_t)KEY_ENTER) {
-                    rx.push_line(g_line);
-                    g_line.clear();
-                    panel_draw();
-                    want_ok = 1;
-                } else if (wc == (wint_t)KEY_BACKSPACE || wc == 127 || wc == 8) {
-                    acc_erase(g_line);
-                    panel_draw();
-                } else if (wr == OK && wc >= 32) {
-                    char utf8[8];
-                    int n = wctomb(utf8, (wchar_t)wc);
-                    if (n > 0) g_line.append(utf8, (std::string::size_type)n);
-                    panel_draw();
-                }
             } else if (!stdin_eof) {
-                struct pollfd p;
-                p.fd = 0;
-                p.events = POLLIN;
-                int pr = poll(&p, 1, 0);
-                if (pr > 0 && (p.revents & POLLIN)) {
-                    char ch;
-                    if (read(0, &ch, 1) == 1) {
-                        if (ch == '\n' || ch == '\r') {
-                            rx.push_line(acc);
-                            acc.clear();
-                            want_ok = 1;
-                        } else acc.push_back(ch);
-                    }
-                } else if (pr > 0 && (p.revents & (POLLHUP | POLLERR))) {
+                const char* text = 0;
+                int got = con_line(&text);
+                if (got == 1) {
+                    rx.push_line(text);
+                    want_ok = 1;
+                } else if (got < 0) {
                     stdin_eof = 1;
                 }
             }
