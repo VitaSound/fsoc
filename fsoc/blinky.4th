@@ -80,8 +80,7 @@ variable blinky-led-u
         s" "
     THEN
     s" FSOC_BLINKY_TOP=" fsoc-append
-    b-dir-a @ b-dir-u @ s" /top.v" fsoc-append
-    blinky-abs fsoc-append
+    b-dir-a @ b-dir-u @ blinky-abs fsoc-append
     s"  ${FHDLGEN_HOME:-$HOME/fhdlgen}/bin/fhdlgen build " fsoc-append
     blinky-top-src@ fsoc-append
     2dup system
@@ -111,12 +110,28 @@ variable blinky-led-u
 
 \ Quartus files via the quartus target. Board must already be loaded.
 \ Resource clk50 → port clk, user_led → port led. Project name is blinky.
+create btop-buf 64 allot
+variable btop-u
+create bvfile-buf 68 allot
+
+: blinky-use-top-module ( -- )
+    b-dir-a @ b-dir-u @ s" /top-module" fsoc-append
+    slurp-file
+    dup 0= IF true abort" top-module empty" THEN
+    2dup + 1- c@ 10 = IF 1- THEN
+    dup 63 > IF true abort" top-module too long" THEN
+    dup btop-u !
+    btop-buf swap cmove
+    btop-buf btop-u @ quartus-top
+    btop-buf bvfile-buf btop-u @ cmove
+    bvfile-buf btop-u @ + s" .v" rot swap cmove
+    bvfile-buf btop-u @ 2 + quartus-vfile ;
+
 : blinky-emit-quartus ( c-addr-dir u - )
     blinky-led-clear
     blinky-emit-dir
     s" blinky" quartus-project
-    s" top" quartus-top
-    s" top.v" quartus-vfile
+    blinky-use-top-module
     s" clk" s" 20.000" quartus-clock
     s" clk50" 0 s" clk" quartus-map
     s" user_led" 0 s" led" quartus-map

@@ -20,6 +20,8 @@ Full module bodies on Forth (fhdlgen expr-AST, structural `always`, no string RH
 
 ## Next
 
+- J1 interval counter and a 1-bit `regio` on the `io` bus, then a Forth blink started from `'BOOT` ([stm8ef-hw.md](stm8ef-hw.md)). The LED is that register bit on `top`. `FSOC_EMU_CON=term` shows the lamp text; the pin log shows `0` and `1`.
+- Background task, interrupt controller, and its connection to J1 — later, same note
 - USB-UART on EP4CE10 (`projects/soc_emul` already boots SwapForth J1a and answers a line)
 - Host CSR bridge (litex_server analogue)
 - Import more boards from litex-boards

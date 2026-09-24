@@ -378,5 +378,6 @@ decimal
 dumpall.16
 ." tdp " tdp @ .
 ." tcp " tcp @ .
+." dpaddr " t' dp .
 
 bye

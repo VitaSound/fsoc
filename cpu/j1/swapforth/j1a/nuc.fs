@@ -206,6 +206,7 @@ header base  :noname var: create base     $a ,
 header state :noname var: create state    0 ,
 header >in   :noname var: create >in      0 ,
 header tth   :noname var: create tethered 0 , \ tethered mode flag
+header 'BOOT :noname var: create boot    0 , \ one-shot before quit, 0 skips
 header forth :noname var: create forth    0 ,
 create dp       0 ,         \ Data pointer, grows up
 create lastword 0 ,
@@ -1186,6 +1187,7 @@ create init meta t' quit 2* target ,
     decimal
     tethered off
     key> drop
+    boot @i ?dup if execute then
     init @i execute
 ;
 

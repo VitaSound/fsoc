@@ -43,20 +43,28 @@ int con_pin(const char* name, unsigned long long time_ns, int value) {
     return 1;
 }
 
-static int con_term_mode(void) {
+enum { CON_LOG = 0, CON_TERM = 1, CON_PIN = 2 };
+
+static int con_mode(void) {
     static int ready = 0;
-    static int term = 0;
-    if (ready) return term;
+    static int mode = CON_LOG;
+    if (ready) return mode;
     const char* s = std::getenv("FSOC_EMU_CON");
     if (s == 0 || s[0] == 0)
-        term = isatty(1) ? 1 : 0;
+        mode = isatty(1) ? CON_TERM : CON_LOG;
+    else if (std::strcmp(s, "term") == 0)
+        mode = CON_TERM;
+    else if (std::strcmp(s, "pin") == 0)
+        mode = CON_PIN;
     else
-        term = std::strcmp(s, "term") == 0 ? 1 : 0;
+        mode = CON_LOG;
     ready = 1;
-    return term;
+    return mode;
 }
 
-int con_term(void) { return con_term_mode(); }
+int con_term(void) { return con_mode() == CON_TERM; }
+
+int con_pin_mode(void) { return con_mode() == CON_PIN; }
 
 static int g_panel = 0;
 static std::string g_line;
@@ -107,7 +115,7 @@ static void acc_erase(std::string& acc) {
 
 int con_panel_open(int want) {
     if (g_panel) return 1;
-    if (!want || !con_term_mode() || !isatty(0) || !isatty(1)) return 0;
+    if (!want || !con_term() || !isatty(0) || !isatty(1)) return 0;
     setlocale(LC_ALL, "");
     initscr();
     cbreak();
@@ -182,11 +190,12 @@ void con_uart(const char* name, unsigned long long time_ns, unsigned byte) {
         term_out(byte);
         return;
     }
-    if (con_term_mode()) {
+    if (con_mode() == CON_TERM) {
         std::putchar((int)byte);
         std::fflush(stdout);
         return;
     }
+    if (con_mode() == CON_PIN) return;
     if (byte >= 32u && byte < 127u)
         std::printf("t=%llu uart %s %c\n", time_ns, name, (char)byte);
     else

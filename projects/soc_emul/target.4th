@@ -3,3 +3,4 @@
 s" soc" fsoc-task!
 s" emulation" fsoc-target!
 0 0 fsoc-board!
+s" ../../designs/soc_console.4th" fsoc-design!

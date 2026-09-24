@@ -41,6 +41,13 @@ variable fsoc-target-u
 
 : fsoc-board! ( c-addr u - ) blinky-board! ;
 
+\ Path of the fhdlgen design for this project. That file is the chip composition.
+: fsoc-design! ( c-addr u - )
+    dup 255 > IF true abort" design path too long" THEN
+    dup fsoc-design-u !
+    dup 0= IF 2drop EXIT THEN
+    fsoc-design-buf swap move ;
+
 : fsoc.help
     cr s" fsoc v" type pkg-version 2@ type cr
     s"   version" type cr
@@ -83,7 +90,7 @@ variable fsoc-version?
     2drop ;
 
 : fsoc-fields-clear ( - )
-    0 fsoc-task-u !  0 fsoc-target-u !  0 blinky-board-u ! ;
+    0 fsoc-task-u !  0 fsoc-target-u !  0 fsoc-design-u !  0 blinky-board-u ! ;
 
 \ included resolves names from the source file, not cwd. Absolute path via get-dir.
 \ included can leave extra stack items. Nothing else is on the stack here.
@@ -123,8 +130,13 @@ variable fsoc-version?
 : fsoc-do-build ( - )
     fsoc-exec-build
     fsoc-emulation? IF
+        soc-cwd-buf 1024 get-dir nip soc-cwd-a !
+        s" Start emulation" soc-note
         s" sh sim.sh" system
-        $? fsoc-sim-ok? 0= IF true abort" sim.sh failed" THEN
+        $? dup 0= IF drop EXIT THEN
+        dup fsoc-sim-ok? 0= IF drop true abort" sim.sh failed" THEN
+        drop
+        s" Emulation stopped" soc-note
     THEN ;
 
 \ Emulation ignores --load. A board runs load.sh; quartus_pgm errors stay visible.

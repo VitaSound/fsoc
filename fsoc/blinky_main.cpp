@@ -64,6 +64,7 @@ int main(int argc, char** argv) {
 
     top->final();
     delete top;
+    if (g_stop) return 130;
     if (edge_limit > 0) return edges >= edge_limit ? 0 : 1;
     return 0;
 }

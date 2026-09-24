@@ -214,6 +214,7 @@ int main(int argc, char** argv) {
     const int byte_limit = env_int("FSOC_EMU_UART_BYTES", 0);
     const int fast = env_int("FSOC_EMU_FAST", 0);
     const int snapshot = env_int("FSOC_EMU_SNAPSHOT", 0);
+    const int pin_view = con_pin_mode();
     const char* feed = env_str("FSOC_EMU_FEED");
     const char* in_text = env_str("FSOC_EMU_UART_IN");
 
@@ -222,7 +223,7 @@ int main(int argc, char** argv) {
     else if (in_text) split_lines(in_text, lines);
     const int scripted = feed || in_text;
     const int capture = !scripted && byte_limit > 0;
-    con_panel_open(!scripted && !capture);
+    con_panel_open(!scripted && !capture && !pin_view);
 
     unsigned long long t = 0;
     unsigned long long cycles = 0;
@@ -234,12 +235,16 @@ int main(int argc, char** argv) {
     int want_ok = 0;
     int q_gap = 0;
     int stdin_eof = 0;
+    int saw_on = 0;
+    int saw_off = 0;
+    int pin_ready = 0;
+    int toggles = 0;
     std::string window;
     RxShift rx;
     TxDec txdec;
     auto wall0 = std::chrono::steady_clock::now();
     const unsigned long long cycle_cap =
-        feed ? 80000000ull : (scripted ? 20000000ull : (byte_limit > 0 ? 2000000ull : 0ull));
+        feed ? 80000000ull : ((scripted || pin_view) ? 20000000ull : (byte_limit > 0 ? 2000000ull : 0ull));
 
     top->uart_rx = 1;
     top->rst = 1;
@@ -266,7 +271,9 @@ int main(int argc, char** argv) {
             con_uart("tx", t, gotb);
             bytes++;
             window.push_back((char)gotb);
-            if (window.size() > 16) window.erase(0, window.size() - 16);
+            if (window.size() > 64) window.erase(0, window.size() - 64);
+            if (window.find("lamp on") != std::string::npos) saw_on = 1;
+            if (window.find("lamp off") != std::string::npos) saw_off = 1;
             if (!fast) {
                 auto target = wall0 + std::chrono::nanoseconds((long long)t);
                 auto now = std::chrono::steady_clock::now();
@@ -335,6 +342,8 @@ int main(int argc, char** argv) {
         } else if (phase == 3) {
             gap--;
             if (gap <= 0) phase = 4;
+        } else if (pin_view && !feed && phase == 4) {
+            // The lamp loop does not return to quit.
         } else if (phase == 4 && !want_ok && rx.idle()) {
             if (scripted) {
                 if (line_i < (int)lines.size()) {
@@ -353,9 +362,18 @@ int main(int argc, char** argv) {
             }
         }
 
+        if (pin_view && !feed) {
+            int led = top->led ? 1 : 0;
+            int changed = con_pin("led", t, led);
+            if (!pin_ready) pin_ready = 1;
+            else if (changed) toggles++;
+        }
+
         top->clk = 0;
         top->eval();
         t += (unsigned long long)kHalfNs;
+
+        if (fast && !feed && saw_on && saw_off && (!pin_view || toggles >= 2)) phase = 5;
 
         if (cycle_cap > 0 && cycles >= cycle_cap) break;
     }
@@ -363,6 +381,9 @@ int main(int argc, char** argv) {
     if (snapshot && feed && phase == 5) snapshot_ram(top);
     top->final();
     delete top;
+    if (g_stop) return 130;
+    if ((pin_view || (fast && saw_on)) && !feed)
+        return (saw_on && saw_off && (!pin_view || toggles >= 2)) ? 0 : 1;
     if (capture) return bytes >= byte_limit ? 0 : 1;
     if (scripted) return phase == 5 ? 0 : 1;
     return 0;

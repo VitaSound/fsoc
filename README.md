@@ -59,6 +59,16 @@ cd projects/soc_emul
 fsoc --build
 ```
 
+`projects/soc_blink` is the same core with a `'BOOT` word that does not return to the prompt. The loop writes `0` and `1` to `h# 400`. That bit leaves `top` as `led`. The pause is a read of the counter at `h# 800`. The loop also sends `lamp on` and `lamp off` on the UART. A background task and an interrupt controller are a later step, described in [doc/stm8ef-hw.md](doc/stm8ef-hw.md).
+
+`FSOC_EMU_CON` picks the view. `term` writes the UART bytes, so the lamp phrases show as text. `log` prints each UART byte as `t=<ns> uart tx <byte>`. `pin` prints only `t=<ns> pin led 0` and `t=<ns> pin led 1` and does not write the UART bytes. `FSOC_EMU_FAST=1` stops after both lamp phrases.
+
+```bash
+cd projects/soc_blink
+FSOC_EMU_CON=term FSOC_EMU_FAST=1 fsoc --build
+FSOC_EMU_CON=pin FSOC_EMU_FAST=1 fsoc --build
+```
+
 `cpu/j1/j1_prompt.v` remains a separate Icarus check of the old UART model.
 
 ## Boards

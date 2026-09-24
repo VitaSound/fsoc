@@ -2,11 +2,15 @@
 // Indexing matches swapforth j1a/verilator/j1a.v: a byte address
 // selects ram[addr[12:1]], and a fetch uses code_addr[11:0] so
 // PC[12] stays the @ cycle flag. The CPU executes the image.
-module j1_wrap (
+module j1_wrap #(
+    parameter USE_TIMER = 0,
+    parameter USE_REGIO = 0
+) (
     input  wire clk,
     input  wire rst,
     input  wire uart_rx,
-    output wire uart_tx
+    output wire uart_tx,
+    output wire led
 );
     reg [15:0] ram [0:4095] /* verilator public_flat */;
     initial $readmemh("firmware.hex", ram);
@@ -21,8 +25,11 @@ module j1_wrap (
     wire        uart_busy;
     wire        uart_valid;
     wire [7:0]  uart_rx_data;
-    // h# 1000 data, h# 2000 status: bit 0 transmitter free, bit 1 key?
+    wire [15:0] timer_value;
+    // h# 400 led bit, h# 800 timer, h# 1000 data, h# 2000 status
     wire [15:0] io_din =
+        (mem_addr[10] ? {15'd0, led} : 16'd0) |
+        (mem_addr[11] ? timer_value : 16'd0) |
         (mem_addr[12] ? {8'd0, uart_rx_data} : 16'd0) |
         (mem_addr[13] ? {14'd0, uart_valid, ~uart_busy} : 16'd0);
 
@@ -47,6 +54,31 @@ module j1_wrap (
         .code_addr(code_addr),
         .insn(insn)
     );
+
+    generate
+        if (USE_TIMER) begin : g_timer
+            timer _timer (
+                .clk(clk),
+                .rst(rst),
+                .wr(io_wr & mem_addr[11]),
+                .din(dout),
+                .value(timer_value)
+            );
+        end else begin : g_timer_off
+            assign timer_value = 16'd0;
+        end
+        if (USE_REGIO) begin : g_regio
+            regio #(.WIDTH(1)) _regio (
+                .clk(clk),
+                .rst(rst),
+                .wr(io_wr & mem_addr[10]),
+                .din(dout[0]),
+                .value(led)
+            );
+        end else begin : g_regio_off
+            assign led = 1'b0;
+        end
+    endgenerate
 
     buart _uart (
         .clk(clk),

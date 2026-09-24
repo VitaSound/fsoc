@@ -48,6 +48,10 @@ s" find projects/soc_emul -mindepth 1 ! -name target.4th -delete" system
     $? 0= expect-true ;
 
 s" FSOC_EMU_UART_BYTES=2" soc-run
+s" test -e projects/soc_emul/regio.v" system
+$? 0= expect-false
+s" test -e projects/soc_emul/timer.v" system
+$? 0= expect-false
 s" python3 tests/soc_uart.py boot projects/soc_emul/sim.log" system
 $? 0= expect-true
 
