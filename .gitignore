@@ -1,4 +1,6 @@
 build/
+# Project dirs are working copies. Git keeps only the manifest; --build
+# writes top.v, firmware.hex, sim.sh, .qsf, obj_dir, … locally.
 projects/*
 !projects/*/
 projects/*/*

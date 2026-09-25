@@ -16,13 +16,13 @@ context: |
   - boards/ — платформа
   - targets/ — тулчейн без имени задачи
   - emu/ — консоль pin/uart
-  - projects/<задача>_<эмуляция-или-плата>/ — рабочая копия
+  - projects/<задача>_<эмуляция-или-плата>/ — рабочий каталог; в git только target.4th, остальное пишет --build
   - fsoc — билдер; задача и плата в target.4th, не в аргументах команды
 
   Уже сделано:
   - rtl/blinky.v с LED_BIT=25 и счётчиком = 0
   - топ из designs/blinky_top.4th
-  - каталоги blinky_emul, blinky_vitasound_ep4ce10, blinky_rz_easyfpga со своими копиями top.v
+  - каталоги blinky_emul, blinky_vitasound_ep4ce10, blinky_rz_easyfpga; в git только target.4th, top.v пишет emit
   - эмуляция Verilator 4.038, такт 50 МГц из C++ (полупериод 10 нс), реалтайм до Ctrl+C
   - консоль печатает t=<ns> pin led <значение> только при смене уровня
   - uart того же вида (t=<ns> uart <имя> <байт>), blinky этот канал не вызывает

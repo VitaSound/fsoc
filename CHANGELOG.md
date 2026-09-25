@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- README / AGENTS.md: a `projects/*` directory is a working copy. Git tracks only `target.4th`; `--build` emits the rest locally. Task and design are debugged on `emulation`; a board project reuses the same design with `quartus` + `board:`.
+
 ## [0.3.0] - 2026-09-25
 
 ### Added
