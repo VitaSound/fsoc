@@ -40,13 +40,6 @@ variable soc-cp-u
     2dup system
     fsoc-str-free ;
 
-: soc-asm-include ( - )
-    s" ../firmware/hex2readmem.4th" included
-    s" ../firmware/j1asm.4th" included
-    s" ../firmware/ok.4th" included ;
-
-soc-asm-include
-
 : soc-prefixed ( c-addr-prefix u - c-addr u )
     soc-nm-a @ soc-nm-u @ fsoc-append ;
 

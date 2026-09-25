@@ -68,3 +68,31 @@ ANS CORE, который MUST присутствовать: `!` `#` `#>` `#s` `'
 #### Scenario: Сборка ядра без лишних предупреждений
 - **WHEN** Gforth собирает `cross.fs`, `basewords.fs` и `nuc.fs`
 - **THEN** нет предупреждений про `0.`, `uw@` и переопределение `n`, и есть предупреждение `redefined noop`
+
+### Requirement: Дизайн не знает способ запуска
+Файл в `designs/` MUST описывать модуль SoC и MUST NOT называть каталог проекта, плату или способ запуска. Путь выходного Verilog MUST задавать вызывающий через `FSOC_SOC_TOP`. Слой MUST NOT подставлять свой каталог, если путь не передан.
+
+#### Scenario: Топ без каталога эмуляции
+- **WHEN** читается `designs/soc_top.4th`
+- **THEN** в файле нет `projects/` и нет `soc_emul`, а `top.v` пишется только по пути из `FSOC_SOC_TOP`
+
+### Requirement: main SoC не лежит в emu
+`emu/` MUST содержать только общую консоль и MUST NOT содержать `main` задачи SoC. `main` MUST жить рядом с задачей. Сборка эмуляции MUST копировать его в каталог проекта вместе с консолью.
+
+#### Scenario: main рядом с задачей
+- **WHEN** собрана эмуляция SoC
+- **THEN** `main` взят из `fsoc/soc_main.cpp`, в каталоге проекта есть его копия, а в `emu/` нет файла с именем soc
+
+### Requirement: CSR пишется в каталог проекта
+Сборка MUST выгрузить карту ctrl, uart, gpio и timer в `csr.4th` и `csr.json` того каталога, откуда запущен билдер. Билдер MUST NOT писать эту карту в `build/soc/software`.
+
+#### Scenario: Имена регистров UART
+- **WHEN** в `projects/soc_emul` выполняется `fsoc --build`
+- **THEN** в этом каталоге `csr.4th` содержит `CSR-uart-rxtx`, а `csr.json` содержит `uart_rxtx`
+
+### Requirement: Запуск как у blinky
+Идентичность проекта MUST читаться из `target.4th`: задача `soc`, таргет `emulation`, плата не задана. `fsoc --build` MUST породить `top.v`, `firmware.hex`, `csr.4th`, `csr.json` и `sim.sh`, затем запустить просмотр. На этом проекте `--load` MUST игнорироваться без ошибки.
+
+#### Scenario: Сборка из каталога проекта
+- **WHEN** в `projects/soc_emul` выполняется `fsoc --build`
+- **THEN** появляются `top.v`, `firmware.hex`, `sim.sh`, `csr.4th` и `csr.json`, Verilator компилируется и просмотр идёт до Ctrl+C

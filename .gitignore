@@ -9,3 +9,4 @@ forth-packages/
 *.o
 out.vcd
 /tmp/
+firmware/firmware.hex

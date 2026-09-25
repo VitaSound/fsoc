@@ -1,12 +1,13 @@
 # fsoc roadmap
 
-## Done (0.1.0)
+## Done (0.1.x)
 
 - Platform DSL and three boards
-- Quartus + Icarus/Verilator emit
-- Blinky vertical slice
-- CSR + uart/gpio/timer/ctrl
-- J1 wrapper, prompt sim, fterm, FOOTSWITCH-SCAN host
+- Quartus + Verilator emit; `fsoc --build` / `--load` from the project directory, `target.4th` names task, target, board
+- Blinky vertical slice: `rtl/blinky.v`, `designs/blinky_top.4th`, `projects/blinky_emul`, `blinky_vitasound_ep4ce10`, `blinky_rz_easyfpga`
+- SwapForth J1a cross-compiled from source, `projects/soc_emul` answers a line with ` ok`; ncurses terminal, `FSOC_EMU_CON` views
+- `regio` and interval `timer` on the J1 `io` bus (`h# 400`, `h# 800`), `'BOOT` cell, `projects/soc_blink` lamp loop
+- Stubs awaiting hardware: `tools/fterm.4th` (in-memory `ok` backend), `firmware/midi_foot.4th` (host mock of FOOTSWITCH-SCAN)
 
 ## Blinky architecture (current)
 
@@ -18,14 +19,24 @@
 
 Full module bodies on Forth (fhdlgen expr-AST, structural `always`, no string RHS). Blinky logic stays a `.v` file; only `top` is generated.
 
-## Next
+## Next — layer refactor toward 0.2.0 (OpenSpec changes in `openspec/changes/`)
 
-- J1 interval counter and a 1-bit `regio` on the `io` bus, then a Forth blink started from `'BOOT` ([stm8ef-hw.md](stm8ef-hw.md)). The LED is that register bit on `top`. `FSOC_EMU_CON=term` shows the lamp text; the pin log shows `0` and `1`.
-- Background task, interrupt controller, and its connection to J1 — later, same note
-- USB-UART on EP4CE10 (`projects/soc_emul` already boots SwapForth J1a and answers a line)
+Review of 0.1.1 found abstraction leaks: the CLI calls task words, every task carries its own path guessing (`../../`, `../`, bare), designs read `FSOC_*` from the environment, `soc_main.cpp` mixes simulator, UART codec, firmware feed and test oracle, and the `io` address map lives in three files. The fix is six changes, in order:
+
+1. `builder-hygiene` — archive finished changes, remove dead code, `fmix hook`, frules
+2. `builder-core` — `project%` manifest (`task:` `target:` `board:` `design:` `option:`), task/target registry with `emit` / `run` / `load` hooks, paths from `FSOC_HOME`, fjson/fenum/ttester-ext instead of local helpers, FPGA family from the board
+3. `design-out-contract` — fhdlgen `--out` / `--param` / `includes.lst`; designs stop reading the environment; one `j1_wrap` blackbox
+4. `emu-lib` — `emu/` as a library (clock, uart, script); thin task `main`s; separate `feed` step writes `firmware.hex` from Verilog
+5. `iomap` — one address map in Forth → `csr.fs`, `iomap.vh`, `csr.json`; `cores.4th` removed
+6. `soc-board` — SoC on `vitasound_ep4ce10` over USB-UART, clock from the board, real `fterm` backend (0.3.0)
+
+## Later
+
+- Background task, interrupt controller, and its connection to J1 — [stm8ef-hw.md](stm8ef-hw.md)
 - Host CSR bridge (litex_server analogue)
 - Import more boards from litex-boards
 - yosys/nextpnr (iCE40/ECP5/Gowin) and Vivado
 - Expression tree + Forth FHDL sim (with fhdlgen) — path 1 for cores that should be Forth-native
 - Own Forth CPU described in fhdlgen DSL
 - Audio cores from hdl-modules behind CSR (Forth synthesizer)
+- DIN MIDI foot controller on the SoC (`midi rx` pin is already on the board)

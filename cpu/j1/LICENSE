@@ -2,4 +2,3 @@ J1 / J1a originally by James Bowman (swapforth), BSD-3-Clause.
 `j1.v`, `stack2.v`, and `uart.v` are vendored from that project.
 `swapforth/` is the J1a Forth (`cross.fs`, `nuc.fs`, `swapforth.fs`, `common/core.fs`, `common/core-ext.fs`) with its BSD text in `swapforth/LICENSE`.
 `j1_wrap.v` loads `firmware.hex` and runs that core.
-`j1_prompt.v` is a separate UART model kept for its Icarus test.

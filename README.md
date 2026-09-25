@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/License-COPL-red.svg)](LICENSE)
 [![Ver](https://img.shields.io/badge/Ver-0.1.1-green.svg)](https://github.com/VitaSound/fsoc)
 
-Forth-native SoC builder: **boards**, **Quartus/Icarus toolchains**, **CSR**, **J1 firmware**, **fterm**. Analogue of LiteX `build` + `soc` on Gforth. Verilog modules come from [fhdlgen](https://github.com/VitaSound/fhdlgen) and [hdl-modules](https://github.com/VitaSound/hdl-modules).
+Forth-native SoC builder: **boards**, **Quartus/Verilator toolchains**, **CSR**, **J1 firmware**. Analogue of LiteX `build` + `soc` on Gforth. Verilog modules come from [fhdlgen](https://github.com/VitaSound/fhdlgen) and [hdl-modules](https://github.com/VitaSound/hdl-modules).
 
 ## Install
 
@@ -69,7 +69,7 @@ FSOC_EMU_CON=term FSOC_EMU_FAST=1 fsoc --build
 FSOC_EMU_CON=pin FSOC_EMU_FAST=1 fsoc --build
 ```
 
-`cpu/j1/j1_prompt.v` remains a separate Icarus check of the old UART model.
+`tools/fterm.4th` and `firmware/midi_foot.4th` are stubs: `fterm` answers `ok` from memory until the SoC runs on a board, `midi_foot` is a host mock of FOOTSWITCH-SCAN.
 
 ## Boards
 

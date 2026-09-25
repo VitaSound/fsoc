@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+### Changed
+
+- OpenSpec: `con-term`, `j1-forth`, `soc-emulation`, `soc-io-blink` archived; `soc-build-log` closed, its open tasks moved to `design-out-contract`. Six changes for the 0.2.0 layer refactor are in `openspec/changes/` (see `doc/roadmap.md`).
+- `package.4th`: `fmix ~> 0.8`; dependency `f` and `fcov-exclude tests/golden` dropped. frules installed in `.cursor/rules/`, `fmix hook install --stage all`.
+- `fterm` and `midi_foot` are documented as stubs.
+
+### Removed
+
+- Dead code: `firmware/ok.4th`, `firmware/j1asm.4th`, `firmware/hex2readmem.4th` (J1 assembler superseded by the SwapForth cross-compiler), `cpu/j1/j1_prompt.v`, `cpu/j1/tb_prompt.v`, `tests/j1_prompt_test.4th`, `fsoc/toolchains/icarus.4th`, `targets/base_soc.4th`, `tests/build/`.
+- `firmware/firmware.hex` is no longer tracked; each project writes its own.
+
 ## [0.1.1] - 2026-09-24
 
 ### Added
