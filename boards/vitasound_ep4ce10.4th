@@ -2,10 +2,12 @@
 
 s" vitasound_ep4ce10" platform-new
 s" EP4CE10E22C8" plat-device
+s" Cyclone IV E" plat-family
 
 s" clk50" 0 io-begin
   s" 23" pins
   s" LVTTL" iostd
+  50000000 plat-clock-hz
 io-end
 
 s" user_led" 0 io-begin

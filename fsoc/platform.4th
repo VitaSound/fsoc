@@ -12,6 +12,7 @@ begin-structure io%
     field: io.iostd$
     field: io.misc$
     field: io.subs
+    field: io.clock-hz
 end-structure
 
 begin-structure conn%
@@ -22,6 +23,7 @@ end-structure
 begin-structure plat%
     field: plat.name$
     field: plat.device$
+    field: plat.family$
     field: plat.ios
     field: plat.conns
     field: plat.reqs
@@ -43,6 +45,7 @@ variable current-io
     plat% allocate throw >r
     fsoc-store r@ plat.name$ !
     0 r@ plat.device$ !
+    0 r@ plat.family$ !
     ulist-new r@ plat.ios !
     ulist-new r@ plat.conns !
     ulist-new r@ plat.reqs !
@@ -52,6 +55,10 @@ variable current-io
 : plat-device ( c-addr u - )
     plat@ plat.device$ @ fsoc-free
     fsoc-store plat@ plat.device$ ! ;
+
+: plat-family ( c-addr u - )
+    plat@ plat.family$ @ fsoc-free
+    fsoc-store plat@ plat.family$ ! ;
 
 variable io-nm-a
 variable io-nm-u
@@ -65,7 +72,15 @@ variable io-idx
     0 current-io @ io.pins$ !
     0 current-io @ io.iostd$ !
     0 current-io @ io.misc$ !
+    0 current-io @ io.clock-hz !
     ulist-new current-io @ io.subs ! ;
+
+: plat-clock-hz ( n -- )
+    current-io @ 0= IF abort" plat-clock-hz outside io" THEN
+    current-io @ io.clock-hz ! ;
+
+: io.clock-hz@ ( io -- n )
+    io.clock-hz @ ;
 
 : pins ( c-addr u - )
     current-io @ 0= IF abort" pins outside io" THEN
@@ -115,18 +130,16 @@ variable find-io-r
 
 : io-match? ( io - flag )
     dup io.index @ find-io-i @ =
-    swap io.name$ @ fsoc-fetch find-io-a @ find-io-u @ fsoc-streq
+    swap io.name$ @ fsoc-fetch find-io-a @ find-io-u @ compare 0=
     and ;
+
+: io-find-one ( io - )
+    dup io-match? IF find-io-r ! ELSE drop THEN ;
 
 : io-find ( c-addr u index - io|0 )
     find-io-i ! find-io-u ! find-io-a !
     0 find-io-r !
-    plat@ plat.ios @ ulist-head @
-    begin dup while
-        dup >r unode-addr @
-        dup io-match? IF find-io-r ! r> drop 0
-        ELSE drop r> unode-next @ THEN
-    repeat drop
+    ['] io-find-one plat@ plat.ios @ ulist-each
     find-io-r @ ;
 
 : request ( c-addr u index - )
@@ -139,16 +152,15 @@ variable find-io-r
     r@ plat@ plat.reqs @ ulist-add
     r> drop ;
 
+: request-one ( io - )
+    dup io.name$ @ fsoc-fetch find-io-a @ find-io-u @ compare 0= IF
+        dup io.name$ @ fsoc-fetch rot io.index @ request
+    ELSE drop THEN ;
+
+\ Every index of a resource name. The ios list is not changed by request.
 : request-all ( c-addr u - )
     find-io-u ! find-io-a !
-    plat@ plat.ios @ ulist-head @
-    begin dup while
-        dup >r unode-addr @
-        dup io.name$ @ fsoc-fetch find-io-a @ find-io-u @ fsoc-streq IF
-            dup io.name$ @ fsoc-fetch rot io.index @ request
-        ELSE drop THEN
-        r> unode-next @
-    repeat drop ;
+    ['] request-one plat@ plat.ios @ ulist-each ;
 
 : plat.ios-len ( - n )
     plat@ plat.ios @ ulist-len ;
@@ -161,3 +173,18 @@ variable find-io-r
 
 : plat.device@ ( - c-addr u )
     plat@ plat.device$ @ fsoc-fetch ;
+
+: plat.family@ ( - c-addr u )
+    plat@ plat.family$ @ fsoc-fetch ;
+
+\ Include boards/<name>.4th from FSOC_HOME. A board file leaves nothing
+\ on the stack; the depth check catches a broken board.
+: board-load ( c-addr u - )
+    s" boards/" 2swap fjson.str-concat
+    s" .4th" fsoc-cat+
+    fsoc-path
+    depth >r
+    2dup included
+    depth r> <> IF true abort" board leaves stack" THEN
+    fjson.str-free
+    plat@ plat.family$ @ 0= IF true abort" board has no family" THEN ;

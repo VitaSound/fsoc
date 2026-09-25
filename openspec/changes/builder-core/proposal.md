@@ -7,14 +7,14 @@
 ## What Changes
 
 - Манифест проекта `project%`: `target.4th` заполняет его словами `task:`, `target:`, `board:`, `design:`, `option:`. CLI читает только манифест.
-- Реестр: `task: <имя>` регистрирует слово `emit ( project -- )`; `target: <имя>` регистрирует `emit`, `run`, `load`. CLI: `--build` = `task.emit`, затем `target.emit`, затем `target.run`; `--load` = `target.load`. Суффиксы `-emit-emulation` / `-on-board` исчезают.
+- Реестр: `task-register` регистрирует слово сборки `( project -- )`; `target-register` регистрирует `emit`, `run`, `load`. CLI: `--build` = `task.emit`, затем `target.emit`, затем `target.run`; `--load` = `target.load`. Суффиксы `-emit-emulation` / `-on-board` исчезают.
 - Пути: `fsoc-path ( rel -- abs )` от `FSOC_HOME`; все `*-pick3`, `*-abs`, `*-emu-file`, `*-main@`, `blinky-load-board` удаляются. Загрузка платы — `board-load ( name -- )` из ядра.
 - Строки и JSON: `fjson/util.4th` (`fjson.str-concat`, `fjson.str-free`, `fjson.u>str`) и `fjson/emit.4th` (`fjson.emit-to-file`, `fjson.object-open`, `fjson.key-uint`, …) заменяют `fsoc-append`, `fsoc-str-dup`, `fsoc-u>str` и ручной `csr-export-json-body`. `fsoc/utils.4th` сжимается до `fsoc-store` / `fsoc-fetch` / `fsoc-write-file`.
 - Контейнеры: `ulist-each` / `ulist-len` вместо обходов `ulist-head @ … unode-next @` в `platform.4th` и `csr.4th`.
 - Оболочка: `sh-run ( cmd msg -- )`, `sh-cp`, `sh-mkdir` — одна точка `system` + `$?` + `abort"`.
 - Лог: `fsoc-note ( msg -- )` в ядре; `soc-note` удаляется.
 - Плата задаёт семейство: `plat-family` в Platform DSL, Quartus пишет `FAMILY` из него.
-- Задачи переезжают в `fsoc/tasks/blinky.4th` и `fsoc/tasks/soc.4th` и содержат только специфику (листы, дизайн, `request`, `quartus-map`). `designs/blinky.4th` удаляется.
+- Задачи переезжают в `fsoc/tasks/blinky.4th` и `fsoc/tasks/soc.4th` и содержат только специфику (листы, дизайн, harness эмуляции, карта ресурс→порт). Путь `design:` — относительно `FSOC_HOME`. `designs/blinky.4th` удаляется.
 - Один `fsoc/load.4th`; `tests/load.4th` включает его через `FSOC_HOME`. `fsoc/toolchains/quartus.4th`-редирект удаляется.
 - Тесты: проект копируется во временный каталог (`TS{ … }ST` с `test-setup` / `test-teardown`), `expect-str-eq`, `expect-stack-clean` в конце каждого файла. Каталоги `projects/*` пользователя тестами не стираются.
 - **BREAKING**: формат `target.4th`. Старые `fsoc-task!` / `fsoc-target!` / `fsoc-board!` / `fsoc-design!` / `soc-lamp-on` заменяются словами манифеста; пять `target.4th` в `projects/` переписываются в этом изменении.

@@ -1,19 +1,18 @@
 // Vendored from https://github.com/jamesbowman/swapforth (BSD-3-Clause)
-// j1a/icestorm/uart.v
+// j1a/icestorm/uart.v — CLK_HZ / BAUD are parameters (divider CLK_HZ/BAUD).
 
 `default_nettype none
 
-`define CLKFREQ   12000000    // frequency of incoming signal 'clk'
-`define BAUD      115200
-
 // Simple baud generator for transmitter
-// ser_clk pulses at 115200 Hz
 
-module baudgen(
+module baudgen #(
+  parameter CLK_HZ = 12000000,
+  parameter BAUD = 115200
+) (
   input wire clk,
   output wire ser_clk);
 
-  localparam lim = (`CLKFREQ / `BAUD) - 1;
+  localparam lim = (CLK_HZ / BAUD) - 1;
   localparam w = $clog2(lim);
   wire [w-1:0] limit = lim[w-1:0];
   reg [w-1:0] counter;
@@ -23,18 +22,15 @@ module baudgen(
     counter <= ser_clk ? 0 : (counter + 1);
 endmodule
 
-// For receiver, a similar baud generator.
-//
-// Need to restart the counter when the transmission starts
-// Generate 2X the baud rate to allow sampling on bit boundary
-// So ser_clk pulses at 2*115200 Hz
-
-module baudgen2(
+module baudgen2 #(
+  parameter CLK_HZ = 12000000,
+  parameter BAUD = 115200
+) (
   input wire clk,
   input wire restart,
   output wire ser_clk);
 
-  localparam lim = (`CLKFREQ / (2 * `BAUD)) - 1;
+  localparam lim = (CLK_HZ / (2 * BAUD)) - 1;
   localparam w = $clog2(lim);
   wire [w-1:0] limit = lim[w-1:0];
   reg [w-1:0] counter;
@@ -48,27 +44,20 @@ module baudgen2(
 
 endmodule
 
-/*
-
------+     +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+----
-     |     |     |     |     |     |     |     |     |     |     |     |
-     |start|  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |stop1|stop2|
-     |     |     |     |     |     |     |     |     |     |     |  ?  |
-     +-----+-----+-----+-----+-----+-----+-----+-----+-----+           +
-
-*/
-
-module uart(
+module uart #(
+  parameter CLK_HZ = 12000000,
+  parameter BAUD = 115200
+) (
    input wire clk,
    input wire resetq,
 
-   output wire uart_busy,       // High means UART is transmitting
-   output reg uart_tx,          // UART transmit wire
+   output wire uart_busy,
+   output reg uart_tx,
 
-   input wire uart_wr_i,        // Raise to transmit byte
+   input wire uart_wr_i,
    input wire [7:0] uart_dat_i
 );
-  reg [3:0] bitcount;           // 0 means idle, so this is a 1-based counter
+  reg [3:0] bitcount;
   reg [8:0] shifter;
 
   assign uart_busy = |bitcount;
@@ -76,7 +65,7 @@ module uart(
 
   wire ser_clk;
 
-  baudgen _baudgen(
+  baudgen #(.CLK_HZ(CLK_HZ), .BAUD(BAUD)) _baudgen(
     .clk(clk),
     .ser_clk(ser_clk));
 
@@ -89,7 +78,7 @@ module uart(
     end else begin
       if (uart_wr_i) begin
         { shifter, uart_tx } <= { uart_dat_i[7:0], 1'b0, 1'b1 };
-        bitcount <= 1 + 8 + 1;    // 1 start, 8 data, 1 stop
+        bitcount <= 1 + 8 + 1;
       end else if (ser_clk & sending) begin
         { shifter, uart_tx } <= { 1'b1, shifter };
         bitcount <= bitcount - 4'd1;
@@ -99,21 +88,18 @@ module uart(
 
 endmodule
 
-module rxuart(
+module rxuart #(
+  parameter CLK_HZ = 12000000,
+  parameter BAUD = 115200
+) (
    input wire clk,
    input wire resetq,
-   input wire uart_rx,      // UART recv wire
-   input wire rd,           // read strobe
-   output wire valid,       // has data 
-   output wire [7:0] data); // data
+   input wire uart_rx,
+   input wire rd,
+   output wire valid,
+   output wire [7:0] data);
   reg [4:0] bitcount;
   reg [7:0] shifter;
-
-  // bitcount == 11111: idle
-  //             0-17:  sampling incoming bits
-  //             18:    character received
-
-  // On starting edge, wait 3 half-bits then sample, and sample every 2 bits thereafter
 
   wire idle = &bitcount;
   assign valid = (bitcount == 18);
@@ -126,7 +112,7 @@ module rxuart(
 
   wire ser_clk;
 
-  baudgen2 _baudgen(
+  baudgen2 #(.CLK_HZ(CLK_HZ), .BAUD(BAUD)) _baudgen(
     .clk(clk),
     .restart(startbit),
     .ser_clk(ser_clk));
@@ -142,7 +128,6 @@ module rxuart(
     else
       bitcountN = bitcount;
 
-  // 3,5,7,9,11,13,15,17
   assign sample = (|bitcount[4:1]) & bitcount[0] & ser_clk;
   assign data = shifter;
 
@@ -160,26 +145,29 @@ module rxuart(
   end
 endmodule
 
-module buart(
+module buart #(
+  parameter CLK_HZ = 12000000,
+  parameter BAUD = 115200
+) (
    input wire clk,
    input wire resetq,
-   input wire rx,           // recv wire
-   output wire tx,          // xmit wire
-   input wire rd,           // read strobe
-   input wire wr,           // write strobe
-   output wire valid,       // has recv data 
-   output wire busy,        // is transmitting
+   input wire rx,
+   output wire tx,
+   input wire rd,
+   input wire wr,
+   output wire valid,
+   output wire busy,
    input wire [7:0] tx_data,
-   output wire [7:0] rx_data // data
+   output wire [7:0] rx_data
 );
-  rxuart _rx (
+  rxuart #(.CLK_HZ(CLK_HZ), .BAUD(BAUD)) _rx (
      .clk(clk),
      .resetq(resetq),
      .uart_rx(rx),
      .rd(rd),
      .valid(valid),
      .data(rx_data));
-  uart _tx (
+  uart #(.CLK_HZ(CLK_HZ), .BAUD(BAUD)) _tx (
      .clk(clk),
      .resetq(resetq),
      .uart_busy(busy),

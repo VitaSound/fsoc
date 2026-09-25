@@ -2,9 +2,9 @@
 \   https://theforth.net/guidelines
 forth-package
     key-value name fsoc
-    key-value version 0.1.1
+    key-value version 0.3.0
     key-value license COPL
-    key-value description Forth-native SoC builder: boards, toolchains, CSR, J1
+    key-value description Forth-native SoC builder: boards, toolchains, iomap, J1
     key-value main fsoc.4th
     key-value fmix ~> 0.8
     key-value flint ~> 0.2

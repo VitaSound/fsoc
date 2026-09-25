@@ -18,8 +18,9 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-  CLI["fsoc.4th"] --> PROJ["fsoc/project.4th: project%"]
-  CLI --> REG["fsoc/registry.4th: task: target:"]
+  CLI["fsoc.4th"] --> BUILD["fsoc/build.4th"]
+  BUILD --> PROJ["fsoc/project.4th: project%"]
+  BUILD --> REG["fsoc/registry.4th: task-register target-register"]
   REG --> TB["fsoc/tasks/blinky.4th"]
   REG --> TS["fsoc/tasks/soc.4th"]
   REG --> TE["targets/emulation.4th"]
@@ -54,11 +55,11 @@ flowchart TB
 
 1. **Манифест — структура `project%`, а не набор глобальных буферов.** Поля: `task$`, `target$`, `board$`, `design$`, `dir$`, `opts` (`ulist` пар имя→значение). Слова `task:` … `option:` — `parse-name` не используют: `s" soc" task:` сохраняет привычный вид `target.4th` и совместим с `included`. Альтернатива — оставить `fsoc-task!`-семейство и просто перенести его в ядро — сохраняет пять буферов и `blinky-board!`-алиас. `soc-lamp-on` становится `s" lamp" s" 1" option:`; задача читает `s" lamp" project.opt@`.
 
-2. **Реестр на `ulist` записей `{ name$, emit-xt, run-xt, load-xt }`.** `task:` и `target:` — обычные слова определения времени загрузки; задача регистрирует себя в конце своего файла. `fsoc.4th` ищет запись по имени из манифеста и `execute`. Альтернатива — `find-name` по склеенному имени — это и есть текущая утечка. Неизвестное имя — `abort" unknown task"` / `abort" unknown target"` до любого `emit`.
+2. **Реестр на `ulist` записей `{ name$, emit-xt, run-xt, load-xt }`.** `task-register` и `target-register` — слова времени загрузки; задача регистрирует себя в конце своего файла. Имена манифеста (`task:`) и реестра различаются, чтобы `target.4th` не мог случайно зарегистрировать что-либо. `fsoc.4th` ищет запись по имени из манифеста и `execute`. Альтернатива — `find-name` по склеенному имени — это и есть текущая утечка. Неизвестное имя — `abort" unknown task"` / `abort" unknown target"` до любого `emit`.
 
-3. **Хуки таргета: `emit ( project -- )`, `run ( project -- )`, `load ( project -- )`.** emulation: `emit` пишет `sim.sh`, `run` — `sh sim.sh` с обработкой кода 130 (сейчас в `fsoc-do-build`), `load` — `noop`. quartus: `emit` пишет `.qsf` `.sdc` `build.sh` `load.sh`, `run` — `noop`, `load` — `sh load.sh`. Порядок `--build`: `task.emit` (листы, дизайн, прошивка, `request`, `quartus-map`), затем `target.emit`, затем `target.run`. Так задача не знает, чем её запускают, а таргет — что он собирает.
+3. **Хуки таргета: `emit ( project -- )`, `run ( project -- )`, `load ( project -- )`.** emulation: `emit` пишет `sim.sh`, `run` — `sh sim.sh` с обработкой кода 130 (сейчас в `fsoc-do-build`), `load` — `noop`. quartus: `emit` пишет `.qsf` `.sdc` `build.sh` `load.sh`, `run` — `noop`, `load` — `sh load.sh`. Порядок `--build`: ядро грузит плату из `board:` (если задана), затем `task.emit` (листы, дизайн, прошивка, `map-port` ресурс→порт, harness эмуляции в `project.harness$`), затем `target.emit` (emulation копирует `emu/` и harness, пишет `sim.sh`; quartus пишет файлы по `plat.maps`), затем `target.run`. Так задача не знает, чем её запускают, а таргет — что он собирает.
 
-4. **Пути только от `FSOC_HOME`.** `fsoc-path ( c-addr u -- c-addr u )` = `$FSOC_HOME/<rel>`, результат — выделенная строка. `cwd` — каталог проекта, читается один раз в `project.dir$` через `get-dir`. `included` получает абсолютные пути. Тесты выставляют `FSOC_HOME` = корень репозитория в `tests/load.4th` (через `getenv` с fallback на `../`), после чего `s" fsoc/load.4th" fsoc-path included`. Альтернатива — искать вверх по дереву `package.4th` — скрытая магия, которую запрещает правило «нижний слой не подставляет каталог верхнего».
+4. **Пути только от `FSOC_HOME`.** `fsoc-path ( c-addr u -- c-addr u )` = `$FSOC_HOME/<rel>`, результат — выделенная строка. `cwd` — каталог проекта, читается один раз в `project.dir$` через `get-dir`. `included` получает абсолютные пути. Тесты грузят `../fsoc/load.4th` относительно `tests/` и, если `FSOC_HOME` не задан, ставят корень словом `fsoc-root!` из `cwd@` (fmix test запускается из корня). Альтернатива — искать вверх по дереву `package.4th` — скрытая магия, которую запрещает правило «нижний слой не подставляет каталог верхнего».
 
 5. **Строки — `fjson/util.4th`.** `fjson.str-concat` возвращает новую строку; освобождение — `fjson.str-free`. Правило в коде: слово, получившее выделенную строку и не вернувшее её, освобождает её само. Длинные тексты (`sim.sh`, `.qsf`, `csr.4th`) пишутся построчно через `fjson.emit-to-file` + `fjson.emit`, без сборки в памяти. `fsoc-store` / `fsoc-fetch` (блок с длиной в первой ячейке) остаются: это формат полей структур, fjson его не даёт.
 
@@ -66,7 +67,11 @@ flowchart TB
 
 7. **Семейство — свойство платы.** `plat-family ( c-addr u -- )` в Platform DSL, `plat.family@`; три платы получают значение (`Cyclone IV E`, `Cyclone IV E`, `Cyclone II`). Quartus без семейства — `abort" quartus-write: no family"`.
 
-8. **Тесты во временном каталоге.** `test-setup` делает `mktemp -d`, копирует туда `target.4th` проекта, `test-teardown` удаляет. Прогон билдера — `cd <tmp> && FSOC_HOME=<root> bin/fsoc --build`. `expect-stack-clean` в конце каждого тестового файла ловит мусор от `included` платы, который сейчас чистится циклом в `blinky-on-board`; сам цикл удаляется, и если `included` платы или `request` оставляют элементы, это исправляется в источнике.
+8. **Прошивка soc проходит через модель Verilator.** Образ SwapForth получается подачей исходника в работающую модель и снимком RAM; для этого нужны `emu/con.*`, harness и `sim.sh` уже на шаге `task.emit`, до `target.emit`. Задача soc вызывает `emu-emit` как инструмент (идемпотентно; на таргете emulation те же файлы затем пишутся повторно). Это осознанная временная связь задачи с таргетом эмуляции: `emu-lib` выносит стадию прошивки в отдельный `soc_feed`, `soc-board` делает её независимой от таргета.
+
+9. **Ядро отделено от задач файлом загрузки.** `fsoc/core.4th` — всё без задач (включая таргеты, которые регистрируются сами), `fsoc/load.4th` = `core.4th` + `tasks/*`. Тест слоёв грузит `core.4th` и проверяет, что `task-find` пуст, а таргеты есть. Конвейер `fsoc-read-manifest` / `fsoc-build` / `fsoc-load` лежит в `fsoc/build.4th` внутри ядра, чтобы тест реестра вызывал его без CLI.
+
+10. **Тесты во временном каталоге.** `test-setup` создаёт `/tmp/fsoc-test-<utime>`, `tmp-use-project` копирует туда `target.4th` проекта, `test-teardown` удаляет. Прогон билдера — `in-tmp-fsoc`: `cd <tmp> && env <prefix> FSOC_HOME=<root> <root>/bin/fsoc <args>`. Сценарий «FSOC_HOME не задан» вызывает `gforth fsoc.4th` напрямую: `bin/fsoc` подставляет `$HOME/fsoc` по умолчанию. `expect-stack-clean` в конце каждого тестового файла ловит мусор от `included` платы, который сейчас чистится циклом в `blinky-on-board`; сам цикл удаляется, и если `included` платы или `request` оставляют элементы, это исправляется в источнике.
 
 ## Risks / Trade-offs
 

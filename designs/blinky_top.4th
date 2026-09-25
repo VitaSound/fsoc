@@ -2,17 +2,13 @@
 \
 \ Leaf logic stays in rtl/blinky.v. This file only includes that module,
 \ declares its ports, and instantiates it as top.
-\ The caller supplies the output directory in FSOC_BLINKY_TOP. The file
-\ name is project.top plus .v. This design does not name a project
-\ directory or a launch method.
+\ The caller supplies the output directory with --out. The file name
+\ is project.top plus .v. LED_BIT comes from --param when the leaf
+\ should not use its Verilog default. This design does not name a
+\ project directory or a launch method.
 
-: blinky-top-out@ ( - c-addr u )
-    s" FSOC_BLINKY_TOP" getenv
-    dup 0= IF true abort" FSOC_BLINKY_TOP unset" THEN
-    project.out-path ;
-
-: blinky-maybe-led-bit ( - )
-    s" FSOC_BLINKY_LED_BIT" getenv dup IF
+: blinky-maybe-led-bit ( -- )
+    s" LED_BIT" project.param@ dup IF
         s" LED_BIT" 2swap hdl-inst-param
     ELSE
         2drop
@@ -23,7 +19,6 @@ hdl-project
   s" top" project.top!
 
   s" designs/blinky_top.4th" begin-srcfile
-  blinky-top-out@ file-frag.out!
 
   s" blinky.v" hdl-include-v
   s" blinky" hdl-blackbox

@@ -39,11 +39,11 @@ rules:
     - Таргет не знает имя задачи (blinky). Имя задачи и плата живут в target.4th
     - "setenv в Gforth не вызывать: вызов падает. FSOC_* передавать в строке system; оболочка может экспортировать переменные до старта Gforth"
     - Путь брать через get-dir. expand-file ищет по Forth-пути и может взять чужой файл
-    - "included платы и request сорят стек: каталог проекта сохранить в буфер до include"
+    - "Пути репозитория только от FSOC_HOME (fsoc-path); каталог проекта — cwd, читается один раз в project%"
     - IF и abort" только внутри определения
     - "next-arg сразу копировать в свой буфер: следующий разбор затирает строку аргумента"
-    - fhdlgen вызывать как ${FHDLGEN_HOME:-$HOME/fhdlgen}/bin/fhdlgen
-    - Путь склеивать через fsoc-append по фактической длине префикса. Запись префикса ../projects/blinky_ длиной 19 со смещением 18 затирала _ и давала каталоги blinkyvitasound_ep4ce10 и blinkyrz_easyfpga
+    - fhdlgen вызывать как ${FHDLGEN_HOME:-$HOME/fhdlgen}/bin/fhdlgen build <design> --out <dir>; дизайн не читает окружение
+    - Строки через fjson.str-concat / fsoc-cat+; списки через ulist-each; задачи не определяют свои cp/mkdir/pick
   tasks:
     - Новое поведение покрывать fmix test
 

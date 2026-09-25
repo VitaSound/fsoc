@@ -1,6 +1,5 @@
-\ projects/soc_emul/target.4th — task, target, board for this project
+\ projects/soc_emul/target.4th — SwapForth console on the J1 SoC
 
-s" soc" fsoc-task!
-s" emulation" fsoc-target!
-0 0 fsoc-board!
-s" ../../designs/soc_console.4th" fsoc-design!
+s" soc" task:
+s" emulation" target:
+s" designs/soc_console.4th" design:

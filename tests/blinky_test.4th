@@ -1,111 +1,67 @@
-\ tests/blinky_test.4th — one blinky task, three project dirs
+\ tests/blinky_test.4th — one blinky task, emulation and three boards
 
 s" test_common.4th" included
-s" load.4th" included
+s" fixture.4th" included
 
-\ designs/ names the module. The project directory is the caller's.
-s" grep -q projects/ designs/blinky_top.4th" system
-$? 0= expect-false
-s" grep -q blinky_emul designs/blinky_top.4th" system
-$? 0= expect-false
+\ --- emulation: short divider for CI; interactive uses the RTL default ---
+test-setup
+s" blinky_emul" tmp-use-project
+s\" s\" led-bit\" s\" 4\" option:" tmp-manifest+
+s" FSOC_EMU_EDGES=2 FSOC_EMU_FAST=1" s" --build" in-tmp-fsoc expect-true
 
-s" test -f fsoc/blinky_main.cpp" system
-$? 0= expect-true
+s" blinky.v" tmp-exists? expect-true
+s" top.v" tmp-exists? expect-true
+s" LED_BIT(4)" s" top.v" tmp-grep? expect-true
+s" u(.clk(clk)" s" top.v" tmp-grep? expect-true
+s" sim.sh" tmp-exists? expect-true
+s" blinky_main.cpp" tmp-exists? expect-true
+s" con.cc" tmp-exists? expect-true
+s" blinky.qsf" tmp-exists? expect-false
+s" LED_BIT = 25" s" blinky.v" tmp-grep? expect-true
+s" rtl/blinky.v" s" blinky.v" tmp-same-as-root? expect-true
+s" rtl/tb_blinky.v" s" tb_blinky.v" tmp-same-as-root? expect-true
+s" fsoc/tasks/blinky_main.cpp" s" blinky_main.cpp" tmp-same-as-root? expect-true
 
-s" test -f emu/blinky_main.cpp" system
-$? 0= expect-false
-
-\ Keep committed target.4th. fmix cwd is the repo root.
-s" mkdir -p projects/blinky_emul projects/blinky_vitasound_ep4ce10 projects/blinky_rz_easyfpga" system
-s" find projects/blinky_emul projects/blinky_vitasound_ep4ce10 projects/blinky_rz_easyfpga -mindepth 1 ! -name target.4th -delete" system
-
-\ --- emulation: short divider for CI; interactive uses LED_BIT=25 ---
-s" 4" blinky-led-u ! blinky-led-a !
-s" projects/blinky_emul" blinky-emit-emulation
-
-s" test -f projects/blinky_emul/blinky.v" system
-$? 0= expect-true
-
-s" test -f projects/blinky_emul/top.v" system
-$? 0= expect-true
-
-s" grep -q 'LED_BIT(4)' projects/blinky_emul/top.v" system
-$? 0= expect-true
-
-s" grep -q 'u(.clk(clk)' projects/blinky_emul/top.v" system
-$? 0= expect-true
-
-s" test -f projects/blinky_emul/sim.sh" system
-$? 0= expect-true
-
-s" test -f projects/blinky_emul/blinky_main.cpp" system
-$? 0= expect-true
-
-s" test -f projects/blinky_emul/blinky.qsf" system
-$? 0= expect-false
-
-s" grep -q 'LED_BIT = 25' projects/blinky_emul/blinky.v" system
-$? 0= expect-true
-
-variable cmp-mid-a
-variable cmp-mid-u
-s" cmp -s " blinky-rtl@ fsoc-append
-cmp-mid-u ! cmp-mid-a !
-cmp-mid-a @ cmp-mid-u @ s"  projects/blinky_emul/blinky.v" fsoc-append
-cmp-mid-a @ cmp-mid-u @ fsoc-str-free
-2dup system
-fsoc-str-free
-$? 0= expect-true
-
-s" cd projects/blinky_emul && FSOC_EMU_EDGES=2 FSOC_EMU_FAST=1 sh sim.sh > sim.log" system
-$? 0= expect-true
-
-s" grep -q 'pin led 0' projects/blinky_emul/sim.log" system
-$? 0= expect-true
-
-s" grep -q 'pin led 1' projects/blinky_emul/sim.log" system
-$? 0= expect-true
-
-s" awk 'END { exit !(NR>=2 && NR<=8) }' projects/blinky_emul/sim.log" system
-$? 0= expect-true
+s" Start build" s" sim.log" tmp-grep? expect-true
+s" Start emulation" s" sim.log" tmp-grep? expect-true
+s" pin led 0" s" sim.log" tmp-grep? expect-true
+s" pin led 1" s" sim.log" tmp-grep? expect-true
+s" awk '/pin led/{n++} END { exit !(n>=2 && n<=8) }' sim.log" in-tmp-sh expect-true
+test-teardown
 
 \ --- quartus: vitasound_ep4ce10, default LED_BIT ---
-s" vitasound_ep4ce10" blinky-load-board
-s" clk50" 0 request
-s" user_led" 0 request
-s" projects/blinky_vitasound_ep4ce10" blinky-emit-quartus
-
-s" test -f projects/blinky_vitasound_ep4ce10/blinky.qsf" system
-$? 0= expect-true
-
-s" grep -q 'TOP_LEVEL_ENTITY top' projects/blinky_vitasound_ep4ce10/blinky.qsf" system
-$? 0= expect-true
-
-s" grep -q 'VERILOG_FILE top.v' projects/blinky_vitasound_ep4ce10/blinky.qsf" system
-$? 0= expect-true
-
-s" grep -q PIN_23 projects/blinky_vitasound_ep4ce10/blinky.qsf" system
-$? 0= expect-true
-
-s" grep -q PIN_86 projects/blinky_vitasound_ep4ce10/blinky.qsf" system
-$? 0= expect-true
-
-s" grep -q LED_BIT projects/blinky_vitasound_ep4ce10/top.v" system
-$? 0= expect-false
+test-setup
+s" blinky_vitasound_ep4ce10" tmp-use-project
+s" " s" --build" in-tmp-fsoc expect-true
+s" blinky.qsf" tmp-exists? expect-true
+s" TOP_LEVEL_ENTITY top" s" blinky.qsf" tmp-grep? expect-true
+s" VERILOG_FILE top.v" s" blinky.qsf" tmp-grep? expect-true
+s" FAMILY Cyclone IV E" s" blinky.qsf" tmp-grep? expect-true
+s" DEVICE EP4CE10E22C8" s" blinky.qsf" tmp-grep? expect-true
+s" PIN_23 -to clk" s" blinky.qsf" tmp-grep? expect-true
+s" PIN_86 -to led" s" blinky.qsf" tmp-grep? expect-true
+s" LED_BIT" s" top.v" tmp-grep? expect-false
+s" create_clock -name clk -period 20.000" s" blinky.sdc" tmp-grep? expect-true
+test-teardown
 
 \ --- quartus: rz_easyfpga ---
-s" rz_easyfpga" blinky-load-board
-s" clk50" 0 request
-s" user_led" 0 request
-s" projects/blinky_rz_easyfpga" blinky-emit-quartus
+test-setup
+s" blinky_rz_easyfpga" tmp-use-project
+s" " s" --build" in-tmp-fsoc expect-true
+s" PIN_87 -to led" s" blinky.qsf" tmp-grep? expect-true
+s" PIN_86" s" blinky.qsf" tmp-grep? expect-false
+s" DEVICE EP4CE6E22C8" s" blinky.qsf" tmp-grep? expect-true
+s" FAMILY Cyclone IV E" s" blinky.qsf" tmp-grep? expect-true
+test-teardown
 
-s" grep -q PIN_87 projects/blinky_rz_easyfpga/blinky.qsf" system
-$? 0= expect-true
+\ --- quartus: ep2c5_mini, a second family ---
+test-setup
+s\" s\" blinky\" task:\ns\" quartus\" target:\ns\" ep2c5_mini\" board:\n" tmp-manifest
+s" " s" --build" in-tmp-fsoc expect-true
+s" FAMILY Cyclone II" s" blinky.qsf" tmp-grep? expect-true
+s" DEVICE EP2C5T144C8" s" blinky.qsf" tmp-grep? expect-true
+test-teardown
 
-s" grep -q PIN_86 projects/blinky_rz_easyfpga/blinky.qsf" system
-$? 0= expect-false
-
-s" grep -q 'DEVICE EP4CE6E22C8' projects/blinky_rz_easyfpga/blinky.qsf" system
-$? 0= expect-true
-
+test-finish
+expect-stack-clean
 cr ." blinky_test ok" cr

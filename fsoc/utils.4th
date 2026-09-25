@@ -1,52 +1,38 @@
-\ fsoc/utils.4th — string and file helpers
+\ fsoc/utils.4th — string blocks and file helpers.
+\ Strings: fjson.str-dup / fjson.str-concat / fjson.str-free / fjson.u>str.
+\ fsoc-cat+ is the one builder addition: concat, then free the left operand.
 
-variable fsoc-dup-a
-variable fsoc-dup-u
+: fsoc-cat+ ( a1 u1 a2 u2 -- a3 u3 )
+    2over 2>r fjson.str-concat 2r> fjson.str-free ;
 
-: fsoc-str-dup ( c-addr u - c-addr2 u )
-    fsoc-dup-u ! fsoc-dup-a !
-    fsoc-dup-u @ allocate throw >r
-    fsoc-dup-a @ r@ fsoc-dup-u @ move
-    r> fsoc-dup-u @ ;
+\ Concat and free the right operand only (left is a literal).
+: fsoc-+cat ( a1 u1 a2 u2 -- a3 u3 )
+    2dup 2>r fjson.str-concat 2r> fjson.str-free ;
 
-: fsoc-str-free ( c-addr u - ) drop free throw ;
+\ Concat and free both operands.
+: fsoc-cat++ ( a1 u1 a2 u2 -- a3 u3 )
+    2dup 2>r fsoc-cat+ 2r> fjson.str-free ;
 
-: fsoc-streq ( addr1 u1 addr2 u2 - flag )
-    compare 0= ;
+\ Block: cell length, then bytes. Format of string fields in structures.
+: fsoc-store ( c-addr u -- block )
+    dup 1 cells + allocate throw >r
+    dup r@ !
+    r@ cell+ swap move
+    r> ;
 
-variable fsoc-pfx-src
-variable fsoc-pfx-len
-variable fsoc-pfx-blk
-
-: fsoc-store ( c-addr u - block )
-    fsoc-str-dup swap fsoc-pfx-src ! fsoc-pfx-len !
-    fsoc-pfx-len @ 1 cells + allocate throw fsoc-pfx-blk !
-    fsoc-pfx-blk @ dup fsoc-pfx-len @ swap !
-    fsoc-pfx-src @ over cell+ fsoc-pfx-len @ cmove
-    fsoc-pfx-src @ fsoc-pfx-len @ fsoc-str-free
-    fsoc-pfx-blk @ ;
-
-: fsoc-free ( block - )
+: fsoc-free ( block -- )
     ?dup IF free throw THEN ;
 
-: fsoc-fetch ( block - c-addr u )
+: fsoc-fetch ( block -- c-addr u )
     dup 0= IF drop 0 0 EXIT THEN
     dup @ swap cell+ swap ;
 
-variable fsoc-app-a
-variable fsoc-app-ua
-variable fsoc-app-b
-variable fsoc-app-ub
+\ Replace the block in a field; the old one is freed.
+: fsoc-store! ( c-addr u field-addr -- )
+    dup @ fsoc-free
+    >r fsoc-store r> ! ;
 
-: fsoc-append ( c-addr u c-addr u - c-addr u )
-    fsoc-app-ub ! fsoc-app-b !
-    fsoc-app-ua ! fsoc-app-a !
-    fsoc-app-ua @ fsoc-app-ub @ + allocate throw >r
-    fsoc-app-a @ r@ fsoc-app-ua @ move
-    fsoc-app-b @ r@ fsoc-app-ua @ + fsoc-app-ub @ move
-    r> fsoc-app-ua @ fsoc-app-ub @ + ;
-
-: fsoc-dirname ( c-addr u - c-addr u2 )
+: fsoc-dirname ( c-addr u -- c-addr u2 )
     dup 0= IF EXIT THEN
     begin
         1-
@@ -54,23 +40,33 @@ variable fsoc-app-ub
         2dup + c@ [char] / = IF EXIT THEN
     again ;
 
-: fsoc-ensure-dir ( c-addr-path u - )
+: fsoc-ensure-dir ( c-addr-path u -- )
     fsoc-dirname
     dup 0= IF 2drop EXIT THEN
-    s" mkdir -p " 2swap fsoc-append
+    s" mkdir -p " 2swap fjson.str-concat
     2dup system
-    fsoc-str-free ;
+    fjson.str-free ;
 
-create fsoc-dec-buf 16 allot
-
-: fsoc-u>str ( u - c-addr u )
-    s>d <# #s #>
-    dup >r
-    fsoc-dec-buf swap cmove
-    fsoc-dec-buf r> ;
-
-: fsoc-write-file ( c-addr-path u c-addr-body u - )
+: fsoc-write-file ( c-addr-path u c-addr-body u -- )
     2swap 2dup fsoc-ensure-dir
     w/o create-file throw >r
     r@ write-file throw
     r> close-file throw ;
+
+\ fjson.emit-to-file has no close. This closes and returns emit to stdout.
+: fsoc-emit-close ( -- )
+    fjson.fid @ close-file throw
+    fjson.emit-to-stdout ;
+
+: fsoc-emit-line ( c-addr u -- )
+    fjson.emit s\" \n" fjson.emit ;
+
+\ First line of a small text file, without the trailing newline. Allocated.
+: fsoc-read-line1 ( c-addr-path u -- c-addr u )
+    slurp-file
+    dup 0= IF EXIT THEN
+    2dup + 1- c@ 10 = IF 1- THEN ;
+
+\ ulist-add prepends. Walk in insertion order without keeping a copy.
+: ulist-each-fifo ( xt lst -- )
+    dup ulist-reverse 2dup ulist-each ulist-reverse drop ;

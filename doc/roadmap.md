@@ -7,7 +7,8 @@
 - Blinky vertical slice: `rtl/blinky.v`, `designs/blinky_top.4th`, `projects/blinky_emul`, `blinky_vitasound_ep4ce10`, `blinky_rz_easyfpga`
 - SwapForth J1a cross-compiled from source, `projects/soc_emul` answers a line with ` ok`; ncurses terminal, `FSOC_EMU_CON` views
 - `regio` and interval `timer` on the J1 `io` bus (`h# 400`, `h# 800`), `'BOOT` cell, `projects/soc_blink` lamp loop
-- Stubs awaiting hardware: `tools/fterm.4th` (in-memory `ok` backend), `firmware/midi_foot.4th` (host mock of FOOTSWITCH-SCAN)
+- Stubs awaiting hardware: `firmware/midi_foot.4th` (host mock of FOOTSWITCH-SCAN)
+- USB-UART on EP4CE10: `projects/soc_vitasound_ep4ce10`, `fterm` device backend
 
 ## Blinky architecture (current)
 
@@ -19,16 +20,18 @@
 
 Full module bodies on Forth (fhdlgen expr-AST, structural `always`, no string RHS). Blinky logic stays a `.v` file; only `top` is generated.
 
-## Next — layer refactor toward 0.2.0 (OpenSpec changes in `openspec/changes/`)
+## Done — layer refactor 0.2.0 / SoC on board 0.3.0
 
-Review of 0.1.1 found abstraction leaks: the CLI calls task words, every task carries its own path guessing (`../../`, `../`, bare), designs read `FSOC_*` from the environment, `soc_main.cpp` mixes simulator, UART codec, firmware feed and test oracle, and the `io` address map lives in three files. The fix is six changes, in order:
+Review of 0.1.1 found abstraction leaks. Six OpenSpec changes closed them:
 
 1. `builder-hygiene` — archive finished changes, remove dead code, `fmix hook`, frules
 2. `builder-core` — `project%` manifest (`task:` `target:` `board:` `design:` `option:`), task/target registry with `emit` / `run` / `load` hooks, paths from `FSOC_HOME`, fjson/fenum/ttester-ext instead of local helpers, FPGA family from the board
 3. `design-out-contract` — fhdlgen `--out` / `--param` / `includes.lst`; designs stop reading the environment; one `j1_wrap` blackbox
 4. `emu-lib` — `emu/` as a library (clock, uart, script); thin task `main`s; separate `feed` step writes `firmware.hex` from Verilog
 5. `iomap` — one address map in Forth → `csr.fs`, `iomap.vh`, `csr.json`; `cores.4th` removed
-6. `soc-board` — SoC on `vitasound_ep4ce10` over USB-UART, clock from the board, real `fterm` backend (0.3.0)
+6. `soc-board` — SoC on `vitasound_ep4ce10` over USB-UART, clock from the board, `fterm` device backend
+
+Quartus `--load` and a live `fterm` line on USB-UART still need a machine with Quartus and the board.
 
 ## Later
 

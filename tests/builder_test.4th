@@ -1,34 +1,67 @@
-\ tests/builder_test.4th — fsoc --build / --load from the project directory
-\ fmix cwd is the repo root. FSOC_HOME from a project dir is ../..
+\ tests/builder_test.4th — fsoc --build / --load from a project directory.
+\ Every run happens in a temporary copy of the manifest.
 
 s" test_common.4th" included
+s" fixture.4th" included
 
-s" cd projects/blinky_rz_easyfpga && FSOC_HOME=../.. ../../bin/fsoc --build" system
-$? 0= expect-true
+\ --- board build writes Quartus files and does not run Quartus ---
+test-setup
+s" blinky_rz_easyfpga" tmp-use-project
+s" " s" --build" in-tmp-fsoc expect-true
+s" PIN_87 -to led" s" blinky.qsf" tmp-grep? expect-true
+s" FAMILY Cyclone IV E" s" blinky.qsf" tmp-grep? expect-true
+s" blinky.sdc" tmp-exists? expect-true
+s" build.sh" tmp-exists? expect-true
+s" load.sh" tmp-exists? expect-true
+s" top.v" tmp-exists? expect-true
+s" Start build" s" sim.log" tmp-grep? expect-true
+s" obj_dir" tmp-exists? expect-false
+test-teardown
 
-s" grep -q 'PIN_87 -to led' projects/blinky_rz_easyfpga/blinky.qsf" system
-$? 0= expect-true
+\ --- emulation ignores --load ---
+test-setup
+s" blinky_emul" tmp-use-project
+s" " s" --load" in-tmp-fsoc expect-true
+s" top.v" tmp-exists? expect-false
+test-teardown
 
-s" cd projects/blinky_emul && FSOC_HOME=../.. ../../bin/fsoc --load" system
-$? 0= expect-true
+\ --- unknown task: nothing is written ---
+test-setup
+s\" s\" nosuch\" task:\ns\" emulation\" target:\n" tmp-manifest
+s" " s" --build" in-tmp-fsoc expect-false
+s" top.v" tmp-exists? expect-false
+test-teardown
 
-s" rm -rf projects/builder_unknown && mkdir -p projects/builder_unknown" system
-$? 0= expect-true
+\ --- unknown target ---
+test-setup
+s\" s\" blinky\" task:\ns\" nosuch\" target:\n" tmp-manifest
+s" " s" --build" in-tmp-fsoc expect-false
+s" top.v" tmp-exists? expect-false
+test-teardown
 
-s\" cat > projects/builder_unknown/target.4th <<'EOF'\ns\" nosuch\" fsoc-task!\ns\" emulation\" fsoc-target!\n0 0 fsoc-board!\nEOF\n" system
-$? 0= expect-true
+\ --- manifest without a target ---
+test-setup
+s\" s\" blinky\" task:\n" tmp-manifest
+s" " s" --build" in-tmp-fsoc expect-false
+s" top.v" tmp-exists? expect-false
+test-teardown
 
-s" cd projects/builder_unknown && FSOC_HOME=../.. ../../bin/fsoc --build" system
-$? 0= expect-false
+\ --- the old task-named manifest words are gone ---
+test-setup
+s\" s\" blinky\" fsoc-task!\ns\" emulation\" fsoc-target!\n" tmp-manifest
+s" " s" --build" in-tmp-fsoc expect-false
+test-teardown
 
-s" test -f projects/builder_unknown/top.v" system
-$? 0= expect-false
+\ --- FSOC_HOME unset: the CLI itself stops (bin/fsoc would default it) ---
+test-setup
+s" blinky_emul" tmp-use-project
+s" env -u FSOC_HOME gforth " fsoc-root fjson.str-concat
+s" /fsoc.4th --build > sim.log 2>&1" fsoc-cat+
+2dup in-tmp-sh expect-false fjson.str-free
+s" FSOC_HOME unset" s" sim.log" tmp-grep? expect-true
+s" top.v" tmp-exists? expect-false
+test-teardown
 
-s" rm -rf projects/builder_unknown" system
-$? 0= expect-true
-
-: builder-fail-exit ( - )
-    #ERRORS @ IF 1 (bye) THEN ;
-
-builder-fail-exit
+test-finish
+expect-stack-clean
 cr ." builder_test ok" cr

@@ -1,5 +1,4 @@
-\ projects/blinky_emul/target.4th — task, target, board for this project
+\ projects/blinky_emul/target.4th — task and target for this project
 
-s" blinky" fsoc-task!
-s" emulation" fsoc-target!
-0 0 fsoc-board!
+s" blinky" task:
+s" emulation" target:

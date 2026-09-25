@@ -4,14 +4,18 @@
 // PC[12] stays the @ cycle flag. The CPU executes the image.
 module j1_wrap #(
     parameter USE_TIMER = 0,
-    parameter USE_REGIO = 0
+    parameter USE_REGIO = 0,
+    parameter CLK_HZ = 12000000,
+    parameter BAUD = 115200
 ) (
     input  wire clk,
     input  wire rst,
+    input  wire dump,
     input  wire uart_rx,
     output wire uart_tx,
     output wire led
 );
+`include "iomap.vh"
     reg [15:0] ram [0:4095] /* verilator public_flat */;
     initial $readmemh("firmware.hex", ram);
 
@@ -26,14 +30,15 @@ module j1_wrap #(
     wire        uart_valid;
     wire [7:0]  uart_rx_data;
     wire [15:0] timer_value;
-    // h# 400 led bit, h# 800 timer, h# 1000 data, h# 2000 status
     wire [15:0] io_din =
-        (mem_addr[10] ? {15'd0, led} : 16'd0) |
-        (mem_addr[11] ? timer_value : 16'd0) |
-        (mem_addr[12] ? {8'd0, uart_rx_data} : 16'd0) |
-        (mem_addr[13] ? {14'd0, uart_valid, ~uart_busy} : 16'd0);
+        (mem_addr[IO_LED_BIT] ? {15'd0, led} : 16'd0) |
+        (mem_addr[IO_TIMER_BIT] ? timer_value : 16'd0) |
+        (mem_addr[IO_UART_DATA_BIT] ? {8'd0, uart_rx_data} : 16'd0) |
+        (mem_addr[IO_UART_STATUS_BIT] ? {14'd0, uart_valid, ~uart_busy} : 16'd0);
 
     always @(posedge clk) begin
+        if (dump)
+            $writememh("firmware.hex", ram);
         if (mem_wr)
             ram[mem_addr[12:1]] <= dout;
         if (rst)
@@ -60,7 +65,7 @@ module j1_wrap #(
             timer _timer (
                 .clk(clk),
                 .rst(rst),
-                .wr(io_wr & mem_addr[11]),
+                .wr(io_wr & mem_addr[IO_TIMER_BIT]),
                 .din(dout),
                 .value(timer_value)
             );
@@ -71,7 +76,7 @@ module j1_wrap #(
             regio #(.WIDTH(1)) _regio (
                 .clk(clk),
                 .rst(rst),
-                .wr(io_wr & mem_addr[10]),
+                .wr(io_wr & mem_addr[IO_LED_BIT]),
                 .din(dout[0]),
                 .value(led)
             );
@@ -80,13 +85,13 @@ module j1_wrap #(
         end
     endgenerate
 
-    buart _uart (
+    buart #(.CLK_HZ(CLK_HZ), .BAUD(BAUD)) _uart (
         .clk(clk),
         .resetq(~rst),
         .rx(uart_rx),
         .tx(uart_tx),
-        .rd(io_rd & mem_addr[12]),
-        .wr(io_wr & mem_addr[12]),
+        .rd(io_rd & mem_addr[IO_UART_DATA_BIT]),
+        .wr(io_wr & mem_addr[IO_UART_DATA_BIT]),
         .valid(uart_valid),
         .busy(uart_busy),
         .tx_data(dout[7:0]),
