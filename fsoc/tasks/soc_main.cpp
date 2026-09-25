@@ -4,6 +4,7 @@
 #include "clock.h"
 #include "con.h"
 #include "script.h"
+#include "trace.h"
 #include "uart.h"
 #include "verilated.h"
 
@@ -12,6 +13,11 @@ int main(int argc, char** argv) {
 
     Vtop* top = new Vtop;
     Clock clk;
+    Trace tr;
+    if (tr.open(top)) {
+        delete top;
+        return 1;
+    }
     const int byte_limit = env_int("FSOC_EMU_UART_BYTES", 0);
     const char* in_text = env_str("FSOC_EMU_UART_IN");
     const int pin_view = con_pin_mode();
@@ -35,11 +41,14 @@ int main(int argc, char** argv) {
     top->rst = 1;
     top->clk = 0;
     top->eval();
+    tr.dump(clk.t);
     top->clk = 1;
     top->eval();
+    tr.dump(clk.t);
     clk.t += Clock::kHalfNs;
     top->clk = 0;
     top->eval();
+    tr.dump(clk.t);
     clk.t += Clock::kHalfNs;
     top->rst = 0;
     clk.cycles = 1;
@@ -51,6 +60,7 @@ int main(int argc, char** argv) {
                 top->uart_rx = rx.level();
                 top->clk = 1;
                 top->eval();
+                tr.dump(clk.t);
                 unsigned gotb = 0;
                 if (txdec.take(top->uart_tx ? 1 : 0, &gotb)) {
                     con_uart("tx", clk.t, gotb);
@@ -65,6 +75,8 @@ int main(int argc, char** argv) {
             } else {
                 top->clk = 0;
                 top->eval();
+                tr.dump(clk.t);
+                tr.end_cycle();
             }
         },
         [&]() {
@@ -72,6 +84,7 @@ int main(int argc, char** argv) {
             return sess.done();
         });
 
+    tr.close();
     top->final();
     delete top;
     if (rc == 130) return 130;

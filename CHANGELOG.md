@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Optional emulation VCD: `FSOC_EMU_TRACE=1` at `--build` passes Verilator `--trace` for the viewer binary and writes `trace.vcd` (4096 cycles, or `FSOC_EMU_CYCLES` if longer). `tools/peek.sh` sends that file to WavePeek. The skill is `.cursor/skills/wavepeek`.
+
 ### Changed
 
 - README / AGENTS.md: a `projects/*` directory is a working copy. Git tracks only `target.4th`; `--build` emits the rest locally. Task and design are debugged on `emulation`; a board project reuses the same design with `quartus` + `board:`.

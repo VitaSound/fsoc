@@ -21,6 +21,19 @@ export PATH="$FSOC_HOME/bin:$PATH"
 fsoc version
 ```
 
+[WavePeek](https://kleverhq.github.io/wavepeek/) is optional. `fmix test` does not call it. It answers questions about a `trace.vcd` from emulation. The install script from that site puts `wavepeek` in `~/.local/bin`; that directory must be on `PATH` (a login shell picks it up from `~/.profile`).
+
+```bash
+curl --proto '=https' --tlsv1.2 -LsSf https://kleverhq.github.io/wavepeek/install.sh | sh
+wavepeek --version
+```
+
+The agent skill in this repo is [`.cursor/skills/wavepeek`](.cursor/skills/wavepeek) (pin 3.0.1). Refresh it from the same binary:
+
+```bash
+wavepeek skill .cursor/skills/wavepeek
+```
+
 ## Blinky
 
 Blinky is one task. The leaf is [`rtl/blinky.v`](rtl/blinky.v) (`clk` / `led`, `LED_BIT` defaults to 25). [`designs/blinky_top.4th`](designs/blinky_top.4th) includes that file and instantiates it as `top`. Working solutions live under [`projects/`](projects/). **Git tracks only `target.4th` in each directory.** `fsoc --build` emits the rest (`top.v`, leaf copies, `firmware.hex`, `sim.sh` / `.qsf`, `obj_dir`, …) into that directory; `.gitignore` keeps those files out. After a clone, `projects/soc_blink/` is the manifest alone.
@@ -47,7 +60,7 @@ s" lamp" s" 1" option:      \ task option
 
 | Target | `emit` | `run` | `load` |
 |--------|--------|-------|--------|
-| `emulation` | `emu/{con,clock,uart,script}.*`, task harness, `sim.sh` | `sh sim.sh` until Ctrl+C or `FSOC_EMU_CYCLES` | nothing |
+| `emulation` | `emu/{con,clock,uart,script,trace}.*`, task harness, `sim.sh` | `sh sim.sh` until Ctrl+C or `FSOC_EMU_CYCLES` | nothing |
 | `quartus` | `<project>.qsf`, `.sdc`, `build.sh`, `load.sh` | nothing | `sh load.sh` |
 
 Emulation is Verilator. `fsoc --build` emits the project and runs in realtime (50 MHz wall pace) until Ctrl+C. The console prints one line per event, not per clock: `t=<ns> pin led <value>` when `led` changes (`LED_BIT=25`, ~0.67 s). The same printer is `con_uart` for a future serial decoder (one line per received byte).
@@ -56,6 +69,8 @@ Emulation is Verilator. `fsoc --build` emits the project and runs in realtime (5
 cd projects/blinky_emul
 fsoc --build
 ```
+
+`FSOC_EMU_TRACE=1` on that `--build` compiles the viewer with Verilator `--trace` and writes `trace.vcd` (4096 cycles, or `FSOC_EMU_CYCLES` when that limit is longer). The run then continues until its usual stop. From the project directory, `"$FSOC_HOME/tools/peek.sh" info` sends that file to WavePeek. Install the binary as in [Install](#install).
 
 Quartus (`--build` writes the project files and does not run Quartus; the task maps `clk50`→`clk` and `user_led`→`led`). `--load` programs the board. On emulation `--load` does nothing.
 

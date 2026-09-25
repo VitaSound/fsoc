@@ -27,6 +27,22 @@ s" Start emulation" s" sim.log" tmp-grep? expect-true
 s" pin led 0" s" sim.log" tmp-grep? expect-true
 s" pin led 1" s" sim.log" tmp-grep? expect-true
 s" awk '/pin led/{n++} END { exit !(n>=2 && n<=8) }' sim.log" in-tmp-sh expect-true
+s" grep -q -F -e --trace sim.sh" in-tmp-sh expect-false
+s" test ! -e trace.vcd" in-tmp-sh expect-true
+test-teardown
+
+\ --- emulation: optional VCD when FSOC_EMU_TRACE is set at build ---
+test-setup
+s" blinky_emul" tmp-use-project
+s\" s\" led-bit\" s\" 4\" option:" tmp-manifest+
+s" FSOC_EMU_TRACE=1 FSOC_EMU_EDGES=2 FSOC_EMU_FAST=1" s" --build" in-tmp-fsoc expect-true
+s" pin led 0" s" sim.log" tmp-grep? expect-true
+s" pin led 1" s" sim.log" tmp-grep? expect-true
+s" grep -q -F -e --trace sim.sh" in-tmp-sh expect-true
+s" grep -q -F -e -DVM_TRACE sim.sh" in-tmp-sh expect-true
+s" grep -c -F -e --trace sim.sh | grep -qx 1" in-tmp-sh expect-true
+s" trace.cc" tmp-exists? expect-true
+s" test -s trace.vcd" in-tmp-sh expect-true
 test-teardown
 
 \ --- quartus: vitasound_ep4ce10, default LED_BIT ---

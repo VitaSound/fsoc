@@ -10,5 +10,6 @@ forth-packages/
 .fmcp/
 *.o
 out.vcd
+trace.vcd
 /tmp/
 firmware/firmware.hex

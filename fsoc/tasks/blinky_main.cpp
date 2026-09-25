@@ -5,6 +5,7 @@
 #include "Vtop.h"
 #include "clock.h"
 #include "con.h"
+#include "trace.h"
 #include "verilated.h"
 
 int main(int argc, char** argv) {
@@ -12,17 +13,25 @@ int main(int argc, char** argv) {
 
     Vtop* top = new Vtop;
     Clock clk;
+    Trace tr;
+    if (tr.open(top)) {
+        delete top;
+        return 1;
+    }
     const int edge_limit = env_int("FSOC_EMU_EDGES", 0);
     int edges = 0;
 
     top->clk = 0;
     top->eval();
+    tr.dump(clk.t);
     con_pin("led", clk.t, top->led);
 
     int rc = clk.run(
         [&](int high) {
             top->clk = high;
             top->eval();
+            tr.dump(clk.t);
+            if (!high) tr.end_cycle();
             if (high && con_pin("led", clk.t, top->led)) {
                 edges++;
                 clk.pace();
@@ -30,6 +39,7 @@ int main(int argc, char** argv) {
         },
         [&]() { return edge_limit > 0 && edges >= edge_limit; });
 
+    tr.close();
     top->final();
     delete top;
     if (rc == 130) return 130;

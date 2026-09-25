@@ -1,8 +1,20 @@
 \ targets/emulation.4th — emulation target (Verilator).
-\ emit copies the shared console and clock/uart/script library and the
+\ emit copies the shared console, clock/uart/script/trace library and the
 \ task's harness into the project directory and writes sim.sh.
 \ run executes sim.sh until Ctrl+C. load is a noop.
 \ This file does not name a task.
+\ FSOC_EMU_TRACE is read here: --trace is text in sim.sh only when set.
+
+: emu-trace? ( -- flag )
+    s" FSOC_EMU_TRACE" getenv nip 0<> ;
+
+: emu-view-compile ( -- )
+    emu-trace? IF
+        s\"   verilator -cc --exe --trace -Mdir obj_dir -CFLAGS \"$cflags -DVM_TRACE=1\" -LDFLAGS \"-lncursesw\" --top-module \"$mod\" \"$mod.v\" *_main.cpp *.cc >build.log 2>&1 || { cat build.log >&2; exit 1; }"
+    ELSE
+        s\"   verilator -cc --exe -Mdir obj_dir -CFLAGS \"$cflags\" -LDFLAGS \"-lncursesw\" --top-module \"$mod\" \"$mod.v\" *_main.cpp *.cc >build.log 2>&1 || { cat build.log >&2; exit 1; }"
+    THEN
+    fsoc-emit-line ;
 
 : emu-sim-sh ( c-addr-path u - )
     fjson.emit-to-file
@@ -14,7 +26,7 @@
     s" BAUD=115200" fsoc-emit-line
     s\" cflags=\"-I.. -DFSOC_UART_BIT=$((CLK_HZ / BAUD))\"" fsoc-emit-line
     s\" if ls *_main.cpp >/dev/null 2>&1; then" fsoc-emit-line
-    s\"   verilator -cc --exe -Mdir obj_dir -CFLAGS \"$cflags\" -LDFLAGS \"-lncursesw\" --top-module \"$mod\" \"$mod.v\" *_main.cpp *.cc >build.log 2>&1 || { cat build.log >&2; exit 1; }" fsoc-emit-line
+    emu-view-compile
     s\"   make -C obj_dir -f V${mod}.mk -j >>build.log 2>&1 || { cat build.log >&2; exit 1; }" fsoc-emit-line
     s" fi" fsoc-emit-line
     s\" if ls *_feed.cpp >/dev/null 2>&1; then" fsoc-emit-line
@@ -37,6 +49,8 @@
     s" emu/uart.cc" r@ project-copy-in
     s" emu/script.h" r@ project-copy-in
     s" emu/script.cc" r@ project-copy-in
+    s" emu/trace.h" r@ project-copy-in
+    s" emu/trace.cc" r@ project-copy-in
     r@ project.harness@ dup 0= IF true abort" task set no harness" THEN
     r@ project-copy-in
     s" sim.sh" r> project.file
