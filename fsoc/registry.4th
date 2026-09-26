@@ -11,6 +11,7 @@ begin-structure target%
     field: target.emit
     field: target.run
     field: target.load
+    field: target.sim
 end-structure
 
 variable fsoc-tasks
@@ -24,11 +25,17 @@ ulist-new fsoc-targets !
     fsoc-store r@ task.name$ !
     r> fsoc-tasks @ ulist-add ;
 
+\ Set immediately before target-register. Only the emulation target does.
+variable target-reg-sim
+: target-sim ( -- ) true target-reg-sim ! ;
+
 : target-register ( name-a name-u emit-xt run-xt load-xt -- )
     target% allocate throw >r
     r@ target.load !
     r@ target.run !
     r@ target.emit !
+    target-reg-sim @ r@ target.sim !
+    0 target-reg-sim !
     fsoc-store r@ target.name$ !
     r> fsoc-targets @ ulist-add ;
 

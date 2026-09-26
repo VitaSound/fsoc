@@ -1,7 +1,7 @@
 # fsoc
 
 [![License](https://img.shields.io/badge/License-COPL-red.svg)](LICENSE)
-[![Ver](https://img.shields.io/badge/Ver-0.5.0-green.svg)](https://github.com/VitaSound/fsoc)
+[![Ver](https://img.shields.io/badge/Ver-0.6.0-green.svg)](https://github.com/VitaSound/fsoc)
 
 Forth-native SoC builder: **boards**, **Quartus/Yosys/Verilator toolchains**, **iomap**, **J1 firmware**. Analogue of LiteX `build` + `soc` on Gforth. Verilog modules come from [fhdlgen](https://github.com/VitaSound/fhdlgen) and [hdl-modules](https://github.com/VitaSound/hdl-modules).
 
@@ -93,6 +93,18 @@ fsoc --clean
 fsoc --build
 ```
 
+One routed nextpnr fit of that blinky (2026-09-26, `LFE5U-25F`, `--25k`) met the 25.00 MHz constraint at 289.35 MHz. The bitstream `blinky.bit` is 582369 bytes. Block RAM is unused.
+
+| Resource | Used | On LFE5U-25F |
+|----------|------|----------------|
+| LUT4 | 27 (1 logic, 26 carry) | 24288 (0%) |
+| DFF | 26 | 24288 (0%) |
+| RAM LUT | 0 | 3036 |
+| RAMW LUT | 0 | 6072 |
+| DP16KD | 0 | 56 |
+| TRELLIS_IO | 2 | 197 |
+| MULT18X18D | 0 | 28 |
+
 ## Minimal SoC
 
 `projects/soc_emul` is a builder task. `fsoc --build` cross-compiles SwapForth J1a, loads `firmware.hex` into the vendored J1 core, and runs Verilator until Ctrl+C. The image is that system's ANS CORE dictionary without `environment?`. On a terminal the session is an ncurses screen: UART text scrolls above, and the bottom row is the host line. Characters, including non-ASCII, appear there as they are typed; Enter sends that line. The reply ends with ` ok`. `FSOC_EMU_CON=log` prints each UART byte as `t=<ns> uart tx <byte>`. `FSOC_EMU_CON=term` forces the text view. A redirected run stays on the byte log unless `term` is set. The io map is written as `csr.fs` (SwapForth constants `IO-LED` …), `iomap.vh` (wrapper `localparam`s), and `csr.json` (`bus` `j1-io`).
@@ -100,6 +112,13 @@ fsoc --build
 ```bash
 cd projects/soc_emul
 fsoc --build
+```
+
+`projects/soc_emul_colorlight_5a_75e_v6_0` is that same console with the Colorlight 5A-75E v6.0 clock, 25 MHz. UART stays in the simulator: the board has no serial pins, and this top keeps `uart_rx`, `uart_tx`, `rst`, and `dump`. `sim.sh` uses `CLK_HZ=25000000`, the same value as `top.v`, so the bit time matches. A line `1 2 + .` still answers `3 ok`.
+
+```bash
+cd projects/soc_emul_colorlight_5a_75e_v6_0
+FSOC_EMU_FAST=1 FSOC_EMU_UART_IN='1 2 + .' fsoc --build
 ```
 
 `projects/soc_blink` is the same core with a `'BOOT` word that does not return to the prompt. The loop writes `0` and `1` to `IO-LED`. That bit leaves `top` as `led`. The pause is a read of `IO-TIMER`. The loop also sends `lamp on` and `lamp off` on the UART. A background task and an interrupt controller are a later step, described in [doc/stm8ef-hw.md](doc/stm8ef-hw.md).

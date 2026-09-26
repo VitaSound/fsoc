@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.6.0] - 2026-09-26
+
+### Added
+
+- `projects/soc_emul_colorlight_5a_75e_v6_0`: the SwapForth console in Verilator at the Colorlight 5A-75E v6.0 clock, 25 MHz. UART, `rst`, and `dump` stay on the simulated top. `sim.sh` takes `CLK_HZ` from that clock, so `1 2 + .` answers `3 ok`.
+
+### Changed
+
+- An emulation target with a board keeps `sim.sh` and does not emit the board netlist (`BOARD`, `NO_UART`, `LED_LOW`, `TIMER_DIV`). Quartus and Yosys still replace the top after the firmware feed and drop `sim.sh`.
+
 ## [0.5.0] - 2026-09-26
 
 ### Added

@@ -16,13 +16,21 @@
     THEN
     fsoc-emit-line ;
 
+\ Board clock only when this target keeps the simulator. The firmware
+\ feed on a board toolchain still uses the 50 MHz top.
+variable emu-use-board-clk
+: emu-clk-hz ( -- n )
+    current-platform @ emu-use-board-clk @ and IF
+        plat-clock io.clock-hz@ dup 0= IF true abort" clock resource has no frequency" THEN
+    ELSE 50000000 THEN ;
+
 : emu-sim-sh ( c-addr-path u - )
     fjson.emit-to-file
     s" #!/bin/sh" fsoc-emit-line
     s" set -e" fsoc-emit-line
     s\" cd \"$(dirname \"$0\")\"" fsoc-emit-line
     s" mod=$(cat top-module)" fsoc-emit-line
-    s" CLK_HZ=50000000" fsoc-emit-line
+    s" CLK_HZ=" emu-clk-hz fjson.u>str 2dup 2>r fjson.str-concat fsoc-emit-free 2r> fjson.str-free
     s" BAUD=115200" fsoc-emit-line
     s\" cflags=\"-I.. -DFSOC_UART_BIT=$((CLK_HZ / BAUD))\"" fsoc-emit-line
     s\" if ls *_main.cpp >/dev/null 2>&1; then" fsoc-emit-line
@@ -41,6 +49,7 @@
 
 : emu-emit ( project - )
     >r
+    r@ target-of target.sim @ emu-use-board-clk !
     s" emu/con.h" r@ project-copy-in
     s" emu/con.cc" r@ project-copy-in
     s" emu/clock.h" r@ project-copy-in
@@ -73,4 +82,5 @@
 
 : emu-load ( project - ) drop ;
 
+target-sim
 s" emulation" ' emu-emit ' emu-run ' emu-load target-register

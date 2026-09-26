@@ -7,6 +7,8 @@
 
 variable soc-board-top?
 0 soc-board-top? !
+variable soc-view?
+0 soc-view? !
 
 variable soc-clk
 
@@ -31,7 +33,7 @@ variable soc-clk
     >r
     s"  --out " r@ project.dir@ fjson.str-concat
     s"  --param CLK_HZ=" fsoc-cat+
-    soc-board-top? @ IF soc-clk-hz ELSE soc-feed-hz THEN
+    soc-board-top? @ soc-view? @ or IF soc-clk-hz ELSE soc-feed-hz THEN
     fjson.u>str fsoc-cat++
     s"  --param BAUD=115200" fsoc-cat+
     soc-board-top? @ IF
@@ -212,6 +214,7 @@ variable flatten-n
     s" csr.fs" r@ project.file 2dup iomap-export-fs fjson.str-free
     s" iomap.vh" r@ project.file 2dup iomap-export-vh fjson.str-free
     s" csr.json" r@ project.file 2dup iomap-export-json fjson.str-free
+    r@ target-of target.sim @ soc-view? !
     0 soc-board-top? !
     r@ soc-gen-top
     r@ soc-copy-leaves
@@ -221,7 +224,7 @@ variable flatten-n
     r@ emu-emit
     r@ soc-cross
     r@ soc-feed
-    r@ project.board@ nip IF
+    r@ project.board@ nip soc-view? @ 0= and IF
         1 soc-board-top? !
         r@ soc-gen-top
         s" rm -f sim.sh" s" keep sim.sh off board" sh-run

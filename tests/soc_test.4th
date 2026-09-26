@@ -48,6 +48,8 @@ s" boot" soc-uart? expect-true
 s" awk 'NF{n++} END{exit !(n==4096)}' firmware.hex" in-tmp-sh expect-true
 s" cpu/j1/swapforth/j1a/build/nuc.hex" s" firmware.hex" tmp-same-as-root? expect-false
 s" uart_rx" s" top.v" tmp-grep? expect-true
+s" CLK_HZ(50000000)" s" top.v" tmp-grep? expect-true
+s" CLK_HZ=50000000" s" sim.sh" tmp-grep? expect-true
 
 s" FSOC_EMU_UART_IN='1 2 + .'" soc-run
 s" add" soc-uart? expect-true
@@ -70,6 +72,25 @@ s" FSOC_EMU_UART_IN=words" soc-sim
 s" words" soc-uart? expect-true
 
 s" " s" --load" in-tmp-fsoc expect-true
+test-teardown
+
+test-setup
+s" soc_emul_colorlight_5a_75e_v6_0" tmp-use-project
+s" FSOC_EMU_UART_IN='1 2 + .'" soc-run
+s" add" soc-uart? expect-true
+s" CLK_HZ(25000000)" s" top.v" tmp-grep? expect-true
+s" BAUD(115200)" s" top.v" tmp-grep? expect-true
+s" input  wire uart_rx" s" top.v" tmp-grep? expect-true
+s" input  wire rst" s" top.v" tmp-grep? expect-true
+s" input  wire dump" s" top.v" tmp-grep? expect-true
+s" BOARD" s" top.v" tmp-grep? expect-false
+s" NO_UART" s" top.v" tmp-grep? expect-false
+s" LED_LOW" s" top.v" tmp-grep? expect-false
+s" TIMER_DIV" s" top.v" tmp-grep? expect-false
+s" CLK_HZ=25000000" s" sim.sh" tmp-grep? expect-true
+s" sim.sh" tmp-exists? expect-true
+s" soc.lpf" tmp-exists? expect-false
+s" soc.qsf" tmp-exists? expect-false
 test-teardown
 
 test-finish
