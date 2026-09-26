@@ -117,11 +117,11 @@ ANS CORE, который MUST присутствовать: `!` `#` `#>` `#s` `'
 - **THEN** вывод содержит `lamp on` и `lamp off`, `firmware/lamp.fs` содержит `IO-LED` и `IO-TIMER`, а `rg "h# *(400|800|1000|2000)" firmware/` пусто
 
 ### Requirement: SoC собирается на плате
-В проекте с `s" soc" task:`, `s" quartus" target:` и платой, у которой описаны ресурсы `clk50`, `user_led` и `serial` с `tx` / `rx`, `fsoc --build` MUST записать `top.v`, листы, `soc.qsf`, `soc.sdc`, `build.sh`, `load.sh` и `firmware.hex` в каталог проекта и MUST NOT запускать Quartus. `.qsf` MUST содержать `DEVICE` и `FAMILY` платы и назначения пинов `clk`, `led`, `uart_tx`, `uart_rx` из ресурсов платы. Порты `rst` и `dump` MUST быть привязаны к 0 внутри топа платы и MUST NOT требовать пинов. `--load` MUST выполнить `load.sh`.
+В проекте с `s" soc" task:`, `s" quartus" target:` и платой, у которой описаны ресурсы `clk50`, `user_led` и `serial` с `tx` / `rx`, `fsoc --build` MUST записать `top.v`, листы, `soc.qpf`, `soc.qsf`, `soc.sdc`, `build.sh`, `load.sh` и `firmware.hex` в каталог проекта и MUST NOT запускать Quartus. `.qpf` MUST содержать `PROJECT_REVISION = "soc"`. `.qsf` MUST содержать `DEVICE` и `FAMILY` платы в кавычках и назначения пинов `clk`, `led`, `uart_tx`, `uart_rx` из ресурсов платы. Порты `rst` и `dump` MUST быть привязаны к 0 внутри топа платы и MUST NOT требовать пинов. `--load` MUST выполнить `load.sh`.
 
 #### Scenario: VitaSound EP4CE10
 - **WHEN** в `projects/soc_vitasound_ep4ce10` выполняется `fsoc --build`
-- **THEN** `soc.qsf` содержит `DEVICE EP4CE10E22C8`, `FAMILY Cyclone IV E`, `PIN_23 -to clk`, `PIN_86 -to led`, `PIN_114 -to uart_tx`, `PIN_115 -to uart_rx`, `top.v` не имеет входов `rst` и `dump` в списке портов, `firmware.hex` содержит 4096 строк, а Quartus не запускался
+- **THEN** `soc.qpf` содержит `PROJECT_REVISION = "soc"`, `soc.qsf` содержит `DEVICE EP4CE10E22C8`, `FAMILY "Cyclone IV E"`, `PIN_23 -to clk`, `PIN_86 -to led`, `PIN_114 -to uart_tx`, `PIN_115 -to uart_rx`, `top.v` не имеет входов `rst` и `dump` в списке портов и не содержит `` `include ``, `firmware.hex` содержит 4096 строк, а Quartus не запускался
 
 ### Requirement: Делитель UART из частоты такта
 Обёртка J1 MUST получать `CLK_HZ` и `BAUD` параметрами инстанса. Значение `CLK_HZ` MUST приходить от тактового ресурса, который запросила задача: у платы — из её описания, у эмуляции — из таргета. Эмуляция MUST вести UART тем же делителем, что стоит в `top.v`. Литерал делителя MUST NOT стоять ни в обёртке, ни в `main`, ни в тесте.

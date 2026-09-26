@@ -9,7 +9,7 @@ test-setup
 s" blinky_rz_easyfpga" tmp-use-project
 s" " s" --build" in-tmp-fsoc expect-true
 s" PIN_87 -to led" s" blinky.qsf" tmp-grep? expect-true
-s" FAMILY Cyclone IV E" s" blinky.qsf" tmp-grep? expect-true
+s\" FAMILY \"Cyclone IV E\"" s" blinky.qsf" tmp-grep? expect-true
 s" blinky.sdc" tmp-exists? expect-true
 s" build.sh" tmp-exists? expect-true
 s" load.sh" tmp-exists? expect-true

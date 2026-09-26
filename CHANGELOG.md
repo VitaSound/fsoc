@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.7.0] - 2026-09-27
+
+### Added
+
+- Quartus writes `IO_STANDARD "3.3-V LVTTL"` when the board pin says `LVTTL`, lists `SDC_FILE`, and appends `derive_clock_uncertainty` so TimeQuest fills clock uncertainty. An output pin also gets `CURRENT_STRENGTH_NEW 8MA` and `SLEW_RATE 2`, the Cyclone defaults written out so the fitter does not call them incomplete. Warning 169177 (AN 447 on a 3.3-V LVTTL input) is suppressed: Quartus has no assignment that clears it.
+
+- Quartus emit writes `<project>.qpf` (`QUARTUS_VERSION` 11.0, `PROJECT_REVISION` equal to the `.qsf` name). Quartus II 11 opens that file; a `.qsf` alone is not in the Open Project list. `FAMILY` is quoted, so `Cyclone IV E` is one assignment value. Each name in `includes.lst` is a `VERILOG_FILE`, and those `` `include `` lines are removed from the top so Quartus does not define the module twice.
+
+- Board `terasic_de0nano`: Terasic DE0-Nano, Cyclone IV E `EP4CE22F17C6` (22320 LEs), pins from litex-boards. Clock `clk50` is `R8` at 50 MHz. `user_led` 0 is `A15`. Serial `tx`/`rx` are `B5`/`B4` (LiteX `JP1:10` / `JP1:8`). Working project: `projects/blinky_terasic_de0nano` on the Quartus target.
+
 ## [0.6.0] - 2026-09-26
 
 ### Added

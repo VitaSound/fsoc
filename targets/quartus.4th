@@ -1,6 +1,6 @@
 \ targets/quartus.4th — Quartus target.
 \ The task names the project, top, verilog file, clock, and maps
-\ board resources to RTL ports. This file writes <project>.qsf, .sdc,
+\ board resources to RTL ports. This file writes <project>.qpf, .qsf, .sdc,
 \ build.sh and load.sh into the project directory. It does not name a
 \ task or a board; family and device come from the loaded platform.
 
@@ -10,8 +10,10 @@ variable qvfile$
 variable qclk$
 variable qperiod$
 variable qmaps
+variable qsrcs
 
 ulist-new qmaps !
+ulist-new qsrcs !
 
 \ One binding of a board pin to an RTL port. Both emitters format it.
 begin-structure qmap%
@@ -40,7 +42,9 @@ end-structure
     qclk$ @ fsoc-free 0 qclk$ !
     qperiod$ @ fsoc-free 0 qperiod$ !
     ['] qmap-free qmaps @ ulist-each
-    qmaps @ ulist-clear ;
+    qmaps @ ulist-clear
+    ['] fsoc-free qsrcs @ ulist-each
+    qsrcs @ ulist-clear ;
 
 : quartus-project ( c-addr u - ) qproj$ fsoc-store! ;
 : quartus-top ( c-addr u - ) qtop$ fsoc-store! ;
@@ -115,6 +119,37 @@ variable qs-idx
 
 variable qmap-cur
 
+\ Board word LVTTL is the Quartus assignment 3.3-V LVTTL.
+: quartus-iostd ( c-addr u - c-addr u )
+    2dup s" LVTTL" compare 0= IF 2drop s" 3.3-V LVTTL" THEN ;
+
+: qmap-emit-iostd ( - )
+    qmap-cur @ qmap.iostd$ @ fsoc-fetch
+    dup 0= IF 2drop EXIT THEN
+    quartus-iostd
+    s\" set_instance_assignment -name IO_STANDARD \""
+    2swap fjson.str-concat
+    s\" \" -to " fsoc-cat+
+    qmap-cur @ qmap.port$ @ fsoc-fetch fsoc-cat+
+    fsoc-emit-free ;
+
+\ Clock and rx are inputs. An output needs an explicit strength and slew,
+\ or the fitter reports its default as an incomplete assignment.
+: quartus-drive? ( c-addr u - flag )
+    2dup qclk$ @ fsoc-fetch compare 0= IF 2drop false EXIT THEN
+    2dup s" rx" compare 0= IF 2drop false EXIT THEN
+    2dup s" uart_rx" compare 0= IF 2drop false EXIT THEN
+    2drop true ;
+
+: qmap-emit-drive ( - )
+    qmap-cur @ qmap.port$ @ fsoc-fetch quartus-drive? 0= IF EXIT THEN
+    s" set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to "
+    qmap-cur @ qmap.port$ @ fsoc-fetch fjson.str-concat
+    fsoc-emit-free
+    s" set_instance_assignment -name SLEW_RATE 2 -to "
+    qmap-cur @ qmap.port$ @ fsoc-fetch fjson.str-concat
+    fsoc-emit-free ;
+
 \ No locals: ulist-each keeps an xt on the return stack.
 : qmap-emit ( map - )
     qmap-cur !
@@ -122,7 +157,9 @@ variable qmap-cur
     qmap-cur @ qmap.pin$ @ fsoc-fetch fjson.str-concat
     s"  -to " fsoc-cat+
     qmap-cur @ qmap.port$ @ fsoc-fetch fsoc-cat+
-    fsoc-emit-free ;
+    fsoc-emit-free
+    qmap-emit-iostd
+    qmap-emit-drive ;
 
 variable qmaps-xt
 
@@ -138,13 +175,108 @@ variable qmaps-xt
     repeat
     drop ;
 
+\ Leaves named in includes.lst. Quartus shows only VERILOG_FILE entries.
+variable qsrc-cur
+
+: qsrc-emit-one ( block - )
+    qsrc-cur !
+    s" set_global_assignment -name VERILOG_FILE "
+    qsrc-cur @ fsoc-fetch fjson.str-concat
+    fsoc-emit-free ;
+
+: qsrcs-emit ( - )
+    qsrcs @ ulist-len
+    begin dup while
+        1-
+        dup qsrcs @ ulist-nth-addr
+        qsrc-emit-one
+    repeat
+    drop ;
+
+create qsrc-buf 128 allot
+variable qsrc-fd
+variable qpath$
+
+: quartus-read-sources ( project - )
+    s" includes.lst" rot project.file fsoc-store qpath$ !
+    qpath$ @ fsoc-fetch file-exists? 0= IF
+        qpath$ @ fsoc-free 0 qpath$ ! EXIT
+    THEN
+    qpath$ @ fsoc-fetch r/o open-file throw qsrc-fd !
+    begin
+        qsrc-buf 127 qsrc-fd @ read-line throw
+    while
+        ?dup IF qsrc-buf swap fsoc-store qsrcs @ ulist-add THEN
+    repeat
+    drop
+    qsrc-fd @ close-file throw
+    qpath$ @ fsoc-free 0 qpath$ ! ;
+
+\ A project file and an `include of the same module define it twice.
+: quartus-include-line? ( c-addr u - flag )
+    dup 9 < IF 2drop false EXIT THEN
+    drop 9 s\" `include " compare 0= ;
+
+variable qkeep
+ulist-new qkeep !
+
+: quartus-keep-line ( c-addr u - )
+    2dup quartus-include-line? IF 2drop EXIT THEN
+    fsoc-store qkeep @ ulist-add ;
+
+: quartus-write-kept ( - )
+    qkeep @ ulist-len
+    begin dup while
+        1-
+        dup qkeep @ ulist-nth-addr
+        fsoc-fetch fsoc-emit-line
+    repeat
+    drop ;
+
+: quartus-strip-includes ( c-addr-path u - )
+    fsoc-store qpath$ !
+    qpath$ @ fsoc-fetch r/o open-file throw qsrc-fd !
+    begin
+        qsrc-buf 127 qsrc-fd @ read-line throw
+    while
+        ?dup IF qsrc-buf swap quartus-keep-line ELSE drop THEN
+    repeat
+    drop
+    qsrc-fd @ close-file throw
+    qpath$ @ fsoc-fetch fjson.emit-to-file
+    quartus-write-kept
+    fsoc-emit-close
+    qpath$ @ fsoc-free 0 qpath$ !
+    ['] fsoc-free qkeep @ ulist-each
+    qkeep @ ulist-clear ;
+
+\ Quartus II 11 opens a project from .qpf. The revision name is the .qsf stem.
+: quartus-qpf ( c-addr-path u - )
+    fjson.emit-to-file
+    s\" QUARTUS_VERSION = \"11.0\"" fsoc-emit-line
+    s" # Revisions" fsoc-emit-line
+    s\" PROJECT_REVISION = \"" fjson.emit
+    qproj$ @ fsoc-fetch fjson.emit
+    s\" \"" fsoc-emit-line
+    fsoc-emit-close ;
+
 : quartus-qsf ( c-addr-path u - )
     fjson.emit-to-file
     s" # generated by fsoc" fsoc-emit-line
-    s" set_global_assignment -name FAMILY " fjson.emit plat.family@ fsoc-emit-line
+    s\" set_global_assignment -name FAMILY \"" fjson.emit
+    plat.family@ fjson.emit
+    s\" \"" fsoc-emit-line
     s" set_global_assignment -name DEVICE " fjson.emit plat.device@ fsoc-emit-line
     s" set_global_assignment -name TOP_LEVEL_ENTITY " fjson.emit qtop$ @ fsoc-fetch fsoc-emit-line
     s" set_global_assignment -name VERILOG_FILE " fjson.emit qvfile$ @ fsoc-fetch fsoc-emit-line
+    qsrcs-emit
+    \ 169177 is the AN 447 reminder for a 3.3-V LVTTL input. Quartus
+    \ enables the PCI clamp itself and has no assignment that clears it.
+    s" set_global_assignment -name MESSAGE_DISABLE 169177" fsoc-emit-line
+    s" set_global_assignment -name SDC_FILE "
+    qproj$ @ fsoc-fetch fjson.str-concat
+    s" .sdc" fsoc-cat+
+    fsoc-emit-free
     ['] qmap-emit qmaps-do
     fsoc-emit-close ;
 
@@ -154,6 +286,7 @@ variable qmaps-xt
     s"  -period " fjson.emit qperiod$ @ fsoc-fetch fjson.emit
     s"  [get_ports {" fjson.emit qclk$ @ fsoc-fetch fjson.emit
     s" }]" fsoc-emit-line
+    s" derive_clock_uncertainty" fsoc-emit-line
     fsoc-emit-close ;
 
 : quartus-build-sh ( c-addr-path u - )
@@ -182,10 +315,16 @@ variable qmaps-xt
     current-platform @ 0= IF true abort" quartus: no board" THEN
     plat.family@ nip 0= IF true abort" quartus: board has no family" THEN ;
 
-\ Writes <project>.qsf, <project>.sdc, build.sh, load.sh into the project dir.
+\ Writes <project>.qpf, <project>.qsf, <project>.sdc, build.sh, load.sh.
 : quartus-emit ( project - )
     quartus-check
     >r
+    r@ quartus-read-sources
+    qsrcs @ ulist-len IF
+        qvfile$ @ fsoc-fetch r@ project.file quartus-strip-includes
+    THEN
+    qproj$ @ fsoc-fetch s" .qpf" fjson.str-concat r@ project.file
+    2dup quartus-qpf fjson.str-free
     qproj$ @ fsoc-fetch s" .qsf" fjson.str-concat r@ project.file
     2dup quartus-qsf fjson.str-free
     qproj$ @ fsoc-fetch s" .sdc" fjson.str-concat r@ project.file

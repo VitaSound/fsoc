@@ -6,7 +6,7 @@ Forth-native SoC builder (LiteX analogue) for VitaSound. Host language is **Gfor
 
 ```
 fsoc/           IR + DSL + emit
-boards/         vitasound_ep4ce10, rz_easyfpga, ep2c5_mini
+boards/         vitasound_ep4ce10, rz_easyfpga, ep2c5_mini, terasic_de0nano
 designs/        Forth design units (fhdlgen top; leaf RTL stays a .v file; no project dir, board, or launch method)
 emu/            Verilator library: con, clock, uart, script, trace (no task names)
 rtl/            Pure Verilog (blinky.v, …)

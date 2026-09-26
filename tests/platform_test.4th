@@ -36,6 +36,17 @@ plat.device@ s" EP2C5T144C8" expect-str-eq
 plat.family@ s" Cyclone II" expect-str-eq
 s" clk50" 0 io-find io.clock-hz@ 50000000 expect=
 
+s" terasic_de0nano" board-load
+plat.name@ s" terasic_de0nano" expect-str-eq
+plat.device@ s" EP4CE22F17C6" expect-str-eq
+plat.family@ s" Cyclone IV E" expect-str-eq
+s" clk50" 0 io-find io.pins$ @ fsoc-fetch s" R8" expect-str-eq
+s" clk50" 0 io-find io.clock-hz@ 50000000 expect=
+s" user_led" 0 io-find io.pins$ @ fsoc-fetch s" A15" expect-str-eq
+s" user_led" 0 io-find io.low@ 0= expect-true
+s" serial" 0 io-find s" tx" io-sub-find sub.pins$ @ fsoc-fetch s" B5" expect-str-eq
+s" serial" 0 io-find s" rx" io-sub-find sub.pins$ @ fsoc-fetch s" B4" expect-str-eq
+
 s" colorlight_5a_75e_v6_0" board-load
 plat.device@ s" LFE5U-25F-6BG256C" expect-str-eq
 plat.family@ s" ECP5" expect-str-eq

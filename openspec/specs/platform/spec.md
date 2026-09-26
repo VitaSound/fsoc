@@ -25,11 +25,15 @@ Platform DSL: файл платы описывает устройство, се�
 - **THEN** `plat.reqs-len` равен 2, `s" nosuch" 0 io-find` равен 0, а глубина стека равна глубине до загрузки платы
 
 ### Requirement: Семейство приходит из платы в тулчейн
-Файл `.qsf` MUST содержать `FAMILY` из `plat.family@` и `DEVICE` из `plat.device@`. Тулчейн MUST NOT содержать литерал семейства. Плата без семейства MUST останавливать запись `.qsf`.
+Файл `.qsf` MUST содержать `FAMILY` из `plat.family@` в кавычках и `DEVICE` из `plat.device@`. Тулчейн MUST NOT содержать литерал семейства. Плата без семейства MUST останавливать запись `.qsf`. Слово `iostd` со значением `LVTTL` MUST попасть в `.qsf` как `IO_STANDARD "3.3-V LVTTL"`. Выход, не являющийся тактом и не являющийся `rx`, MUST получить `CURRENT_STRENGTH_NEW 8MA` и `SLEW_RATE 2`. Сообщение Quartus 169177 MUST быть подавлено назначением `MESSAGE_DISABLE 169177`.
 
 #### Scenario: Cyclone II для ep2c5_mini
 - **WHEN** blinky собран на плате `ep2c5_mini`
-- **THEN** `blinky.qsf` содержит `FAMILY Cyclone II` и `DEVICE EP2C5T144C8`, а в `targets/quartus.4th` нет строки `Cyclone`
+- **THEN** `blinky.qsf` содержит `FAMILY "Cyclone II"` и `DEVICE EP2C5T144C8`, а в `targets/quartus.4th` нет строки `Cyclone`
+
+#### Scenario: Terasic DE0-Nano
+- **WHEN** загружена `terasic_de0nano`
+- **THEN** `plat.device@` равен `EP4CE22F17C6`, `plat.family@` равен `Cyclone IV E`, пин `clk50` равен `R8` и его частота 50000000, пин `user_led` 0 равен `A15`, подсигналы `serial` `tx` и `rx` равны `B5` и `B4`
 
 ### Requirement: Тактовый ресурс знает частоту
 Внутри блока `io-begin … io-end` тактового ресурса плата MUST задавать `plat-clock-hz ( hz -- )`. `io.clock-hz@ ( io -- hz )` MUST возвращать это значение; для ресурса без частоты — 0. Задача, запросившая тактовый ресурс без частоты, MUST остановиться с `clock resource has no frequency`.

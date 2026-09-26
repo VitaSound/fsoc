@@ -1,7 +1,7 @@
 # fsoc
 
 [![License](https://img.shields.io/badge/License-COPL-red.svg)](LICENSE)
-[![Ver](https://img.shields.io/badge/Ver-0.6.0-green.svg)](https://github.com/VitaSound/fsoc)
+[![Ver](https://img.shields.io/badge/Ver-0.7.0-green.svg)](https://github.com/VitaSound/fsoc)
 
 Forth-native SoC builder: **boards**, **Quartus/Yosys/Verilator toolchains**, **iomap**, **J1 firmware**. Analogue of LiteX `build` + `soc` on Gforth. Verilog modules come from [fhdlgen](https://github.com/VitaSound/fhdlgen) and [hdl-modules](https://github.com/VitaSound/hdl-modules).
 
@@ -44,6 +44,7 @@ Debug the task and the design in an `emulation` project (`blinky_emul`, `soc_emu
 projects/blinky_emul/                  Verilator realtime, LED_BIT=25, console pin events
 projects/blinky_vitasound_ep4ce10/     Quartus .qsf
 projects/blinky_rz_easyfpga/           Quartus .qsf
+projects/blinky_terasic_de0nano/       Quartus .qsf, Terasic DE0-Nano
 projects/blinky_colorlight_5a_75e_v6_0/  Yosys .lpf, nextpnr-ecp5, ecppack
 projects/soc_blink_colorlight_5a_75e_v6_0/  lamp image, same board and tools
 ```
@@ -63,7 +64,7 @@ s" lamp" s" 1" option:      \ task option
 | Target | `emit` | `run` | `load` |
 |--------|--------|-------|--------|
 | `emulation` | `emu/{con,clock,uart,script,trace}.*`, task harness, `sim.sh` | `sh sim.sh` until Ctrl+C or `FSOC_EMU_CYCLES` | nothing |
-| `quartus` | `<project>.qsf`, `.sdc`, `build.sh`, `load.sh` | nothing | `sh load.sh` |
+| `quartus` | `<project>.qpf`, `.qsf`, `.sdc`, `build.sh`, `load.sh` | nothing | `sh load.sh` |
 | `yosys` | `<project>.lpf`, `build.sh`, `load.sh` | `sh build.sh` | `sh load.sh` |
 
 Emulation is Verilator. `fsoc --build` emits the project and runs in realtime (50 MHz wall pace) until Ctrl+C. The console prints one line per event, not per clock: `t=<ns> pin led <value>` when `led` changes (`LED_BIT=25`, ~0.67 s). The same printer is `con_uart` for a future serial decoder (one line per received byte).
@@ -75,13 +76,15 @@ fsoc --build
 
 `FSOC_EMU_TRACE=1` on that `--build` compiles the viewer with Verilator `--trace` and writes `trace.vcd` (4096 cycles, or `FSOC_EMU_CYCLES` when that limit is longer). The run then continues until its usual stop. From the project directory, `"$FSOC_HOME/tools/peek.sh" info` sends that file to WavePeek. Install the binary as in [Install](#install).
 
-Quartus (`--build` writes the project files and does not run Quartus; the task maps `clk50`→`clk` and `user_led`→`led`). `--load` programs the board. On emulation `--load` does nothing.
+Quartus (`--build` writes the project files and does not run Quartus; the task maps `clk50`→`clk` and `user_led`→`led`). Open `<project>.qpf` in Quartus II 11 (`QUARTUS_VERSION` 11.0, revision name equal to the `.qsf`). `FAMILY` is quoted. Each name in `includes.lst` is a `VERILOG_FILE`, and those `` `include `` lines are removed from the top. A board `LVTTL` pin is `IO_STANDARD "3.3-V LVTTL"`. An output also gets `CURRENT_STRENGTH_NEW 8MA` and `SLEW_RATE 2`. `blinky.sdc` is listed as `SDC_FILE` and ends with `derive_clock_uncertainty`. Warning 169177, the AN 447 reminder on a 3.3-V LVTTL input, is suppressed. `--load` programs the board. On emulation `--load` does nothing.
 
 ```bash
 cd projects/blinky_vitasound_ep4ce10
 fsoc --build
 fsoc --build --load
 cd ../blinky_rz_easyfpga
+fsoc --build
+cd ../blinky_terasic_de0nano
 fsoc --build
 ```
 
@@ -173,6 +176,7 @@ fsoc --build
 | `vitasound_ep4ce10` | EP4CE10E22C8 | pins from VitaPolySimple.qsf | tx 114 / rx 115 |
 | `rz_easyfpga` | EP4CE6E22C8 | litex-boards port | tx 114 / rx 115 |
 | `ep2c5_mini` | EP2C5T144C8 | Quartus II 13.0sp1 | — |
+| `terasic_de0nano` | EP4CE22F17C6 | Terasic DE0-Nano, litex-boards; clk `R8`, led `A15` | tx `B5` / rx `B4` |
 | `colorlight_5a_75e_v6_0` | LFE5U-25F-6BG256C | clk `P6` 25 MHz, led `T6` active-low, btn `R7` | — |
 | `colorlight_5a_75e_v7_1` | LFE5U-25F-6BG256C | clk `P6` 25 MHz, led `P11` active-low, btn `M13` | — |
 | `colorlight_5a_75e_v8_2` | LFE5U-25F-7BG256I | clk `P6` 25 MHz, led `T6` active-low, speed 7 | — |

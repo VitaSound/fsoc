@@ -15,7 +15,7 @@
 
 #### Scenario: Сборка платы
 - **WHEN** в `projects/blinky_rz_easyfpga` лежит `target.4th` со строками `s" blinky" task:`, `s" quartus" target:`, `s" rz_easyfpga" board:` и выполняется `fsoc --build`
-- **THEN** в этом каталоге появляются `top.v`, `blinky.qsf`, `blinky.sdc`, `build.sh` и `load.sh`, а Quartus не запускается
+- **THEN** в этом каталоге появляются `top.v`, `blinky.qpf`, `blinky.qsf`, `blinky.sdc`, `build.sh` и `load.sh`, а Quartus не запускается
 
 #### Scenario: Опция проекта
 - **WHEN** `target.4th` проекта `soc_blink` содержит `s" lamp" s" 1" option:`
