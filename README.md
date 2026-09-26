@@ -1,7 +1,7 @@
 # fsoc
 
 [![License](https://img.shields.io/badge/License-COPL-red.svg)](LICENSE)
-[![Ver](https://img.shields.io/badge/Ver-0.4.0-green.svg)](https://github.com/VitaSound/fsoc)
+[![Ver](https://img.shields.io/badge/Ver-0.5.0-green.svg)](https://github.com/VitaSound/fsoc)
 
 Forth-native SoC builder: **boards**, **Quartus/Yosys/Verilator toolchains**, **iomap**, **J1 firmware**. Analogue of LiteX `build` + `soc` on Gforth. Verilog modules come from [fhdlgen](https://github.com/VitaSound/fhdlgen) and [hdl-modules](https://github.com/VitaSound/hdl-modules).
 
@@ -45,6 +45,7 @@ projects/blinky_emul/                  Verilator realtime, LED_BIT=25, console p
 projects/blinky_vitasound_ep4ce10/     Quartus .qsf
 projects/blinky_rz_easyfpga/           Quartus .qsf
 projects/blinky_colorlight_5a_75e_v6_0/  Yosys .lpf, nextpnr-ecp5, ecppack
+projects/soc_blink_colorlight_5a_75e_v6_0/  lamp image, same board and tools
 ```
 
 Run `fsoc` from the project directory. The task and the board are in `target.4th`, not on the command line:
@@ -123,6 +124,27 @@ gforth tools/fterm.4th /dev/ttyUSB0
 
 `fterm` without a path still answers `ok` from memory.
 
+`projects/soc_blink_colorlight_5a_75e_v6_0` is the lamp image on the Colorlight 5A-75E v6.0 (`LFE5U-25F-6BG256C`, CABGA256, speed 6, nextpnr `--25k`). The clock is `clk25` on `P6`, 25 MHz, LVCMOS33. `T6` is the user LED and `R7` is the button, so this board has no UART pins. The board `top` ties `uart_rx` to `1'b1`, leaves `uart_tx` on an unused wire, and ties `rst` and `dump` to `1'b0`. The LED is active-low: a stored `1` drives `T6` low (`assign led = ~led_q`). The timer counts milliseconds (`TIMER_DIV = 25000`, which is `CLK_HZ/1000`). While `DIV` is greater than 1 it holds `0` until the next write, so the Forth poll can see the zero. The lamp period in `firmware/lamp.fs` is 500 counts, about half a second. `BAUD` on the wrapper stays 115200. The SwapForth feed that writes `firmware.hex` still runs at 50 MHz, the same bit time as emulation; the board `top.v` is written again at 25 MHz. `--build` writes `soc.lpf` and runs Yosys with `read_verilog -DSYNTHESIS`, so `$writememh` in the wrapper is not part of synthesis. `FSOC_SYNTH_SKIP` writes the files and skips the tools. `load.sh` needs a `cable` option; this manifest does not set one.
+
+One routed nextpnr fit of that image (2026-09-26) met the 25.00 MHz constraint at 71.55 MHz. The bitstream `soc.bit` is 591641 bytes. The critical path starts at a block-RAM data pin, `u.ram.0.3.DOB`.
+
+| Resource | Used | On LFE5U-25F |
+|----------|------|----------------|
+| LUT4 | 1135 (1017 logic, 118 carry) | 24288 (4%) |
+| DFF | 697 | 24288 (2%) |
+| RAM LUT | 0 | 3036 |
+| RAMW LUT | 0 | 6072 |
+| DP16KD | 4 | 56 (7%) |
+| TRELLIS_IO | 2 | 197 |
+| MULT18X18D | 0 | 28 |
+
+The four `DP16KD` blocks are the J1 firmware array, `4096 × 16` (8 KB, 64 Kbit of data). Each block is 18 Kbit, so those four reserve 72 Kbit out of the 1008 Kbit block-RAM budget. Distributed LUT RAM is unused.
+
+```bash
+cd projects/soc_blink_colorlight_5a_75e_v6_0
+fsoc --build
+```
+
 `tools/fterm.4th` and `firmware/midi_foot.4th`: `fterm` talks to a real port when given a path; `midi_foot` is a host mock of FOOTSWITCH-SCAN.
 
 ## Boards
@@ -132,6 +154,9 @@ gforth tools/fterm.4th /dev/ttyUSB0
 | `vitasound_ep4ce10` | EP4CE10E22C8 | pins from VitaPolySimple.qsf | tx 114 / rx 115 |
 | `rz_easyfpga` | EP4CE6E22C8 | litex-boards port | tx 114 / rx 115 |
 | `ep2c5_mini` | EP2C5T144C8 | Quartus II 13.0sp1 | — |
+| `colorlight_5a_75e_v6_0` | LFE5U-25F-6BG256C | clk `P6` 25 MHz, led `T6` active-low, btn `R7` | — |
+| `colorlight_5a_75e_v7_1` | LFE5U-25F-6BG256C | clk `P6` 25 MHz, led `P11` active-low, btn `M13` | — |
+| `colorlight_5a_75e_v8_2` | LFE5U-25F-7BG256I | clk `P6` 25 MHz, led `T6` active-low, speed 7 | — |
 
 ## Related
 

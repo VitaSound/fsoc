@@ -8,36 +8,59 @@
 variable soc-board-top?
 0 soc-board-top? !
 
+variable soc-clk
+
+\ Feed sim matches targets/emulation.4th (UART bit time at 50 MHz).
+50000000 constant soc-feed-hz
+
 : soc-clk-hz ( -- n )
     current-platform @ IF
-        s" clk50" 0 io-find dup 0= IF true abort" clock resource missing" THEN
-        io.clock-hz@ dup 0= IF true abort" clock resource has no frequency" THEN
-    ELSE 50000000 THEN ;
+        plat-clock io.clock-hz@ dup 0= IF true abort" clock resource has no frequency" THEN
+    ELSE soc-feed-hz THEN ;
+
+\ serial is optional: Colorlight shares those pins with the LED.
+: soc-serial? ( -- flag )
+    current-platform @ 0= IF false EXIT THEN
+    s" serial" 0 io-find 0<> ;
+
+: soc-led-low? ( -- flag )
+    current-platform @ 0= IF false EXIT THEN
+    s" user_led" 0 io-find dup IF io.low@ 0<> ELSE drop false THEN ;
 
 : soc-gen-top ( project -- )
     >r
     s"  --out " r@ project.dir@ fjson.str-concat
     s"  --param CLK_HZ=" fsoc-cat+
-    soc-clk-hz fjson.u>str fsoc-cat++
+    soc-board-top? @ IF soc-clk-hz ELSE soc-feed-hz THEN
+    fjson.u>str fsoc-cat++
     s"  --param BAUD=115200" fsoc-cat+
-    soc-board-top? @ IF s"  --param BOARD=1" fsoc-cat+ THEN
+    soc-board-top? @ IF
+        s"  --param BOARD=1" fsoc-cat+
+        soc-serial? 0= IF s"  --param NO_UART=1" fsoc-cat+ THEN
+        soc-led-low? IF s"  --param LED_LOW=1" fsoc-cat+ THEN
+        s"  --param TIMER_DIV=" fsoc-cat+
+        soc-clk-hz 1000 / fjson.u>str fsoc-cat++
+    THEN
     2dup r> soc-design fhdlgen-build
     fjson.str-free ;
 
 : soc-map-board ( project -- )
     current-platform @ 0= IF drop EXIT THEN
     >r
-    s" clk50" 0 request
+    plat-clock soc-clk !
+    soc-clk @ io.name$ @ fsoc-fetch soc-clk @ io.index @ request
     s" user_led" 0 request
-    s" serial" 0 request
+    soc-serial? IF s" serial" 0 request THEN
     s" soc" quartus-project
     r@ project.top-module@ 2dup quartus-top
     s" .v" fsoc-cat+ 2dup quartus-vfile fjson.str-free
     s" clk" soc-clk-hz 1000000000 swap / fjson.u>str quartus-clock
-    s" clk50" 0 s" clk" quartus-map
+    soc-clk @ io.name$ @ fsoc-fetch soc-clk @ io.index @ s" clk" quartus-map
     s" user_led" 0 s" led" quartus-map
-    s" serial" 0 s" tx" s" uart_tx" quartus-map-sub
-    s" serial" 0 s" rx" s" uart_rx" quartus-map-sub
+    soc-serial? IF
+        s" serial" 0 s" tx" s" uart_tx" quartus-map-sub
+        s" serial" 0 s" rx" s" uart_rx" quartus-map-sub
+    THEN
     rdrop ;
 
 : soc-swap ( rel-a rel-u -- abs-a abs-u )

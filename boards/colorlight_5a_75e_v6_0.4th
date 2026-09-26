@@ -19,6 +19,7 @@ io-end
 s" user_led" 0 io-begin
   s" T6" pins
   s" LVCMOS33" iostd
+  active-low
 io-end
 
 s" user_btn" 0 io-begin

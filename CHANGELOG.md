@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.5.0] - 2026-09-26
+
+### Added
+
+- `projects/soc_blink_colorlight_5a_75e_v6_0`: the J1 lamp image on Colorlight 5A-75E v6.0 through the Yosys target. The clock is the board's 25 MHz `clk25` (`P6`). The board has no UART pins, so the board top ties `uart_rx` to 1 and does not bring `uart_tx`, `rst`, or `dump` out. `user_led` is active-low (`LED_LOW=1`, pin `T6`).
+- `active-low` / `io.low@` on a board resource. The three Colorlight `user_led` resources set it.
+- Timer parameter `TIMER_DIV` (default 1). On a board it is `CLK_HZ/1000`, so the lamp's period of 500 is about half a second. With `DIV` greater than 1 the counter holds 0 until the next write.
+
+### Changed
+
+- The SwapForth feed that writes `firmware.hex` stays at 50 MHz, matching emulation. The board `top.v` is generated again at the board clock.
+- Yosys reads Verilog with `-DSYNTHESIS`. `$writememh` in `j1_wrap.v` sits inside `ifndef SYNTHESIS`, so synthesis ignores the simulator dump and Verilator still writes `firmware.hex`.
+
+### Notes
+
+- Routed nextpnr on `LFE5U-25F` (`--25k`), 2026-09-26: 1135/24288 LUT4 (1017 logic, 118 carry), 697/24288 DFF, 0/3036 RAM LUT, 4/56 `DP16KD`, 2/197 `TRELLIS_IO`. The four blocks hold the 8 KB firmware (64 Kbit of data inside 72 Kbit reserved, of 1008 Kbit block RAM). Fmax 71.55 MHz, constraint 25.00 MHz, pass. `soc.bit` is 591641 bytes. `load.sh` still stops without a `cable` option.
+
 ## [0.4.0] - 2026-09-26
 
 ### Added

@@ -7,9 +7,18 @@
         2drop 2drop
     THEN ;
 
-: hdl-board? ( -- flag )
-    s" BOARD" project.param@ dup 0= IF 2drop false EXIT THEN
+: hdl-flag? ( c-addr u -- flag )
+    project.param@ dup 0= IF 2drop false EXIT THEN
     s" 1" compare 0= ;
+
+: hdl-board? ( -- flag )
+    s" BOARD" hdl-flag? ;
+
+: hdl-no-uart? ( -- flag )
+    s" NO_UART" hdl-flag? ;
+
+: hdl-led-low? ( -- flag )
+    s" LED_LOW" hdl-flag? ;
 
 : hdl-maybe-rst-dump ( -- )
     hdl-board? IF EXIT THEN

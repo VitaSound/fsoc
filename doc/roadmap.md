@@ -36,8 +36,13 @@ Quartus `--load` and a live `fterm` line on USB-UART still need a machine with Q
 ## Done — Yosys Colorlight 0.4.0
 
 - Target `yosys`: `--build` writes the LPF and runs `yosys`, `nextpnr-ecp5`, `ecppack`. `~/oss-cad-suite` is used when those tools are not on `PATH`.
-- Boards `colorlight_5a_75e_v6_0`, `v7_1`, `v8_2`. The working project is v6.0 (`clk` `P6`, `led` `T6`).
+- Boards `colorlight_5a_75e_v6_0`, `v7_1`, `v8_2`. The working blinky project is v6.0 (`clk` `P6`, `led` `T6`).
 - `fsoc --clean` deletes build output and keeps `target.4th`.
+
+## Done — J1 lamp on Colorlight 0.5.0
+
+- `projects/soc_blink_colorlight_5a_75e_v6_0`: lamp image on that board. Clock 25 MHz. No UART pins; the LED is active-low; the timer step is 1 ms (period 500, about 0.5 s). Feed stays at 50 MHz.
+- Routed fit on `LFE5U-25F`: 1135/24288 LUT4, 697/24288 DFF, 4/56 `DP16KD` (8 KB firmware). Fmax 71.55 MHz at a 25 MHz constraint.
 
 ## Later
 

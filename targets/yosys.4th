@@ -64,7 +64,7 @@
     fjson.emit-to-file
     s" #!/bin/sh" fsoc-emit-line
     s" set -e" fsoc-emit-line
-    s\" yosys -p \"read_verilog "
+    s\" yosys -p \"read_verilog -DSYNTHESIS "
     qvfile$ @ fsoc-fetch fjson.str-concat
     s" ; synth_ecp5 -top " fsoc-cat+
     qtop$ @ fsoc-fetch fsoc-cat+

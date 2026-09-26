@@ -24,6 +24,25 @@ s" awk 'NF{n++} END{exit !(n==4096)}' firmware.hex" in-tmp-sh expect-true
 s" quartus_map" s" sim.log" tmp-grep? expect-false
 test-teardown
 
+\ --- yosys: colorlight 5A-75E v6.0 lamp, files only (no synthesis) ---
+test-setup
+s" soc_blink_colorlight_5a_75e_v6_0" tmp-use-project
+s" FSOC_SYNTH_SKIP=1" s" --build" in-tmp-fsoc expect-true
+s" soc.lpf" tmp-exists? expect-true
+s" soc.qsf" tmp-exists? expect-false
+s" sim.sh" tmp-exists? expect-false
+s\" SITE \"P6\"" s" soc.lpf" tmp-grep? expect-true
+s\" SITE \"T6\"" s" soc.lpf" tmp-grep? expect-true
+s\" FREQUENCY PORT \"clk\" 25.000 MHz;" s" soc.lpf" tmp-grep? expect-true
+s" CLK_HZ(25000000)" s" top.v" tmp-grep? expect-true
+s" TIMER_DIV(25000)" s" top.v" tmp-grep? expect-true
+s" assign led = ~led_q" s" top.v" tmp-grep? expect-true
+s" input wire uart_rx" s" top.v" tmp-grep? expect-false
+s" output wire uart_tx" s" top.v" tmp-grep? expect-false
+s" input wire rst" s" top.v" tmp-grep? expect-false
+s" awk 'NF{n++} END{exit !(n==4096)}' firmware.hex" in-tmp-sh expect-true
+test-teardown
+
 test-finish
 expect-stack-clean
 cr ." soc_board_test ok" cr

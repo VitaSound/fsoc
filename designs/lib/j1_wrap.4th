@@ -4,6 +4,7 @@
 s" j1_wrap" hdl-blackbox
   s" CLK_HZ" s" 50000000" hdl-param
   s" BAUD" s" 115200" hdl-param
+  s" TIMER_DIV" s" 1" hdl-param
   s" clk" in-port
   s" rst" in-port
   s" dump" in-port

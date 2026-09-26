@@ -21,7 +21,7 @@ variable fsoc-lib-u
 fsoc-include-lib
 
 2VARIABLE pkg-version
-s" 0.4.0" pkg-version 2!
+s" 0.5.0" pkg-version 2!
 
 : fsoc.help
     cr s" fsoc v" type pkg-version 2@ type cr

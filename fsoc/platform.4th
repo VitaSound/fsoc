@@ -13,6 +13,7 @@ begin-structure io%
     field: io.misc$
     field: io.subs
     field: io.clock-hz
+    field: io.low
 end-structure
 
 begin-structure conn%
@@ -91,6 +92,7 @@ variable io-idx
     0 current-io @ io.iostd$ !
     0 current-io @ io.misc$ !
     0 current-io @ io.clock-hz !
+    0 current-io @ io.low !
     ulist-new current-io @ io.subs ! ;
 
 : plat-clock-hz ( n -- )
@@ -99,6 +101,14 @@ variable io-idx
 
 : io.clock-hz@ ( io -- n )
     io.clock-hz @ ;
+
+\ Onboard LED that lights when the pin is low.
+: active-low ( -- )
+    current-io @ 0= IF abort" active-low outside io" THEN
+    1 current-io @ io.low ! ;
+
+: io.low@ ( io -- flag )
+    io.low @ ;
 
 : pins ( c-addr u - )
     current-io @ 0= IF abort" pins outside io" THEN

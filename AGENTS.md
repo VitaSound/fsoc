@@ -27,6 +27,7 @@ fsoc version             # needs FSOC_HOME + PATH (see feco shell-setup)
 cd projects/blinky_emul && fsoc --build
 cd projects/soc_emul && fsoc --build
 cd projects/soc_vitasound_ep4ce10 && fsoc --build
+cd projects/soc_blink_colorlight_5a_75e_v6_0 && fsoc --build
 cd projects/blinky_rz_easyfpga && fsoc --build
 ```
 

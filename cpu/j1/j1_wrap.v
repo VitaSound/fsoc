@@ -6,7 +6,8 @@ module j1_wrap #(
     parameter USE_TIMER = 0,
     parameter USE_REGIO = 0,
     parameter CLK_HZ = 12000000,
-    parameter BAUD = 115200
+    parameter BAUD = 115200,
+    parameter TIMER_DIV = 1
 ) (
     input  wire clk,
     input  wire rst,
@@ -37,8 +38,10 @@ module j1_wrap #(
         (mem_addr[IO_UART_STATUS_BIT] ? {14'd0, uart_valid, ~uart_busy} : 16'd0);
 
     always @(posedge clk) begin
+`ifndef SYNTHESIS
         if (dump)
             $writememh("firmware.hex", ram);
+`endif
         if (mem_wr)
             ram[mem_addr[12:1]] <= dout;
         if (rst)
@@ -62,7 +65,7 @@ module j1_wrap #(
 
     generate
         if (USE_TIMER) begin : g_timer
-            timer _timer (
+            timer #(.DIV(TIMER_DIV)) _timer (
                 .clk(clk),
                 .rst(rst),
                 .wr(io_wr & mem_addr[IO_TIMER_BIT]),
