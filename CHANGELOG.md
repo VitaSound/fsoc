@@ -10,6 +10,25 @@
 
 - Board `terasic_de0nano`: Terasic DE0-Nano, Cyclone IV E `EP4CE22F17C6` (22320 LEs), pins from litex-boards. Clock `clk50` is `R8` at 50 MHz. `user_led` 0 is `A15`. Serial `tx`/`rx` are `B5`/`B4` (LiteX `JP1:10` / `JP1:8`). Working project: `projects/blinky_terasic_de0nano` on the Quartus target.
 
+## [0.8.0] - 2026-09-27
+
+### Added
+
+- Quartus II 11.1 fit of `projects/soc_terasic_de0nano` on `EP4CE22F17C6` (2026-09-27 02:10:30): 1001 / 22320 logic elements (4%), 625 / 22320 registers (3%), 65536 / 608256 memory bits (11%, 4096×16). Setup slack 9.752 ns (slow 85°C). See README.
+- `doc/quartus-ii-11.md`: what failed in that Quartus II 11 flow and how each failure was closed.
+- OpenSpec change `xilinx-soc`: check the console on the DE0-Nano, then add a Xilinx build.
+
+### Fixed
+
+- The SwapForth console instantiates the LED register (`USE_REGIO`). A write of `1` to `IO-LED` (`$400 io!`) drives `led`. The pin is no longer tied to ground.
+- Quartus strip of `` `include `` keeps a Verilog line that is longer than the read buffer. A split token (`.led` written as `.le` / `d`) is a syntax error in Quartus II 11.
+- A Verilog `` `include `` of a `.vh` inside a leaf is `VERILOG_INCLUDE_FILE` in the `.qsf`, so Quartus lists `iomap.vh` in the project files. It stays out of `VERILOG_FILE`.
+- A `$readmemh` file that sits in the project directory is `HEX_FILE` in the `.qsf`, so the Quartus II 11 file list shows `firmware.hex`. The RAM image is still read by `$readmemh`.
+
+### Changed
+
+- Quartus SoC working project is `projects/soc_terasic_de0nano` (task `soc`, target `quartus`, board `terasic_de0nano`, design `designs/soc_console.4th`). Removed projects `soc_vitasound_ep4ce10`, `blinky_vitasound_ep4ce10`, `blinky_rz_easyfpga` and boards `vitasound_ep4ce10`, `rz_easyfpga`.
+
 ## [0.6.0] - 2026-09-26
 
 ### Added

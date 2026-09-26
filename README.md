@@ -1,7 +1,7 @@
 # fsoc
 
 [![License](https://img.shields.io/badge/License-COPL-red.svg)](LICENSE)
-[![Ver](https://img.shields.io/badge/Ver-0.7.0-green.svg)](https://github.com/VitaSound/fsoc)
+[![Ver](https://img.shields.io/badge/Ver-0.8.0-green.svg)](https://github.com/VitaSound/fsoc)
 
 Forth-native SoC builder: **boards**, **Quartus/Yosys/Verilator toolchains**, **iomap**, **J1 firmware**. Analogue of LiteX `build` + `soc` on Gforth. Verilog modules come from [fhdlgen](https://github.com/VitaSound/fhdlgen) and [hdl-modules](https://github.com/VitaSound/hdl-modules).
 
@@ -42,8 +42,6 @@ Debug the task and the design in an `emulation` project (`blinky_emul`, `soc_emu
 
 ```text
 projects/blinky_emul/                  Verilator realtime, LED_BIT=25, console pin events
-projects/blinky_vitasound_ep4ce10/     Quartus .qsf
-projects/blinky_rz_easyfpga/           Quartus .qsf
 projects/blinky_terasic_de0nano/       Quartus .qsf, Terasic DE0-Nano
 projects/blinky_colorlight_5a_75e_v6_0/  Yosys .lpf, nextpnr-ecp5, ecppack
 projects/soc_blink_colorlight_5a_75e_v6_0/  lamp image, same board and tools
@@ -54,7 +52,7 @@ Run `fsoc` from the project directory. The task and the board are in `target.4th
 ```forth
 s" blinky" task:            \ registered task (fsoc/tasks/)
 s" quartus" target:         \ emulation | quartus | yosys
-s" rz_easyfpga" board:      \ boards/<name>.4th; omit for emulation
+s" terasic_de0nano" board:  \ boards/<name>.4th; omit for emulation
 s" designs/soc_top.4th" design:   \ fhdlgen top, path from FSOC_HOME (soc only)
 s" lamp" s" 1" option:      \ task option
 ```
@@ -79,13 +77,9 @@ fsoc --build
 Quartus (`--build` writes the project files and does not run Quartus; the task maps `clk50`→`clk` and `user_led`→`led`). Open `<project>.qpf` in Quartus II 11 (`QUARTUS_VERSION` 11.0, revision name equal to the `.qsf`). `FAMILY` is quoted. Each name in `includes.lst` is a `VERILOG_FILE`, and those `` `include `` lines are removed from the top. A board `LVTTL` pin is `IO_STANDARD "3.3-V LVTTL"`. An output also gets `CURRENT_STRENGTH_NEW 8MA` and `SLEW_RATE 2`. `blinky.sdc` is listed as `SDC_FILE` and ends with `derive_clock_uncertainty`. Warning 169177, the AN 447 reminder on a 3.3-V LVTTL input, is suppressed. `--load` programs the board. On emulation `--load` does nothing.
 
 ```bash
-cd projects/blinky_vitasound_ep4ce10
+cd projects/blinky_terasic_de0nano
 fsoc --build
 fsoc --build --load
-cd ../blinky_rz_easyfpga
-fsoc --build
-cd ../blinky_terasic_de0nano
-fsoc --build
 ```
 
 Yosys (`--build` writes the LPF and the scripts, then runs `sh build.sh`). The clock and the LED come from the board (`clk25` on the Colorlight 5A-75E). `yosys` and `nextpnr-ecp5` are taken from `PATH`. If they are not there and `~/oss-cad-suite` is installed, the tool run sources that suite's `environment` itself. `load.sh` calls `openFPGALoader` only when the manifest has `s" cable" s" <name>" option:`. `FSOC_SYNTH_SKIP` skips the tool run and still writes the files. The board database also has revisions 7.1 and 8.2; the working project is 6.0.
@@ -136,10 +130,24 @@ FSOC_EMU_CON=pin FSOC_EMU_FAST=1 FSOC_EMU_CYCLES=800000 fsoc --build
 
 ## SoC on a board
 
-`projects/soc_vitasound_ep4ce10` writes Quartus files and `firmware.hex`. `--build` does not run Quartus. `--load` runs `load.sh`. Then a host line on the USB UART:
+`projects/soc_terasic_de0nano` writes Quartus files and `firmware.hex` for the SwapForth console on the Terasic DE0-Nano (`EP4CE22F17C6`). Clock `clk50` is `R8`, `user_led` 0 is `A15`, serial tx/rx are `B5`/`B4`. `led` is the `IO-LED` register: in hex, `1 400 io!` drives `A15` high and `0 400 io!` drives it low. `--build` does not run Quartus. `--load` runs `load.sh`. Then a host line on the USB UART.
+
+Quartus II 11.1 Build 173, full compile 2026-09-27 02:10:30, timing final. Five map warnings remain (`$writememh` ignored, four truncated integer literals). Fitter, assembler, and TimeQuest reported none. Notes on those warnings and on the errors closed before this fit: [doc/quartus-ii-11.md](doc/quartus-ii-11.md).
+
+| Resource | Used | Available |
+| --- | ---: | ---: |
+| Logic elements | 1001 (4%) | 22320 |
+| Combinational functions | 1000 (4%) | 22320 |
+| Dedicated logic registers | 625 (3%) | 22320 |
+| Pins | 4 (3%) | 154 |
+| Memory bits | 65536 (11%) | 608256 |
+| Embedded 9-bit multipliers | 0 | 132 |
+| PLLs | 0 | 4 |
+
+Memory is the 4096×16 firmware RAM. Setup slack 9.752 ns (slow 85°C), hold slack 0.317 ns. The on-board check of `1 400 io!` is still open; the next build after that is Xilinx (`openspec/changes/xilinx-soc`).
 
 ```bash
-cd projects/soc_vitasound_ep4ce10
+cd projects/soc_terasic_de0nano
 fsoc --build --load
 gforth tools/fterm.4th /dev/ttyUSB0
 ```
@@ -173,8 +181,6 @@ fsoc --build
 
 | Board | Device | Notes | serial |
 |-------|--------|--------|--------|
-| `vitasound_ep4ce10` | EP4CE10E22C8 | pins from VitaPolySimple.qsf | tx 114 / rx 115 |
-| `rz_easyfpga` | EP4CE6E22C8 | litex-boards port | tx 114 / rx 115 |
 | `ep2c5_mini` | EP2C5T144C8 | Quartus II 13.0sp1 | — |
 | `terasic_de0nano` | EP4CE22F17C6 | Terasic DE0-Nano, litex-boards; clk `R8`, led `A15` | tx `B5` / rx `B4` |
 | `colorlight_5a_75e_v6_0` | LFE5U-25F-6BG256C | clk `P6` 25 MHz, led `T6` active-low, btn `R7` | — |

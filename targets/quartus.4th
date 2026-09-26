@@ -11,9 +11,13 @@ variable qclk$
 variable qperiod$
 variable qmaps
 variable qsrcs
+variable qhdrs
+variable qmems
 
 ulist-new qmaps !
 ulist-new qsrcs !
+ulist-new qhdrs !
+ulist-new qmems !
 
 \ One binding of a board pin to an RTL port. Both emitters format it.
 begin-structure qmap%
@@ -44,7 +48,11 @@ end-structure
     ['] qmap-free qmaps @ ulist-each
     qmaps @ ulist-clear
     ['] fsoc-free qsrcs @ ulist-each
-    qsrcs @ ulist-clear ;
+    qsrcs @ ulist-clear
+    ['] fsoc-free qhdrs @ ulist-each
+    qhdrs @ ulist-clear
+    ['] fsoc-free qmems @ ulist-each
+    qmems @ ulist-clear ;
 
 : quartus-project ( c-addr u - ) qproj$ fsoc-store! ;
 : quartus-top ( c-addr u - ) qtop$ fsoc-store! ;
@@ -175,7 +183,10 @@ variable qmaps-xt
     repeat
     drop ;
 
-\ Leaves named in includes.lst. Quartus shows only VERILOG_FILE entries.
+\ Leaves named in includes.lst. A .vh stays out of VERILOG_FILE:
+\ Quartus would compile it as its own unit, and localparam at file
+\ scope is not a design unit. VERILOG_INCLUDE_FILE puts it in the
+\ project file list; `include still inserts the text.
 variable qsrc-cur
 
 : qsrc-emit-one ( block - )
@@ -193,9 +204,117 @@ variable qsrc-cur
     repeat
     drop ;
 
-create qsrc-buf 128 allot
+: qhdr-emit-one ( block - )
+    qsrc-cur !
+    s" set_global_assignment -name VERILOG_INCLUDE_FILE "
+    qsrc-cur @ fsoc-fetch fjson.str-concat
+    fsoc-emit-free ;
+
+: qhdrs-emit ( - )
+    qhdrs @ ulist-len
+    begin dup while
+        1-
+        dup qhdrs @ ulist-nth-addr
+        qhdr-emit-one
+    repeat
+    drop ;
+
+\ Project Navigator Files shows HEX_FILE. MISC_FILE stays out of that
+\ list. The RAM image is still the $readmemh file, not this assignment.
+: qmem-emit-one ( block - )
+    qsrc-cur !
+    s" set_global_assignment -name HEX_FILE "
+    qsrc-cur @ fsoc-fetch fjson.str-concat
+    fsoc-emit-free ;
+
+: qmems-emit ( - )
+    qmems @ ulist-len
+    begin dup while
+        1-
+        dup qmems @ ulist-nth-addr
+        qmem-emit-one
+    repeat
+    drop ;
+
+\ Name inside `include "...", or 0 0 when the line is not one.
+\ The nine-character prefix is backtick, include, space. The quote
+\ that follows is the opening delimiter, not part of that prefix.
+: quartus-include-name ( c-addr u - c-addr u )
+    dup 10 < IF 2drop 0 0 EXIT THEN
+    2dup drop 9 s\" `include " compare 0<> IF 2drop 0 0 EXIT THEN
+    10 /string
+    2dup [char] " scan nip - ;
+
+\ Quoted name after a $readmemh(" or $writememh(" prefix, or 0 0.
+: quartus-quoted ( c-addr u - c-addr u )
+    2dup [char] " scan
+    dup 0= IF 2drop 2drop 0 0 EXIT THEN
+    nip - ;
+
+\ search leaves ( c-addr u flag ) and keeps the string. On a hit, c-addr
+\ is the start of the prefix.
+: quartus-memh-name ( c-addr u - c-addr u )
+    s\" $readmemh(\"" search IF 11 /string quartus-quoted EXIT THEN
+    s\" $writememh(\"" search IF 12 /string quartus-quoted EXIT THEN
+    2drop 0 0 ;
+
+: quartus-have-hdr? ( c-addr u - flag )
+    qhdrs @ ulist-len 0 ?do
+        i qhdrs @ ulist-nth-addr fsoc-fetch
+        2over compare 0= IF 2drop true UNLOOP EXIT THEN
+    loop
+    2drop false ;
+
+: quartus-have-mem? ( c-addr u - flag )
+    qmems @ ulist-len 0 ?do
+        i qmems @ ulist-nth-addr fsoc-fetch
+        2over compare 0= IF 2drop true UNLOOP EXIT THEN
+    loop
+    2drop false ;
+
+\ read-line fills this and leaves the rest of a longer line for the next call.
+\ A chunk written as its own line splits a token; Quartus II 11 then
+\ reports a syntax error at the next character.
+127 constant qline#
+create qsrc-buf qline# 1+ allot
 variable qsrc-fd
 variable qpath$
+variable qline$
+variable qscan-proj
+
+: quartus-note-mem ( c-addr u - )
+    dup 0= IF 2drop EXIT THEN
+    2dup quartus-have-mem? IF 2drop EXIT THEN
+    2dup qscan-proj @ project.file 2dup file-exists? >r fjson.str-free r>
+    IF fsoc-store qmems @ ulist-add ELSE 2drop THEN ;
+
+: quartus-scan-file ( c-addr-path u - )
+    2dup r/o open-file throw qsrc-fd !
+    fjson.str-free
+    begin
+        qsrc-buf qline# qsrc-fd @ read-line throw
+    while
+        qsrc-buf swap 2dup quartus-include-name
+        dup IF
+            2dup quartus-have-hdr? IF 2drop
+            ELSE fsoc-store qhdrs @ ulist-add THEN
+        ELSE 2drop THEN
+        quartus-memh-name quartus-note-mem
+    repeat
+    drop
+    qsrc-fd @ close-file throw ;
+
+: quartus-scan-hdrs ( project - )
+    dup qscan-proj !
+    >r
+    qsrcs @ ulist-len
+    begin dup while
+        1-
+        dup qsrcs @ ulist-nth-addr fsoc-fetch
+        r@ project.file quartus-scan-file
+    repeat
+    drop
+    rdrop ;
 
 : quartus-read-sources ( project - )
     s" includes.lst" rot project.file fsoc-store qpath$ !
@@ -204,7 +323,7 @@ variable qpath$
     THEN
     qpath$ @ fsoc-fetch r/o open-file throw qsrc-fd !
     begin
-        qsrc-buf 127 qsrc-fd @ read-line throw
+        qsrc-buf qline# qsrc-fd @ read-line throw
     while
         ?dup IF qsrc-buf swap fsoc-store qsrcs @ ulist-add THEN
     repeat
@@ -233,15 +352,41 @@ ulist-new qkeep !
     repeat
     drop ;
 
+\ Append one read-line chunk. The buffer is reused on the next read.
+: qline-add ( c-addr u - )
+    qline$ @ 0= IF
+        fsoc-store qline$ ! EXIT
+    THEN
+    qline$ @ fsoc-fetch 2swap fjson.str-concat
+    qline$ @ fsoc-free
+    2dup fsoc-store qline$ !
+    fjson.str-free ;
+
+: qline-flush ( - )
+    qline$ @ 0= IF EXIT THEN
+    qline$ @ fsoc-fetch quartus-keep-line
+    qline$ @ fsoc-free
+    0 qline$ ! ;
+
+\ A full buffer means the line continues. Gforth leaves the delimiter when
+\ the line length equals the buffer, so the following read is empty and
+\ that empty read is the end of the line, not a blank line of its own.
 : quartus-strip-includes ( c-addr-path u - )
     fsoc-store qpath$ !
     qpath$ @ fsoc-fetch r/o open-file throw qsrc-fd !
+    0 qline$ !
     begin
-        qsrc-buf 127 qsrc-fd @ read-line throw
+        qsrc-buf qline# qsrc-fd @ read-line throw
     while
-        ?dup IF qsrc-buf swap quartus-keep-line ELSE drop THEN
+        dup qline# = IF
+            qsrc-buf swap qline-add
+        ELSE
+            dup IF qsrc-buf swap qline-add ELSE drop THEN
+            qline-flush
+        THEN
     repeat
     drop
+    qline-flush
     qsrc-fd @ close-file throw
     qpath$ @ fsoc-fetch fjson.emit-to-file
     quartus-write-kept
@@ -270,6 +415,8 @@ ulist-new qkeep !
     s" set_global_assignment -name TOP_LEVEL_ENTITY " fjson.emit qtop$ @ fsoc-fetch fsoc-emit-line
     s" set_global_assignment -name VERILOG_FILE " fjson.emit qvfile$ @ fsoc-fetch fsoc-emit-line
     qsrcs-emit
+    qhdrs-emit
+    qmems-emit
     \ 169177 is the AN 447 reminder for a 3.3-V LVTTL input. Quartus
     \ enables the PCI clamp itself and has no assignment that clears it.
     s" set_global_assignment -name MESSAGE_DISABLE 169177" fsoc-emit-line
@@ -323,6 +470,7 @@ ulist-new qkeep !
     qsrcs @ ulist-len IF
         qvfile$ @ fsoc-fetch r@ project.file quartus-strip-includes
     THEN
+    r@ quartus-scan-hdrs
     qproj$ @ fsoc-fetch s" .qpf" fjson.str-concat r@ project.file
     2dup quartus-qpf fjson.str-free
     qproj$ @ fsoc-fetch s" .qsf" fjson.str-concat r@ project.file

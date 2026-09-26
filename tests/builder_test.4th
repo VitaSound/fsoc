@@ -6,9 +6,9 @@ s" fixture.4th" included
 
 \ --- board build writes Quartus files and does not run Quartus ---
 test-setup
-s" blinky_rz_easyfpga" tmp-use-project
+s" blinky_terasic_de0nano" tmp-use-project
 s" " s" --build" in-tmp-fsoc expect-true
-s" PIN_87 -to led" s" blinky.qsf" tmp-grep? expect-true
+s" PIN_A15 -to led" s" blinky.qsf" tmp-grep? expect-true
 s\" FAMILY \"Cyclone IV E\"" s" blinky.qsf" tmp-grep? expect-true
 s" blinky.sdc" tmp-exists? expect-true
 s" build.sh" tmp-exists? expect-true
@@ -20,7 +20,7 @@ test-teardown
 
 \ --- clean keeps the manifest and removes the build ---
 test-setup
-s" blinky_rz_easyfpga" tmp-use-project
+s" blinky_terasic_de0nano" tmp-use-project
 s" " s" --build" in-tmp-fsoc expect-true
 s" top.v" tmp-exists? expect-true
 s" mkdir -p obj_dir && touch obj_dir/x extra.log" in-tmp-sh expect-true
@@ -30,7 +30,7 @@ s" blinky.qsf" tmp-exists? expect-false
 s" obj_dir" tmp-exists? expect-false
 s" extra.log" tmp-exists? expect-false
 s" target.4th" tmp-exists? expect-true
-s" rz_easyfpga" s" target.4th" tmp-grep? expect-true
+s" terasic_de0nano" s" target.4th" tmp-grep? expect-true
 s" " s" --clean --build" in-tmp-fsoc expect-true
 s" top.v" tmp-exists? expect-true
 s" target.4th" tmp-exists? expect-true

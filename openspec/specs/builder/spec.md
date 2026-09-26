@@ -14,7 +14,7 @@
 - **THEN** в этом каталоге появляются `top.v`, `blinky.v` и `sim.sh`, Verilator компилируется и реалтайм-просмотр идёт до Ctrl+C
 
 #### Scenario: Сборка платы
-- **WHEN** в `projects/blinky_rz_easyfpga` лежит `target.4th` со строками `s" blinky" task:`, `s" quartus" target:`, `s" rz_easyfpga" board:` и выполняется `fsoc --build`
+- **WHEN** в `projects/blinky_terasic_de0nano` лежит `target.4th` со строками `s" blinky" task:`, `s" quartus" target:`, `s" terasic_de0nano" board:` и выполняется `fsoc --build`
 - **THEN** в этом каталоге появляются `top.v`, `blinky.qpf`, `blinky.qsf`, `blinky.sdc`, `build.sh` и `load.sh`, а Quartus не запускается
 
 #### Scenario: Опция проекта
@@ -29,7 +29,7 @@
 `fsoc --build --load` MUST сначала выполнить сборку, затем прошивку. На эмуляции `--load` MUST игнорироваться без ошибки. На проекте с платой `--load` MUST запустить `load.sh`.
 
 #### Scenario: Оба флага на плате
-- **WHEN** в `projects/blinky_vitasound_ep4ce10` выполняется `fsoc --build --load`
+- **WHEN** в `projects/blinky_terasic_de0nano` выполняется `fsoc --build --load`
 - **THEN** сначала записываются файлы проекта, затем выполняется `load.sh`
 
 #### Scenario: Load на эмуляции
@@ -55,7 +55,7 @@
 `fsoc --clean` MUST удалить из текущего каталога всё, кроме `target.4th`. Если этого файла нет, команда MUST завершиться с ошибкой `no target.4th` и MUST NOT удалять соседние файлы. `fsoc --clean --build` MUST сначала очистить каталог, затем выполнить сборку.
 
 #### Scenario: Очистка после сборки платы
-- **WHEN** в каталоге с манифестом `blinky_rz_easyfpga` после `fsoc --build` выполняется `fsoc --clean`
+- **WHEN** в каталоге с манифестом `blinky_terasic_de0nano` после `fsoc --build` выполняется `fsoc --clean`
 - **THEN** `target.4th` остаётся, а `top.v` и `blinky.qsf` отсутствуют
 
 #### Scenario: Нет манифеста
@@ -113,7 +113,7 @@
 Задача `soc` MUST собираться на зарегистрированном таргете без сравнения имени таргета со строками `quartus`, `emulation` или `yosys`. При заданной плате задача MUST загрузить её, запросить единственный тактовый ресурс (`plat-clock`) и `user_led`, и MUST запросить `serial` только когда `s" serial" 0 io-find` его находит. Таргет `quartus` MUST записать `.qsf` из карты пинов. Таргет `emulation` MUST карту игнорировать. Таргет `yosys` MUST записать `.lpf` из той же карты.
 
 #### Scenario: Один и тот же дизайн на двух таргетах
-- **WHEN** `projects/soc_emul` и `projects/soc_vitasound_ep4ce10` называют `designs/soc_console.4th` и выполняется `fsoc --build` в каждом
+- **WHEN** `projects/soc_emul` и `projects/soc_terasic_de0nano` называют `designs/soc_console.4th` и выполняется `fsoc --build` в каждом
 - **THEN** первый каталог содержит `sim.sh` и не содержит `.qsf`, второй содержит `soc.qsf` и не содержит `sim.sh`
 
 #### Scenario: Лампа на Yosys

@@ -22,13 +22,14 @@ context: |
   Уже сделано:
   - rtl/blinky.v с LED_BIT=25 и счётчиком = 0
   - топ из designs/blinky_top.4th
-  - каталоги blinky_emul, blinky_vitasound_ep4ce10, blinky_rz_easyfpga; в git только target.4th, top.v пишет emit
+  - каталоги blinky_emul, blinky_terasic_de0nano, soc_terasic_de0nano; в git только target.4th, top.v пишет emit
   - эмуляция Verilator 4.038, такт 50 МГц из C++ (полупериод 10 нс), реалтайм до Ctrl+C
   - консоль печатает t=<ns> pin led <значение> только при смене уровня
   - uart того же вида (t=<ns> uart <имя> <байт>), blinky этот канал не вызывает
   - clk50→clk, user_led→led
-  - VitaSound: PIN_23 и PIN_86, DEVICE EP4CE10E22C8
-  - RZ-EasyFPGA: PIN_87, DEVICE EP4CE6E22C8
+  - Terasic DE0-Nano: clk PIN_R8, led PIN_A15, uart tx PIN_B5, rx PIN_B4, DEVICE EP4CE22F17C6
+  - Консоль soc_terasic_de0nano: USE_REGIO=1, fit 1001 LE / 625 рег. / 65536 бит памяти (Quartus II 11.1, 2026-09-27)
+  - Дальше: проверка на плате Altera, затем сборка Xilinx (openspec/changes/xilinx-soc)
 
 rules:
   specs:

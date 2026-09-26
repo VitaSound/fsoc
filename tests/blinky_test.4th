@@ -46,44 +46,17 @@ s" trace.cc" tmp-exists? expect-true
 s" test -s trace.vcd" in-tmp-sh expect-true
 test-teardown
 
-\ --- quartus: vitasound_ep4ce10, default LED_BIT ---
-test-setup
-s" blinky_vitasound_ep4ce10" tmp-use-project
-s" " s" --build" in-tmp-fsoc expect-true
-s" blinky.qsf" tmp-exists? expect-true
-s" blinky.qpf" tmp-exists? expect-true
-s\" QUARTUS_VERSION = \"11.0\"" s" blinky.qpf" tmp-grep? expect-true
-s\" PROJECT_REVISION = \"blinky\"" s" blinky.qpf" tmp-grep? expect-true
-s" TOP_LEVEL_ENTITY top" s" blinky.qsf" tmp-grep? expect-true
-s" VERILOG_FILE top.v" s" blinky.qsf" tmp-grep? expect-true
-s" VERILOG_FILE blinky.v" s" blinky.qsf" tmp-grep? expect-true
-s" VERILOG_FILE tb_blinky.v" s" blinky.qsf" tmp-grep? expect-false
-s\" `include" s" top.v" tmp-grep? expect-false
-s\" FAMILY \"Cyclone IV E\"" s" blinky.qsf" tmp-grep? expect-true
-s" DEVICE EP4CE10E22C8" s" blinky.qsf" tmp-grep? expect-true
-s" PIN_23 -to clk" s" blinky.qsf" tmp-grep? expect-true
-s" PIN_86 -to led" s" blinky.qsf" tmp-grep? expect-true
-s" LED_BIT" s" top.v" tmp-grep? expect-false
-s" create_clock -name clk -period 20.000" s" blinky.sdc" tmp-grep? expect-true
-s" derive_clock_uncertainty" s" blinky.sdc" tmp-grep? expect-true
-s\" IO_STANDARD \"3.3-V LVTTL\" -to clk" s" blinky.qsf" tmp-grep? expect-true
-s\" IO_STANDARD \"3.3-V LVTTL\" -to led" s" blinky.qsf" tmp-grep? expect-true
-test-teardown
-
-\ --- quartus: rz_easyfpga ---
-test-setup
-s" blinky_rz_easyfpga" tmp-use-project
-s" " s" --build" in-tmp-fsoc expect-true
-s" PIN_87 -to led" s" blinky.qsf" tmp-grep? expect-true
-s" PIN_86" s" blinky.qsf" tmp-grep? expect-false
-s" DEVICE EP4CE6E22C8" s" blinky.qsf" tmp-grep? expect-true
-s\" FAMILY \"Cyclone IV E\"" s" blinky.qsf" tmp-grep? expect-true
-test-teardown
-
 \ --- quartus: terasic_de0nano ---
 test-setup
 s" blinky_terasic_de0nano" tmp-use-project
 s" " s" --build" in-tmp-fsoc expect-true
+s" blinky.qpf" tmp-exists? expect-true
+s\" QUARTUS_VERSION = \"11.0\"" s" blinky.qpf" tmp-grep? expect-true
+s\" PROJECT_REVISION = \"blinky\"" s" blinky.qpf" tmp-grep? expect-true
+s" VERILOG_FILE top.v" s" blinky.qsf" tmp-grep? expect-true
+s" VERILOG_FILE blinky.v" s" blinky.qsf" tmp-grep? expect-true
+s\" `include" s" top.v" tmp-grep? expect-false
+s" LED_BIT" s" top.v" tmp-grep? expect-false
 s" PIN_R8 -to clk" s" blinky.qsf" tmp-grep? expect-true
 s" PIN_A15 -to led" s" blinky.qsf" tmp-grep? expect-true
 s" DEVICE EP4CE22F17C6" s" blinky.qsf" tmp-grep? expect-true

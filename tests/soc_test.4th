@@ -34,7 +34,8 @@ s" soc_emul" tmp-use-project
     2dup in-tmp-sh -rot fjson.str-free ;
 
 s" FSOC_EMU_UART_BYTES=2" soc-run
-s" regio.v" tmp-exists? expect-false
+s" regio.v" tmp-exists? expect-true
+s" USE_REGIO(1)" s" top.v" tmp-grep? expect-true
 s" timer.v" tmp-exists? expect-false
 s" soc_main.cpp" tmp-exists? expect-true
 s" fsoc/tasks/soc_main.cpp" s" soc_main.cpp" tmp-same-as-root? expect-true
