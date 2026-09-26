@@ -24,6 +24,9 @@ begin-structure plat%
     field: plat.name$
     field: plat.device$
     field: plat.family$
+    field: plat.package$
+    field: plat.speed$
+    field: plat.density$
     field: plat.ios
     field: plat.conns
     field: plat.reqs
@@ -46,6 +49,9 @@ variable current-io
     fsoc-store r@ plat.name$ !
     0 r@ plat.device$ !
     0 r@ plat.family$ !
+    0 r@ plat.package$ !
+    0 r@ plat.speed$ !
+    0 r@ plat.density$ !
     ulist-new r@ plat.ios !
     ulist-new r@ plat.conns !
     ulist-new r@ plat.reqs !
@@ -59,6 +65,18 @@ variable current-io
 : plat-family ( c-addr u - )
     plat@ plat.family$ @ fsoc-free
     fsoc-store plat@ plat.family$ ! ;
+
+: plat-package ( c-addr u - )
+    plat@ plat.package$ @ fsoc-free
+    fsoc-store plat@ plat.package$ ! ;
+
+: plat-speed ( c-addr u - )
+    plat@ plat.speed$ @ fsoc-free
+    fsoc-store plat@ plat.speed$ ! ;
+
+: plat-density ( c-addr u - )
+    plat@ plat.density$ @ fsoc-free
+    fsoc-store plat@ plat.density$ ! ;
 
 variable io-nm-a
 variable io-nm-u
@@ -176,6 +194,32 @@ variable find-io-r
 
 : plat.family@ ( - c-addr u )
     plat@ plat.family$ @ fsoc-fetch ;
+
+: plat.package@ ( - c-addr u )
+    plat@ plat.package$ @ fsoc-fetch ;
+
+: plat.speed@ ( - c-addr u )
+    plat@ plat.speed$ @ fsoc-fetch ;
+
+: plat.density@ ( - c-addr u )
+    plat@ plat.density$ @ fsoc-fetch ;
+
+variable plat-clock-n
+variable plat-clock-io
+
+: plat-clock-see ( io - )
+    dup io.clock-hz@ IF
+        plat-clock-n @ 1+ plat-clock-n !
+        plat-clock-io !
+    ELSE drop THEN ;
+
+\ The one io whose clock-hz is set. Zero or several abort.
+: plat-clock ( - io )
+    0 plat-clock-n !
+    0 plat-clock-io !
+    ['] plat-clock-see plat@ plat.ios @ ulist-each
+    plat-clock-n @ 1 <> IF true abort" board clock count" THEN
+    plat-clock-io @ ;
 
 \ Include boards/<name>.4th from FSOC_HOME. A board file leaves nothing
 \ on the stack; the depth check catches a broken board.

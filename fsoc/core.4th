@@ -16,5 +16,6 @@ s" hdl.4th" included
 s" platform.4th" included
 s" ../targets/emulation.4th" included
 s" ../targets/quartus.4th" included
+s" ../targets/yosys.4th" included
 s" soc/iomap.4th" included
 s" build.4th" included

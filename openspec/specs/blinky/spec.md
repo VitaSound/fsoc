@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Задача blinky: лист Verilog, топ из fhdlgen, три рабочих проекта. Консоль эмуляции печатает события устройства, а не каждый такт.
+Задача blinky: лист Verilog, топ из fhdlgen, рабочие проекты эмуляции, Quartus и Yosys. Консоль эмуляции печатает события устройства, а не каждый такт.
 
 ## Requirements
 
@@ -40,6 +40,17 @@
 #### Scenario: qsf двух плат
 - **WHEN** задача собрана на `vitasound_ep4ce10` и на `rz_easyfpga`
 - **THEN** первый `.qsf` содержит `PIN_86 -to led` и `DEVICE EP4CE10E22C8`, второй — `PIN_87 -to led` и `DEVICE EP4CE6E22C8`, и ни один `top.v` платы не содержит `LED_BIT`
+
+### Requirement: Такт blinky берётся с платы
+Задача blinky MUST брать единственный такт платы и MUST писать период ограничения из его частоты. На плате 50 МГц период Quartus MUST быть `20.000`. На Colorlight 5A-75E V6.0 такт MUST быть 25 МГц: порт `clk` на `P6`, порт `led` на `T6`, частота в LPF MUST быть `25.000 MHz`.
+
+#### Scenario: Период Quartus от 50 МГц
+- **WHEN** задача собрана на `vitasound_ep4ce10`
+- **THEN** `blinky.sdc` содержит `create_clock -name clk -period 20.000`
+
+#### Scenario: LPF Colorlight V6.0
+- **WHEN** собран `projects/blinky_colorlight_5a_75e_v6_0` с `FSOC_SYNTH_SKIP=1`
+- **THEN** `blinky.lpf` содержит `SITE "P6"`, `SITE "T6"` и `FREQUENCY PORT "clk" 25.000 MHz`
 
 ### Requirement: Канал uart того же вида
 Канал UART MUST оставаться в общей консоли рядом с `con_pin`. В виде `log` декодированный байт MUST печататься строкой `t=<ns> uart <имя> <байт>`. Blinky этот канал MUST NOT вызывать и экран строки набора MUST NOT открывать. Строки `pin` MUST печататься по-прежнему: `t=<ns> pin led <значение>` только при смене уровня.

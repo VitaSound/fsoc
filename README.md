@@ -1,9 +1,9 @@
 # fsoc
 
 [![License](https://img.shields.io/badge/License-COPL-red.svg)](LICENSE)
-[![Ver](https://img.shields.io/badge/Ver-0.3.0-green.svg)](https://github.com/VitaSound/fsoc)
+[![Ver](https://img.shields.io/badge/Ver-0.4.0-green.svg)](https://github.com/VitaSound/fsoc)
 
-Forth-native SoC builder: **boards**, **Quartus/Verilator toolchains**, **iomap**, **J1 firmware**. Analogue of LiteX `build` + `soc` on Gforth. Verilog modules come from [fhdlgen](https://github.com/VitaSound/fhdlgen) and [hdl-modules](https://github.com/VitaSound/hdl-modules).
+Forth-native SoC builder: **boards**, **Quartus/Yosys/Verilator toolchains**, **iomap**, **J1 firmware**. Analogue of LiteX `build` + `soc` on Gforth. Verilog modules come from [fhdlgen](https://github.com/VitaSound/fhdlgen) and [hdl-modules](https://github.com/VitaSound/hdl-modules).
 
 ## Install
 
@@ -44,24 +44,26 @@ Debug the task and the design in an `emulation` project (`blinky_emul`, `soc_emu
 projects/blinky_emul/                  Verilator realtime, LED_BIT=25, console pin events
 projects/blinky_vitasound_ep4ce10/     Quartus .qsf
 projects/blinky_rz_easyfpga/           Quartus .qsf
+projects/blinky_colorlight_5a_75e_v6_0/  Yosys .lpf, nextpnr-ecp5, ecppack
 ```
 
 Run `fsoc` from the project directory. The task and the board are in `target.4th`, not on the command line:
 
 ```forth
 s" blinky" task:            \ registered task (fsoc/tasks/)
-s" quartus" target:         \ emulation | quartus
+s" quartus" target:         \ emulation | quartus | yosys
 s" rz_easyfpga" board:      \ boards/<name>.4th; omit for emulation
 s" designs/soc_top.4th" design:   \ fhdlgen top, path from FSOC_HOME (soc only)
 s" lamp" s" 1" option:      \ task option
 ```
 
-`--build` runs the task's emit, then the target's `emit` and `run`; `--load` runs the target's `load`. Every repository file (`rtl/`, `cpu/`, `emu/`, `designs/`, `boards/`) is found through `FSOC_HOME`; the project directory is the current directory.
+`--build` runs the task's emit, then the target's `emit` and `run`; `--load` runs the target's `load`. `--clean` deletes every other file in the project directory and keeps `target.4th`. It refuses to run when that file is absent. `--clean --build` wipes the output and builds again. Every repository file (`rtl/`, `cpu/`, `emu/`, `designs/`, `boards/`) is found through `FSOC_HOME`; the project directory is the current directory.
 
 | Target | `emit` | `run` | `load` |
 |--------|--------|-------|--------|
 | `emulation` | `emu/{con,clock,uart,script,trace}.*`, task harness, `sim.sh` | `sh sim.sh` until Ctrl+C or `FSOC_EMU_CYCLES` | nothing |
 | `quartus` | `<project>.qsf`, `.sdc`, `build.sh`, `load.sh` | nothing | `sh load.sh` |
+| `yosys` | `<project>.lpf`, `build.sh`, `load.sh` | `sh build.sh` | `sh load.sh` |
 
 Emulation is Verilator. `fsoc --build` emits the project and runs in realtime (50 MHz wall pace) until Ctrl+C. The console prints one line per event, not per clock: `t=<ns> pin led <value>` when `led` changes (`LED_BIT=25`, ~0.67 s). The same printer is `con_uart` for a future serial decoder (one line per received byte).
 
@@ -79,6 +81,14 @@ cd projects/blinky_vitasound_ep4ce10
 fsoc --build
 fsoc --build --load
 cd ../blinky_rz_easyfpga
+fsoc --build
+```
+
+Yosys (`--build` writes the LPF and the scripts, then runs `sh build.sh`). The clock and the LED come from the board (`clk25` on the Colorlight 5A-75E). `yosys` and `nextpnr-ecp5` are taken from `PATH`. If they are not there and `~/oss-cad-suite` is installed, the tool run sources that suite's `environment` itself. `load.sh` calls `openFPGALoader` only when the manifest has `s" cable" s" <name>" option:`. `FSOC_SYNTH_SKIP` skips the tool run and still writes the files. The board database also has revisions 7.1 and 8.2; the working project is 6.0.
+
+```bash
+cd projects/blinky_colorlight_5a_75e_v6_0
+fsoc --clean
 fsoc --build
 ```
 

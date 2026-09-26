@@ -19,16 +19,24 @@
     r@ blinky-flags 2dup r> blinky-design fhdlgen-build
     fjson.str-free ;
 
-\ Board present: clock and led of the board go to the top ports.
+\ Nanoseconds of one clock period, three decimal places (50 MHz → 20.000).
+: blinky-period ( hz -- c-addr u )
+    1000000000 swap / fjson.u>str s" .000" fsoc-cat+ ;
+
+variable blinky-clk
+
+\ Board present: its clock io and user_led go to the top ports.
+\ Called under >r in blinky-emit, so the clock io stays in a variable.
 : blinky-map-board ( project -- )
     current-platform @ 0= IF drop EXIT THEN
-    s" clk50" 0 request
+    plat-clock blinky-clk !
+    blinky-clk @ io.name$ @ fsoc-fetch blinky-clk @ io.index @ request
     s" user_led" 0 request
     s" blinky" quartus-project
     project.top-module@ 2dup quartus-top
     s" .v" fsoc-cat+ 2dup quartus-vfile fjson.str-free
-    s" clk" s" 20.000" quartus-clock
-    s" clk50" 0 s" clk" quartus-map
+    s" clk" blinky-clk @ io.clock-hz@ blinky-period quartus-clock
+    blinky-clk @ io.name$ @ fsoc-fetch blinky-clk @ io.index @ s" clk" quartus-map
     s" user_led" 0 s" led" quartus-map ;
 
 : blinky-emit ( project -- )

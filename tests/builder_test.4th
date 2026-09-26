@@ -18,6 +18,32 @@ s" Start build" s" sim.log" tmp-grep? expect-true
 s" obj_dir" tmp-exists? expect-false
 test-teardown
 
+\ --- clean keeps the manifest and removes the build ---
+test-setup
+s" blinky_rz_easyfpga" tmp-use-project
+s" " s" --build" in-tmp-fsoc expect-true
+s" top.v" tmp-exists? expect-true
+s" mkdir -p obj_dir && touch obj_dir/x extra.log" in-tmp-sh expect-true
+s" " s" --clean" in-tmp-fsoc expect-true
+s" top.v" tmp-exists? expect-false
+s" blinky.qsf" tmp-exists? expect-false
+s" obj_dir" tmp-exists? expect-false
+s" extra.log" tmp-exists? expect-false
+s" target.4th" tmp-exists? expect-true
+s" rz_easyfpga" s" target.4th" tmp-grep? expect-true
+s" " s" --clean --build" in-tmp-fsoc expect-true
+s" top.v" tmp-exists? expect-true
+s" target.4th" tmp-exists? expect-true
+test-teardown
+
+\ --- clean without a manifest leaves the directory alone ---
+test-setup
+s" touch keep.txt" in-tmp-sh expect-true
+s" " s" --clean" in-tmp-fsoc expect-false
+s" no target.4th" s" sim.log" tmp-grep? expect-true
+s" keep.txt" tmp-exists? expect-true
+test-teardown
+
 \ --- emulation ignores --load ---
 test-setup
 s" blinky_emul" tmp-use-project

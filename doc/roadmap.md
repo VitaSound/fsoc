@@ -13,8 +13,8 @@
 ## Blinky architecture (current)
 
 - Task: leaf [`rtl/blinky.v`](../rtl/blinky.v) (`clk` / `led`, `LED_BIT` default 25) plus [`designs/blinky_top.4th`](../designs/blinky_top.4th)
-- Working solutions under [`projects/`](../projects/): `blinky_emul` (Verilator realtime until Ctrl+C; [`emu/con.h`](../emu/con.h) prints `t=<ns> pin led <value>` on change), `blinky_vitasound_ep4ce10`, `blinky_rz_easyfpga`
-- Emit: from `projects/blinky_emul`, `fsoc --build` (sim.sh from [`targets/emulation.4th`](../targets/emulation.4th), then Verilator until Ctrl+C); from `projects/blinky_<board>`, `fsoc --build` (`.qsf` from [`targets/quartus.4th`](../targets/quartus.4th); the task maps `clk50`→`clk` and `user_led`→`led`). Task and board are in `target.4th`
+- Working solutions under [`projects/`](../projects/): `blinky_emul` (Verilator realtime until Ctrl+C; [`emu/con.h`](../emu/con.h) prints `t=<ns> pin led <value>` on change), `blinky_vitasound_ep4ce10`, `blinky_rz_easyfpga`, `blinky_colorlight_5a_75e_v6_0` (Yosys / nextpnr-ecp5)
+- Emit: from `projects/blinky_emul`, `fsoc --build` (sim.sh from [`targets/emulation.4th`](../targets/emulation.4th), then Verilator until Ctrl+C); from a Quartus board project, `fsoc --build` (`.qsf` from [`targets/quartus.4th`](../targets/quartus.4th)); from the Colorlight project, `fsoc --build` (`.lpf` from [`targets/yosys.4th`](../targets/yosys.4th), then synthesis). The task maps the board clock to `clk` and `user_led` to `led`. Task and board are in `target.4th`
 
 ## Path 1 — later (not a blinky blocker)
 
@@ -33,12 +33,18 @@ Review of 0.1.1 found abstraction leaks. Six OpenSpec changes closed them:
 
 Quartus `--load` and a live `fterm` line on USB-UART still need a machine with Quartus and the board.
 
+## Done — Yosys Colorlight 0.4.0
+
+- Target `yosys`: `--build` writes the LPF and runs `yosys`, `nextpnr-ecp5`, `ecppack`. `~/oss-cad-suite` is used when those tools are not on `PATH`.
+- Boards `colorlight_5a_75e_v6_0`, `v7_1`, `v8_2`. The working project is v6.0 (`clk` `P6`, `led` `T6`).
+- `fsoc --clean` deletes build output and keeps `target.4th`.
+
 ## Later
 
 - Background task, interrupt controller, and its connection to J1 — [stm8ef-hw.md](stm8ef-hw.md)
 - Host CSR bridge (litex_server analogue)
 - Import more boards from litex-boards
-- yosys/nextpnr (iCE40/ECP5/Gowin) and Vivado
+- yosys/nextpnr for iCE40 and Gowin, and Vivado
 - Expression tree + Forth FHDL sim (with fhdlgen) — path 1 for cores that should be Forth-native
 - Own Forth CPU described in fhdlgen DSL
 - Audio cores from hdl-modules behind CSR (Forth synthesizer)

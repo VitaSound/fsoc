@@ -1,4 +1,4 @@
-\ tests/blinky_test.4th — one blinky task, emulation and three boards
+\ tests/blinky_test.4th — one blinky task, emulation, quartus boards, yosys
 
 s" test_common.4th" included
 s" fixture.4th" included
@@ -76,6 +76,22 @@ s\" s\" blinky\" task:\ns\" quartus\" target:\ns\" ep2c5_mini\" board:\n" tmp-ma
 s" " s" --build" in-tmp-fsoc expect-true
 s" FAMILY Cyclone II" s" blinky.qsf" tmp-grep? expect-true
 s" DEVICE EP2C5T144C8" s" blinky.qsf" tmp-grep? expect-true
+test-teardown
+
+\ --- yosys: colorlight 5A-75E V6.0, files only (no synthesis) ---
+test-setup
+s" blinky_colorlight_5a_75e_v6_0" tmp-use-project
+s" FSOC_SYNTH_SKIP=1" s" --build" in-tmp-fsoc expect-true
+s" blinky.lpf" tmp-exists? expect-true
+s" blinky.qsf" tmp-exists? expect-false
+s\" SITE \"P6\"" s" blinky.lpf" tmp-grep? expect-true
+s\" SITE \"T6\"" s" blinky.lpf" tmp-grep? expect-true
+s" IO_TYPE=LVCMOS33" s" blinky.lpf" tmp-grep? expect-true
+s\" FREQUENCY PORT \"clk\" 25.000 MHz;" s" blinky.lpf" tmp-grep? expect-true
+s" synth_ecp5" s" build.sh" tmp-grep? expect-true
+s" nextpnr-ecp5 --25k --package CABGA256 --speed 6" s" build.sh" tmp-grep? expect-true
+s" yosys: no cable option" s" load.sh" tmp-grep? expect-true
+s" blinky.sdc" tmp-exists? expect-false
 test-teardown
 
 test-finish

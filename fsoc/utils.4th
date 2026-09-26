@@ -61,6 +61,10 @@
 : fsoc-emit-line ( c-addr u -- )
     fjson.emit s\" \n" fjson.emit ;
 
+\ Emit a heap string and free it. fsoc-emit-line consumes the pair.
+: fsoc-emit-free ( c-addr u -- )
+    2dup fsoc-emit-line fjson.str-free ;
+
 \ First line of a small text file, without the trailing newline. Allocated.
 : fsoc-read-line1 ( c-addr-path u -- c-addr u )
     slurp-file

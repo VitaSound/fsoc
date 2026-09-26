@@ -22,6 +22,7 @@ s" blinky" task-find 0<> expect-true
 s" soc" task-find 0<> expect-true
 s" emulation" target-find 0<> expect-true
 s" quartus" target-find 0<> expect-true
+s" yosys" target-find 0<> expect-true
 
 project-new
 s" faketask" task:

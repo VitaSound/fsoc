@@ -1,14 +1,18 @@
 # Changelog
 
-## [Unreleased]
+## [0.4.0] - 2026-09-26
 
 ### Added
 
+- Yosys target: `--build` writes `<project>.lpf`, `build.sh` and `load.sh`, then runs `yosys`, `nextpnr-ecp5` and `ecppack`. Tools already on `PATH` are used as they are. Otherwise the run sources `~/oss-cad-suite/environment` when that install exists. `FSOC_SYNTH_SKIP` writes the files and skips the tools. `load.sh` calls `openFPGALoader` only when the manifest has a `cable` option.
+- Colorlight 5A-75E boards `colorlight_5a_75e_v6_0`, `v7_1` and `v8_2` (package, speed, density, one 25 MHz clock). The working project is `projects/blinky_colorlight_5a_75e_v6_0`.
+- `fsoc --clean` deletes build output in the project directory and keeps `target.4th`. Without that file it stops. `--clean --build` wipes the output and builds again.
 - Optional emulation VCD: `FSOC_EMU_TRACE=1` at `--build` passes Verilator `--trace` for the viewer binary and writes `trace.vcd` (4096 cycles, or `FSOC_EMU_CYCLES` if longer). `tools/peek.sh` sends that file to WavePeek. The skill is `.cursor/skills/wavepeek`.
 
 ### Changed
 
-- README / AGENTS.md: a `projects/*` directory is a working copy. Git tracks only `target.4th`; `--build` emits the rest locally. Task and design are debugged on `emulation`; a board project reuses the same design with `quartus` + `board:`.
+- Blinky takes the single board clock and the constraint period from that frequency. Quartus on a 50 MHz board still writes period `20.000`.
+- README / AGENTS.md: a `projects/*` directory is a working copy. Git tracks only `target.4th`; `--build` emits the rest locally. Task and design are debugged on `emulation`; a board project reuses the same design with `quartus` or `yosys` plus `board:`.
 
 ## [0.3.0] - 2026-09-25
 

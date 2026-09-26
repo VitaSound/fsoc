@@ -13,13 +13,33 @@ variable qmaps
 
 ulist-new qmaps !
 
+\ One binding of a board pin to an RTL port. Both emitters format it.
+begin-structure qmap%
+    field: qmap.pin$
+    field: qmap.port$
+    field: qmap.iostd$
+end-structure
+
+: qmap-free ( map - )
+    dup qmap.pin$ @ fsoc-free
+    dup qmap.port$ @ fsoc-free
+    dup qmap.iostd$ @ fsoc-free
+    free throw ;
+
+: qmap-store ( pin-a pin-u port-a port-u std-a std-u - map )
+    qmap% allocate throw >r
+    fsoc-store r@ qmap.iostd$ !
+    fsoc-store r@ qmap.port$ !
+    fsoc-store r@ qmap.pin$ !
+    r> ;
+
 : quartus-reset ( - )
     qproj$ @ fsoc-free 0 qproj$ !
     qtop$ @ fsoc-free 0 qtop$ !
     qvfile$ @ fsoc-free 0 qvfile$ !
     qclk$ @ fsoc-free 0 qclk$ !
     qperiod$ @ fsoc-free 0 qperiod$ !
-    ['] fsoc-free qmaps @ ulist-each
+    ['] qmap-free qmaps @ ulist-each
     qmaps @ ulist-clear ;
 
 : quartus-project ( c-addr u - ) qproj$ fsoc-store! ;
@@ -37,17 +57,22 @@ ulist-new qmaps !
     2dup quartus-vfile
     fjson.str-free ;
 
-\ Board resource index → RTL port. One qsf line, stored as a block.
-: quartus-map ( c-addr-res u index c-addr-port u - )
-    2>r
+variable qm-pa
+variable qm-pu
+variable qm-ia
+variable qm-iu
+
+\ Board resource index → RTL port. Pin, port, and iostd stay on the record.
+: quartus-map ( res-a res-u index port-a port-u - )
+    qm-pu ! qm-pa !
     io-find
     dup 0= IF abort" quartus-map: missing resource" THEN
-    s" set_location_assignment PIN_"
-    rot io.pins$ @ fsoc-fetch fjson.str-concat
-    s"  -to " fsoc-cat+
-    2r> fsoc-cat+
-    2dup fsoc-store qmaps @ ulist-add
-    fjson.str-free ;
+    dup io.iostd$ @ fsoc-fetch qm-iu ! qm-ia !
+    io.pins$ @ fsoc-fetch
+    qm-pa @ qm-pu @
+    qm-ia @ qm-iu @
+    qmap-store
+    qmaps @ ulist-add ;
 
 variable qsub-a
 variable qsub-u
@@ -79,17 +104,39 @@ variable qs-idx
     qs-ru ! qs-ra !
     qs-ra @ qs-ru @ qs-idx @ io-find
     dup 0= IF abort" quartus-map-sub: missing resource" THEN
+    dup io.iostd$ @ fsoc-fetch { std-a std-u }
     qs-sa @ qs-su @ io-sub-find
     dup 0= IF abort" quartus-map-sub: missing subsignal" THEN
-    s" set_location_assignment PIN_"
-    rot sub.pins$ @ fsoc-fetch fjson.str-concat
-    s"  -to " fsoc-cat+
-    qs-pa @ qs-pu @ fsoc-cat+
-    2dup fsoc-store qmaps @ ulist-add
-    fjson.str-free ;
+    sub.pins$ @ fsoc-fetch
+    qs-pa @ qs-pu @
+    std-a std-u
+    qmap-store
+    qmaps @ ulist-add ;
 
-: qmap-emit ( block - )
-    fsoc-fetch fsoc-emit-line ;
+variable qmap-cur
+
+\ No locals: ulist-each keeps an xt on the return stack.
+: qmap-emit ( map - )
+    qmap-cur !
+    s" set_location_assignment PIN_"
+    qmap-cur @ qmap.pin$ @ fsoc-fetch fjson.str-concat
+    s"  -to " fsoc-cat+
+    qmap-cur @ qmap.port$ @ fsoc-fetch fsoc-cat+
+    fsoc-emit-free ;
+
+variable qmaps-xt
+
+\ Insertion order. ulist-each keeps an xt on the return stack, and the
+\ string words cannot run under that.
+: qmaps-do ( xt - )
+    qmaps-xt !
+    qmaps @ ulist-len
+    begin dup while
+        1-
+        dup qmaps @ ulist-nth-addr
+        qmaps-xt @ execute
+    repeat
+    drop ;
 
 : quartus-qsf ( c-addr-path u - )
     fjson.emit-to-file
@@ -98,7 +145,7 @@ variable qs-idx
     s" set_global_assignment -name DEVICE " fjson.emit plat.device@ fsoc-emit-line
     s" set_global_assignment -name TOP_LEVEL_ENTITY " fjson.emit qtop$ @ fsoc-fetch fsoc-emit-line
     s" set_global_assignment -name VERILOG_FILE " fjson.emit qvfile$ @ fsoc-fetch fsoc-emit-line
-    ['] qmap-emit qmaps @ ulist-each-fifo
+    ['] qmap-emit qmaps-do
     fsoc-emit-close ;
 
 : quartus-sdc ( c-addr-path u - )
