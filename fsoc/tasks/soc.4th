@@ -11,6 +11,7 @@ variable soc-view?
 0 soc-view? !
 
 variable soc-clk
+variable soc-cpu
 
 \ Feed sim matches targets/emulation.4th (UART bit time at 50 MHz).
 50000000 constant soc-feed-hz
@@ -69,6 +70,18 @@ variable soc-clk
     s" cpu/j1/swapforth/" 2swap fjson.str-concat
     fsoc-path+ ;
 
+\ <cross>/<tail> under swapforth/. The directory comes from the profile.
+: soc-swap-rel { tail-a tail-u -- abs-a abs-u }
+    soc-cpu @ cpu.cross$ @ fsoc-fetch
+    s" /" fjson.str-concat
+    tail-a tail-u fsoc-cat+
+    2dup 2>r
+    soc-swap
+    2r> fjson.str-free ;
+
+: soc-cross-dir ( -- abs-a abs-u )
+    soc-cpu @ cpu.cross$ @ fsoc-fetch soc-swap ;
+
 \ Leaf named by an include line of top.v: cpu/j1/<name> or rtl/<name>.
 : soc-leaf-src ( name-a name-u -- abs-a abs-u )
     2dup s" cpu/j1/" 2swap fjson.str-concat
@@ -103,14 +116,14 @@ variable leaf-fd
 
 : soc-cross ( project -- )
     >r
-    s" j1a/nuc.fs" soc-swap 2dup ."     " type cr fjson.str-free
+    s" nuc.fs" soc-swap-rel 2dup ."     " type cr fjson.str-free
     s" cd "
-    s" j1a" soc-swap fsoc-+cat
+    soc-cross-dir fsoc-+cat
     s"  && mkdir -p build && gforth cross.fs basewords.fs nuc.fs >build/cross.out" fsoc-cat+
     s"  || { cat build/cross.out >&2; exit 1; }" fsoc-cat+
     s\"  && awk '{ for (i = 1; i <= NF; i++) if ($i == \"tdp\") printf \"    SwapForth nucleus: dictionary at $%s bytes of 8192, code pointer %s\\n\", $(i+1), $(i+3) }' build/cross.out" fsoc-cat+
     s" swapforth cross failed" sh-run+
-    s" j1a/build/nuc.hex" soc-swap 2dup
+    s" build/nuc.hex" soc-swap-rel 2dup
     s" firmware.hex" r> project-copy-as
     fjson.str-free ;
 
@@ -176,14 +189,14 @@ variable flatten-n
 
 : soc-fw-size ( -- )
     s\" awk 'function hex(s, i,c,n) { n=0; for (i=1;i<=length(s);i++) { c=index(\"0123456789abcdef\", tolower(substr(s,i,1))); if (c==0) return -1; n=n*16+c-1 } return n } NR==FNR { for (i=1;i<=NF;i++) if ($i==\"dpaddr\") dp=hex($(i+1)); next } FNR==dp/2+1 && dp>0 { printf \"    firmware.hex: %d bytes of 8192\\n\", hex($1); ok=1; exit } END { if (!ok) exit 1 }' "
-    s" j1a/build/cross.out" soc-swap fsoc-+cat
+    s" build/cross.out" soc-swap-rel fsoc-+cat
     s"  firmware.hex" fsoc-cat+
     s" firmware size failed" sh-run+ ;
 
 : soc-feed ( project -- )
     >r
     s" FSOC_EMU_COMPILE_ONLY=1 sh sim.sh" s" verilator compile failed" sh-run
-    s" j1a/swapforth.fs" soc-swap
+    s" swapforth.fs" soc-swap-rel
     2dup ."     " type cr
     s" feed.fs" r@ project.file
     2over 2over soc-flatten
@@ -205,7 +218,14 @@ variable flatten-n
     s" swapforth feed failed" sh-run+
     soc-fw-size ;
 
-: soc-emit ( project -- )
+\ CG=I builds the SwapForth image from the profile directory.
+\ A 32-bit profile without its wrapper stops here and writes no hex.
+: soc-cg-i ( project cpu -- )
+    dup cpu-image? 0= IF
+        nip
+        s" needs a WIDTH 32 wrapper with mem_din" cpu-stop
+    THEN
+    soc-cpu !
     >r
     s" Start build" fsoc-note
     s" Hardware" fsoc-note
@@ -232,4 +252,22 @@ variable flatten-n
     s" Software complete" fsoc-note
     rdrop ;
 
+\ Empty cpu: on this task is j1a. Any other id must be a registered profile.
+: soc-cpu-id ( project -- c-addr u )
+    project.cpu@ dup IF EXIT THEN
+    2drop s" j1a" ;
+
+: soc-cpu-of ( project -- cpu )
+    soc-cpu-id 2dup cpu-find ?dup IF nip nip EXIT THEN
+    s" unknown cpu " 2swap fjson.str-concat
+    2dup stderr write-file throw
+    s\" \n" stderr write-file throw
+    stderr flush-file throw
+    fjson.str-free
+    true abort" unknown cpu" ;
+
+: soc-emit ( project -- )
+    dup soc-cpu-of cg-run ;
+
+s" I" ' soc-cg-i cg-register
 s" soc" ' soc-emit task-register

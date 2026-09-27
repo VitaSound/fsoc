@@ -1,6 +1,6 @@
 \ fsoc.4th — CLI. Run from the project directory: fsoc --build / --load / --clean.
-\ The manifest target.4th names the task, target, board, design and
-\ options. The registry supplies the words; this file knows no task.
+\ The manifest target.4th names the task, target, board, design, cpu
+\ and options. The registry supplies the words; this file knows no task.
 
 create fsoc-lib-buf 1024 allot
 variable fsoc-lib-u

@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Manifest field `cpu:` names a Forth profile. Task `soc` with an empty field still cross-compiles `cpu/j1/swapforth/j1a`. An unknown id stops the build and does not substitute `j1a`. Profiles `stm8` (class 1, CG=E, stm8ef) and `z80` (class 2, CG=F, cerberus-z80) stop before an image is built. `j1b` is the 32-bit core and cross from AFCK_J1B_FORTH `original/j1b`; the build stops until a WIDTH 32 wrapper with `mem_din` exists, so it does not write a J1a `firmware.hex`.
+
 ## [0.7.0] - 2026-09-27
 
 ### Added
