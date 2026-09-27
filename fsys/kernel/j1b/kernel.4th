@@ -108,10 +108,38 @@ variable jb-fid
     s" um/mod" 0 s" umod" jb-pc jb-word
     s" tibc" 0 s" tibc" jb-pc jb-word
     s" parse-name" 0 s" token" jb-pc jb-word
+    s" and" 0 s" andw" jb-pc jb-word
+    s" or" 0 s" orw" jb-pc jb-word
+    s" xor" 0 s" xorw" jb-pc jb-word
+    s" invert" 0 s" invw" jb-pc jb-word
+    s" nip" 0 s" nipw" jb-pc jb-word
+    s" >r" 0 s" tor" jb-pc jb-word
+    s" r>" 0 s" rfrom" jb-pc jb-word
+    s" r@" 0 s" rat" jb-pc jb-word
+    s" <" 0 s" ltw" jb-pc jb-word
+    s" lshift" 0 s" lsh" jb-pc jb-word
+    s" rshift" 0 s" rsh" jb-pc jb-word
+    s" byte-off" 0 s" byteoff" jb-pc jb-word
+    s" depth" 0 s" depthw" jb-pc jb-word
+    s" execute" 0 s" exec" jb-pc jb-word
+    s" key" 0 s" key" jb-pc jb-word
+    s" io@" 0 s" iofetch" jb-pc jb-word
+    s" io!" 0 s" iostore" jb-pc jb-word
+    s" *" 0 s" star" jb-pc jb-word
+    s" base" 0 s" basew" jb-pc jb-word
+    s" u." 0 s" dotu" jb-pc jb-word
+    s" find" 0 s" find" jb-pc jb-word
+    s" branch0" 0 s" zbranch" jb-pc jb-word
+    s" >in" 0 s" toin" jb-pc jb-word
+    s" ntib" 0 s" ntibw" jb-pc jb-word
     fasm-pc @ 12288 u< 0= abort" kernel overlaps variables"
     jb-latest @ 12544 jb-h!
     fasm-pc @ 2* 12546 jb-h!
-    0 12548 jb-h! ;
+    0 12548 jb-h!
+    10 12536 jb-h! ;
+
+\ Byte address of the target here cell. The image size line reads it.
+25092 constant jb-here
 
 [asm]
 quit jmp,
@@ -213,6 +241,11 @@ accept_ch:
     emit call,
     25064 imm,
     fetch call,
+    88 imm,
+    u<,
+    accept_full 0branch,
+    25064 imm,
+    fetch call,
     cellx call,
     24576 imm,
     +,
@@ -223,6 +256,9 @@ accept_ch:
     +,
     25064 imm,
     store call,
+    accept_l jmp,
+accept_full:
+    drop,
     accept_l jmp,
 
 \ ( -- flag ) next word from the tib into the token buffer
@@ -339,19 +375,38 @@ number_lo:
     dup,
     58 imm,
     u<,
-    number_bad 0branch,
+    number_let 0branch,
     48 imm,
     sub call,
-    >r,
+    number_dig jmp,
+number_let:
+    32 imm,
+    or,
     dup,
-    x2 call,
-    >r,
-    x2 call,
-    x2 call,
-    x2 call,
-    r>,
-    +,
-    r>,
+    97 imm,
+    u<,
+    number_isa 0branch,
+    drop,
+    drop,
+    0 imm,
+    exit,
+number_isa:
+    dup,
+    103 imm,
+    u<,
+    number_bad 0branch,
+    87 imm,
+    sub call,
+number_dig:
+    dup,
+    25072 imm,
+    fetch call,
+    u<,
+    number_bad 0branch,
+    swap,
+    25072 imm,
+    fetch call,
+    star call,
     +,
     25068 imm,
     fetch call,
@@ -637,7 +692,6 @@ dotu:
     emit call,
     exit,
 dotu_d:
-    dup,
     10 imm,
     umod call,
     swap,
@@ -650,6 +704,16 @@ dotu_d:
     exit,
 
 dot:
+    dup,
+    0 imm,
+    <,
+    dot_pos 0branch,
+    45 imm,
+    emit call,
+    invert,
+    1 imm,
+    +,
+dot_pos:
     dotu call,
     32 imm,
     emit call,
@@ -792,6 +856,73 @@ tibc:
     25060 imm, fetch call, 1 imm, +,
     25060 imm, store call, exit,
 tibc_z: 34 imm, exit,
+
+andw: and, exit,
+orw: or, exit,
+xorw: xor, exit,
+invw: invert, exit,
+nipw: nip, exit,
+\ ( slot -- ) 0branch in the low half, noop in the high half.
+\ The untaken path steps onto that noop and then the next cell.
+zbranch:
+    8192 imm,
+    or,
+    24576 imm,
+    16 imm,
+    lshift,
+    or,
+    comma call,
+    exit,
+\ Call pushes a return address. Tuck the value under it.
+tor:
+    r>,
+    swap,
+    >r,
+    >r,
+    exit,
+rfrom:
+    r>,
+    r>,
+    swap,
+    >r,
+    exit,
+rat:
+    r>,
+    r@,
+    swap,
+    >r,
+    exit,
+ltw: <, exit,
+lsh: lshift, exit,
+rsh: rshift, exit,
+\ ( a -- shift ) 0, 8, 16 or 24, the byte lane in a 32-bit cell
+byteoff:
+    3 imm, and,
+    3 imm,
+    lshift,
+    exit,
+depthw: depths, 31 imm, and, exit,
+iofetch: iord, io@, exit,
+iostore: io!, drop, exit,
+\ ( a b -- a*b ) low cell, logical shifts
+star:
+    >r,
+    0 imm,
+star_l:
+    r@, star_z 0branch,
+    r@, 1 imm, and, star_skip 0branch,
+    over, +,
+star_skip:
+    swap, 1 imm, lsh call, swap,
+    r>, 1 imm, rsh call, >r,
+    star_l jmp,
+star_z:
+    nip,
+    rdrop,
+    exit,
+basew: 25072 imm, exit,
+toin: 25060 imm, exit,
+ntibw: 25064 imm, exit,
 
 [endasm]
 jb-finish

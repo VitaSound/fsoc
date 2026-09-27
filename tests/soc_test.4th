@@ -36,6 +36,7 @@ s" soc_main.cpp" tmp-exists? expect-true
 s" fsoc/tasks/soc_main.cpp" s" soc_main.cpp" tmp-same-as-root? expect-true
 s" cpu/j1/j1a/j1.v" s" j1.v" tmp-same-as-root? expect-true
 s" Start build" s" sim.log" tmp-grep? expect-true
+s" image tool: SwapForth" s" sim.log" tmp-grep? expect-true
 s" boot" soc-uart? expect-true
 
 s" FSOC_EMU_CON=log FSOC_EMU_UART_BYTES=2" soc-sim

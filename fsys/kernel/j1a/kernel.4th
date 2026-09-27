@@ -92,10 +92,38 @@ variable k-fid
     s" um/mod" 0 s" umod" k-pc k-word
     s" tibc" 0 s" tibc" k-pc k-word
     s" parse-name" 0 s" token" k-pc k-word
+    s" and" 0 s" andw" k-pc k-word
+    s" or" 0 s" orw" k-pc k-word
+    s" xor" 0 s" xorw" k-pc k-word
+    s" invert" 0 s" invw" k-pc k-word
+    s" nip" 0 s" nipw" k-pc k-word
+    s" >r" 0 s" tor" k-pc k-word
+    s" r>" 0 s" rfrom" k-pc k-word
+    s" r@" 0 s" rat" k-pc k-word
+    s" <" 0 s" ltw" k-pc k-word
+    s" lshift" 0 s" lsh" k-pc k-word
+    s" rshift" 0 s" rsh" k-pc k-word
+    s" byte-off" 0 s" byteoff" k-pc k-word
+    s" depth" 0 s" depthw" k-pc k-word
+    s" execute" 0 s" exec" k-pc k-word
+    s" key" 0 s" key" k-pc k-word
+    s" io@" 0 s" iofetch" k-pc k-word
+    s" io!" 0 s" iostore" k-pc k-word
+    s" *" 0 s" star" k-pc k-word
+    s" base" 0 s" basew" k-pc k-word
+    s" u." 0 s" dotu" k-pc k-word
+    s" find" 0 s" find" k-pc k-word
+    s" branch0" 0 s" zbranch" k-pc k-word
+    s" >in" 0 s" toin" k-pc k-word
+    s" ntib" 0 s" ntibw" k-pc k-word
     fasm-pc @ 3840 u< 0= abort" kernel overlaps variables"
     k-latest @ 3840 k-h!
     fasm-pc @ 2* 3841 k-h!
-    0 3842 k-h! ;
+    0 3842 k-h!
+    10 3844 k-h! ;
+
+\ Byte address of the target here cell. The image size line reads it.
+7682 constant kernel-here
 
 [asm]
 quit jmp,
@@ -173,6 +201,11 @@ accept_ch:
     emit call,
     7492 imm,
     fetch call,
+    128 imm,
+    u<,
+    accept_full 0branch,
+    7492 imm,
+    fetch call,
     2*,
     7168 imm,
     +,
@@ -183,6 +216,9 @@ accept_ch:
     +,
     7492 imm,
     store call,
+    accept_l jmp,
+accept_full:
+    drop,
     accept_l jmp,
 
 \ ( -- flag ) next word from the tib into the token buffer
@@ -299,19 +335,38 @@ number_lo:
     dup,
     58 imm,
     u<,
-    number_bad 0branch,
+    number_let 0branch,
     48 imm,
     -,
-    >r,
+    number_dig jmp,
+number_let:
+    32 imm,
+    or,
     dup,
-    2*,
-    >r,
-    2*,
-    2*,
-    2*,
-    r>,
-    +,
-    r>,
+    97 imm,
+    u<,
+    number_isa 0branch,
+    drop,
+    drop,
+    0 imm,
+    exit,
+number_isa:
+    dup,
+    103 imm,
+    u<,
+    number_bad 0branch,
+    87 imm,
+    -,
+number_dig:
+    dup,
+    7688 imm,
+    fetch call,
+    u<,
+    number_bad 0branch,
+    swap,
+    7688 imm,
+    fetch call,
+    star call,
     +,
     7686 imm,
     fetch call,
@@ -584,7 +639,6 @@ dotu:
     emit call,
     exit,
 dotu_d:
-    dup,
     10 imm,
     umod call,
     swap,
@@ -597,6 +651,16 @@ dotu_d:
     exit,
 
 dot:
+    dup,
+    0 imm,
+    <,
+    dot_pos 0branch,
+    45 imm,
+    emit call,
+    invert,
+    1 imm,
+    +,
+dot_pos:
     dotu call,
     32 imm,
     emit call,
@@ -739,6 +803,86 @@ tibc:
     7490 imm, fetch call, 1 imm, +,
     7490 imm, store call, exit,
 tibc_z: 34 imm, exit,
+
+andw: and, exit,
+orw: or, exit,
+xorw: xor, exit,
+invw: invert, exit,
+nipw: nip, exit,
+\ ( slot -- ) 0branch to a slot. One 16-bit cell.
+zbranch:
+    8192 imm,
+    or,
+    comma call,
+    exit,
+\ Call pushes a return address. Tuck the value under it.
+tor:
+    r>,
+    swap,
+    >r,
+    >r,
+    exit,
+rfrom:
+    r>,
+    r>,
+    swap,
+    >r,
+    exit,
+rat:
+    r>,
+    r@,
+    swap,
+    >r,
+    exit,
+ltw: <, exit,
+\ ( u n -- u<<n ) logical
+lsh:
+    dup, lsh0 0branch,
+    1 imm, -,
+    swap,
+    2*,
+    swap,
+    lsh jmp,
+lsh0: drop, exit,
+\ ( u n -- u>>n ) logical, one unsigned divide by 2 per bit
+rsh:
+    dup, rsh0 0branch,
+    1 imm, -,
+    swap,
+    2 imm,
+    umod call,
+    nip,
+    swap,
+    rsh jmp,
+rsh0: drop, exit,
+\ ( a -- shift ) 0 or 8, the byte lane in a 16-bit cell
+byteoff:
+    1 imm, and,
+    3 imm,
+    lsh call,
+    exit,
+depthw: depth, 31 imm, and, exit,
+iofetch: iord, io@, exit,
+iostore: io!, drop, exit,
+\ ( a b -- a*b ) low cell, logical shifts
+star:
+    >r,
+    0 imm,
+star_l:
+    r@, star_z 0branch,
+    r@, 1 imm, and, star_skip 0branch,
+    over, +,
+star_skip:
+    swap, 1 imm, lsh call, swap,
+    r>, 1 imm, rsh call, >r,
+    star_l jmp,
+star_z:
+    nip,
+    rdrop,
+    exit,
+basew: 7688 imm, exit,
+toin: 7490 imm, exit,
+ntibw: 7492 imm, exit,
 
 [endasm]
 kernel-finish

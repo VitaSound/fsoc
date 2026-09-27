@@ -227,19 +227,42 @@ variable flatten-n
     soc-flatten-file
     flatten-fd @ close-file throw ;
 
-\ Image bytes are the cell stored at dp. The line pitch is the kit cell.
-: soc-fw-size ( -- )
+\ One line for every image tool: firmware.hex: <used> bytes of <ram>.
+\ addr is the byte address of the cell that holds the used-byte count.
+: soc-image-line { addr -- }
     soc-cpu @ cpu.kit @ { kit }
     kit kit.width @ 8 / { bytes }
     kit kit.ram @ bytes * { cap }
-    s\" awk 'function hex(s, i,c,n) { n=0; for (i=1;i<=length(s);i++) { c=index(\"0123456789abcdef\", tolower(substr(s,i,1))); if (c==0) return -1; n=n*16+c-1 } return n } NR==FNR { for (i=1;i<=NF;i++) if ($i==\"dpaddr\") dp=hex($(i+1)); next } FNR==dp/"
+    s" awk -v dp="
+    addr fjson.u>str fsoc-+cat
+    s"  -v bytes=" fsoc-cat+
     bytes fjson.u>str fsoc-+cat
-    s\" +1 && dp>0 { printf \"    firmware.hex: %d bytes of " fsoc-cat+
-    cap fjson.u>str fsoc-cat++
-    s\" \\n\", hex($1); ok=1; exit } END { if (!ok) exit 1 }' " fsoc-cat+
-    s" build/cross.out" soc-swap-rel fsoc-+cat
-    s"  firmware.hex" fsoc-cat+
+    s"  -v cap=" fsoc-cat+
+    cap fjson.u>str fsoc-+cat
+    s\"  'function hex(s, i,c,n) { n=0; for (i=1;i<=length(s);i++) { c=index(\"0123456789abcdef\", tolower(substr(s,i,1))); if (c==0) return -1; n=n*16+c-1 } return n } FNR==int(dp/bytes)+1 && dp>0 { printf \"    firmware.hex: %d bytes of %d\\n\", hex($1), cap; ok=1; exit } END { if (!ok) exit 1 }' firmware.hex" fsoc-cat+
     s" firmware size failed" sh-run+ ;
+
+\ SwapForth prints dpaddr in hex after dumpall sets base.
+: soc-dp-addr ( -- n )
+    s\" awk 'function hex(s, i,c,n) { n=0; for (i=1;i<=length(s);i++) { c=index(\"0123456789abcdef\", tolower(substr(s,i,1))); if (c==0) return -1; n=n*16+c-1 } return n } { for (i=1;i<=NF;i++) if ($i==\"dpaddr\") print hex($(i+1)) }' "
+    s" build/cross.out" soc-swap-rel fsoc-+cat
+    s"  > dp.addr" fsoc-cat+
+    s" firmware size failed" sh-run+
+    s" dp.addr" fsoc-read-line1
+    2dup s>number? if
+        drop >r
+        fjson.str-free
+        s" dp.addr" sh-rm
+        r>
+    else
+        2drop
+        fjson.str-free
+        s" dp.addr" sh-rm
+        true abort" firmware size failed"
+    then ;
+
+: soc-fw-size ( -- )
+    soc-dp-addr soc-image-line ;
 
 : soc-feed ( project -- )
     >r
@@ -271,14 +294,19 @@ variable flatten-n
     project.sys@ dup IF EXIT THEN
     2drop s" swapforth" ;
 
+\ The manifest id is swapforth. The log uses the same name as the nucleus line.
+: soc-tool-label ( c-addr u -- c-addr u )
+    2dup s" swapforth" compare 0= if 2drop s" SwapForth" then ;
+
 : soc-sys-step ( project -- )
     dup >r
-    soc-sys-id 2dup sys-find ?dup IF
-        nip nip
+    soc-sys-id { id-a id-u }
+    id-a id-u sys-find ?dup IF
+        ."     image tool: " id-a id-u soc-tool-label type cr
         r> swap sys.step @ execute
     ELSE
         rdrop
-        stderr write-file throw
+        id-a id-u stderr write-file throw
         s\" \n" stderr write-file throw
         stderr flush-file throw
         true abort" unknown sys"
@@ -298,10 +326,15 @@ variable flatten-n
 : soc-fsys-feed ( -- )
     s" FSOC_EMU_COMPILE_ONLY=1 sh sim.sh" s" verilator compile failed" sh-run
     ."     fsys/common/common.4th" cr
-    s" env -u FSOC_EMU_UART_IN -u FSOC_EMU_UART_BYTES -u FSOC_EMU_CON -u FSOC_EMU_CYCLES FSOC_EMU_FAST=1 FSOC_EMU_FEED="
+    ."     fsys/common/core.4th" cr
+    s" cat "
     s" fsys/common/common.4th" fsoc-path fsoc-+cat
-    s"  ./obj_dir/Vtop_feed >feed.log" fsoc-cat+
-    s" fsys common feed failed" sh-run+ ;
+    s"  " fsoc-cat+
+    s" fsys/common/core.4th" fsoc-path fsoc-+cat
+    s"  > feed.fs" fsoc-cat+
+    s" fsys feed cat failed" sh-run+
+    s" env -u FSOC_EMU_UART_IN -u FSOC_EMU_UART_BYTES -u FSOC_EMU_CON -u FSOC_EMU_CYCLES FSOC_EMU_FAST=1 FSOC_EMU_FEED=feed.fs ./obj_dir/Vtop_feed >feed.log"
+    s" fsys common feed failed" sh-run ;
 
 \ j1a keeps kernel-save. j1b's saver is jb-save so both files can
 \ sit in one tree without a second definition of the same name.
@@ -313,6 +346,14 @@ variable flatten-n
     then
     find-name name>interpret execute ;
 
+: soc-here-addr ( -- n )
+    s" j1b" soc-port compare 0= if
+        s" jb-here"
+    else
+        s" kernel-here"
+    then
+    find-name name>interpret execute ;
+
 : soc-fsys ( project -- )
     >r
     soc-kernel
@@ -320,7 +361,8 @@ variable flatten-n
     2dup
     soc-kernel-save
     fjson.str-free
-    soc-fsys-feed ;
+    soc-fsys-feed
+    soc-here-addr soc-image-line ;
 
 \ CG=I builds the image with the tool named by sys:.
 \ A 32-bit profile without its wrapper stops here and writes no hex.

@@ -116,6 +116,9 @@ s" j1b_wrap.v" s" includes.lst" tmp-grep? expect-true
 s" j1.v" s" includes.lst" tmp-grep? expect-false
 s" j1_wrap.v" s" includes.lst" tmp-grep? expect-false
 s" SwapForth nucleus" s" sim.log" tmp-grep? expect-true
+s" image tool: SwapForth" s" sim.log" tmp-grep? expect-true
+s" firmware.hex:" s" sim.log" tmp-grep? expect-true
+s" bytes of 32768" s" sim.log" tmp-grep? expect-true
 s" awk 'length($1)!=8{bad=1} END{exit bad||NR!=8192}' firmware.hex" in-tmp-sh expect-true
 s" 3" s" sim.log" tmp-grep? expect-true
 s"  ok" s" sim.log" tmp-grep? expect-true
@@ -140,6 +143,10 @@ s\" s\" soc\" task:\ns\" emulation\" target:\ns\" designs/soc_console.4th\" desi
 s" FSOC_EMU_FAST=1 FSOC_EMU_CYCLES=2000" s" --build" in-tmp-fsoc
 expect-true
 s" firmware.hex" tmp-exists? expect-true
+s" image tool: fsys" s" sim.log" tmp-grep? expect-true
+s" image tool: SwapForth" s" sim.log" tmp-grep? expect-false
+s" firmware.hex:" s" sim.log" tmp-grep? expect-true
+s" bytes of 8192" s" sim.log" tmp-grep? expect-true
 s" gforth cross.fs" s" sim.log" tmp-grep? expect-false
 s" swapforth/" s" sim.log" tmp-grep? expect-false
 test-teardown

@@ -28,6 +28,7 @@ get-order common-wl swap 1+ set-order
 : = drop drop 0 ;
 : tibc 34 ;
 : , drop ;
+: branch0 drop ;
 
 s" ../fsys/common/common.4th" included
 forth-wordlist set-current
@@ -47,20 +48,46 @@ get-order nip 1- set-order
 
 test-setup
 s\" s\" soc\" task:\ns\" emulation\" target:\ns\" designs/soc_console.4th\" design:\ns\" j1a\" cpu:\ns\" fsys\" sys:\n" tmp-manifest
-s\" FSOC_EMU_FAST=1 FSOC_EMU_CON=term FSOC_EMU_UART_IN=\"$(printf '%s\n' 'variable x' '5 x !' 'x @ .' '10 3 / .')\"" s" --build" in-tmp-fsoc
+s\" FSOC_EMU_FAST=1 FSOC_EMU_CON=term FSOC_EMU_UART_IN=\"$(printf '%s\n' 'variable x' '5 x !' 'x @ .' '10 3 / .' '8 3 max .' '6 7 * .' 'hex 10 decimal .' 'create q 0 , 65 q c! q c@ .' '1 2 .s 2drop' '5 negate .' ': up 0 begin 1+ dup 7 = until ;' \"' up execute .\" \"'BOOT @ .\" '\\ 1 .' '2 .' ': hi .\" hi\" ;' 'hi' \": run ['] up execute . ;\" 'run')\"" s" --build" in-tmp-fsoc
 expect-true
 s" fsys/common/common.4th" s" sim.log" tmp-grep? expect-true
 s" 5  ok" s" sim.log" tmp-grep? expect-true
 s" 3  ok" s" sim.log" tmp-grep? expect-true
+s" 8  ok" s" sim.log" tmp-grep? expect-true
+s" 42  ok" s" sim.log" tmp-grep? expect-true
+s" 16  ok" s" sim.log" tmp-grep? expect-true
+s" 65  ok" s" sim.log" tmp-grep? expect-true
+s" 2> 1 2" s" sim.log" tmp-grep? expect-true
+s" negate .-5" s" sim.log" tmp-grep? expect-true
+s" execute .7" s" sim.log" tmp-grep? expect-true
+s" BOOT @ .0" s" sim.log" tmp-grep? expect-true
+s" 2 .2" s" sim.log" tmp-grep? expect-true
+s" 1 .1" s" sim.log" tmp-grep? expect-false
+s" hihi" s" sim.log" tmp-grep? expect-true
+s" run7" s" sim.log" tmp-grep? expect-true
+s" fsys/common/core.4th" s" sim.log" tmp-grep? expect-true
 test-teardown
 
 test-setup
 s\" s\" soc\" task:\ns\" emulation\" target:\ns\" designs/soc_console.4th\" design:\ns\" j1b\" cpu:\ns\" fsys\" sys:\n" tmp-manifest
-s\" FSOC_EMU_FAST=1 FSOC_EMU_CON=term FSOC_EMU_UART_IN=\"$(printf '%s\n' 'variable x' '5 x !' 'x @ .' '10 3 / .')\"" s" --build" in-tmp-fsoc
+s\" FSOC_EMU_FAST=1 FSOC_EMU_CON=term FSOC_EMU_UART_IN=\"$(printf '%s\n' 'variable x' '5 x !' 'x @ .' '10 3 / .' '8 3 max .' '6 7 * .' 'hex 10 decimal .' 'create q 0 , 65 q c! q c@ .' '1 2 .s 2drop' '5 negate .' ': up 0 begin 1+ dup 7 = until ;' \"' up execute .\" \"'BOOT @ .\" '\\ 1 .' '2 .' ': hi .\" hi\" ;' 'hi' \": run ['] up execute . ;\" 'run')\"" s" --build" in-tmp-fsoc
 expect-true
 s" fsys/common/common.4th" s" sim.log" tmp-grep? expect-true
 s" 5  ok" s" sim.log" tmp-grep? expect-true
 s" 3  ok" s" sim.log" tmp-grep? expect-true
+s" 8  ok" s" sim.log" tmp-grep? expect-true
+s" 42  ok" s" sim.log" tmp-grep? expect-true
+s" 16  ok" s" sim.log" tmp-grep? expect-true
+s" 65  ok" s" sim.log" tmp-grep? expect-true
+s" 2> 1 2" s" sim.log" tmp-grep? expect-true
+s" negate .-5" s" sim.log" tmp-grep? expect-true
+s" execute .7" s" sim.log" tmp-grep? expect-true
+s" BOOT @ .0" s" sim.log" tmp-grep? expect-true
+s" 2 .2" s" sim.log" tmp-grep? expect-true
+s" 1 .1" s" sim.log" tmp-grep? expect-false
+s" hihi" s" sim.log" tmp-grep? expect-true
+s" run7" s" sim.log" tmp-grep? expect-true
+s" fsys/common/core.4th" s" sim.log" tmp-grep? expect-true
 test-teardown
 
 test-setup
