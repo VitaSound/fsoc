@@ -1,4 +1,4 @@
-\ tests/cpu_test.4th — cpu: profile, CG emitter, j1b without a wrapper
+\ tests/cpu_test.4th — cpu: profile, CG emitter, j1b kit image
 
 s" test_common.4th" included
 s" fixture.4th" included
@@ -20,7 +20,7 @@ s" j1b" cpu-find cpu.cg$ @ fsoc-fetch s" I" expect-str-eq
 s" j1b" cpu-find cpu.bm$ @ fsoc-fetch s" C" expect-str-eq
 s" j1b" cpu-find cpu.width @ 32 expect=
 s" j1b" cpu-find cpu.dsp @ 32 expect=
-s" j1b" cpu-find cpu-image? expect-false
+s" j1b" cpu-find cpu-image? expect-true
 
 s" stm8" cpu-find cpu.class @ 1 expect=
 s" stm8" cpu-find cpu.cg$ @ fsoc-fetch s" E" expect-str-eq
@@ -32,31 +32,39 @@ s" E" cg-find cg.emit @ s" F" cg-find cg.emit @ = expect-true
 s" I" cg-find cg.emit @ s" E" cg-find cg.emit @ = expect-false
 s" no-such-cpu" cpu-find 0= expect-true
 
-s" grep -q 'WIDTH 16' cpu/j1/j1.v" system
+s" grep -q 'WIDTH 16' cpu/j1/j1a/j1.v" system
 $? 0= expect-true
-s" grep -q 'WIDTH 32' cpu/j1/j1b.v" system
+s" grep -q 'WIDTH 32' cpu/j1/j1b/j1b.v" system
 $? 0= expect-true
-s" grep -q mem_din cpu/j1/j1b.v" system
+s" grep -q mem_din cpu/j1/j1b/j1b.v" system
 $? 0= expect-true
-s" grep -q 'WIDTH 32' cpu/j1/j1_wrap.v" system
+s" grep -q 'WIDTH 32' cpu/j1/j1a/j1_wrap.v" system
 $? 0= expect-false
-s" grep -q mem_din cpu/j1/j1_wrap.v" system
+s" grep -q mem_din cpu/j1/j1a/j1_wrap.v" system
 $? 0= expect-false
-s" test -f cpu/j1/swapforth/j1b/cross.fs" system
+s" grep -q 'WIDTH 32' cpu/j1/j1b/j1b_wrap.v" system
 $? 0= expect-true
-s" test -f cpu/j1/swapforth/j1b/basewords.fs" system
+s" grep -q mem_din cpu/j1/j1b/j1b_wrap.v" system
 $? 0= expect-true
-s" test -f cpu/j1/swapforth/j1b/nuc.fs" system
+s" test -f swapforth/j1b/cross.fs" system
 $? 0= expect-true
-s" test -f cpu/j1/swapforth/j1b/swapforth.fs" system
+s" test -f swapforth/j1b/basewords.fs" system
 $? 0= expect-true
-s" test -f cpu/j1/swapforth/j1b/LICENSE" system
+s" test -f swapforth/j1b/nuc.fs" system
 $? 0= expect-true
-s" grep -q 'James Bowman' cpu/j1/swapforth/j1b/LICENSE" system
+s" test -f swapforth/j1b/swapforth.fs" system
 $? 0= expect-true
-s" test -f cpu/j1/stack.v" system
+s" test -f swapforth/j1b/LICENSE" system
 $? 0= expect-true
-s" test -f cpu/j1/common.h" system
+s" grep -q 'James Bowman' swapforth/j1b/LICENSE" system
+$? 0= expect-true
+s" test -f cpu/j1/j1b/stack.v" system
+$? 0= expect-true
+s" test -f cpu/j1/j1b/common.h" system
+$? 0= expect-true
+s" test -f cpu/j1/j1a/kit.4th" system
+$? 0= expect-true
+s" test -f cpu/j1/j1b/kit.4th" system
 $? 0= expect-true
 s" find . -name j1.vhd -o -name forth.asm -o -name asmz80.4th | grep -q ." system
 $? 0= expect-false
@@ -98,12 +106,42 @@ s" gforth cross.fs" s" sim.log" tmp-grep? expect-false
 s" forth.asm" tmp-exists? expect-false
 test-teardown
 
-s\" s\" soc\" task:\ns\" emulation\" target:\ns\" j1b\" cpu:\n" cpu-build
+test-setup
+s\" s\" soc\" task:\ns\" emulation\" target:\ns\" designs/soc_console.4th\" design:\ns\" j1b\" cpu:\n" tmp-manifest
+s\" FSOC_EMU_FAST=1 FSOC_EMU_CON=term FSOC_EMU_UART_IN='1 2 + .' " s" --build" in-tmp-fsoc expect-true
+s" j1b.v" s" includes.lst" tmp-grep? expect-true
+s" stack.v" s" includes.lst" tmp-grep? expect-true
+s" common.h" s" includes.lst" tmp-grep? expect-true
+s" j1b_wrap.v" s" includes.lst" tmp-grep? expect-true
+s" j1.v" s" includes.lst" tmp-grep? expect-false
+s" j1_wrap.v" s" includes.lst" tmp-grep? expect-false
+s" SwapForth nucleus" s" sim.log" tmp-grep? expect-true
+s" awk 'length($1)!=8{bad=1} END{exit bad||NR!=8192}' firmware.hex" in-tmp-sh expect-true
+s" 3" s" sim.log" tmp-grep? expect-true
+s"  ok" s" sim.log" tmp-grep? expect-true
+s" swapforth/j1a/build/nuc.hex" s" firmware.hex" tmp-same-as-root? expect-false
+test-teardown
+
+s" grep -q swapforth cpu/j1/j1a/kit.4th" system
+$? 0= expect-false
+s" grep -q swapforth cpu/j1/j1b/kit.4th" system
+$? 0= expect-false
+s" grep -q '" s" cpu/j1/" fjson.str-concat s" swapforth' fsoc/tasks/soc.4th" fjson.str-concat system
+$? 0= expect-false
+
+s\" s\" soc\" task:\ns\" emulation\" target:\ns\" no-such-sys\" sys:\n" cpu-build
 expect-false
-s" j1b" s" sim.log" tmp-grep? expect-true
-s" firmware.hex" tmp-exists? expect-false
+s" no-such-sys" s" sim.log" tmp-grep? expect-true
 s" gforth cross.fs" s" sim.log" tmp-grep? expect-false
-s" cpu/j1/swapforth/j1a/build/nuc.hex" s" firmware.hex" tmp-same-as-root? expect-false
+test-teardown
+
+test-setup
+s\" s\" soc\" task:\ns\" emulation\" target:\ns\" designs/soc_console.4th\" design:\ns\" j1a\" cpu:\ns\" fsys\" sys:\n" tmp-manifest
+s" FSOC_EMU_FAST=1 FSOC_EMU_CYCLES=2000" s" --build" in-tmp-fsoc
+expect-true
+s" firmware.hex" tmp-exists? expect-true
+s" gforth cross.fs" s" sim.log" tmp-grep? expect-false
+s" swapforth/" s" sim.log" tmp-grep? expect-false
 test-teardown
 
 test-finish

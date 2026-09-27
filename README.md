@@ -128,6 +128,10 @@ FSOC_EMU_CON=term FSOC_EMU_FAST=1 FSOC_EMU_CYCLES=800000 fsoc --build
 FSOC_EMU_CON=pin FSOC_EMU_FAST=1 FSOC_EMU_CYCLES=800000 fsoc --build
 ```
 
+## Data SPI NOR
+
+An extra SPI NOR is a data part, not a boot ROM. The J1 reset stays at the first word of internal RAM, and `firmware.hex` is still that image. The part is not named `rom`. A command on the io bus reads a contiguous range into an internal buffer; it is not a memory-map window. Chip rows live in `fsoc/soc/nor.4th`. `w25q32jv` is device id `$7016`, 4194304 bytes, page 256, opcode `$03`, and no dummy clocks. `w25q64jv` is the same 1-1-1 read with a different size. Both rows use one leaf, [`rtl/spi_nor.v`](rtl/spi_nor.v). `spi_clk` is a port of that module. A memory-map window of the flash, and a `main_ram` region with a base, a size, and a bus, are later slices and are not in this build. The command read is checked under Verilator and does not need a board. `csr.json` carries `regions` next to `devices`; with no region call, `regions` is `[]` and `led` stays at `$400`.
+
 ## SoC on a board
 
 `projects/soc_terasic_de0nano` writes Quartus files and `firmware.hex` for the SwapForth console on the Terasic DE0-Nano (`EP4CE22F17C6`). Clock `clk50` is `R8`, `user_led` 0 is `A15`, serial tx/rx are `B5`/`B4`. `led` is the `IO-LED` register: in hex, `1 400 io!` drives `A15` high and `0 400 io!` drives it low. `--build` does not run Quartus. `--load` runs `load.sh`. Then a host line on the USB UART.

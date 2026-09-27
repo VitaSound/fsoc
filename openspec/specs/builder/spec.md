@@ -7,7 +7,7 @@
 ## Requirements
 
 ### Requirement: Запуск из каталога проекта
-Билдер MUST выполняться в текущем каталоге и MUST NOT переходить в корень репозитория. Идентичность проекта MUST читаться из `target.4th` в этом каталоге словами манифеста: `s" <задача>" task:`, `s" <таргет>" target:`, `s" <плата>" board:` (пустая строка — без платы), `s" <путь>" design:`, `s" <имя>" s" <значение>" option:`. Слова манифеста MUST жить в ядре билдера и MUST NOT быть словами задачи. Билдер MUST остановиться с ошибкой, если `task:` или `target:` отсутствуют.
+Билдер MUST выполняться в текущем каталоге и MUST NOT переходить в корень репозитория. Идентичность проекта MUST читаться из `target.4th` в этом каталоге словами манифеста: `s" <задача>" task:`, `s" <таргет>" target:`, `s" <плата>" board:` (пустая строка — без платы), `s" <путь>" design:`, `s" <id>" cpu:`, `s" <id>" sys:`, `s" <имя>" s" <значение>" option:`. Слова манифеста MUST жить в ядре билдера и MUST NOT быть словами задачи. Билдер MUST остановиться с ошибкой, если `task:` или `target:` отсутствуют. Пустое `sys:` MUST NOT быть ошибкой и MUST означать `swapforth`. Неизвестный id в `sys:` MUST останавливать сборку до кросса.
 
 #### Scenario: Сборка эмуляции blinky
 - **WHEN** в `projects/blinky_emul` лежит `target.4th` со строками `s" blinky" task:` и `s" emulation" target:` и выполняется `fsoc --build`
@@ -24,6 +24,14 @@
 #### Scenario: Манифест без таргета
 - **WHEN** `target.4th` содержит только `s" blinky" task:`
 - **THEN** билдер завершается с ошибкой до записи файлов, и `top.v` не создан
+
+#### Scenario: Пустое sys не ошибка
+- **WHEN** `target.4th` задачи `soc` не содержит `sys:` и выполняется `fsoc --build`
+- **THEN** сборка не останавливается из-за отсутствия `sys:` и читает инструмент `swapforth`
+
+#### Scenario: Неизвестный sys
+- **WHEN** `target.4th` содержит `s" no-such-sys" sys:` и выполняется `fsoc --build`
+- **THEN** билдер завершается с ошибкой, содержащей `no-such-sys`, до запуска кросса
 
 ### Requirement: Флаги build и load независимы
 `fsoc --build --load` MUST сначала выполнить сборку, затем прошивку. На эмуляции `--load` MUST игнорироваться без ошибки. На проекте с платой `--load` MUST запустить `load.sh`.
@@ -110,7 +118,7 @@
 - **THEN** последнее утверждение `expect-stack-clean` проходит
 
 ### Requirement: Задача SoC на таргете платы
-Задача `soc` MUST собираться на зарегистрированном таргете без сравнения имени таргета со строками `quartus`, `emulation` или `yosys`. При заданной плате задача MUST загрузить её, запросить единственный тактовый ресурс (`plat-clock`) и `user_led`, и MUST запросить `serial` только когда `s" serial" 0 io-find` его находит. Таргет `quartus` MUST записать `.qsf` из карты пинов. Таргет `emulation` MUST карту игнорировать. Таргет `yosys` MUST записать `.lpf` из той же карты.
+Задача `soc` MUST собираться на зарегистрированном таргете без сравнения имени таргета со строками `quartus`, `emulation` или `yosys`. При заданной плате задача MUST загрузить её, запросить единственный тактовый ресурс (`plat-clock`) и `user_led`, и MUST запросить `serial` только когда `s" serial" 0 io-find` его находит. Таргет `quartus` MUST записать `.qsf` из карты пинов. Таргет `emulation` MUST карту пинов игнорировать, MUST оставить `sim.sh` и MUST NOT писать `.qsf` или `.lpf`. Таргет `yosys` MUST записать `.lpf` из той же карты.
 
 #### Scenario: Один и тот же дизайн на двух таргетах
 - **WHEN** `projects/soc_emul` и `projects/soc_terasic_de0nano` называют `designs/soc_console.4th` и выполняется `fsoc --build` в каждом
@@ -119,3 +127,7 @@
 #### Scenario: Лампа на Yosys
 - **WHEN** в `projects/soc_blink_colorlight_5a_75e_v6_0` выполняется `fsoc --build` с `FSOC_SYNTH_SKIP=1`
 - **THEN** каталог содержит `soc.lpf` и не содержит `sim.sh` и `soc.qsf`
+
+#### Scenario: Консоль на эмуляции с платой
+- **WHEN** в `projects/soc_emul_colorlight_5a_75e_v6_0` выполняется `fsoc --build` с `FSOC_EMU_FAST=1` и `FSOC_EMU_UART_IN`, равным `1 2 + .`
+- **THEN** каталог содержит `sim.sh` и не содержит `soc.qsf` и `soc.lpf`, а `fsoc/tasks/soc.4th` не сравнивает имя таргета со строками `quartus`, `emulation` и `yosys`

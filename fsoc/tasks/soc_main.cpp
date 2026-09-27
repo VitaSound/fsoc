@@ -8,6 +8,8 @@
 #include "uart.h"
 #include "verilated.h"
 
+#include <cstdio>
+
 int main(int argc, char** argv) {
     Verilated::commandArgs(argc, argv);
 
@@ -83,6 +85,10 @@ int main(int argc, char** argv) {
             if (capture && byte_limit > 0 && bytes >= byte_limit) return 1;
             return sess.done();
         });
+
+    // cpu-compare reads this line. Other runs leave the log unchanged.
+    if (scripted && env_str("FSOC_EMU_CYCLES_OUT") != 0)
+        std::fprintf(stderr, "cycles %llu\n", clk.cycles);
 
     tr.close();
     top->final();

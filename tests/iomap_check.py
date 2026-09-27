@@ -9,7 +9,11 @@ vh = open("iomap.vh", encoding="utf-8").read()
 j = json.load(open("csr.json", encoding="utf-8"))
 if j.get("bus") != "j1-io":
     sys.exit("bus")
+if "regions" not in j or j["regions"] != []:
+    sys.exit("regions")
 devs = {d["name"]: d for d in j["devices"]}
+if len(devs) != 4:
+    sys.exit("count")
 bits = dict(re.findall(r"IO_([A-Z_]+)_BIT = (\d+)", vh))
 addrs = {n: h for h, n in re.findall(r"\$([0-9A-Fa-f]+) constant IO-([A-Z-]+)", fs)}
 want = [

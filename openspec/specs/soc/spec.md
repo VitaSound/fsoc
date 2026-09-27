@@ -7,23 +7,29 @@
 ## Requirements
 
 ### Requirement: Образ собирает кросс-компилятор SwapForth
-Прошивка MUST быть образом SwapForth J1a, собранным Forth-кросс-компилятором из исходников, а не готовым hex и не текстом `j1_prompt`. Сборка MUST загрузить этот образ в память J1. Ядро MUST исполнить его. Байты консоли MUST появиться из этого исполнения. Модуль `j1_prompt` MUST NOT быть их источником.
+При пустом `sys:` и при `s" swapforth" sys:` прошивка MUST быть образом SwapForth, собранным Forth-кросс-компилятором из исходников в `swapforth/<id>/`, а не готовым hex и не текстом `j1_prompt`. Сборка MUST загрузить этот образ в память J1. Ядро MUST исполнить его. Байты консоли MUST появиться из этого исполнения. Модуль `j1_prompt` MUST NOT быть их источником. При `s" fsys" sys:` этот абзац MUST NOT требовать образ SwapForth.
 
 #### Scenario: Hex совпадает со сборкой SwapForth
-- **WHEN** в `projects/soc_emul` выполняется `fsoc --build`
-- **THEN** `firmware.hex` совпадает с выходом сборки SwapForth, исходники прошивки остаются Forth-текстом, а в `top.v` нет `j1_prompt`
+- **WHEN** в `projects/soc_emul` выполняется `fsoc --build` и в `target.4th` нет `sys:`
+- **THEN** `firmware.hex` совпадает с выходом сборки SwapForth из `swapforth/j1a`, исходники прошивки остаются Forth-текстом, а в `top.v` нет `j1_prompt`
+
+#### Scenario: fsys не подменяет консоль soc_emul
+- **WHEN** временный манифест содержит `s" soc" task:`, `s" emulation" target:`, `s" j1a" cpu:` и `s" fsys" sys:`
+- **THEN** `firmware.hex` не совпадает с образом `projects/soc_emul`, собранным без `sys:`
 
 ### Requirement: Словарь SwapForth J1a
-Словарь загруженного образа MUST содержать каждое слово ANS CORE, кроме `environment?`. Слова `environment?` в образе MUST NOT требоваться. MUST также быть найдены слова, которые добавляет интерактивный образ J1a: `io@` `io!` `key?` `words` `.s` `.x` `.x2` `nip` `tuck` `-rot` `false` `true` `u>` `within` `erase` `.(` `hex` `marker` `pad` `unused` `see` `dump` `ms` `leds` `new` `.xt` `case` `of` `endof` `endcase` `save-input` `restore-input` `convert` `[compile]`.
+При пустом `sys:` и при `s" swapforth" sys:` словарь загруженного образа MUST содержать каждое слово ANS CORE, кроме `environment?`. Слова `environment?` в образе MUST NOT требоваться. MUST также быть найдены слова, которые добавляет интерактивный образ J1a: `io@` `io!` `key?` `words` `.s` `.x` `.x2` `nip` `tuck` `-rot` `false` `true` `u>` `within` `erase` `.(` `hex` `marker` `pad` `unused` `see` `dump` `ms` `leds` `new` `.xt` `case` `of` `endof` `endcase` `save-input` `restore-input` `convert` `[compile]`.
 
 ANS CORE, который MUST присутствовать: `!` `#` `#>` `#s` `'` `(` `*` `*/` `*/mod` `+` `+!` `+loop` `,` `-` `.` `."` `/` `/mod` `0<` `0=` `1+` `1-` `2!` `2*` `2/` `2@` `2drop` `2dup` `2over` `2swap` `:` `;` `<` `<#` `=` `>` `>body` `>in` `>number` `>r` `?dup` `@` `abort` `abort"` `abs` `accept` `align` `aligned` `allot` `and` `base` `begin` `bl` `c!` `c,` `c@` `cell+` `cells` `char` `char+` `chars` `constant` `count` `cr` `create` `decimal` `depth` `do` `does>` `drop` `dup` `else` `emit` `evaluate` `execute` `exit` `fill` `find` `fm/mod` `here` `hold` `i` `if` `immediate` `invert` `j` `key` `leave` `literal` `loop` `lshift` `m*` `max` `min` `mod` `move` `negate` `or` `over` `postpone` `quit` `r>` `r@` `recurse` `repeat` `rot` `rshift` `s"` `s>d` `sign` `sm/rem` `source` `space` `spaces` `state` `swap` `then` `type` `u<` `um*` `um/mod` `unloop` `until` `variable` `while` `word` `xor` `[` `[']` `[char]` `]`.
 
+При `s" fsys" sys:` этот список MUST NOT требоваться. Словарь fsys задаёт спецификация `fsys`.
+
 #### Scenario: words печатает словарь
-- **WHEN** после рукопожатия загрузки подана строка `words`
+- **WHEN** после рукопожатия загрузки образа SwapForth подана строка `words`
 - **THEN** в журнале передачи есть имя каждого слова из этого требования
 
 #### Scenario: Определение с ветвлением
-- **WHEN** после рукопожатия поданы строка `: P 0 if 1 else 2 then . ;` и затем строка `P`
+- **WHEN** после рукопожатия образа SwapForth поданы строка `: P 0 if 1 else 2 then . ;` и затем строка `P`
 - **THEN** в журнале после второй строки есть байт `2`, пробел и ответ ` ok`
 
 ### Requirement: Ответ ok после строки
@@ -103,11 +109,15 @@ ANS CORE, который MUST присутствовать: `!` `#` `#>` `#s` `'
 - **THEN** появляются `top.v`, `firmware.hex`, `sim.sh`, `csr.fs`, `iomap.vh` и `csr.json`, Verilator компилируется и просмотр идёт до Ctrl+C
 
 ### Requirement: Образ прошивки собирает отдельный шаг
-`firmware.hex` MUST создавать шаг `feed`, отделённый от интерактивного просмотра: билдер MUST подготовить плоский файл подачи (раскрыв `include` SwapForth), запустить `feed` и получить `firmware.hex` из обёртки. Переменная `FSOC_EMU_SNAPSHOT` MUST NOT использоваться. Интерактивный просмотр MUST только загрузить готовый `firmware.hex`.
+Задача `soc` MUST вызвать один шаг выбранного `sys:` и MUST NOT сама вызывать кросс SwapForth. При пустом `sys:` и при `s" swapforth" sys:` этот шаг MUST создать `firmware.hex` отдельным `feed`, отделённым от интерактивного просмотра: билдер MUST подготовить плоский файл подачи (раскрыв `include` из `swapforth/`), запустить `feed` и получить `firmware.hex` из обёртки. При `s" fsys" sys:` hex MUST записать шаг fsys; подача по UART MUST выполняться только если инструмент оставил Форт, который её принимает. Переменная `FSOC_EMU_SNAPSHOT` MUST NOT использоваться. Интерактивный просмотр MUST только загрузить готовый `firmware.hex`.
 
 #### Scenario: Сборка образа без интерактивного main
-- **WHEN** в `projects/soc_blink` выполняется `fsoc --build`
+- **WHEN** в `projects/soc_blink` выполняется `fsoc --build` и в манифесте нет `sys:`
 - **THEN** в каталоге появляются плоский файл подачи, `obj_dir/Vtop_feed` и `firmware.hex` на 4096 строк, а `rg FSOC_EMU_SNAPSHOT fsoc/ emu/ targets/` пусто
+
+#### Scenario: Задача не содержит имя swapforth
+- **WHEN** читается слово сборки задачи `soc`
+- **THEN** в нём нет литерала `cpu/j1/swapforth` и нет прямого вызова кросса; каталог даёт выбранный `sys:`
 
 ### Requirement: Прошивка берёт адреса из карты
 Файл прошивки проекта (`firmware/lamp.fs` и последующие) MUST начинаться с `include csr.fs` и MUST обращаться к шине через константы `IO-<ИМЯ>`. Литералы адресов `h# 400`, `h# 800`, `h# 1000`, `h# 2000` MUST NOT стоять в прошивке проекта. Билдер MUST подать `csr.fs` в образ до прошивки проекта.
@@ -119,7 +129,7 @@ ANS CORE, который MUST присутствовать: `!` `#` `#>` `#s` `'
 ### Requirement: SoC собирается на плате
 В проекте с `s" soc" task:`, `s" quartus" target:` и платой, у которой описаны ресурсы `clk50`, `user_led` и `serial` с `tx` / `rx`, `fsoc --build` MUST записать `top.v`, листы, `soc.qpf`, `soc.qsf`, `soc.sdc`, `build.sh`, `load.sh` и `firmware.hex` в каталог проекта и MUST NOT запускать Quartus. `.qpf` MUST содержать `PROJECT_REVISION = "soc"`. `.qsf` MUST содержать `DEVICE` и `FAMILY` платы в кавычках и назначения пинов `clk`, `led`, `uart_tx`, `uart_rx` из ресурсов платы. Порты `rst` и `dump` MUST быть привязаны к 0 внутри топа платы и MUST NOT требовать пинов. `--load` MUST выполнить `load.sh`. Топ консоли MUST передать обёртке `USE_REGIO` равный 1 и MUST включить `regio.v` в список Verilog. Строка инстанса в `top.v` MUST содержать `.led(led)` одним токеном. `.qsf` MUST содержать `VERILOG_INCLUDE_FILE iomap.vh` и `HEX_FILE firmware.hex`. `iomap.vh` MUST NOT быть `VERILOG_FILE`.
 
-#### Scenario: VitaSound EP4CE10
+#### Scenario: Terasic DE0-Nano
 - **WHEN** в `projects/soc_terasic_de0nano` выполняется `fsoc --build`
 - **THEN** `soc.qpf` содержит `PROJECT_REVISION = "soc"`, `soc.qsf` содержит `DEVICE EP4CE22F17C6`, `FAMILY "Cyclone IV E"`, `PIN_R8 -to clk`, `PIN_A15 -to led`, `PIN_B5 -to uart_tx`, `PIN_B4 -to uart_rx`, `VERILOG_FILE regio.v`, `VERILOG_INCLUDE_FILE iomap.vh` и `HEX_FILE firmware.hex`, `top.v` не имеет входов `rst` и `dump` в списке портов, не содержит `` `include ``, содержит `USE_REGIO(1)` и `.led(led)`, `firmware.hex` содержит 4096 строк, а Quartus не запускался
 
@@ -147,3 +157,10 @@ ANS CORE, который MUST присутствовать: `!` `#` `#>` `#s` `'
 #### Scenario: Файлы без синтеза
 - **WHEN** в `projects/soc_blink_colorlight_5a_75e_v6_0` выполняется `fsoc --build` с `FSOC_SYNTH_SKIP=1`
 - **THEN** `soc.lpf` содержит `SITE "P6"`, `SITE "T6"` и `FREQUENCY PORT "clk" 25.000 MHz`, `top.v` содержит `CLK_HZ(25000000)`, `TIMER_DIV(25000)` и `assign led = ~led_q`, в `top.v` нет `input wire uart_rx`, `output wire uart_tx` и `input wire rst`, нет `sim.sh`, а `firmware.hex` содержит 4096 строк
+
+### Requirement: Консоль на эмуляции Colorlight
+Проект `projects/soc_emul_colorlight_5a_75e_v6_0` MUST собираться задачей `soc`, таргетом `emulation`, платой `colorlight_5a_75e_v6_0` и дизайном `designs/soc_console.4th`. Топ MUST получить `CLK_HZ` тактового ресурса платы и `BAUD` 115200 и MUST сохранить порты `uart_rx`, `uart_tx`, `rst` и `dump`. Параметры `BOARD`, `NO_UART`, `LED_LOW` и `TIMER_DIV` MUST NOT попадать в этот топ. Сеанс `1 2 + .` MUST ответить `3` и ` ok`.
+
+#### Scenario: Сеанс на 25 МГц
+- **WHEN** в `projects/soc_emul_colorlight_5a_75e_v6_0` выполняется `fsoc --build` с `FSOC_EMU_FAST=1` и `FSOC_EMU_UART_IN`, равным `1 2 + .`
+- **THEN** код возврата 0, журнал содержит `3` и ` ok`, `top.v` содержит `CLK_HZ(25000000)`, `BAUD(115200)` и `input wire uart_rx`, `sim.sh` содержит `CLK_HZ=25000000`, а `soc.lpf` и `soc.qsf` отсутствуют

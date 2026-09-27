@@ -30,6 +30,22 @@ variable soc-cpu
     current-platform @ 0= IF false EXIT THEN
     s" user_led" 0 io-find dup IF io.low@ 0<> ELSE drop false THEN ;
 
+: soc-kit-param ( extra-a extra-u name-a name-u file-a file-u -- c-addr u )
+    2>r 2>r
+    s"  --param " fsoc-cat+
+    2r> fsoc-cat+
+    s" =" fsoc-cat+
+    2r> fsoc-cat+ ;
+
+: soc-kit-params ( extra-a extra-u -- c-addr u )
+    soc-cpu @ cpu.kit @ { kit }
+    kit kit.hdr$ @ fsoc-fetch dup IF
+        s" HDR" 2swap soc-kit-param
+    ELSE 2drop THEN
+    kit kit.stack$ @ fsoc-fetch s" STACK" 2swap soc-kit-param
+    kit kit.core$ @ fsoc-fetch s" CORE" 2swap soc-kit-param
+    kit kit.wrap$ @ fsoc-fetch s" WRAP" 2swap soc-kit-param ;
+
 : soc-gen-top ( project -- )
     >r
     s"  --out " r@ project.dir@ fjson.str-concat
@@ -44,6 +60,7 @@ variable soc-cpu
         s"  --param TIMER_DIV=" fsoc-cat+
         soc-clk-hz 1000 / fjson.u>str fsoc-cat++
     THEN
+    soc-kit-params
     2dup r> soc-design fhdlgen-build
     fjson.str-free ;
 
@@ -67,12 +84,15 @@ variable soc-cpu
     rdrop ;
 
 : soc-swap ( rel-a rel-u -- abs-a abs-u )
-    s" cpu/j1/swapforth/" 2swap fjson.str-concat
+    s" swapforth/" 2swap fjson.str-concat
     fsoc-path+ ;
 
-\ <cross>/<tail> under swapforth/. The directory comes from the profile.
+\ <id>/<tail> under swapforth/. The id is the cpu profile.
+: soc-port ( -- c-addr u )
+    soc-cpu @ cpu.id$ @ fsoc-fetch ;
+
 : soc-swap-rel { tail-a tail-u -- abs-a abs-u }
-    soc-cpu @ cpu.cross$ @ fsoc-fetch
+    soc-port
     s" /" fjson.str-concat
     tail-a tail-u fsoc-cat+
     2dup 2>r
@@ -80,10 +100,24 @@ variable soc-cpu
     2r> fjson.str-free ;
 
 : soc-cross-dir ( -- abs-a abs-u )
-    soc-cpu @ cpu.cross$ @ fsoc-fetch soc-swap ;
+    soc-port soc-swap ;
 
-\ Leaf named by an include line of top.v: cpu/j1/<name> or rtl/<name>.
+\ Leaf named by an include line: the kit directory, then cpu/j1/, then rtl/.
+: soc-try-leaf ( name-a name-u rel-a rel-u -- abs-a abs-u flag )
+    2swap fjson.str-concat fsoc-path+
+    2dup file-exists? ;
+
 : soc-leaf-src ( name-a name-u -- abs-a abs-u )
+    soc-cpu @ cpu.kit @ ?dup IF
+        kit.id$ @ fsoc-fetch
+        s" cpu/j1/" 2swap fjson.str-concat
+        s" /" fsoc-cat+
+        2>r 2dup 2r@ soc-try-leaf IF
+            2r> fjson.str-free 2nip EXIT
+        THEN
+        fjson.str-free
+        2r> fjson.str-free
+    THEN
     2dup s" cpu/j1/" 2swap fjson.str-concat
     fsoc-path+
     2dup file-exists? IF 2nip EXIT THEN
@@ -114,6 +148,10 @@ variable leaf-fd
     leaf-fd @ close-file throw
     rdrop ;
 
+: soc-ram-bytes ( -- n )
+    soc-cpu @ cpu.kit @
+    dup kit.ram @ swap kit.width @ 8 / * ;
+
 : soc-cross ( project -- )
     >r
     s" nuc.fs" soc-swap-rel 2dup ."     " type cr fjson.str-free
@@ -121,7 +159,9 @@ variable leaf-fd
     soc-cross-dir fsoc-+cat
     s"  && mkdir -p build && gforth cross.fs basewords.fs nuc.fs >build/cross.out" fsoc-cat+
     s"  || { cat build/cross.out >&2; exit 1; }" fsoc-cat+
-    s\"  && awk '{ for (i = 1; i <= NF; i++) if ($i == \"tdp\") printf \"    SwapForth nucleus: dictionary at $%s bytes of 8192, code pointer %s\\n\", $(i+1), $(i+3) }' build/cross.out" fsoc-cat+
+    s\"  && awk '{ for (i = 1; i <= NF; i++) if ($i == \"tdp\") printf \"    SwapForth nucleus: dictionary at $%s bytes of " fsoc-cat+
+    soc-ram-bytes fjson.u>str fsoc-cat++
+    s\" , code pointer %s\\n\", $(i+1), $(i+3) }' build/cross.out" fsoc-cat+
     s" swapforth cross failed" sh-run+
     s" build/nuc.hex" soc-swap-rel 2dup
     s" firmware.hex" r> project-copy-as
@@ -187,8 +227,16 @@ variable flatten-n
     soc-flatten-file
     flatten-fd @ close-file throw ;
 
+\ Image bytes are the cell stored at dp. The line pitch is the kit cell.
 : soc-fw-size ( -- )
-    s\" awk 'function hex(s, i,c,n) { n=0; for (i=1;i<=length(s);i++) { c=index(\"0123456789abcdef\", tolower(substr(s,i,1))); if (c==0) return -1; n=n*16+c-1 } return n } NR==FNR { for (i=1;i<=NF;i++) if ($i==\"dpaddr\") dp=hex($(i+1)); next } FNR==dp/2+1 && dp>0 { printf \"    firmware.hex: %d bytes of 8192\\n\", hex($1); ok=1; exit } END { if (!ok) exit 1 }' "
+    soc-cpu @ cpu.kit @ { kit }
+    kit kit.width @ 8 / { bytes }
+    kit kit.ram @ bytes * { cap }
+    s\" awk 'function hex(s, i,c,n) { n=0; for (i=1;i<=length(s);i++) { c=index(\"0123456789abcdef\", tolower(substr(s,i,1))); if (c==0) return -1; n=n*16+c-1 } return n } NR==FNR { for (i=1;i<=NF;i++) if ($i==\"dpaddr\") dp=hex($(i+1)); next } FNR==dp/"
+    bytes fjson.u>str fsoc-+cat
+    s\" +1 && dp>0 { printf \"    firmware.hex: %d bytes of " fsoc-cat+
+    cap fjson.u>str fsoc-cat++
+    s\" \\n\", hex($1); ok=1; exit } END { if (!ok) exit 1 }' " fsoc-cat+
     s" build/cross.out" soc-swap-rel fsoc-+cat
     s"  firmware.hex" fsoc-cat+
     s" firmware size failed" sh-run+ ;
@@ -218,7 +266,63 @@ variable flatten-n
     s" swapforth feed failed" sh-run+
     soc-fw-size ;
 
-\ CG=I builds the SwapForth image from the profile directory.
+\ Empty sys: is swapforth. The task calls that tool's one step.
+: soc-sys-id ( project -- c-addr u )
+    project.sys@ dup IF EXIT THEN
+    2drop s" swapforth" ;
+
+: soc-sys-step ( project -- )
+    dup >r
+    soc-sys-id 2dup sys-find ?dup IF
+        nip nip
+        r> swap sys.step @ execute
+    ELSE
+        rdrop
+        stderr write-file throw
+        s\" \n" stderr write-file throw
+        stderr flush-file throw
+        true abort" unknown sys"
+    THEN ;
+
+: soc-swapforth ( project -- )
+    dup soc-cross
+    soc-feed ;
+
+\ fsys image: assemble the kernel, then let that kernel compile fsys/common.
+\ SwapForth's cross is not used. lamp.fs is not appended.
+: soc-kernel ( -- )
+    s" fsys/kernel/" soc-port fjson.str-concat
+    s" /kernel.4th" fjson.str-concat
+    fsoc-path included ;
+
+: soc-fsys-feed ( -- )
+    s" FSOC_EMU_COMPILE_ONLY=1 sh sim.sh" s" verilator compile failed" sh-run
+    ."     fsys/common/common.4th" cr
+    s" env -u FSOC_EMU_UART_IN -u FSOC_EMU_UART_BYTES -u FSOC_EMU_CON -u FSOC_EMU_CYCLES FSOC_EMU_FAST=1 FSOC_EMU_FEED="
+    s" fsys/common/common.4th" fsoc-path fsoc-+cat
+    s"  ./obj_dir/Vtop_feed >feed.log" fsoc-cat+
+    s" fsys common feed failed" sh-run+ ;
+
+\ j1a keeps kernel-save. j1b's saver is jb-save so both files can
+\ sit in one tree without a second definition of the same name.
+: soc-kernel-save ( c-addr u -- )
+    s" j1b" soc-port compare 0= if
+        s" jb-save"
+    else
+        s" kernel-save"
+    then
+    find-name name>interpret execute ;
+
+: soc-fsys ( project -- )
+    >r
+    soc-kernel
+    s" firmware.hex" r> project.file
+    2dup
+    soc-kernel-save
+    fjson.str-free
+    soc-fsys-feed ;
+
+\ CG=I builds the image with the tool named by sys:.
 \ A 32-bit profile without its wrapper stops here and writes no hex.
 : soc-cg-i ( project cpu -- )
     dup cpu-image? 0= IF
@@ -242,8 +346,7 @@ variable flatten-n
     s" Hardware complete" fsoc-note
     s" Software" fsoc-note
     r@ emu-emit
-    r@ soc-cross
-    r@ soc-feed
+    r@ soc-sys-step
     r@ project.board@ nip soc-view? @ 0= and IF
         1 soc-board-top? !
         r@ soc-gen-top
@@ -267,7 +370,17 @@ variable flatten-n
     true abort" unknown cpu" ;
 
 : soc-emit ( project -- )
+    dup soc-sys-id 2dup sys-find 0= IF
+        stderr write-file throw
+        s\" \n" stderr write-file throw
+        stderr flush-file throw
+        true abort" unknown sys"
+    ELSE
+        2drop
+    THEN
     dup soc-cpu-of cg-run ;
 
 s" I" ' soc-cg-i cg-register
 s" soc" ' soc-emit task-register
+s" swapforth" ' soc-swapforth sys-register
+s" fsys" ' soc-fsys sys-register

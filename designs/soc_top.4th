@@ -43,12 +43,11 @@ hdl-project
 
   s" designs/soc_top.4th" begin-srcfile
 
-  s" stack2.v" hdl-include-v
-  s" j1.v" hdl-include-v
+  soc-kit-core
   s" uart.v" hdl-include-v
   s" timer.v" hdl-include-v
   s" regio.v" hdl-include-v
-  s" j1_wrap.v" hdl-include-v
+  soc-kit-wrap
   s" lib/j1_wrap.4th" included
 
   project.top@ hdl-module

@@ -11,7 +11,8 @@ end-structure
 variable iomap-list
 
 : iomap-reset ( -- )
-    ulist-new iomap-list ! ;
+    ulist-new iomap-list !
+    region-reset ;
 
 iomap-reset
 
@@ -124,8 +125,26 @@ create io-nm 64 allot
     fjson.array-open
     ['] iomap-emit-json iomap-each
     fjson.array-close
+    fjson.comma
+    s\" \"regions\":" fjson.emit
+    fjson.array-open
+    ['] region-emit-json region-each
+    fjson.array-close
     fjson.object-close
     fsoc-emit-close ;
+
+\ Command registers for a data flash. Bits 14 and 15 stay free:
+\ the J1a nucleus reads those addresses in tasksel.
+6 constant spi-addr-bit
+7 constant spi-len-bit
+8 constant spi-idx-bit
+9 constant spi-data-bit
+
+: spi-cmd-map ( -- )
+    s" spi_addr" spi-addr-bit 16 s" rw" io-dev
+    s" spi_len"  spi-len-bit  16 s" rw" io-dev
+    s" spi_idx"  spi-idx-bit  16 s" rw" io-dev
+    s" spi_data" spi-data-bit  8 s" ro" io-dev ;
 
 : iomap-soc ( -- )
     iomap-reset

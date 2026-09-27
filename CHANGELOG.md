@@ -4,7 +4,15 @@
 
 ### Added
 
-- Manifest field `cpu:` names a Forth profile. Task `soc` with an empty field still cross-compiles `cpu/j1/swapforth/j1a`. An unknown id stops the build and does not substitute `j1a`. Profiles `stm8` (class 1, CG=E, stm8ef) and `z80` (class 2, CG=F, cerberus-z80) stop before an image is built. `j1b` is the 32-bit core and cross from AFCK_J1B_FORTH `original/j1b`; the build stops until a WIDTH 32 wrapper with `mem_din` exists, so it does not write a J1a `firmware.hex`.
+- `cpu-compare` reports one task and one scenario for a list of `cpu:` profiles: MM, EX-C, CG, cell width, image bytes, and Verilator cycles. The cycle winner is only among rows that share MM, EX-C, and CG and have a filled cycle count. A smaller image at a different cell width is not ranked. Rows from different synthesis toolchains are not marked as a core comparison. A profile with no image leaves the cycle cell empty. The report does not run Yosys, nextpnr, or Quartus.
+
+- Command SPI NOR read into an internal buffer. The part is not a boot ROM: `firmware.hex` and the J1 reset stay in internal RAM, and the names `rom` and `main_ram` are refused. Chip rows `w25q32jv` and `w25q64jv` share `rtl/spi_nor.v` (opcode, dummy clocks, address width). `csr.json` carries a `regions` array beside `devices`. A memory-map window and `main_ram` are not in this slice.
+
+- Host assembler `fsys/fasm` for j1a and j1b. Comma words emit one J1 instruction. `[asm]` … `[endasm]` writes `$readmemh` lines and does not start a UART feed. j1b packs two instructions into each output word.
+
+- Manifest field `sys:` names the image tool. Empty is `swapforth`, so current `target.4th` files stay on that console. The tool lives in `swapforth/<cpu>/` (`j1a/`, `j1b/`, `common/`), not under `cpu/j1/`. An unknown id stops before `gforth`. `s" fsys" sys:` assembles `fsys/kernel` for j1a or j1b, then that kernel compiles `fsys/common/common.4th`. `words` lists the dictionary, `1 2 + .` prints `3` and ` ok`, `variable x  5 x !  x @ .` prints `5`, and `10 3 / .` prints `3`. `firmware/lamp.fs` is not appended. Core kits no longer name a cross directory.
+
+- Manifest field `cpu:` names a Forth profile. Task `soc` with an empty field still cross-compiles `swapforth/j1a`. An unknown id stops the build and does not substitute `j1a`. Profiles `stm8` (class 1, CG=E, stm8ef) and `z80` (class 2, CG=F, cerberus-z80) stop before an image is built. `j1a` and `j1b` are core kits under `cpu/j1/<id>/`: the build copies that kit's core, stack, and memory wrap. `j1b` is the 32-bit core and cross from AFCK_J1B_FORTH `original/j1b`, with `j1b_wrap.v` (`WIDTH 32`, `mem_din`).
 
 ## [0.7.0] - 2026-09-27
 

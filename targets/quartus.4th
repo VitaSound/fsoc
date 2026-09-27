@@ -316,6 +316,16 @@ variable qscan-proj
     drop
     rdrop ;
 
+\ A header is not a design unit. .h and .vh stay out of VERILOG_FILE.
+: quartus-hdr-name? { name-a name-u -- flag }
+    name-u 2 >= IF
+        name-a name-u 2 - + 2 s" .h" compare 0= IF true EXIT THEN
+    THEN
+    name-u 3 >= IF
+        name-a name-u 3 - + 3 s" .vh" compare 0= EXIT
+    THEN
+    false ;
+
 : quartus-read-sources ( project - )
     s" includes.lst" rot project.file fsoc-store qpath$ !
     qpath$ @ fsoc-fetch file-exists? 0= IF
@@ -325,7 +335,13 @@ variable qscan-proj
     begin
         qsrc-buf qline# qsrc-fd @ read-line throw
     while
-        ?dup IF qsrc-buf swap fsoc-store qsrcs @ ulist-add THEN
+        ?dup IF
+            qsrc-buf swap 2dup quartus-hdr-name? IF
+                fsoc-store qhdrs @ ulist-add
+            ELSE
+                fsoc-store qsrcs @ ulist-add
+            THEN
+        THEN
     repeat
     drop
     qsrc-fd @ close-file throw

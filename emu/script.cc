@@ -107,8 +107,12 @@ void Session::on_tx_byte(unsigned b, RxShift& rx) {
     if (want_ok && window.size() >= 5 &&
         window.compare(window.size() - 5, 5, " ok\r\n") == 0)
         line_done = 1;
-    if (want_ok && rx.idle() && !window.empty() && window[window.size() - 1] == '?' &&
-        (window.size() == 1 || window[window.size() - 2] == ' '))
+    // J1a ends a failed line with '?'. J1b prints "error:" and restarts
+    // quit, which then waits. Either reply ends the line once TX is idle.
+    int query = !window.empty() && window[window.size() - 1] == '?' &&
+        (window.size() == 1 || window[window.size() - 2] == ' ');
+    int thrown = window.find("error:") != std::string::npos;
+    if (want_ok && rx.idle() && (query || thrown))
         q_gap = 8000;
     else
         q_gap = 0;

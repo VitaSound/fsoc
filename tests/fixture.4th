@@ -82,6 +82,12 @@ s" load.4th" included
     2r> fsoc-cat+
     2dup in-tmp-sh -rot fjson.str-free ;
 
+\ UART log check shared by the console tests.
+: soc-uart? ( mode-a mode-u -- flag )
+    s" python3 " fsoc-root fjson.str-concat s" /tests/soc_uart.py " fsoc-cat+
+    2swap fsoc-cat+ s"  sim.log" fsoc-cat+
+    2dup in-tmp-sh -rot fjson.str-free ;
+
 \ Exit with 1 when any expectation failed, so fmix sees the failure.
 : test-finish ( -- )
     #ERRORS @ IF 1 (bye) THEN ;

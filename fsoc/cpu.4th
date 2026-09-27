@@ -19,6 +19,7 @@ begin-structure cpu%
     field: cpu.ref$
     field: cpu.note$
     field: cpu.wrap$
+    field: cpu.kit
 end-structure
 
 begin-structure cg%
@@ -85,18 +86,35 @@ ulist-new fsoc-cgs !
 s" E" ' cg-halt cg-register
 s" F" ' cg-halt cg-register
 
-\ A 32-bit profile needs a wrapper file that names WIDTH 32 and mem_din.
-\ The 16-bit j1_wrap.v is not that file. An empty wrap path is not ready.
+\ Copy the current kit onto the current cpu. The kit file is the source.
+: cpu-take-kit ( -- )
+    kit@ cpu@ cpu.kit !
+    kit@ kit.width @ cpu-width
+    kit@ kit.dsp @ cpu-dsp
+    kit@ kit.rsp @ cpu-rsp
+    kit@ kit.wrap$ @ fsoc-fetch cpu-wrap ;
+
+: cpu-load-kit ( rel-a rel-u -- )
+    fsoc-path 2dup included fjson.str-free
+    cpu-take-kit ;
+
+\ A 32-bit kit needs its wrap file to name WIDTH 32 and mem_din.
 : file-has? ( path-a path-u needle-a needle-u -- flag )
     2>r slurp-file 2dup 2r> search nip nip >r fjson.str-free r> ;
 
+: cpu-wrap-path { cpu -- path-a path-u }
+    s" cpu/j1/" cpu cpu.kit @ kit.id$ @ fsoc-fetch fjson.str-concat
+    s" /" fsoc-cat+
+    cpu cpu.wrap$ @ fsoc-fetch fsoc-cat+
+    fsoc-path+ ;
+
 : cpu-image? ( cpu -- flag )
     dup cpu.width @ cpu-wide < IF drop true EXIT THEN
-    cpu.wrap$ @ fsoc-fetch dup 0= IF 2drop false EXIT THEN
-    s" cpu/j1/" 2swap fjson.str-concat fsoc-path+
-    2dup file-exists? 0= IF fjson.str-free false EXIT THEN
-    2dup s" mem_din" file-has? 0= IF fjson.str-free false EXIT THEN
-    2dup s" WIDTH 32" file-has? >r fjson.str-free r> ;
+    dup cpu.kit @ 0= IF drop false EXIT THEN
+    dup cpu-wrap-path
+    2dup file-exists? 0= IF fjson.str-free drop false EXIT THEN
+    2dup s" mem_din" file-has? 0= IF fjson.str-free drop false EXIT THEN
+    2dup s" WIDTH 32" file-has? >r fjson.str-free drop r> ;
 
 : cg-run ( project cpu -- )
     dup cpu.cg$ @ fsoc-fetch cg-find
@@ -114,13 +132,9 @@ s" V" cpu-mm
 s" V" cpu-exc
 s" I" cpu-cg
 s" C" cpu-bm
-16 cpu-width
-15 cpu-dsp
-17 cpu-rsp
-s" j1a" cpu-cross
 s" j1" cpu-ref
 s" external interpreter" cpu-note
-s" j1_wrap.v" cpu-wrap
+s" cpu/j1/j1a/kit.4th" cpu-load-kit
 
 s" j1b" cpu-new
 0 cpu-class
@@ -129,12 +143,9 @@ s" V" cpu-mm
 s" V" cpu-exc
 s" I" cpu-cg
 s" C" cpu-bm
-32 cpu-width
-32 cpu-dsp
-32 cpu-rsp
-s" j1b" cpu-cross
 s" j1" cpu-ref
 s" external interpreter" cpu-note
+s" cpu/j1/j1b/kit.4th" cpu-load-kit
 
 \ Stubs: axes from the named frules profile. No core sources.
 s" stm8" cpu-new

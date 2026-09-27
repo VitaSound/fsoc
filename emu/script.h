@@ -1,5 +1,5 @@
-// Console session: boot CR LF, one CR, then lines. Knows the ok/?
-// protocol, not a task name or firmware text.
+// Console session: boot CR LF, one CR, then lines. A line is done on
+// " ok", a trailing '?', or J1b "error:". No task name or firmware text.
 
 #ifndef FSOC_SCRIPT_H
 #define FSOC_SCRIPT_H

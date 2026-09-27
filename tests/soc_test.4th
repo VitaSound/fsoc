@@ -5,13 +5,13 @@ s" fixture.4th" included
 
 s" grep -q uart_rx designs/soc_top.4th" system
 $? 0= expect-true
-s" grep -q 'rx(1' cpu/j1/j1_wrap.v" system
+s" grep -q 'rx(1' cpu/j1/j1a/j1_wrap.v" system
 $? 0= expect-false
-s" grep -q uart_rx cpu/j1/j1_wrap.v" system
+s" grep -q uart_rx cpu/j1/j1a/j1_wrap.v" system
 $? 0= expect-true
-s" grep -q 'header quit' cpu/j1/swapforth/j1a/nuc.fs" system
+s" grep -q 'header quit' swapforth/j1a/nuc.fs" system
 $? 0= expect-true
-s" test -f cpu/j1/swapforth/LICENSE" system
+s" test -f swapforth/LICENSE" system
 $? 0= expect-true
 
 test-setup
@@ -28,18 +28,13 @@ s" soc_emul" tmp-use-project
     2dup in-tmp-sh expect-true
     fjson.str-free ;
 
-: soc-uart? ( mode-a mode-u -- flag )
-    s" python3 " fsoc-root fjson.str-concat s" /tests/soc_uart.py " fsoc-cat+
-    2swap fsoc-cat+ s"  sim.log" fsoc-cat+
-    2dup in-tmp-sh -rot fjson.str-free ;
-
 s" FSOC_EMU_UART_BYTES=2" soc-run
 s" regio.v" tmp-exists? expect-true
 s" USE_REGIO(1)" s" top.v" tmp-grep? expect-true
 s" timer.v" tmp-exists? expect-false
 s" soc_main.cpp" tmp-exists? expect-true
 s" fsoc/tasks/soc_main.cpp" s" soc_main.cpp" tmp-same-as-root? expect-true
-s" cpu/j1/j1.v" s" j1.v" tmp-same-as-root? expect-true
+s" cpu/j1/j1a/j1.v" s" j1.v" tmp-same-as-root? expect-true
 s" Start build" s" sim.log" tmp-grep? expect-true
 s" boot" soc-uart? expect-true
 
@@ -47,7 +42,7 @@ s" FSOC_EMU_CON=log FSOC_EMU_UART_BYTES=2" soc-sim
 s" boot" soc-uart? expect-true
 
 s" awk 'NF{n++} END{exit !(n==4096)}' firmware.hex" in-tmp-sh expect-true
-s" cpu/j1/swapforth/j1a/build/nuc.hex" s" firmware.hex" tmp-same-as-root? expect-false
+s" swapforth/j1a/build/nuc.hex" s" firmware.hex" tmp-same-as-root? expect-false
 s" uart_rx" s" top.v" tmp-grep? expect-true
 s" CLK_HZ(50000000)" s" top.v" tmp-grep? expect-true
 s" CLK_HZ=50000000" s" sim.sh" tmp-grep? expect-true

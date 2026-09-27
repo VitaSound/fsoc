@@ -52,6 +52,6 @@ Platform DSL: файл платы описывает устройство, се�
 ### Requirement: Активный низкий выход
 Слово `active-low` внутри `io-begin … io-end` MUST выставить флаг ресурса. `io.low@ ( io -- flag )` MUST вернуть его. Ресурс без этого слова MUST иметь флаг 0. Задача SoC на плате с этим флагом у `user_led` MUST передать генератору `LED_LOW=1`.
 
-#### Scenario: Colorlight и VitaSound
+#### Scenario: Colorlight и DE0-Nano
 - **WHEN** загружены `terasic_de0nano` и по очереди `colorlight_5a_75e_v6_0`, `colorlight_5a_75e_v7_1`, `colorlight_5a_75e_v8_2`, и у каждой взят `s" user_led" 0 io-find`
 - **THEN** у DE0-Nano `io.low@` равен 0, а у трёх Colorlight `io.low@` не равен 0

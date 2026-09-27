@@ -29,17 +29,27 @@ s" python3 " fsoc-root fjson.str-concat s" /tests/iomap_check.py" fsoc-cat+
 2dup in-tmp-sh -rot fjson.str-free expect-true
 
 s" yes 0000 | head -n 4096 > firmware.hex" in-tmp-sh expect-true
-s" cp " s" cpu/j1/j1_wrap.v" fsoc-path fjson.str-concat s"  ." fsoc-cat+ 2dup in-tmp-sh -rot fjson.str-free expect-true
-s" cp " s" cpu/j1/j1.v" fsoc-path fjson.str-concat s"  ." fsoc-cat+ 2dup in-tmp-sh -rot fjson.str-free expect-true
+s" cp " s" cpu/j1/j1a/j1_wrap.v" fsoc-path fjson.str-concat s"  ." fsoc-cat+ 2dup in-tmp-sh -rot fjson.str-free expect-true
+s" cp " s" cpu/j1/j1a/j1.v" fsoc-path fjson.str-concat s"  ." fsoc-cat+ 2dup in-tmp-sh -rot fjson.str-free expect-true
 s" cp " s" cpu/j1/uart.v" fsoc-path fjson.str-concat s"  ." fsoc-cat+ 2dup in-tmp-sh -rot fjson.str-free expect-true
-s" cp " s" cpu/j1/stack2.v" fsoc-path fjson.str-concat s"  ." fsoc-cat+ 2dup in-tmp-sh -rot fjson.str-free expect-true
+s" cp " s" cpu/j1/j1a/stack2.v" fsoc-path fjson.str-concat s"  ." fsoc-cat+ 2dup in-tmp-sh -rot fjson.str-free expect-true
 s" cp " s" rtl/timer.v" fsoc-path fjson.str-concat s"  ." fsoc-cat+ 2dup in-tmp-sh -rot fjson.str-free expect-true
 s" cp " s" rtl/regio.v" fsoc-path fjson.str-concat s"  ." fsoc-cat+ 2dup in-tmp-sh -rot fjson.str-free expect-true
 s" cp " s" rtl/tb_j1_wrap_io.v" fsoc-path fjson.str-concat s"  ." fsoc-cat+ 2dup in-tmp-sh -rot fjson.str-free expect-true
 s" iverilog -o tb_io tb_j1_wrap_io.v j1_wrap.v j1.v uart.v stack2.v timer.v regio.v && vvp tb_io | grep -q '^ok$'" in-tmp-sh expect-true
+
+s" yes 00000000 | head -n 8192 > firmware.hex" in-tmp-sh expect-true
+s" cp " s" cpu/j1/j1b/j1b_wrap.v" fsoc-path fjson.str-concat s"  ." fsoc-cat+ 2dup in-tmp-sh -rot fjson.str-free expect-true
+s" cp " s" cpu/j1/j1b/j1b.v" fsoc-path fjson.str-concat s"  ." fsoc-cat+ 2dup in-tmp-sh -rot fjson.str-free expect-true
+s" cp " s" cpu/j1/j1b/stack.v" fsoc-path fjson.str-concat s"  ." fsoc-cat+ 2dup in-tmp-sh -rot fjson.str-free expect-true
+s" cp " s" cpu/j1/j1b/common.h" fsoc-path fjson.str-concat s"  ." fsoc-cat+ 2dup in-tmp-sh -rot fjson.str-free expect-true
+s" cp " s" rtl/tb_j1b_wrap_io.v" fsoc-path fjson.str-concat s"  ." fsoc-cat+ 2dup in-tmp-sh -rot fjson.str-free expect-true
+s" iverilog -o tb_io32 tb_j1b_wrap_io.v j1b_wrap.v j1b.v uart.v stack.v timer.v regio.v && vvp tb_io32 | grep -q '^ok$'" in-tmp-sh expect-true
 test-teardown
 
-s" grep -E 'mem_addr\\[1[0-3]\\]' cpu/j1/j1_wrap.v" system
+s" grep -E 'mem_addr\\[1[0-3]\\]' cpu/j1/j1a/j1_wrap.v" system
+$? 0= expect-false
+s" grep -E 'mem_addr\\[1[0-3]\\]' cpu/j1/j1b/j1b_wrap.v" system
 $? 0= expect-false
 s" grep -E 'h# *(400|800)' firmware/lamp.fs" system
 $? 0= expect-false
