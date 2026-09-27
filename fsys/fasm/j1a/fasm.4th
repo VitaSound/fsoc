@@ -3,7 +3,7 @@
 include ../session.4th
 4096 fasm-max !
 0 fasm-pack? !
-include ../words.4th
+include words.4th
 
 \ J1a ALU slots. On j1b these opcodes are shifts and fetch.
 $0900 constant T2/

@@ -1,4 +1,4 @@
-\ fsys/fasm/words.4th — encodings shared by j1a and j1b.
+\ fsys/fasm/j1a/words.4th — J1 encodings. j1a came first; j1b includes this file.
 \ A second include leaves the first copy in place.
 
 [IFUNDEF] T

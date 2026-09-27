@@ -1,11 +1,11 @@
 \ fsys/fasm/j1b/fasm.4th — one-instruction J1b words, comma at the end.
-\ Shared encodings match j1a. This file adds the J1b ALU and packs
+\ Shared encodings live in j1a. This file adds the J1b ALU and packs
 \ two instructions into each output word.
 
 include ../session.4th
 16384 fasm-max !
 -1 fasm-pack? !
-include ../words.4th
+include ../j1a/words.4th
 
 $0900 constant N>>T
 $0a00 constant N<<T
