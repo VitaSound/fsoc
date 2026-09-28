@@ -12,7 +12,9 @@
 
 - The Software section names the image tool on its own line (`image tool: SwapForth` or `image tool: fsys`). Both tools then print the same size line, `firmware.hex: <used> bytes of <ram>`.
 
-- Manifest field `sys:` names the image tool. Empty is `swapforth`, so current `target.4th` files stay on that console. The tool lives in `swapforth/<cpu>/` (`j1a/`, `j1b/`, `common/`), not under `cpu/j1/`. An unknown id stops before `gforth`. `s" fsys" sys:` assembles `fsys/kernel` for j1a or j1b, then that kernel compiles `fsys/common/common.4th` and `fsys/common/core.4th`. `words` lists the dictionary, `1 2 + .` prints `3` and ` ok`, `variable x  5 x !  x @ .` prints `5`, and `10 3 / .` prints `3`. `firmware/lamp.fs` is not appended. Core kits no longer name a cross directory.
+- Manifest field `sys:` names the image tool. Empty is `swapforth`, so current `target.4th` files stay on that console. The tool lives in `swapforth/<cpu>/` (`j1a/`, `j1b/`, `common/`), not under `cpu/j1/`. An unknown id stops before `gforth`. `s" fsys" sys:` assembles `fsys/kernel` for j1a or j1b, then that kernel compiles `fsys/common/common.4th` and `fsys/common/core.4th`. `words` lists the dictionary, `1 2 + .` prints `3` and ` ok`, `variable x  5 x !  x @ .` prints `5`, and `10 3 / .` prints `3`. `firmware/lamp.fs` is appended only when `s" lamp" s" 1" option:` is set. Core kits no longer name a cross directory.
+
+- fsys dictionary names are packed bytes on j1a and j1b. Two link bytes carry the immediate flag in the low bit, then a length byte and the letters, then alignment to the cell, then the code. `here` stays the only pointer. After the shared layer the image is 5108 bytes of 8192 on j1a and 7300 of 32768 on j1b.
 
 - Shared fsys colon words, one text for both cell widths: `until`, signed `.`, `.s`, `'`, `[']`, `\`, variable `'BOOT`, and `."` without the space after the quote. A line that does not fit the terminal buffer is not written past that buffer.
 

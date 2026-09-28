@@ -317,13 +317,14 @@ variable flatten-n
     soc-feed ;
 
 \ fsys image: assemble the kernel, then let that kernel compile fsys/common.
-\ SwapForth's cross is not used. lamp.fs is not appended.
+\ SwapForth's cross is not used. lamp.fs is appended only when the option asks.
 : soc-kernel ( -- )
     s" fsys/kernel/" soc-port fjson.str-concat
     s" /kernel.4th" fjson.str-concat
     fsoc-path included ;
 
-: soc-fsys-feed ( -- )
+: soc-fsys-feed ( project -- )
+    >r
     s" FSOC_EMU_COMPILE_ONLY=1 sh sim.sh" s" verilator compile failed" sh-run
     ."     fsys/common/common.4th" cr
     ."     fsys/common/core.4th" cr
@@ -333,8 +334,20 @@ variable flatten-n
     s" fsys/common/core.4th" fsoc-path fsoc-+cat
     s"  > feed.fs" fsoc-cat+
     s" fsys feed cat failed" sh-run+
+    s" lamp" r@ project.opt@ s" 1" compare 0= IF
+        s" firmware/lamp.fs" fsoc-path
+        2dup ."     " type cr
+        2dup s" lamp.fs" r@ project-copy-as
+        fjson.str-free
+        s" lamp.fs" r@ project.file
+        s" feed-lamp.fs" r@ project.file
+        2over 2over soc-flatten
+        fjson.str-free fjson.str-free
+        s" cat feed-lamp.fs >> feed.fs" s" lamp feed append failed" sh-run
+    THEN
     s" env -u FSOC_EMU_UART_IN -u FSOC_EMU_UART_BYTES -u FSOC_EMU_CON -u FSOC_EMU_CYCLES FSOC_EMU_FAST=1 FSOC_EMU_FEED=feed.fs ./obj_dir/Vtop_feed >feed.log"
-    s" fsys common feed failed" sh-run ;
+    s" fsys common feed failed" sh-run
+    rdrop ;
 
 \ j1a keeps kernel-save. j1b's saver is jb-save so both files can
 \ sit in one tree without a second definition of the same name.
@@ -357,11 +370,11 @@ variable flatten-n
 : soc-fsys ( project -- )
     >r
     soc-kernel
-    s" firmware.hex" r> project.file
+    s" firmware.hex" r@ project.file
     2dup
     soc-kernel-save
     fjson.str-free
-    soc-fsys-feed
+    r> soc-fsys-feed
     soc-here-addr soc-image-line ;
 
 \ CG=I builds the image with the tool named by sys:.

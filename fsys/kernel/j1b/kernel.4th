@@ -23,16 +23,42 @@ variable jb-latest
 : jb-pc ( c-addr u -- pc )
     fasm-label@ 0= abort" kernel: missing label" ;
 
+\ Link in two bytes, low bit immediate, then a length byte and the letters.
+\ Code starts on the next 32-bit cell. The jump stays in the low half.
+variable jb-at
+
+: jb-c! ( c addr -- )
+    dup 2/ { slot }
+    1 and { odd }
+    slot fasm@ $ffff and
+    odd if
+        $00ff and swap 8 lshift or
+    else
+        $ff00 and swap $ff and or
+    then
+    slot jb-h! ;
+
+: jb-b, ( c -- )
+    jb-at @ jb-c!
+    1 jb-at +! ;
+
+: jb-pad ( n -- )
+    >r
+    begin jb-at @ r@ 1- and while 0 jb-b, repeat
+    r> drop ;
+
 \ ( name-a name-u flags pc -- ) header, code is a jump in the low half
 : jb-word { na nu fl pc -- }
-    k-align
-    fasm-pc @ 2* { entry }
-    jb-latest @ jb-cell,
-    fl jb-cell,
-    nu jb-cell,
+    fasm-pc @ 2* dup jb-at ! { entry }
+    jb-latest @ fl if 1 or then
+    dup $ff and jb-b,
+    8 rshift $ff and jb-b,
+    nu $ff and jb-b,
     nu 0 ?do
-        na i + c@ jb-cell,
+        na i + c@ jb-b,
     loop
+    4 jb-pad
+    jb-at @ 2/ fasm-pc !
     pc $1fff and jb-cell,
     entry jb-latest ! ;
 
@@ -73,7 +99,7 @@ variable jb-fid
 : jb-finish ( -- )
     0 jb-latest !
     s" +" 0 s" plus" jb-pc jb-word
-    s" ." 0 s" dot" jb-pc jb-word
+    s" tlen" 0 s" tlenw" jb-pc jb-word
     s" :" 0 s" colon" jb-pc jb-word
     s" ;" 1 s" semi" jb-pc jb-word
     s" if" 1 s" ifw" jb-pc jb-word
@@ -108,6 +134,7 @@ variable jb-fid
     s" um/mod" 0 s" umod" jb-pc jb-word
     s" tibc" 0 s" tibc" jb-pc jb-word
     s" parse-name" 0 s" token" jb-pc jb-word
+    s" namec" 0 s" namecw" jb-pc jb-word
     s" and" 0 s" andw" jb-pc jb-word
     s" or" 0 s" orw" jb-pc jb-word
     s" xor" 0 s" xorw" jb-pc jb-word
@@ -116,6 +143,7 @@ variable jb-fid
     s" >r" 0 s" tor" jb-pc jb-word
     s" r>" 0 s" rfrom" jb-pc jb-word
     s" r@" 0 s" rat" jb-pc jb-word
+    s" i" 0 s" rat" jb-pc jb-word
     s" <" 0 s" ltw" jb-pc jb-word
     s" lshift" 0 s" lsh" jb-pc jb-word
     s" rshift" 0 s" rsh" jb-pc jb-word
@@ -125,18 +153,25 @@ variable jb-fid
     s" key" 0 s" key" jb-pc jb-word
     s" io@" 0 s" iofetch" jb-pc jb-word
     s" io!" 0 s" iostore" jb-pc jb-word
-    s" *" 0 s" star" jb-pc jb-word
+    s" nidx" 0 s" nidxw" jb-pc jb-word
+    s" radix" 0 s" radixw" jb-pc jb-word
+    s" tchar" 0 s" tcharw" jb-pc jb-word
+    s" nhook" 0 s" nhookw" jb-pc jb-word
     s" base" 0 s" basew" jb-pc jb-word
-    s" u." 0 s" dotu" jb-pc jb-word
+    s" latest" 0 s" latestw" jb-pc jb-word
+    s" state" 0 s" statew" jb-pc jb-word
     s" find" 0 s" find" jb-pc jb-word
     s" branch0" 0 s" zbranch" jb-pc jb-word
     s" >in" 0 s" toin" jb-pc jb-word
     s" ntib" 0 s" ntibw" jb-pc jb-word
+    s" 'BOOT" 0 s" bootw" jb-pc jb-word
     fasm-pc @ 12288 u< 0= abort" kernel overlaps variables"
     jb-latest @ 12544 jb-h!
     fasm-pc @ 2* 12546 jb-h!
     0 12548 jb-h!
-    10 12536 jb-h! ;
+    10 12536 jb-h!
+    0 12540 jb-h!
+    0 12542 jb-h! ;
 
 \ Byte address of the target here cell. The image size line reads it.
 25092 constant jb-here
@@ -346,6 +381,31 @@ number:
     0 imm,
     25068 imm,
     store call,
+    25072 imm,
+    fetch call,
+    25076 imm,
+    store call,
+    25056 imm,
+    fetch call,
+    2 imm,
+    u<,
+    invert,
+    number_plain 0branch,
+    0 imm,
+    cellx call,
+    24928 imm,
+    +,
+    fetch call,
+    36 imm,
+    =,
+    number_plain 0branch,
+    1 imm,
+    25068 imm,
+    store call,
+    16 imm,
+    25076 imm,
+    store call,
+number_plain:
 number_l:
     25068 imm,
     fetch call,
@@ -375,38 +435,18 @@ number_lo:
     dup,
     58 imm,
     u<,
-    number_let 0branch,
+    number_bad 0branch,
     48 imm,
     sub call,
     number_dig jmp,
-number_let:
-    32 imm,
-    or,
-    dup,
-    97 imm,
-    u<,
-    number_isa 0branch,
-    drop,
-    drop,
-    0 imm,
-    exit,
-number_isa:
-    dup,
-    103 imm,
-    u<,
-    number_bad 0branch,
-    87 imm,
-    sub call,
 number_dig:
     dup,
-    25072 imm,
+    25076 imm,
     fetch call,
     u<,
     number_bad 0branch,
     swap,
-    25072 imm,
-    fetch call,
-    star call,
+    number_mul call,
     +,
     25068 imm,
     fetch call,
@@ -415,6 +455,20 @@ number_dig:
     25068 imm,
     store call,
     number_l jmp,
+\ ( acc -- acc*radix ) radix is 10 or 16
+number_mul:
+    25076 imm,
+    fetch call,
+    16 imm,
+    =,
+    number_m10 0branch,
+    x2 call, x2 call, x2 call, x2 call,
+    exit,
+number_m10:
+    dup, x2 call, >r,
+    x2 call, x2 call, x2 call,
+    r>, +,
+    exit,
 number_bad:
     drop,
     drop,
@@ -460,7 +514,52 @@ comma:
     store call,
     exit,
 
+\ ( a -- c ) one byte. The shift stays under the return address.
+bfetch:
+    dup,
+    byteoff call,
+    tor call,
+    3 imm,
+    invert,
+    and,
+    fetch call,
+    rfrom call,
+    rsh call,
+    255 imm,
+    and,
+    exit,
+
+\ ( c a -- ) merge one byte. Three copies of the address sit under the return.
+bstore:
+    dup,
+    tor call,
+    dup,
+    tor call,
+    dup,
+    tor call,
+    3 imm,
+    invert,
+    and,
+    fetch call,
+    255 imm,
+    rfrom call,
+    byteoff call,
+    lsh call,
+    invert,
+    and,
+    swap,
+    255 imm,
+    and,
+    rfrom call,
+    byteoff call,
+    lsh call,
+    or,
+    rfrom call,
+    store call,
+    exit,
+
 \ create a header from the token. code begins at here.
+\ The entry address stays a multiple of 4, so the low link bit can be immediate.
 header:
     25092 imm,
     fetch call,
@@ -476,19 +575,25 @@ header:
     >r,
     25088 imm,
     fetch call,
+    dup,
+    255 imm,
+    and,
     r@,
-    store call,
-    0 imm,
+    bstore call,
+    8 imm,
+    rsh call,
+    255 imm,
+    and,
     r@,
-    4 imm,
+    1 imm,
     +,
-    store call,
+    bstore call,
     25056 imm,
     fetch call,
     r@,
-    8 imm,
+    2 imm,
     +,
-    store call,
+    bstore call,
     0 imm,
     25068 imm,
     store call,
@@ -500,14 +605,16 @@ header_l:
     =,
     header_c 0branch,
     r@,
-    8 imm,
+    3 imm,
     +,
+    25056 imm,
     fetch call,
-    cellx call,
-    12 imm,
     +,
-    r@,
+    3 imm,
     +,
+    3 imm,
+    invert,
+    and,
     25092 imm,
     store call,
     r>,
@@ -521,14 +628,13 @@ header_c:
     24928 imm,
     +,
     fetch call,
+    r@,
+    3 imm,
+    +,
     25068 imm,
     fetch call,
-    cellx call,
-    12 imm,
     +,
-    r@,
-    +,
-    store call,
+    bstore call,
     25068 imm,
     fetch call,
     1 imm,
@@ -545,9 +651,9 @@ find_l:
     dup,
     find_no 0branch,
     dup,
-    8 imm,
+    2 imm,
     +,
-    fetch call,
+    bfetch call,
     25056 imm,
     fetch call,
     =,
@@ -569,12 +675,11 @@ find_c:
     fetch call,
     >r,
     over,
+    3 imm,
+    +,
     over,
-    cellx call,
-    12 imm,
     +,
-    +,
-    fetch call,
+    bfetch call,
     r>,
     =,
     find_ne 0branch,
@@ -584,22 +689,37 @@ find_c:
 find_ne:
     drop,
 find_nx:
-    fetch call,
+    dup,
+    bfetch call,
+    swap,
+    1 imm,
+    +,
+    bfetch call,
+    8 imm,
+    lsh call,
+    or,
+    1 imm,
+    invert,
+    and,
     find_l jmp,
 find_ok:
     dup,
-    4 imm,
-    +,
-    fetch call,
+    bfetch call,
+    1 imm,
+    and,
     swap,
     dup,
-    8 imm,
+    2 imm,
     +,
-    fetch call,
-    cellx call,
-    12 imm,
+    bfetch call,
+    3 imm,
     +,
     +,
+    3 imm,
+    +,
+    3 imm,
+    invert,
+    and,
     swap,
     0 imm,
     invert,
@@ -681,44 +801,6 @@ umod_sub:
     swap,
     umod_l jmp,
 
-\ ( u -- )
-dotu:
-    dup,
-    10 imm,
-    u<,
-    dotu_d 0branch,
-    48 imm,
-    +,
-    emit call,
-    exit,
-dotu_d:
-    10 imm,
-    umod call,
-    swap,
-    >r,
-    dotu call,
-    r>,
-    48 imm,
-    +,
-    emit call,
-    exit,
-
-dot:
-    dup,
-    0 imm,
-    <,
-    dot_pos 0branch,
-    45 imm,
-    emit call,
-    invert,
-    1 imm,
-    +,
-dot_pos:
-    dotu call,
-    32 imm,
-    emit call,
-    exit,
-
 plus:
     +,
     exit,
@@ -730,9 +812,9 @@ word_l:
     dup,
     word_end 0branch,
     dup,
-    8 imm,
+    2 imm,
     +,
-    fetch call,
+    bfetch call,
     >r,
     0 imm,
 word_c:
@@ -744,16 +826,26 @@ word_c:
     rdrop,
     32 imm,
     emit call,
-    fetch call,
+    dup,
+    bfetch call,
+    swap,
+    1 imm,
+    +,
+    bfetch call,
+    8 imm,
+    lsh call,
+    or,
+    1 imm,
+    invert,
+    and,
     word_l jmp,
 word_ch:
     over,
+    3 imm,
+    +,
     over,
-    cellx call,
-    12 imm,
     +,
-    +,
-    fetch call,
+    bfetch call,
     emit call,
     1 imm,
     +,
@@ -766,7 +858,16 @@ interp:
 interp_l:
     token call,
     interp_z 0branch,
+    25084 imm,
+    fetch call,
+    dup,
+    interp_k 0branch,
+    exec call,
+    interp_num jmp,
+interp_k:
+    drop,
     number call,
+interp_num:
     interp_w 0branch,
     25096 imm,
     fetch call,
@@ -803,6 +904,15 @@ interp_z:
     exit,
 
 quit:
+    25080 imm,
+    fetch call,
+    dup,
+    quit_ok 0branch,
+    exec call,
+    quit_back jmp,
+quit_ok:
+    drop,
+quit_back:
     13 imm,
     emit call,
     10 imm,
@@ -846,8 +956,9 @@ ahead:
     0 imm, comma call,
     25092 imm, fetch call, 4 imm, sub call, exit,
 immw:
-    25088 imm, fetch call, 4 imm, +,
-    1 imm, swap, store call, exit,
+    25088 imm, fetch call,
+    dup, bfetch call, 1 imm, or,
+    swap, bstore call, exit,
 tibc:
     25060 imm, fetch call,
     25064 imm, fetch call,
@@ -904,25 +1015,20 @@ byteoff:
 depthw: depths, 31 imm, and, exit,
 iofetch: iord, io@, exit,
 iostore: io!, drop, exit,
-\ ( a b -- a*b ) low cell, logical shifts
-star:
-    >r,
-    0 imm,
-star_l:
-    r@, star_z 0branch,
-    r@, 1 imm, and, star_skip 0branch,
-    over, +,
-star_skip:
-    swap, 1 imm, lsh call, swap,
-    r>, 1 imm, rsh call, >r,
-    star_l jmp,
-star_z:
-    nip,
-    rdrop,
-    exit,
 basew: 25072 imm, exit,
+latestw: 25088 imm, exit,
+statew: 25096 imm, exit,
 toin: 25060 imm, exit,
 ntibw: 25064 imm, exit,
+bootw: 25080 imm, exit,
+tlenw: 25056 imm, exit,
+nidxw: 25068 imm, exit,
+radixw: 25076 imm, exit,
+nhookw: 25084 imm, exit,
+\ ( i -- c ) character i of the token
+tcharw: cellx call, 24928 imm, +, fetch call, exit,
+\ ( -- c ) first character of the word parse-name just stored
+namecw: 24928 imm, fetch call, exit,
 
 [endasm]
 jb-finish

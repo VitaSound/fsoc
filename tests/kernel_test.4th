@@ -12,6 +12,21 @@ s" quit" fasm-label@ drop
 3842 fasm@ 0= expect-true
 fasm-pc @ 3840 u< expect-true
 
+\ Byte at a target address in the 16-bit image slots.
+: img-c@ ( addr -- c )
+    dup 2/ fasm@ $ffff and swap 1 and if 8 rshift then $ff and ;
+
+\ 'BOOT is the latest name: length byte, then the five letters.
+: boot-name ( addr -- )
+    dup 2 + img-c@ 5 expect=
+    dup 3 + img-c@ 39 expect=
+    dup 4 + img-c@ 66 expect=
+    dup 5 + img-c@ 79 expect=
+    dup 6 + img-c@ 79 expect=
+    7 + img-c@ 84 expect= ;
+
+3840 fasm@ boot-name
+
 s" /tmp/fsoc-kernel-j1a.hex" kernel-save
 s" awk 'END{exit !(NR==4096)}' /tmp/fsoc-kernel-j1a.hex" system
 $? 0= expect-true
@@ -40,6 +55,7 @@ s" quit" fasm-label@ drop
 12546 fasm@ 0<> expect-true
 12548 fasm@ 0= expect-true
 fasm-pc @ 12288 u< expect-true
+12544 fasm@ boot-name
 
 s" /tmp/fsoc-kernel-j1b.hex" jb-save
 s" awk 'length($1)!=8{bad=1} END{exit bad||NR!=8192}' /tmp/fsoc-kernel-j1b.hex" system
