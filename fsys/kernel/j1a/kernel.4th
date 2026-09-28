@@ -165,7 +165,7 @@ variable k-fid
     10 4092 k-h!
     0 4094 k-h!
     0 4095 k-h!
-    8010 4084 k-h! ;
+    8066 4084 k-h! ;
 
 \ Byte address of the target here cell. The image size line reads it.
 8178 constant kernel-here
@@ -220,8 +220,8 @@ store:
 
 \ read a line into the tib. CR or LF ends it. Other bytes are echoed.
 accept:
-    8010 imm,
-    128 imm,
+    8066 imm,
+    88 imm,
     acceptw call,
     8174 imm,
     store call,
@@ -330,7 +330,7 @@ token_c:
 token_put:
     8170 imm,
     fetch call,
-    8138 imm,
+    8154 imm,
     +,
     bstore call,
     8170 imm,
@@ -374,7 +374,7 @@ number:
     invert,
     number_plain 0branch,
     0 imm,
-    8138 imm,
+    8154 imm,
     +,
     bfetch call,
     36 imm,
@@ -400,7 +400,7 @@ number_l:
 number_d:
     8182 imm,
     fetch call,
-    8138 imm,
+    8154 imm,
     +,
     bfetch call,
     dup,
@@ -638,7 +638,7 @@ header_l:
 header_c:
     8182 imm,
     fetch call,
-    8138 imm,
+    8154 imm,
     +,
     bfetch call,
     r@,
@@ -682,7 +682,7 @@ find_i:
     find_ok jmp,
 find_c:
     dup,
-    8138 imm,
+    8154 imm,
     +,
     bfetch call,
     >r,
@@ -1102,10 +1102,11 @@ nidxw: 8182 imm, exit,
 radixw: 8186 imm, exit,
 nhookw: 8190 imm, exit,
 \ ( i -- c ) character i of the token
-tcharw: 8138 imm, +, bfetch call, exit,
+tcharw: 8154 imm, +, bfetch call, exit,
 \ ( -- c ) first character of the word parse-name just stored
-namecw: 8138 imm, bfetch call, exit,
-tibw: 8010 imm, exit,
+namecw: 8154 imm, bfetch call, exit,
+\ 88-byte line buffer, ending where the token starts
+tibw: 8066 imm, exit,
 \ Base address of the current input. Boot value is tib.
 srcw: 8168 imm, exit,
 

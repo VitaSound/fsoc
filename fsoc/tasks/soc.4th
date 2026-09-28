@@ -334,6 +334,13 @@ variable flatten-n
     s" fsys/common/core.4th" fsoc-path fsoc-+cat
     s"  > feed.fs" fsoc-cat+
     s" fsys feed cat failed" sh-run+
+    s" j1b" soc-port compare 0= if
+        ."     fsys/j1b/extra.4th" cr
+        s" cat "
+        s" fsys/j1b/extra.4th" fsoc-path fsoc-+cat
+        s"  >> feed.fs" fsoc-cat+
+        s" fsys j1b feed cat failed" sh-run+
+    then
     s" lamp" r@ project.opt@ s" 1" compare 0= IF
         s" firmware/lamp.fs" fsoc-path
         2dup ."     " type cr

@@ -195,10 +195,11 @@ variable hld
 immediate
 \ skip the rest of the line
 : \ ntib @ >in ! ; immediate
+\ plant the two literals of a compiled string
+: pl, >r swap resolve r> >r rot lit! r> swap lit! ;
 \ c-addr u -- text up to char 34
 : s" tibc drop state @ if
-  here 0 literal here 0 literal ahead quote,
-  >r swap resolve r> >r rot lit! r> swap lit!
+  here 0 literal here 0 literal ahead quote, pl,
   else quote, then ;
 immediate
 : ." tibc drop begin tibc dup 34 = 0 = while literal compile-emit repeat drop ;
@@ -295,10 +296,15 @@ immediate
 : [compile] parse-name drop find dup 0= if
   drop 63 emit else drop drop compile, then ;
 immediate
+\ 0 while reading the console, -1 while evaluate is running
+variable sid
+\ ( -- n )
+: source-id sid @ ;
 \ ( i*x c-addr u -- j*x ) interpret the string as a line
-: evaluate src @ >r ntib @ >r >in @ >r
+: evaluate sid @ >r true sid !
+  src @ >r ntib @ >r >in @ >r
   ntib ! 0 >in ! src ! interp
-  r> >in ! r> ntib ! r> src ! ;
+  r> >in ! r> ntib ! r> src ! r> sid ! ;
 \ ( char "<chars>ccc<char>" -- c-addr ) counted string in the pictured buffer
 : word >r begin >in @ ntib @ u< 0= if true else
   tibc dup r@ = if drop false else drop >in @ 1- >in ! true then then until
@@ -306,3 +312,73 @@ immediate
   tibc dup r@ = if drop true else
   over pic - 38 u< if over c! 1+ else drop then false then then until
   r> drop pic tuck - 1- pic c! ;
+\ ( -- xt ) start a colon definition with no name
+: :noname here ] ;
+\ ( x "<name>" -- ) a cell that to can replace
+: value constant ;
+\ ( x "<name>" -- ) replace the literal inside a value
+: to ' state @ if literal ['] lit! compile, else lit! then ;
+immediate
+\ ( u "<name>" -- ) name a buffer of u bytes
+: buffer: create allot ;
+\ ( "<name>" -- ) a word whose action starts as abort
+: defer parse-name drop header here 2 cells + literal compile-exit
+  ['] abort , does> @ execute ;
+\ ( xt2 xt1 -- ) store the action of a defer
+: defer! >body ! ;
+\ ( xt1 -- xt2 ) fetch the action of a defer
+: defer@ >body @ ;
+\ ( xt "<name>" -- ) set the action of a defer
+: is ' >body state @ if literal ['] ! compile, else ! then ;
+immediate
+\ ( "<name>" -- xt ) fetch the action, and compile that fetch
+: action-of ' state @ if literal ['] defer@ compile, else defer@ then ;
+immediate
+\ ( -- 0 ) mark the bottom of a case while compiling
+: case 0 ; immediate
+\ ( x1 x2 -- x1 ) take this arm when x2 equals the selector
+: of postpone over postpone = postpone if postpone drop ; immediate
+\ ( -- ) leave this arm and try the next one
+: endof postpone else ; immediate
+\ ( x -- ) drop the selector when no arm matched
+: endcase postpone drop begin ?dup while postpone then repeat ; immediate
+\ ( c-addr u -- ) prepend the string to the pictured output
+: holds begin dup while 1- 2dup + c@ hold repeat 2drop ;
+\ ( -- c-addr ) transient buffer above here
+: pad here 34 + ;
+\ ( -- u ) bytes left below the terminal buffer
+: unused tib here - ;
+\ a through z. x is read as hex. m is two characters, handled apart
+create et
+  7 c, 8 c, 99 c, 100 c, 27 c, 12 c,
+  103 c, 104 c, 105 c, 106 c, 107 c, 10 c,
+  109 c, 10 c, 111 c, 112 c, 34 c, 13 c,
+  115 c, 9 c, 117 c, 11 c, 119 c, 120 c,
+  121 c, 0 c,
+align
+\ ( -- n true | false ) store the next character of an escaped string
+: q tibc dup 34 = if drop false else
+  dup 92 = if drop tibc dup 109 = if drop 13 c, 10 c, 2 true else
+    dup 120 = if drop tibc digit 0= if 0 then
+      tibc digit 0= if 0 then swap 16 * +
+    else dup 96 u> over 123 u< and if 97 - et + c@ then then
+    c, 1 true then else c, 1 true then then ;
+\ ( -- c-addr u ) copy up to the closing quote and align here
+: es, here 0 begin q while + repeat
+  here aligned here - allot ;
+\ ( "ccc<quote>" -- c-addr ) counted string while compiling
+: c" ( " cstr) tibc drop here 0 literal ahead here >r 0 c, quote,
+  r> swap over c! nip swap resolve swap lit! ;
+immediate
+\ ( "ccc<quote>" -- c-addr u ) string with escapes
+: s\" ( " sesc) tibc drop state @ if
+  here 0 literal here 0 literal ahead es, pl,
+  else es, then ;
+immediate
+\ ( -- flag ) a new console line, or false while evaluate is running
+: refill source-id if false else tib src ! accept true then ;
+\ ( -- >in ntib src sid 4 ) the four input cells
+: save-input >in @ ntib @ src @ sid @ 4 ;
+\ ( >in ntib src sid n -- flag ) false when n is 4
+: restore-input dup 4 = if drop sid ! src ! ntib ! >in ! false else
+  begin dup while 1- swap drop repeat drop true then ;

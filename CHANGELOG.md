@@ -4,6 +4,8 @@
 
 ### Added
 
+- j1b fsys dictionary ends here. `s" fsys" sys:` on j1b assembles the kernel, compiles the shared layer, then feeds `fsys/j1b/extra.4th`. The image is 13248 bytes of 32768. j1a stays on the shared layer, 7862 of 8192. Empty `sys:` remains `swapforth`.
+
 - `cpu-compare` reports one task and one scenario for a list of `cpu:` profiles: MM, EX-C, CG, cell width, image bytes, and Verilator cycles. The cycle winner is only among rows that share MM, EX-C, and CG and have a filled cycle count. A smaller image at a different cell width is not ranked. Rows from different synthesis toolchains are not marked as a core comparison. A profile with no image leaves the cycle cell empty. The report does not run Yosys, nextpnr, or Quartus.
 
 - Command SPI NOR read into an internal buffer. The part is not a boot ROM: `firmware.hex` and the J1 reset stay in internal RAM, and the names `rom` and `main_ram` are refused. Chip rows `w25q32jv` and `w25q64jv` share `rtl/spi_nor.v` (opcode, dummy clocks, address width). `csr.json` carries a `regions` array beside `devices`. A memory-map window and `main_ram` are not in this slice.
@@ -25,6 +27,16 @@
 - Shared fsys words `]`, `[`, `.(`, and `[compile]`, plus kernel `exit` and `unloop`. `[` returns to interpretation and `]` to compilation. `exit` leaves the current word. `unloop` drops the loop index and limit. After them the image is 6750 bytes of 8192 on j1a and 10204 of 32768 on j1b.
 
 - Shared fsys words `evaluate` and `word`, plus kernel `quit`, `accept`, and the input base `src`. `quit` clears the return stack and leaves the data stack. `accept` reads the line. `evaluate` interprets a string. `word` returns a counted string. After them the image is 7054 bytes of 8192 on j1a and 10712 of 32768 on j1b.
+
+- Shared fsys words `:noname`, `value`, `to`, `buffer:`, and `source-id`. `:noname` leaves the token of a nameless colon word. `to` replaces a value. `buffer:` names a byte buffer. `source-id` is 0 at the console and -1 while `evaluate` runs. After them the image is 7172 bytes of 8192 on j1a and 10904 of 32768 on j1b.
+
+- Shared fsys words `defer`, `defer!`, `defer@`, `is`, and `action-of`. A defer starts as `abort`. `is` and `defer!` replace the action. `defer@` and `action-of` fetch it. After them the image is 7302 bytes of 8192 on j1a and 11124 of 32768 on j1b.
+
+- Shared fsys words `case`, `of`, `endof`, `endcase`, `holds`, `pad`, and `unused`. `case` runs the arm whose value equals the selector and leaves the selector when none does. `holds` prepends a string to the pictured output. `pad` is a transient buffer above `here`. `unused` is the bytes left below the terminal buffer. After them the image is 7432 bytes of 8192 on j1a and 11336 of 32768 on j1b.
+
+- Shared fsys words `c"`, `s\"`, `refill`, `save-input`, and `restore-input`. `c"` compiles a counted string. `s\"` reads the escape letters. `refill` reads the next console line and returns false while `evaluate` is running. `save-input` and `restore-input` keep the four input cells. On j1a the console line is 88 bytes, the same limit as j1b, leaving room for the dictionary. After them the image is 7862 bytes of 8192 on j1a and 12112 of 32768 on j1b.
+
+- j1b-only words `.x`, `.x2`, `dump`, `ms`, `leds`, `convert`, `new`, `w@`, `w!`, `uw@`, `w,`, `calign`, `caligned`, `2rot`, `m*/`, and `throw`, fed from `fsys/j1b/extra.4th`. `.x` prints eight hex digits and `.x2` prints two. `dump` prints hex bytes, sixteen on a line. `ms` waits with a short counted loop because this console has no timer. `leds` writes bit 0 to the LED. `convert` reads the digits after the first character. `new` forgets definitions made after the image. `w@` sign-extends a halfword. `throw` with zero returns, and any other code prints the code and aborts to the text loop. The shared layer does not include this file, so the j1a image stays 7862 of 8192. After these words the j1b image is 13248 bytes of 32768.
 
 - Shared fsys colon words, one text for both cell widths: `until`, signed `.`, `.s`, `'`, `[']`, `\`, variable `'BOOT`, and `."` without the space after the quote. A line that does not fit the terminal buffer is not written past that buffer.
 
