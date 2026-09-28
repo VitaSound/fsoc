@@ -134,16 +134,26 @@ immediate
 \ ( "<spaces>name" -- ) append the compilation of the next word
 : postpone parse-name drop find dup 0= if drop 63 emit else drop postponed then ;
 immediate
+variable lsp
+create lstk 16 cells allot
+\ ( saved -- ) point every leave in this loop at here
+: unleaves dup begin dup lsp @ < while
+  dup cells lstk + @ resolve 1+ repeat drop lsp ! ;
+\ ( -- ) drop this loop and jump past it
+: leave postpone r> postpone drop postpone r> postpone drop
+  ahead lsp @ cells lstk + ! 1 lsp +! ;
+immediate
 \ ( after-orig body -- ) The increment is already compiled.
 : (loop) postpone r> postpone swap postpone +
   postpone dup postpone r@ postpone <
   postpone if postpone >r swap jump postpone then
   postpone drop postpone r> postpone drop
-  postpone else postpone 2drop postpone then ;
+  postpone else postpone 2drop postpone then unleaves ;
 \ ( limit index -- ) ( R: -- limit index ) Leave the body address.
-: do postpone 2dup postpone swap postpone < postpone if
+: do lsp @ postpone 2dup postpone swap postpone < postpone if
   postpone swap postpone >r postpone >r here ;
 immediate
+: ?do postpone do ; immediate
 : +loop (loop) ; immediate
 : loop 1 literal (loop) ; immediate
 \ ( -- ) ( R: body -- ) body runs for the word just created
@@ -193,3 +203,106 @@ immediate
 immediate
 : ." tibc drop begin tibc dup 34 = 0 = while literal compile-emit repeat drop ;
 immediate
+\ ( -- n ) index of the loop outside the current one
+: j r> r> r> r@ swap >r swap >r swap >r ;
+: char+ 1+ ;
+: chars ;
+: align here dup aligned swap - allot ;
+\ ( xt -- a-addr ) data field after the literal and the exit
+: >body 2 cells + ;
+: within over - >r - r> u< ;
+: erase 0 fill ;
+: move >r 2dup u< if r> cmove> else r> cmove then ;
+: /string dup >r - swap r> + swap ;
+\ ( x1 x2 -- ) ( R: -- x1 x2 )
+: 2>r r> rot >r swap >r >r ;
+: 2r> r> r> r> swap rot >r ;
+: 2r@ r> r> r> 2dup >r >r swap rot >r ;
+: pick dup if swap >r 1- recurse r> swap else drop dup then ;
+: roll dup if swap >r 1- recurse r> swap else drop then ;
+: s>d dup 0< ;
+: d0= or 0= ;
+: d0< nip 0< ;
+: dabs 2dup d0< if dnegate then ;
+: d= rot = >r = r> and ;
+: d< rot 2dup = if 2drop u< else 2swap 2drop > then ;
+: du< rot 2dup = if 2drop u< else 2swap 2drop u> then ;
+: d- dnegate d+ ;
+: d2/ dup >r 2/ swap 1 rshift r> 1 and if
+  1 cells 8 * 1- 1 swap lshift or then swap ;
+: d>s drop ;
+: dmax 2over 2over d< if 2swap then 2drop ;
+: dmin 2over 2over d< 0= if 2swap then 2drop ;
+variable db
+variable dr
+variable dq
+\ ( rem u base -- rem quot ) one cell, high bit first
+: cell/mod db ! swap dr ! 0 dq ! 1 cells 8 *
+  begin dup while 1- over 0< if
+    swap 2* swap dr @ 2* 1+ dr !
+  else swap 2* swap dr @ 2* dr ! then
+    dr @ db @ u< if dq @ 2* dq !
+    else dr @ db @ - dr ! dq @ 2* 1+ dq ! then
+  repeat drop drop dr @ dq @ ;
+\ ( lo hi base -- rem lo' hi' )
+: ud/mod >r 0 swap r@ cell/mod swap rot r> cell/mod rot ;
+: d. dup 0< if 45 emit dnegate then <#
+  2dup or 0= if 48 hold then
+  begin 2dup or while base @ ud/mod rot
+    dup 9 > if 7 + then 48 + hold
+  repeat 2drop #> type space ;
+: d.r >r dup 0< dup >r if dnegate then <#
+  2dup or 0= if 48 hold then
+  begin 2dup or while base @ ud/mod rot
+    dup 9 > if 7 + then 48 + hold
+  repeat 2drop r> if 45 hold then
+  #> r> over - 0 max spaces type ;
+\ ( lo hi u -- lo' hi' )
+: d*u dup >r >r swap r@ um* rot r> um* drop + r> drop ;
+\ ( lo hi addr u n -- lo hi addr' u' )
+: nstep >r 2swap base @ d*u r> 0 d+ 2swap
+  swap 1+ swap 1- ;
+: >number begin dup 0= if true else
+  over c@ digit 0= if true else
+  dup base @ u< if nstep false else drop true then
+  then then until ;
+\ ( char "ccc<char>" -- c-addr u )
+: parse >r here 0 begin tibc dup r@ =
+  >in @ ntib @ u< 0= or if drop true
+  else c, 1+ false then until r> drop
+  here aligned here - allot ;
+\ ( lo hi n -- rem quot ) remainder keeps the sign of the divisor
+: fm/mod dup >r sm/rem over dup 0<> swap 0< r@ 0< xor and if
+  1- swap r> + swap else r> drop then ;
+\ ( -- c-addr u ) current input, one byte per character
+: source src @ ntib @ ;
+\ ( c-addr u -- ) compile a string literal
+: sliteral here 3 cells + >r r@ literal dup literal ahead >r
+  begin dup while over c@ c, 1- swap 1+ swap repeat
+  drop drop here aligned here - allot r> resolve r> drop ;
+immediate
+\ ( "ccc<quote>" -- ) if the flag is true, print ccc and abort
+: abort" ( " ) postpone if postpone s" postpone type
+  postpone abort postpone then ;
+immediate
+\ ( -- ) enter compilation
+: ] 1 state ! ;
+\ ( -- ) enter interpretation
+: [ 0 state ! ; immediate
+\ ( "ccc<paren>" -- ) print the text up to the parenthesis
+: .( tibc drop 41 parse type ; immediate
+\ ( "<spaces>name" -- ) compile the next word
+: [compile] parse-name drop find dup 0= if
+  drop 63 emit else drop drop compile, then ;
+immediate
+\ ( i*x c-addr u -- j*x ) interpret the string as a line
+: evaluate src @ >r ntib @ >r >in @ >r
+  ntib ! 0 >in ! src ! interp
+  r> >in ! r> ntib ! r> src ! ;
+\ ( char "<chars>ccc<char>" -- c-addr ) counted string in the pictured buffer
+: word >r begin >in @ ntib @ u< 0= if true else
+  tibc dup r@ = if drop false else drop >in @ 1- >in ! true then then until
+  pic 1+ begin >in @ ntib @ u< 0= if true else
+  tibc dup r@ = if drop true else
+  over pic - 38 u< if over c! 1+ else drop then false then then until
+  r> drop pic tuck - 1- pic c! ;

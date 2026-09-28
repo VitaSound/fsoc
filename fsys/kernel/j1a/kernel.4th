@@ -1,5 +1,5 @@
 \ fsys/kernel/j1a/kernel.4th — J1a kernel in fasm comma words.
-\ Fixed cells sit above the image: tib, token, latest, here, state.
+\ Fixed cells sit above the image. The terminal buffer and the token are bytes.
 
 include ../../fasm/j1a/fasm.4th
 
@@ -149,17 +149,26 @@ variable k-fid
     s" branch0" 0 s" zbranch" k-pc k-word
     s" >in" 0 s" toin" k-pc k-word
     s" ntib" 0 s" ntibw" k-pc k-word
+    s" tib" 0 s" tibw" k-pc k-word
+    s" abort" 0 s" abortw" k-pc k-word
+    s" accept" 0 s" acceptw" k-pc k-word
+    s" exit" 0 s" exitw" k-pc k-word
+    s" unloop" 0 s" unloopw" k-pc k-word
+    s" quit" 0 s" quitw" k-pc k-word
+    s" src" 0 s" srcw" k-pc k-word
+    s" interp" 0 s" interp" k-pc k-word
     s" 'BOOT" 0 s" bootw" k-pc k-word
-    fasm-pc @ 3840 u< 0= abort" kernel overlaps variables"
-    k-latest @ 3840 k-h!
-    fasm-pc @ 2* 3841 k-h!
-    0 3842 k-h!
-    10 3844 k-h!
-    0 3846 k-h!
-    0 3847 k-h! ;
+    fasm-pc @ 3925 u< 0= abort" kernel overlaps variables"
+    k-latest @ 4088 k-h!
+    fasm-pc @ 2* 4089 k-h!
+    0 4090 k-h!
+    10 4092 k-h!
+    0 4094 k-h!
+    0 4095 k-h!
+    8010 4084 k-h! ;
 
 \ Byte address of the target here cell. The image size line reads it.
-7682 constant kernel-here
+8178 constant kernel-here
 
 [asm]
 quit jmp,
@@ -211,94 +220,107 @@ store:
 
 \ read a line into the tib. CR or LF ends it. Other bytes are echoed.
 accept:
-    0 imm,
-    7492 imm,
+    8010 imm,
+    128 imm,
+    acceptw call,
+    8174 imm,
     store call,
     0 imm,
-    7490 imm,
+    8172 imm,
     store call,
-accept_l:
+    exit,
+
+\ ( c-addr +n1 -- +n2 ) read a line, at most +n1 bytes. CR or LF ends it.
+acceptw:
+    >r,
+    0 imm,
+acc_l:
     key call,
     dup,
     10 imm,
     =,
-    accept_cr 0branch,
+    acc_cr 0branch,
     drop,
-    exit,
-accept_cr:
+    acc_out jmp,
+acc_cr:
     dup,
     13 imm,
     =,
-    accept_ch 0branch,
+    acc_ch 0branch,
     drop,
-    exit,
-accept_ch:
+    acc_out jmp,
+acc_ch:
     dup,
     emit call,
-    7492 imm,
-    fetch call,
-    128 imm,
+    swap,
+    dup,
+    r@,
     u<,
-    accept_full 0branch,
-    7492 imm,
-    fetch call,
-    2*,
-    7168 imm,
+    acc_skip 0branch,
+    swap,
+    >r,
+    over,
+    over,
     +,
-    store call,
-    7492 imm,
-    fetch call,
+    r>,
+    swap,
+    bstore call,
     1 imm,
     +,
-    7492 imm,
-    store call,
-    accept_l jmp,
-accept_full:
+    acc_l jmp,
+acc_skip:
+    swap,
     drop,
-    accept_l jmp,
+    acc_l jmp,
+acc_out:
+    swap,
+    drop,
+    r>,
+    drop,
+    exit,
 
 \ ( -- flag ) next word from the tib into the token buffer
 token:
 token_sk:
-    7490 imm,
+    8172 imm,
     fetch call,
-    7492 imm,
+    8174 imm,
     fetch call,
     u<,
     token_no 0branch,
-    7490 imm,
+    8172 imm,
     fetch call,
-    2*,
-    7168 imm,
+    8168 imm,
+    fetch call,
     +,
-    fetch call,
+    bfetch call,
     33 imm,
     u<,
     token_wd 0branch,
-    7490 imm,
+    8172 imm,
     fetch call,
     1 imm,
     +,
-    7490 imm,
+    8172 imm,
     store call,
     token_sk jmp,
 token_wd:
     0 imm,
-    7488 imm,
+    8170 imm,
     store call,
 token_c:
-    7490 imm,
+    8172 imm,
     fetch call,
-    7492 imm,
+    8174 imm,
     fetch call,
     u<,
     token_yes 0branch,
-    7490 imm,
+    8172 imm,
     fetch call,
-    2*,
-    7168 imm,
+    8168 imm,
+    fetch call,
     +,
-    fetch call,
+    bfetch call,
     dup,
     33 imm,
     u<,
@@ -306,23 +328,22 @@ token_c:
     drop,
     token_yes jmp,
 token_put:
-    7488 imm,
+    8170 imm,
     fetch call,
-    2*,
-    7424 imm,
+    8138 imm,
     +,
-    store call,
-    7488 imm,
-    fetch call,
-    1 imm,
-    +,
-    7488 imm,
-    store call,
-    7490 imm,
+    bstore call,
+    8170 imm,
     fetch call,
     1 imm,
     +,
-    7490 imm,
+    8170 imm,
+    store call,
+    8172 imm,
+    fetch call,
+    1 imm,
+    +,
+    8172 imm,
     store call,
     token_c jmp,
 token_yes:
@@ -335,42 +356,41 @@ token_no:
 
 \ ( -- n true | false )
 number:
-    7488 imm,
+    8170 imm,
     fetch call,
     number_no 0branch,
     0 imm,
     0 imm,
-    7686 imm,
+    8182 imm,
     store call,
-    7688 imm,
+    8184 imm,
     fetch call,
-    7690 imm,
+    8186 imm,
     store call,
-    7488 imm,
+    8170 imm,
     fetch call,
     2 imm,
     u<,
     invert,
     number_plain 0branch,
     0 imm,
-    2*,
-    7424 imm,
+    8138 imm,
     +,
-    fetch call,
+    bfetch call,
     36 imm,
     =,
     number_plain 0branch,
     1 imm,
-    7686 imm,
+    8182 imm,
     store call,
     16 imm,
-    7690 imm,
+    8186 imm,
     store call,
 number_plain:
 number_l:
-    7686 imm,
+    8182 imm,
     fetch call,
-    7488 imm,
+    8170 imm,
     fetch call,
     =,
     number_d 0branch,
@@ -378,12 +398,11 @@ number_l:
     invert,
     exit,
 number_d:
-    7686 imm,
+    8182 imm,
     fetch call,
-    2*,
-    7424 imm,
+    8138 imm,
     +,
-    fetch call,
+    bfetch call,
     dup,
     48 imm,
     u<,
@@ -402,23 +421,23 @@ number_lo:
     number_dig jmp,
 number_dig:
     dup,
-    7690 imm,
+    8186 imm,
     fetch call,
     u<,
     number_bad 0branch,
     swap,
     number_mul call,
     +,
-    7686 imm,
+    8182 imm,
     fetch call,
     1 imm,
     +,
-    7686 imm,
+    8182 imm,
     store call,
     number_l jmp,
 \ ( acc -- acc*radix ) radix is 10 or 16
 number_mul:
-    7690 imm,
+    8186 imm,
     fetch call,
     16 imm,
     =,
@@ -460,14 +479,14 @@ hibit_x:
 
 \ ( x -- ) compile one cell and advance here
 comma:
-    7682 imm,
+    8178 imm,
     fetch call,
     store call,
-    7682 imm,
+    8178 imm,
     fetch call,
     2 imm,
     +,
-    7682 imm,
+    8178 imm,
     store call,
     exit,
 
@@ -550,19 +569,19 @@ bstore_lo:
 \ create a header from the token. code begins at here.
 \ The entry address stays even, so the low link bit can be immediate.
 header:
-    7682 imm,
+    8178 imm,
     fetch call,
     1 imm,
     +,
     1 imm,
     invert,
     and,
-    7682 imm,
+    8178 imm,
     store call,
-    7682 imm,
+    8178 imm,
     fetch call,
     >r,
-    7680 imm,
+    8176 imm,
     fetch call,
     dup,
     255 imm,
@@ -583,26 +602,26 @@ header:
     1 imm,
     +,
     bstore call,
-    7488 imm,
+    8170 imm,
     fetch call,
     r@,
     2 imm,
     +,
     bstore call,
     0 imm,
-    7686 imm,
+    8182 imm,
     store call,
 header_l:
-    7686 imm,
+    8182 imm,
     fetch call,
-    7488 imm,
+    8170 imm,
     fetch call,
     =,
     header_c 0branch,
     r@,
     3 imm,
     +,
-    7488 imm,
+    8170 imm,
     fetch call,
     +,
     1 imm,
@@ -610,37 +629,36 @@ header_l:
     1 imm,
     invert,
     and,
-    7682 imm,
+    8178 imm,
     store call,
     r>,
-    7680 imm,
+    8176 imm,
     store call,
     exit,
 header_c:
-    7686 imm,
+    8182 imm,
     fetch call,
-    2*,
-    7424 imm,
+    8138 imm,
     +,
-    fetch call,
+    bfetch call,
     r@,
     3 imm,
     +,
-    7686 imm,
+    8182 imm,
     fetch call,
     +,
     bstore call,
-    7686 imm,
+    8182 imm,
     fetch call,
     1 imm,
     +,
-    7686 imm,
+    8182 imm,
     store call,
     header_l jmp,
 
 \ ( -- cfa flags true | false )
 find:
-    7680 imm,
+    8176 imm,
     fetch call,
 find_l:
     dup,
@@ -649,14 +667,14 @@ find_l:
     2 imm,
     +,
     bfetch call,
-    7488 imm,
+    8170 imm,
     fetch call,
     =,
     find_nx 0branch,
     0 imm,
 find_i:
     dup,
-    7488 imm,
+    8170 imm,
     fetch call,
     =,
     find_c 0branch,
@@ -664,10 +682,9 @@ find_i:
     find_ok jmp,
 find_c:
     dup,
-    2*,
-    7424 imm,
+    8138 imm,
     +,
-    fetch call,
+    bfetch call,
     >r,
     over,
     3 imm,
@@ -730,7 +747,7 @@ colon:
     header call,
     0 imm,
     invert,
-    7684 imm,
+    8180 imm,
     store call,
     exit,
 colon_z:
@@ -740,21 +757,21 @@ semi:
     24716 imm,
     comma call,
     0 imm,
-    7684 imm,
+    8180 imm,
     store call,
     exit,
 
 ifw:
     8192 imm,
     comma call,
-    7682 imm,
+    8178 imm,
     fetch call,
     2 imm,
     -,
     exit,
 
 thenw:
-    7682 imm,
+    8178 imm,
     fetch call,
     2/,
     over,
@@ -765,7 +782,7 @@ thenw:
     exit,
 
 beginw:
-    7682 imm,
+    8178 imm,
     fetch call,
     exit,
 
@@ -801,7 +818,7 @@ plus:
     exit,
 
 wordw:
-    7680 imm,
+    8176 imm,
     fetch call,
 word_l:
     dup,
@@ -853,7 +870,7 @@ interp:
 interp_l:
     token call,
     interp_z 0branch,
-    7694 imm,
+    8190 imm,
     fetch call,
     dup,
     interp_k 0branch,
@@ -864,7 +881,7 @@ interp_k:
     number call,
 interp_num:
     interp_w 0branch,
-    7684 imm,
+    8180 imm,
     fetch call,
     interp_keep 0branch,
     hibit call,
@@ -876,7 +893,7 @@ interp_keep:
 interp_w:
     find call,
     interp_bad 0branch,
-    7684 imm,
+    8180 imm,
     fetch call,
     0 imm,
     =,
@@ -899,7 +916,7 @@ interp_z:
     exit,
 
 quit:
-    7692 imm,
+    8188 imm,
     fetch call,
     dup,
     quit_ok 0branch,
@@ -913,8 +930,13 @@ quit_back:
     10 imm,
     emit call,
 quit_l:
+    1 imm,
+    >r,
+quit_in:
     accept call,
     interp call,
+    rdrop,
+quit_say:
     32 imm,
     emit call,
     111 imm,
@@ -927,6 +949,52 @@ quit_l:
     emit call,
     quit_l jmp,
 
+\ Drop the data stack, then return frames, until the 1 from quit_l.
+abortw:
+abort_d:
+    depth,
+    abort_r 0branch,
+    drop,
+    abort_d jmp,
+abort_r:
+    r@,
+    1 imm,
+    =,
+    abort_x 0branch,
+    rdrop,
+    quit_say jmp,
+abort_x:
+    rdrop,
+    abort_r jmp,
+
+\ Drop the call into exit, so the word that called it returns.
+exitw: rdrop, exit,
+\ Drop the index and the limit. They sit above this word's return.
+unloopw:
+    r>,
+    r>,
+    drop,
+    r>,
+    drop,
+    >r,
+    exit,
+
+\ Drop return frames down to the sentinel. Leave the data stack.
+quitw:
+quit_r:
+    r@,
+    1 imm,
+    =,
+    quit_x 0branch,
+    rdrop,
+    0 imm,
+    8180 imm,
+    store call,
+    quit_say jmp,
+quit_x:
+    rdrop,
+    quit_r jmp,
+
 dupw: dup, exit,
 dropw: drop, exit,
 swapw: swap, exit,
@@ -936,31 +1004,31 @@ ultw: u<, exit,
 subw: -, exit,
 cellp: 2 imm, +, exit,
 celln: 2*, exit,
-herew: 7682 imm, fetch call, exit,
+herew: 8178 imm, fetch call, exit,
 dcomma:
-    7682 imm, fetch call, store call,
-    7682 imm, fetch call, 2 imm, +,
-    7682 imm, store call, exit,
+    8178 imm, fetch call, store call,
+    8178 imm, fetch call, 2 imm, +,
+    8178 imm, store call, exit,
 allotw:
-    7682 imm, fetch call, +,
-    7682 imm, store call, exit,
+    8178 imm, fetch call, +,
+    8178 imm, store call, exit,
 litw: hibit call, or, comma call, exit,
 compexit: 24716 imm, comma call, exit,
 compemit: emit imm, 16384 imm, or, comma call, exit,
 ahead:
     0 imm, comma call,
-    7682 imm, fetch call, 2 imm, -, exit,
+    8178 imm, fetch call, 2 imm, -, exit,
 immw:
-    7680 imm, fetch call,
+    8176 imm, fetch call,
     dup, bfetch call, 1 imm, or,
     swap, bstore call, exit,
 tibc:
-    7490 imm, fetch call,
-    7492 imm, fetch call,
+    8172 imm, fetch call,
+    8174 imm, fetch call,
     u<, tibc_z 0branch,
-    7490 imm, fetch call, 2*, 7168 imm, +, fetch call,
-    7490 imm, fetch call, 1 imm, +,
-    7490 imm, store call, exit,
+    8172 imm, fetch call, 8168 imm, fetch call, +, bfetch call,
+    8172 imm, fetch call, 1 imm, +,
+    8172 imm, store call, exit,
 tibc_z: 34 imm, exit,
 
 andw: and, exit,
@@ -1023,20 +1091,23 @@ byteoff:
 depthw: depth, 31 imm, and, exit,
 iofetch: iord, io@, exit,
 iostore: io!, drop, exit,
-basew: 7688 imm, exit,
-latestw: 7680 imm, exit,
-statew: 7684 imm, exit,
-toin: 7490 imm, exit,
-ntibw: 7492 imm, exit,
-bootw: 7692 imm, exit,
-tlenw: 7488 imm, exit,
-nidxw: 7686 imm, exit,
-radixw: 7690 imm, exit,
-nhookw: 7694 imm, exit,
+basew: 8184 imm, exit,
+latestw: 8176 imm, exit,
+statew: 8180 imm, exit,
+toin: 8172 imm, exit,
+ntibw: 8174 imm, exit,
+bootw: 8188 imm, exit,
+tlenw: 8170 imm, exit,
+nidxw: 8182 imm, exit,
+radixw: 8186 imm, exit,
+nhookw: 8190 imm, exit,
 \ ( i -- c ) character i of the token
-tcharw: 2*, 7424 imm, +, fetch call, exit,
+tcharw: 8138 imm, +, bfetch call, exit,
 \ ( -- c ) first character of the word parse-name just stored
-namecw: 7424 imm, fetch call, exit,
+namecw: 8138 imm, bfetch call, exit,
+tibw: 8010 imm, exit,
+\ Base address of the current input. Boot value is tib.
+srcw: 8168 imm, exit,
 
 [endasm]
 kernel-finish

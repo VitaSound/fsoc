@@ -1,7 +1,7 @@
 \ fsys/kernel/j1b/kernel.4th — J1b kernel in fasm comma words.
 \ Data cells are 32 bits. A compiled instruction sits in the low half
 \ of a cell with a nop in the high half, so here advances by 4.
-\ Fixed cells sit above the image: tib, token, latest, here, state.
+\ The terminal buffer and the token are bytes. latest, here, and state sit above them.
 
 include ../../fasm/j1b/fasm.4th
 
@@ -164,6 +164,14 @@ variable jb-fid
     s" branch0" 0 s" zbranch" jb-pc jb-word
     s" >in" 0 s" toin" jb-pc jb-word
     s" ntib" 0 s" ntibw" jb-pc jb-word
+    s" tib" 0 s" tibw" jb-pc jb-word
+    s" abort" 0 s" abortw" jb-pc jb-word
+    s" accept" 0 s" acceptw" jb-pc jb-word
+    s" exit" 0 s" exitw" jb-pc jb-word
+    s" unloop" 0 s" unloopw" jb-pc jb-word
+    s" quit" 0 s" quitw" jb-pc jb-word
+    s" src" 0 s" srcw" jb-pc jb-word
+    s" interp" 0 s" interp" jb-pc jb-word
     s" 'BOOT" 0 s" bootw" jb-pc jb-word
     fasm-pc @ 12288 u< 0= abort" kernel overlaps variables"
     jb-latest @ 12544 jb-h!
@@ -171,7 +179,8 @@ variable jb-fid
     0 12548 jb-h!
     10 12536 jb-h!
     0 12540 jb-h!
-    0 12542 jb-h! ;
+    0 12542 jb-h!
+    24576 12550 jb-h! ;
 
 \ Byte address of the target here cell. The image size line reads it.
 25092 constant jb-here
@@ -250,51 +259,64 @@ shr1:
 
 \ read a line into the tib. CR or LF ends it. Other bytes are echoed.
 accept:
-    0 imm,
+    24576 imm,
+    88 imm,
+    acceptw call,
     25064 imm,
     store call,
     0 imm,
     25060 imm,
     store call,
-accept_l:
+    exit,
+
+\ ( c-addr +n1 -- +n2 ) read a line, at most +n1 bytes. CR or LF ends it.
+acceptw:
+    >r,
+    0 imm,
+acc_l:
     key call,
     dup,
     10 imm,
     =,
-    accept_cr 0branch,
+    acc_cr 0branch,
     drop,
-    exit,
-accept_cr:
+    acc_out jmp,
+acc_cr:
     dup,
     13 imm,
     =,
-    accept_ch 0branch,
+    acc_ch 0branch,
     drop,
-    exit,
-accept_ch:
+    acc_out jmp,
+acc_ch:
     dup,
     emit call,
-    25064 imm,
-    fetch call,
-    88 imm,
+    swap,
+    dup,
+    r@,
     u<,
-    accept_full 0branch,
-    25064 imm,
-    fetch call,
-    cellx call,
-    24576 imm,
+    acc_skip 0branch,
+    swap,
+    >r,
+    over,
+    over,
     +,
-    store call,
-    25064 imm,
-    fetch call,
+    r>,
+    swap,
+    bstore call,
     1 imm,
     +,
-    25064 imm,
-    store call,
-    accept_l jmp,
-accept_full:
+    acc_l jmp,
+acc_skip:
+    swap,
     drop,
-    accept_l jmp,
+    acc_l jmp,
+acc_out:
+    swap,
+    drop,
+    r>,
+    drop,
+    exit,
 
 \ ( -- flag ) next word from the tib into the token buffer
 token:
@@ -307,10 +329,10 @@ token_sk:
     token_no 0branch,
     25060 imm,
     fetch call,
-    cellx call,
-    24576 imm,
-    +,
+    25100 imm,
     fetch call,
+    +,
+    bfetch call,
     33 imm,
     u<,
     token_wd 0branch,
@@ -334,10 +356,10 @@ token_c:
     token_yes 0branch,
     25060 imm,
     fetch call,
-    cellx call,
-    24576 imm,
-    +,
+    25100 imm,
     fetch call,
+    +,
+    bfetch call,
     dup,
     33 imm,
     u<,
@@ -347,10 +369,9 @@ token_c:
 token_put:
     25056 imm,
     fetch call,
-    cellx call,
     24928 imm,
     +,
-    store call,
+    bstore call,
     25056 imm,
     fetch call,
     1 imm,
@@ -392,10 +413,9 @@ number:
     invert,
     number_plain 0branch,
     0 imm,
-    cellx call,
     24928 imm,
     +,
-    fetch call,
+    bfetch call,
     36 imm,
     =,
     number_plain 0branch,
@@ -419,10 +439,9 @@ number_l:
 number_d:
     25068 imm,
     fetch call,
-    cellx call,
     24928 imm,
     +,
-    fetch call,
+    bfetch call,
     dup,
     48 imm,
     u<,
@@ -624,10 +643,9 @@ header_l:
 header_c:
     25068 imm,
     fetch call,
-    cellx call,
     24928 imm,
     +,
-    fetch call,
+    bfetch call,
     r@,
     3 imm,
     +,
@@ -669,10 +687,9 @@ find_i:
     find_ok jmp,
 find_c:
     dup,
-    cellx call,
     24928 imm,
     +,
-    fetch call,
+    bfetch call,
     >r,
     over,
     3 imm,
@@ -918,8 +935,13 @@ quit_back:
     10 imm,
     emit call,
 quit_l:
+    1 imm,
+    >r,
+quit_in:
     accept call,
     interp call,
+    rdrop,
+quit_say:
     32 imm,
     emit call,
     111 imm,
@@ -931,6 +953,52 @@ quit_l:
     10 imm,
     emit call,
     quit_l jmp,
+
+\ Drop the data stack, then return frames, until the 1 from quit_l.
+abortw:
+abort_d:
+    depths,
+    abort_r 0branch,
+    drop,
+    abort_d jmp,
+abort_r:
+    r@,
+    1 imm,
+    =,
+    abort_x 0branch,
+    rdrop,
+    quit_say jmp,
+abort_x:
+    rdrop,
+    abort_r jmp,
+
+\ Drop the call into exit, so the word that called it returns.
+exitw: rdrop, exit,
+\ Drop the index and the limit. They sit above this word's return.
+unloopw:
+    r>,
+    r>,
+    drop,
+    r>,
+    drop,
+    >r,
+    exit,
+
+\ Drop return frames down to the sentinel. Leave the data stack.
+quitw:
+quit_r:
+    r@,
+    1 imm,
+    =,
+    quit_x 0branch,
+    rdrop,
+    0 imm,
+    25096 imm,
+    store call,
+    quit_say jmp,
+quit_x:
+    rdrop,
+    quit_r jmp,
 
 dupw: dup, exit,
 dropw: drop, exit,
@@ -963,7 +1031,7 @@ tibc:
     25060 imm, fetch call,
     25064 imm, fetch call,
     u<, tibc_z 0branch,
-    25060 imm, fetch call, cellx call, 24576 imm, +, fetch call,
+    25060 imm, fetch call, 25100 imm, fetch call, +, bfetch call,
     25060 imm, fetch call, 1 imm, +,
     25060 imm, store call, exit,
 tibc_z: 34 imm, exit,
@@ -1026,9 +1094,12 @@ nidxw: 25068 imm, exit,
 radixw: 25076 imm, exit,
 nhookw: 25084 imm, exit,
 \ ( i -- c ) character i of the token
-tcharw: cellx call, 24928 imm, +, fetch call, exit,
+tcharw: 24928 imm, +, bfetch call, exit,
 \ ( -- c ) first character of the word parse-name just stored
-namecw: 24928 imm, fetch call, exit,
+namecw: 24928 imm, bfetch call, exit,
+tibw: 24576 imm, exit,
+\ Base address of the current input. Boot value is tib.
+srcw: 25100 imm, exit,
 
 [endasm]
 jb-finish

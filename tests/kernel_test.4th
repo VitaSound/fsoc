@@ -7,10 +7,10 @@ s" ../fsys/kernel/j1a/kernel.4th" included
 
 s" quit" fasm-label@ drop
 0 fasm@ expect=
-3840 fasm@ 0<> expect-true
-3841 fasm@ 0<> expect-true
-3842 fasm@ 0= expect-true
-fasm-pc @ 3840 u< expect-true
+4088 fasm@ 0<> expect-true
+4089 fasm@ 0<> expect-true
+4090 fasm@ 0= expect-true
+fasm-pc @ 3925 u< expect-true
 
 \ Byte at a target address in the 16-bit image slots.
 : img-c@ ( addr -- c )
@@ -25,7 +25,7 @@ fasm-pc @ 3840 u< expect-true
     dup 6 + img-c@ 79 expect=
     7 + img-c@ 84 expect= ;
 
-3840 fasm@ boot-name
+4088 fasm@ boot-name
 
 s" /tmp/fsoc-kernel-j1a.hex" kernel-save
 s" awk 'END{exit !(NR==4096)}' /tmp/fsoc-kernel-j1a.hex" system

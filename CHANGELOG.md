@@ -16,6 +16,16 @@
 
 - fsys dictionary names are packed bytes on j1a and j1b. Two link bytes carry the immediate flag in the low bit, then a length byte and the letters, then alignment to the cell, then the code. `here` stays the only pointer. After the shared layer the image is 5108 bytes of 8192 on j1a and 7300 of 32768 on j1b.
 
+- Shared fsys words for both cell widths: `j`, `char+`, `chars`, `align`, `>body`, `within`, `erase`, `move`, `/string`, `2>r`, `2r>`, `2r@`, `pick`, `roll`, `s>d`, `d0=`, `d0<`, `dabs`, `d=`, `d<`, `du<`, `d-`, `d2/`, `d>s`, `dmax`, `dmin`. After them the image is 5668 bytes of 8192 on j1a and 8264 of 32768 on j1b.
+
+- Shared fsys words `leave`, `?do`, `parse`, `>number`, `d.`, and `d.r`. `leave` jumps past the current loop, including a loop inside another loop. `d.` and `d.r` take digits by a bit walk, so a wide cell does not subtract its way through the quotient. After them the image is 6420 bytes of 8192 on j1a and 9664 of 32768 on j1b. On j1a the terminal buffer and the `here` cell sit higher in RAM, so the dictionary can grow past the old buffer.
+
+- Shared fsys words `fm/mod`, `source`, `sliteral`, and `abort"`. `fm/mod` keeps the remainder with the sign of the divisor. `source` is the input line, one byte per character. `abort` clears both stacks and returns to the outer text loop. After them the image is 6628 bytes of 8192 on j1a and 10016 of 32768 on j1b.
+
+- Shared fsys words `]`, `[`, `.(`, and `[compile]`, plus kernel `exit` and `unloop`. `[` returns to interpretation and `]` to compilation. `exit` leaves the current word. `unloop` drops the loop index and limit. After them the image is 6750 bytes of 8192 on j1a and 10204 of 32768 on j1b.
+
+- Shared fsys words `evaluate` and `word`, plus kernel `quit`, `accept`, and the input base `src`. `quit` clears the return stack and leaves the data stack. `accept` reads the line. `evaluate` interprets a string. `word` returns a counted string. After them the image is 7054 bytes of 8192 on j1a and 10712 of 32768 on j1b.
+
 - Shared fsys colon words, one text for both cell widths: `until`, signed `.`, `.s`, `'`, `[']`, `\`, variable `'BOOT`, and `."` without the space after the quote. A line that does not fit the terminal buffer is not written past that buffer.
 
 - Manifest field `cpu:` names a Forth profile. Task `soc` with an empty field still cross-compiles `swapforth/j1a`. An unknown id stops the build and does not substitute `j1a`. Profiles `stm8` (class 1, CG=E, stm8ef) and `z80` (class 2, CG=F, cerberus-z80) stop before an image is built. `j1a` and `j1b` are core kits under `cpu/j1/<id>/`: the build copies that kit's core, stack, and memory wrap. `j1b` is the 32-bit core and cross from AFCK_J1B_FORTH `original/j1b`, with `j1b_wrap.v` (`WIDTH 32`, `mem_din`).
