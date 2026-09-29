@@ -28,6 +28,8 @@ get-order common-wl swap 1+ set-order
 : tibc 34 ;
 : , drop ;
 : branch0 drop ;
+: opti 0 ;
+: ! 2drop ;
 
 s" ../fsys/common/common.4th" included
 forth-wordlist set-current

@@ -52,6 +52,8 @@ $0f00 constant Nu<T
 : r>, ( -- ) rT T->N r-1 d+1 alu, ;
 : r@, ( -- ) rT T->N d+1 alu, ;
 : exit, ( -- ) T RET r-1 alu, ;
+\ Same ALU, but it returns. One instruction instead of ALU plus exit.
+: alu-exit, ( u -- ) RET r-1 alu, ;
 
 : 2dupand, ( -- ) T&N T->N d+1 alu, ;
 : 2dup<, ( -- ) N<T T->N d+1 alu, ;

@@ -102,6 +102,7 @@ variable jb-fid
     s" tlen" 0 s" tlenw" jb-pc jb-word
     s" :" 0 s" colon" jb-pc jb-word
     s" ;" 1 s" semi" jb-pc jb-word
+    s" opti" 0 s" optiw" jb-pc jb-word
     s" if" 1 s" ifw" jb-pc jb-word
     s" then" 1 s" thenw" jb-pc jb-word
     s" begin" 1 s" beginw" jb-pc jb-word
@@ -180,7 +181,8 @@ variable jb-fid
     10 12536 jb-h!
     0 12540 jb-h!
     0 12542 jb-h!
-    24576 12550 jb-h! ;
+    24576 12550 jb-h!
+    0 12552 jb-h! ;
 
 \ Byte address of the target here cell. The image size line reads it.
 25092 constant jb-here
@@ -218,8 +220,7 @@ key_w:
 
 \ ( a -- x )
 fetch:
-    @,
-    exit,
+    [T] alu-exit,
 
 exec:
     >r,
@@ -228,8 +229,7 @@ exec:
 \ ( n a -- )
 store:
     !,
-    drop,
-    exit,
+    nos d-1 alu-exit,
 
 \ ( a b -- a-b )
 sub:
@@ -751,6 +751,9 @@ colon:
     colon_z 0branch,
     header call,
     0 imm,
+    25104 imm,
+    store call,
+    0 imm,
     invert,
     25096 imm,
     store call,
@@ -758,9 +761,78 @@ colon:
 colon_z:
     exit,
 
+\ Console ; matches SwapForth texit: a trailing call becomes a jump.
+\ fine must be set, or string bytes that look like a call are left alone.
+\ The exit stays, so a branch already aimed at that slot still returns.
+\ The high half stays a nop. An empty word still compiles a real exit.
 semi:
+    25088 imm,
+    fetch call,
+    dup,
+    2 imm,
+    +,
+    bfetch call,
+    +,
+    6 imm,
+    +,
+    3 imm,
+    invert,
+    and,
+    25092 imm,
+    fetch call,
+    over,
+    over,
+    =,
+    semi_go 0branch,
+    drop,
+    drop,
     24716 imm,
     comma call,
+    semi_st jmp,
+semi_go:
+    drop,
+    drop,
+    25104 imm,
+    fetch call,
+    semi_no 0branch,
+    25092 imm,
+    fetch call,
+    4 imm,
+    sub call,
+    dup,
+    fetch call,
+    dup,
+    13 imm,
+    rshift,
+    7 imm,
+    and,
+    2 imm,
+    =,
+    semi_ex 0branch,
+    dup,
+    8191 imm,
+    and,
+    swap,
+    16 imm,
+    rshift,
+    16 imm,
+    lshift,
+    or,
+    swap,
+    store call,
+    24716 imm,
+    comma call,
+    semi_st jmp,
+semi_ex:
+    drop,
+    drop,
+semi_no:
+    24716 imm,
+    comma call,
+semi_st:
+    0 imm,
+    25104 imm,
+    store call,
     0 imm,
     25096 imm,
     store call,
@@ -819,8 +891,7 @@ umod_sub:
     umod_l jmp,
 
 plus:
-    +,
-    exit,
+    T+N d-1 alu-exit,
 
 wordw:
     25088 imm,
@@ -905,6 +976,9 @@ interp_w:
     swap,
     or,
     interp_comp 0branch,
+    0 imm,
+    25104 imm,
+    store call,
     exec call,
     interp_l jmp,
 interp_comp:
@@ -912,6 +986,10 @@ interp_comp:
     16384 imm,
     or,
     comma call,
+    0 imm,
+    invert,
+    25104 imm,
+    store call,
     interp_l jmp,
 interp_bad:
     63 imm,
@@ -1000,16 +1078,16 @@ quit_x:
     rdrop,
     quit_r jmp,
 
-dupw: dup, exit,
-dropw: drop, exit,
-swapw: swap, exit,
-overw: over, exit,
-eqw: =, exit,
-ultw: u<, exit,
+dupw: T T->N d+1 alu-exit,
+dropw: nos d-1 alu-exit,
+swapw: nos T->N alu-exit,
+overw: nos T->N d+1 alu-exit,
+eqw: N==T d-1 alu-exit,
+ultw: Nu<T d-1 alu-exit,
 subw: sub call, exit,
-cellp: 4 imm, +, exit,
+cellp: 4 imm, T+N d-1 alu-exit,
 celln: cellx call, exit,
-herew: 25092 imm, fetch call, exit,
+herew: 25092 imm, [T] alu-exit,
 dcomma:
     25092 imm, fetch call, store call,
     25092 imm, fetch call, 4 imm, +,
@@ -1036,11 +1114,11 @@ tibc:
     25060 imm, store call, exit,
 tibc_z: 34 imm, exit,
 
-andw: and, exit,
-orw: or, exit,
-xorw: xor, exit,
-invw: invert, exit,
-nipw: nip, exit,
+andw: T&N d-1 alu-exit,
+orw: T|N d-1 alu-exit,
+xorw: T^N d-1 alu-exit,
+invw: ~T alu-exit,
+nipw: T d-1 alu-exit,
 \ ( slot -- ) 0branch in the low half, noop in the high half.
 \ The untaken path steps onto that noop and then the next cell.
 zbranch:
@@ -1071,21 +1149,22 @@ rat:
     swap,
     >r,
     exit,
-ltw: <, exit,
-lsh: lshift, exit,
-rsh: rshift, exit,
+ltw: N<T d-1 alu-exit,
+lsh: N<<T d-1 alu-exit,
+rsh: N>>T d-1 alu-exit,
 \ ( a -- shift ) 0, 8, 16 or 24, the byte lane in a 32-bit cell
 byteoff:
     3 imm, and,
     3 imm,
     lshift,
     exit,
-depthw: depths, 31 imm, and, exit,
-iofetch: iord, io@, exit,
-iostore: io!, drop, exit,
+depthw: depths, 31 imm, T&N d-1 alu-exit,
+iofetch: iord, io[T] alu-exit,
+iostore: io!, nos d-1 alu-exit,
 basew: 25072 imm, exit,
 latestw: 25088 imm, exit,
 statew: 25096 imm, exit,
+optiw: 25104 imm, exit,
 toin: 25060 imm, exit,
 ntibw: 25064 imm, exit,
 bootw: 25080 imm, exit,

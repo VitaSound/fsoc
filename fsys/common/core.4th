@@ -164,7 +164,7 @@ immediate
 : lit! swap 1 15 lshift or 24576 16 lshift or swap ! ;
 \ store the bytes up to char 34 and align here
 : quote, here 0 begin tibc dup 34 = 0= while c, 1+ repeat drop
-  here aligned here - allot ;
+  here aligned here - allot 0 opti ! ;
 create pic 40 allot
 variable hld
 \ ( -- ) start pictured output at the end of the buffer
@@ -365,7 +365,7 @@ align
     c, 1 true then else c, 1 true then then ;
 \ ( -- c-addr u ) copy up to the closing quote and align here
 : es, here 0 begin q while + repeat
-  here aligned here - allot ;
+  here aligned here - allot 0 opti ! ;
 \ ( "ccc<quote>" -- c-addr ) counted string while compiling
 : c" ( " cstr) tibc drop here 0 literal ahead here >r 0 c, quote,
   r> swap over c! nip swap resolve swap lit! ;
