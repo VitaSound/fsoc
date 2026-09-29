@@ -4,9 +4,14 @@
 s" test_common.4th" included
 s" fixture.4th" included
 
+s" git check-ignore -q projects/baremetal/blinky_emul/target.4th" system
+$? 0= expect-false
+s" git check-ignore -q projects/soc_emul/target.4th" system
+$? 0= expect-false
+
 \ --- board build writes Quartus files and does not run Quartus ---
 test-setup
-s" blinky_terasic_de0nano" tmp-use-project
+s" baremetal/blinky_terasic_de0nano" tmp-use-project
 s" " s" --build" in-tmp-fsoc expect-true
 s" PIN_A15 -to led" s" blinky.qsf" tmp-grep? expect-true
 s\" FAMILY \"Cyclone IV E\"" s" blinky.qsf" tmp-grep? expect-true
@@ -20,7 +25,7 @@ test-teardown
 
 \ --- clean keeps the manifest and removes the build ---
 test-setup
-s" blinky_terasic_de0nano" tmp-use-project
+s" baremetal/blinky_terasic_de0nano" tmp-use-project
 s" " s" --build" in-tmp-fsoc expect-true
 s" top.v" tmp-exists? expect-true
 s" mkdir -p obj_dir && touch obj_dir/x extra.log" in-tmp-sh expect-true
@@ -46,7 +51,7 @@ test-teardown
 
 \ --- emulation ignores --load ---
 test-setup
-s" blinky_emul" tmp-use-project
+s" baremetal/blinky_emul" tmp-use-project
 s" " s" --load" in-tmp-fsoc expect-true
 s" top.v" tmp-exists? expect-false
 test-teardown
@@ -80,7 +85,7 @@ test-teardown
 
 \ --- FSOC_HOME unset: the CLI itself stops (bin/fsoc would default it) ---
 test-setup
-s" blinky_emul" tmp-use-project
+s" baremetal/blinky_emul" tmp-use-project
 s" env -u FSOC_HOME gforth " fsoc-root fjson.str-concat
 s" /fsoc.4th --build > sim.log 2>&1" fsoc-cat+
 2dup in-tmp-sh expect-false fjson.str-free

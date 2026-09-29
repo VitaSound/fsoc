@@ -10,33 +10,34 @@ boards/         ep2c5_mini, terasic_de0nano, colorlight_5a_75e_v6_0, colorlight_
 designs/        Forth design units (fhdlgen top; leaf RTL stays a .v file; no project dir, board, or launch method)
 emu/            Verilator library: con, clock, uart, script, trace (no task names)
 rtl/            Pure Verilog (blinky.v, …)
-projects/       Working dirs (blinky_emul, blinky_<board>, soc_emul, …). Git: only target.4th; --build emits the rest locally
+projects/       Working dirs: `baremetal/blinky_*` (no Forth), `soc_*` (Forth). Git: only target.4th; --build emits the rest locally
 targets/        emulation (Verilator sim.sh), quartus (project files; no task name)
 cpu/j1/         Core kits `j1a/` and `j1b/` (core, stack, memory wrap) plus shared `uart.v`; `j1b/j1b_wrap.v` is the 32-bit cell
 swapforth/      SwapForth image tool, moved intact: `j1a/`, `j1b/`, `common/`
-fsys/fasm/      Host assembler for j1a and j1b: comma words, labels, `[asm]`/`[endasm]`
-fsoc/cpu.4th    Forth profiles (`j1a`, `j1b`, `stm8`, `z80`). Manifest `cpu:`; empty on task `soc` is `j1a`
-fsoc/sys.4th    Image tool named by `sys:`. Empty is `swapforth`. `fsys` assembles `fsys/kernel/<cpu>`, then the host compiles `fsys/common` (j1b then `fsys/j1b/extra.4th`; j1a with `extra-min=1` then `fsys/j1a/extra-min.4th`). `s" image" s" release" option:` with an application option such as `lamp` loads only the closure of those programs plus `fsys/<cpu>/release.4th`; otherwise the full layers are loaded. The dictionary JSON is `doc/j1-word-graph/<cpu-sys>.json`
+fsys/fasm/      Host assembler for j1a, j1b, and avr: comma words, labels, `[asm]`/`[endasm]`. avr writes Intel HEX. Part files `atmega8`, `atmega328p`, `atmega2560` hold flash, SRAM, EEPROM, and register addresses. Kernel console stays in `fsys/kernel/<cpu>`; fasm-only blink is `firmware/blink_avr.4th`
+fsoc/cpu.4th    Forth profiles (`j1a`, `j1b`, `stm8`, `z80`, `avr`). Manifest `cpu:`; empty on task `soc` is `j1a`. A new ISA is a new id here (FMAP + CG). A new chip of an existing ISA is a part file under `fsys/fasm/<id>/`, not a new id. How to add a platform: `.cursor/rules/fsoc-cpu-target.mdc`
+fsoc/sys.4th    Image tool named by `sys:`. Empty is `swapforth`. `fsys` assembles `fsys/kernel/<cpu>`, then the host compiles `fsys/common` (j1b then `fsys/j1b/extra.4th`; j1a with `extra-min=1` then `fsys/j1a/extra-min.4th`; `avr` console then `fsys/avr/extra-min.4th`; `avr` with `blink=1` then `fsys/avr/extra.4th`). `s" image" s" release" option:` with an application option such as `lamp` or `blink` loads only the closure of those programs plus `fsys/<cpu>/release.4th`; otherwise the full layers are loaded. The dictionary JSON is `doc/j1-word-graph/<cpu-sys>.json`. Profile `avr` is class 1 Harvard STC (EX-C=S, CG=F): empty `sys:` stops; `s" fsys" sys:` assembles `fsys/kernel/avr`, host `avr-cross` adds extra-min (console) or extra (blink), then Intel HEX. `s" blink" s" 1" option:` with `s" image" s" release" option:` appends `firmware/blink.fs`. Kernel is the console; the app stays in `firmware/`. `soc.4th` names no cpu id; the CG emitter branches.
 
 fsoc/kit.4th    Core kit: file names, cell width, stack depths, RAM words. The kit does not name the image tool
 fsoc/compare.4th One scenario, several `cpu:` rows: cell width, image bytes, Verilator cycles. No synthesis. A row stays empty when that profile cannot build an image
-firmware/       lamp.fs (J1 lamp loop), midi_foot.4th (host mock, stub)
-tools/          fterm.4th line terminal (device path, or mock without a path); peek.sh queries trace.vcd with WavePeek
+firmware/       lamp.fs (J1 lamp loop), blink.fs (AVR Forth on kernel), blink_avr.4th (fasm blink), midi_foot.4th (host mock, stub)
+tools/          fterm.4th line terminal (device path, or mock without a path); avr-con simavr UART console for ATmega8 HEX; peek.sh queries trace.vcd with WavePeek
 ```
 
-Blinky is one task (`rtl/blinky.v` + fhdlgen `top`; emulation `main` is `fsoc/tasks/blinky_main.cpp`, not a file in `emu/`). Working solutions live under `projects/`: `blinky_emul` (Verilator realtime until Ctrl+C; `emu/con` prints `t=<ns> pin led <value>` on change; `con_uart` for a decoded serial byte; `FSOC_EMU_TRACE=1` at `--build` writes `trace.vcd`, 4096 cycles or `FSOC_EMU_CYCLES` if longer, then `"$FSOC_HOME/tools/peek.sh"`; skill `.cursor/skills/wavepeek`), `blinky_terasic_de0nano` (Quartus `.qsf`, default `LED_BIT` 25). `soc_emul` runs SwapForth J1a: on a tty the session is text and the reply ends with ` ok`; `FSOC_EMU_CON=log` keeps the byte log. `soc_emul_colorlight_5a_75e_v6_0` is that console at the Colorlight 25 MHz clock; UART stays in the simulator. Firmware is written by `Vtop_feed` (`dump` → `$writememh`), not by a C++ RAM snapshot. `soc_blink` runs a `'BOOT` loop that stores `0` and `1` at `IO-LED` and waits on `IO-TIMER` (`csr.fs`). `FSOC_EMU_CON=term` shows the lamp text, `FSOC_EMU_CON=pin` shows only `pin led` `0` and `1`. A short lamp run uses `FSOC_EMU_CYCLES` (tests use 800000). Background and an interrupt controller stay a later step in `doc/stm8ef-hw.md`. Each project dir is a working copy: git has only `target.4th` (`s" <task>" task:`, `s" <target>" target:`, `s" <board>" board:`, `s" <path>" design:`, `s" <id>" cpu:`, `s" <id>" sys:`, `s" <name>" s" <value>" option:`). `--build` writes leaves, `top.v`, firmware, and scripts there; they must not be committed. Debug task and design on `emulation`; a board project reuses the same design with `quartus` + `board:`. Run `fsoc --build` from that directory: task emit → target emit → target run; `--load` → target load. `--clean` deletes that output and keeps `target.4th`. Tasks register with `task-register`, targets with `target-register`; the CLI knows no task name. Repository files are resolved only from `FSOC_HOME` (`fsoc-path`); nothing guesses `../../`. Tests build in temporary directories (`tests/fixture.4th`) and never write into `projects/*`. `always` is not generated from Forth strings.
+Blinky (no Forth) lives under `projects/baremetal/`. HDL copies omit `cpu:`. AVR is the same task `blinky` with `s" avr" cpu:` (`projects/baremetal/blinky_atmega`, PB0 via `firmware/blink_avr.4th`). `soc_emul` runs SwapForth J1a: on a tty the session is text and the reply ends with ` ok`; `FSOC_EMU_CON=log` keeps the byte log. `soc_emul_colorlight_5a_75e_v6_0` is that console at the Colorlight 25 MHz clock; UART stays in the simulator. Firmware is written by `Vtop_feed` (`dump` → `$writememh`), not by a C++ RAM snapshot. `soc_blink` runs a `'BOOT` loop that stores `0` and `1` at `IO-LED` and waits on `IO-TIMER` (`csr.fs`). `FSOC_EMU_CON=term` shows the lamp text, `FSOC_EMU_CON=pin` shows only `pin led` `0` and `1`. A short lamp run uses `FSOC_EMU_CYCLES` (tests use 800000). Background and an interrupt controller stay a later step in `doc/stm8ef-hw.md`. Each project dir is a working copy: git has only `target.4th` (`s" <task>" task:`, `s" <target>" target:`, `s" <board>" board:`, `s" <path>" design:`, `s" <id>" cpu:`, `s" <id>" sys:`, `s" <name>" s" <value>" option:`). `--build` writes leaves, `top.v`, firmware, and scripts there; they must not be committed. Debug task and design on `emulation`; a board project reuses the same design with `quartus` + `board:`. Run `fsoc --build` from that directory: task emit → target emit → target run; `--load` → target load. `--clean` deletes that output and keeps `target.4th`. Tasks register with `task-register`, targets with `target-register`; the CLI knows no task name. Repository files are resolved only from `FSOC_HOME` (`fsoc-path`); nothing guesses `../../`. Tests build in temporary directories (`tests/fixture.4th`) and never write into `projects/*`. `always` is not generated from Forth strings.
 ## Commands
 
 ```bash
 fmix packages.get
-fmix test
+fmix test                # avr_con_test needs simavr + libsimavr-dev; skips if missing
 fsoc version             # needs FSOC_HOME + PATH (see feco shell-setup)
-cd projects/blinky_emul && fsoc --build
+cd projects/baremetal/blinky_emul && fsoc --build
+cd projects/baremetal/blinky_atmega && fsoc --build
 cd projects/soc_emul && fsoc --build
 cd projects/soc_emul_colorlight_5a_75e_v6_0 && fsoc --build
 cd projects/soc_terasic_de0nano && fsoc --build
 cd projects/soc_blink_colorlight_5a_75e_v6_0 && fsoc --build
-cd projects/blinky_terasic_de0nano && fsoc --build
+cd projects/baremetal/blinky_terasic_de0nano && fsoc --build
 ```
 
 Quartus is optional (often missing in WSL). Verilator covers blinky and the SwapForth session; Icarus covers the rtl/ testbenches.
@@ -46,3 +47,7 @@ Quartus is optional (often missing in WSL). Verilator covers blinky and the Swap
 Non-trivial changes: OpenSpec in `openspec/`. Before commit: `fmix test`, `flint`, `fcov`.
 
 A value the build shows or uses comes from the project: a file it copies, generates, cross-compiles, or feeds. If that source is not found, do not hardcode a stand-in list or name. Stop and ask where the data comes from and how to use it.
+
+## New CPU / MCU
+
+A new ISA is a new `cpu:` id (FMAP + CG) with the same fsys layers as j1a/j1b/avr: `fsys/fasm/<id>/` → `fsys/kernel/<id>/` (Forth console, not blink) → `fsys/host/<id>-cross.4th` → `fsys/<id>/extra.4th` → `firmware/*.fs`. A new chip of an existing ISA is only a part file under fasm. Empty `sys:` is swapforth; an MCU without SwapForth requires `s" fsys" sys:`. Branch by CG in the existing emitter, not by a cpu id literal in `soc.4th`. Baremetal LED is task `blinky` plus `cpu:`, fasm is the assembler. AVR `--build` prints Hardware `atmega8(avr)` then Software `firmware.hex: N bytes of flash`. Agent rule: `.cursor/rules/fsoc-cpu-target.mdc`. Specs: `openspec/specs/forth-cross/spec.md`, `openspec/specs/fsys/spec.md`.

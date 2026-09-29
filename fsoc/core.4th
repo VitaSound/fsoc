@@ -17,6 +17,7 @@ s" platform.4th" included
 s" ../targets/emulation.4th" included
 s" ../targets/quartus.4th" included
 s" ../targets/yosys.4th" included
+s" ../targets/proteus.4th" included
 s" soc/region.4th" included
 s" soc/iomap.4th" included
 s" soc/nor.4th" included

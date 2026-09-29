@@ -28,7 +28,16 @@ s" stm8" cpu-find cpu.ref$ @ fsoc-fetch s" stm8ef" expect-str-eq
 s" z80" cpu-find cpu.class @ 2 expect=
 s" z80" cpu-find cpu.cg$ @ fsoc-fetch s" F" expect-str-eq
 s" z80" cpu-find cpu.ref$ @ fsoc-fetch s" cerberus-z80" expect-str-eq
-s" E" cg-find cg.emit @ s" F" cg-find cg.emit @ = expect-true
+s" avr" cpu-find cpu.class @ 1 expect=
+s" avr" cpu-find cpu.fmap$ @ fsoc-fetch s" D-S-A-M-3-F" expect-str-eq
+s" avr" cpu-find cpu.mm$ @ fsoc-fetch s" D" expect-str-eq
+s" avr" cpu-find cpu.exc$ @ fsoc-fetch s" S" expect-str-eq
+s" avr" cpu-find cpu.cg$ @ fsoc-fetch s" F" expect-str-eq
+s" avr" cpu-find cpu.bm$ @ fsoc-fetch s" C" expect-str-eq
+s" avr" cpu-find cpu.width @ 16 expect=
+s" avr" cpu-find cpu.ref$ @ fsoc-fetch s" atmega8" expect-str-eq
+s" E" cg-find cg.emit @ s" F" cg-find cg.emit @ = expect-false
+s" F" cg-find 0<> expect-true
 s" I" cg-find cg.emit @ s" E" cg-find cg.emit @ = expect-false
 s" no-such-cpu" cpu-find 0= expect-true
 
@@ -72,6 +81,8 @@ s" grep -Eq 'swapforth/j1a|cpu/j1/j1a' fsoc/tasks/soc.4th" system
 $? 0= expect-false
 s" grep -Eq 'stm8|z80' fsoc/tasks/soc.4th" system
 $? 0= expect-false
+s" grep -q avr fsoc/tasks/soc.4th" system
+$? 0= expect-false
 
 project-new
 s" soc" task:
@@ -104,6 +115,53 @@ expect-false
 s" z80" s" sim.log" tmp-grep? expect-true
 s" gforth cross.fs" s" sim.log" tmp-grep? expect-false
 s" forth.asm" tmp-exists? expect-false
+s" firmware.hex" tmp-exists? expect-false
+test-teardown
+
+s\" s\" soc\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\n" cpu-build
+expect-false
+s" avr needs fsys" s" sim.log" tmp-grep? expect-true
+s" firmware.hex" tmp-exists? expect-false
+test-teardown
+
+s\" s\" soc\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\ns\" fsys\" sys:\n" cpu-build
+expect-true
+s" Hardware" s" sim.log" tmp-grep? expect-true
+s" atmega8(avr)" s" sim.log" tmp-grep? expect-true
+s" image tool: fsys" s" sim.log" tmp-grep? expect-true
+s" firmware.hex:" s" sim.log" tmp-grep? expect-true
+s" bytes of 8192" s" sim.log" tmp-grep? expect-true
+s" ATmega8 Intel HEX" s" sim.log" tmp-grep? expect-false
+s" open firmware.hex in Proteus" s" sim.log" tmp-grep? expect-true
+s" fsys/avr/extra-min.4th" s" sim.log" tmp-grep? expect-true
+s" fsys/avr/extra.4th" s" sim.log" tmp-grep? expect-false
+s" firmware/blink.fs" s" sim.log" tmp-grep? expect-false
+s" gforth cross.fs" s" sim.log" tmp-grep? expect-false
+s" :00000001FF" s" firmware.hex" tmp-grep? expect-true
+s" 6C696E6B206F" s" firmware.hex" tmp-grep? expect-false
+s" B89A" s" firmware.hex" tmp-grep? expect-false
+test-teardown
+
+s\" s\" soc\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\ns\" fsys\" sys:\ns\" blink\" s\" 1\" option:\ns\" image\" s\" release\" option:\n" cpu-build
+expect-true
+s" fsys/avr/extra.4th" s" sim.log" tmp-grep? expect-true
+s" fsys/avr/release.4th" s" sim.log" tmp-grep? expect-true
+s" firmware/blink.fs" s" sim.log" tmp-grep? expect-true
+s" fsys/avr/extra-min.4th" s" sim.log" tmp-grep? expect-false
+s" grep -aq 6C696E6B206F firmware.hex" in-tmp-sh expect-true
+s" gforth cross.fs" s" sim.log" tmp-grep? expect-false
+test-teardown
+
+s\" s\" blinky\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\n" cpu-build
+expect-true
+s" Hardware" s" sim.log" tmp-grep? expect-true
+s" atmega8(avr)" s" sim.log" tmp-grep? expect-true
+s" image tool: fasm" s" sim.log" tmp-grep? expect-true
+s" firmware/blink_avr.4th" s" sim.log" tmp-grep? expect-true
+s" bytes of 8192" s" sim.log" tmp-grep? expect-true
+s" :00000001FF" s" firmware.hex" tmp-grep? expect-true
+s" quit" s" firmware.hex" tmp-grep? expect-false
+s" gforth cross.fs" s" sim.log" tmp-grep? expect-false
 test-teardown
 
 test-setup

@@ -3,11 +3,17 @@
 
 [IFUNDEF] fasm-pc
 
-16384 constant fasm-cap
+\ ATmega2560 flash is 131072 words. The buffer covers that part.
+131072 constant fasm-cap
 create fasm-buf  fasm-cap cells allot
 variable fasm-pc
 variable fasm-pack?
 variable fasm-max
+
+\ A comma word occupies one cell unless an assembler says otherwise.
+: fasm-span1 ( c-addr u -- n ) 2drop 1 ;
+defer fasm-span
+' fasm-span1 is fasm-span
 
 1024 constant fasm-label-max
 create fasm-label-adr  fasm-label-max cells allot
@@ -88,8 +94,9 @@ variable fasm-tok-u
             fasm-pc @ fasm-label!
         else
             [char] , fasm-ends if
-                fasm-pc @ fasm-max @ u>= abort" fasm: image full"
-                1 fasm-pc +!
+                2dup fasm-span
+                fasm-pc @ over + fasm-max @ u> abort" fasm: image full"
+                fasm-pc +!
             then
             2drop
         then

@@ -5,7 +5,7 @@ s" fixture.4th" included
 
 \ --- emulation: short divider for CI; interactive uses the RTL default ---
 test-setup
-s" blinky_emul" tmp-use-project
+s" baremetal/blinky_emul" tmp-use-project
 s\" s\" led-bit\" s\" 4\" option:" tmp-manifest+
 s" FSOC_EMU_EDGES=2 FSOC_EMU_FAST=1" s" --build" in-tmp-fsoc expect-true
 
@@ -34,7 +34,7 @@ test-teardown
 
 \ --- emulation: optional VCD when FSOC_EMU_TRACE is set at build ---
 test-setup
-s" blinky_emul" tmp-use-project
+s" baremetal/blinky_emul" tmp-use-project
 s\" s\" led-bit\" s\" 4\" option:" tmp-manifest+
 s" FSOC_EMU_TRACE=1 FSOC_EMU_EDGES=2 FSOC_EMU_FAST=1" s" --build" in-tmp-fsoc expect-true
 s" pin led 0" s" sim.log" tmp-grep? expect-true
@@ -48,7 +48,7 @@ test-teardown
 
 \ --- quartus: terasic_de0nano ---
 test-setup
-s" blinky_terasic_de0nano" tmp-use-project
+s" baremetal/blinky_terasic_de0nano" tmp-use-project
 s" " s" --build" in-tmp-fsoc expect-true
 s" blinky.qpf" tmp-exists? expect-true
 s\" QUARTUS_VERSION = \"11.0\"" s" blinky.qpf" tmp-grep? expect-true
@@ -82,7 +82,7 @@ test-teardown
 
 \ --- yosys: colorlight 5A-75E V6.0, files only (no synthesis) ---
 test-setup
-s" blinky_colorlight_5a_75e_v6_0" tmp-use-project
+s" baremetal/blinky_colorlight_5a_75e_v6_0" tmp-use-project
 s" FSOC_SYNTH_SKIP=1" s" --build" in-tmp-fsoc expect-true
 s" blinky.lpf" tmp-exists? expect-true
 s" blinky.qsf" tmp-exists? expect-false

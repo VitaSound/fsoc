@@ -10,6 +10,20 @@
 
 ### Added
 
+- `tests/avr_con_test.4th`: extra-min UART under `tools/avr-con` (simavr). Covers `1 2 + .`, two-digit `.`, `.s` on the next line after `1 2 3`, and `words`. Skips when `simavr` / `libsimavr-dev` are missing.
+
+- HDL `blinky_*` projects live under `projects/baremetal/`. `projects/baremetal/blinky_atmega` is task `blinky` with `s" avr" cpu:`: fasm assembles `firmware/blink_avr.4th` (PB0), no Forth kernel. AVR `--build` prints `Hardware` / `atmega8(avr)` then `Software` / `image tool: fasm` / `firmware.hex: <used> bytes of 8192`.
+
+- How to add another CPU/MCU: always-on rule `.cursor/rules/fsoc-cpu-target.mdc`, skill `add-cpu-target`, and OpenSpec requirements in `forth-cross` / `fsys`. A new `cpu:` id is an ISA family (fasm, kernel console, host cross, extra, firmware). A new chip of the same ISA is a part file under `fsys/fasm/<id>/`. `soc.4th` still names no MCU id; the CG emitter branches.
+
+- ATmega8 profile `avr` (class 1, MM=D, EX-C=S, CG=F, BM=C). Empty `sys:` stops; `s" fsys" sys:` assembles the STC console kernel, host `avr-cross` compiles `fsys/avr/extra-min.4th` (console) or `fsys/avr/extra.4th` (blink), and writes Intel HEX. `s" blink" s" 1" option:` with `s" image" s" release" option:` appends `firmware/blink.fs` (PB0 and USART text), not `fsys/kernel/avr`. `avra` is not called. `z80` still stops before a hex image. Target `proteus` does not launch a simulator. `projects/soc_atmega8` is the extra-min console; `projects/soc_atmega8_blink` is a release blink image. The AVR assembler covers the classic opcode set. `atmega8`, `atmega328p`, and `atmega2560` each carry their own flash, SRAM, EEPROM, vector length, and register addresses. The Proteus schematic is in `doc/atmega8-proteus.md`.
+
+### Fixed
+
+- AVR console hung in Proteus after `ok`: `okmsg` and `wordsw` called Forth `emit` (which pops TOS) as if it were putchar, and `accept` stored TOS instead of the UART byte. A `tx` primitive writes UDR without touching the stack. CR and LF both end a line (VT100 Enter is CR). After extra-min the reset `seed` is patched so `cr` / `type` are in the target dictionary.
+
+### Added
+
 - Colorlight lamp fit table. `python3 doc/j1-word-graph/build.py fit` runs nextpnr for j1a and j1b, full and release, and rewrites `doc/j1-word-graph/soc-fit.md`. The command is not part of `fsoc --build`.
 
 - fsys release image for a named program. `s" fsys" sys:` and `s" image" s" release" option:` next to an application option such as `lamp` load the program's word closure plus `fsys/<cpu>/release.4th`, not the whole dictionary layers. On `projects/soc_blink`, j1a release is `firmware.hex: 2822 bytes of 8192` and debug is `7752 bytes of 8192`. j1b release is `2956 bytes of 32768` and debug is `9156 bytes of 32768`. The lamp still runs; the console compiler stays in the image.
@@ -70,7 +84,7 @@
 
 - Quartus emit writes `<project>.qpf` (`QUARTUS_VERSION` 11.0, `PROJECT_REVISION` equal to the `.qsf` name). Quartus II 11 opens that file; a `.qsf` alone is not in the Open Project list. `FAMILY` is quoted, so `Cyclone IV E` is one assignment value. Each name in `includes.lst` is a `VERILOG_FILE`, and those `` `include `` lines are removed from the top so Quartus does not define the module twice.
 
-- Board `terasic_de0nano`: Terasic DE0-Nano, Cyclone IV E `EP4CE22F17C6` (22320 LEs), pins from litex-boards. Clock `clk50` is `R8` at 50 MHz. `user_led` 0 is `A15`. Serial `tx`/`rx` are `B5`/`B4` (LiteX `JP1:10` / `JP1:8`). Working project: `projects/blinky_terasic_de0nano` on the Quartus target.
+- Board `terasic_de0nano`: Terasic DE0-Nano, Cyclone IV E `EP4CE22F17C6` (22320 LEs), pins from litex-boards. Clock `clk50` is `R8` at 50 MHz. `user_led` 0 is `A15`. Serial `tx`/`rx` are `B5`/`B4` (LiteX `JP1:10` / `JP1:8`). Working project: `projects/baremetal/blinky_terasic_de0nano` on the Quartus target.
 
 ## [0.8.0] - 2026-09-27
 
@@ -123,7 +137,7 @@
 ### Added
 
 - Yosys target: `--build` writes `<project>.lpf`, `build.sh` and `load.sh`, then runs `yosys`, `nextpnr-ecp5` and `ecppack`. Tools already on `PATH` are used as they are. Otherwise the run sources `~/oss-cad-suite/environment` when that install exists. `FSOC_SYNTH_SKIP` writes the files and skips the tools. `load.sh` calls `openFPGALoader` only when the manifest has a `cable` option.
-- Colorlight 5A-75E boards `colorlight_5a_75e_v6_0`, `v7_1` and `v8_2` (package, speed, density, one 25 MHz clock). The working project is `projects/blinky_colorlight_5a_75e_v6_0`.
+- Colorlight 5A-75E boards `colorlight_5a_75e_v6_0`, `v7_1` and `v8_2` (package, speed, density, one 25 MHz clock). The working project is `projects/baremetal/blinky_colorlight_5a_75e_v6_0`.
 - `fsoc --clean` deletes build output in the project directory and keeps `target.4th`. Without that file it stops. `--clean --build` wipes the output and builds again.
 - Optional emulation VCD: `FSOC_EMU_TRACE=1` at `--build` passes Verilator `--trace` for the viewer binary and writes `trace.vcd` (4096 cycles, or `FSOC_EMU_CYCLES` if longer). `tools/peek.sh` sends that file to WavePeek. The skill is `.cursor/skills/wavepeek`.
 

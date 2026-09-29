@@ -34,6 +34,8 @@ The agent skill in this repo is [`.cursor/skills/wavepeek`](.cursor/skills/wavep
 wavepeek skill .cursor/skills/wavepeek
 ```
 
+ATmega8 UART under simavr is optional for a clone. Packages: `simavr`, `libsimavr-dev`, `gcc`. `fmix test` runs [`tests/avr_con_test.4th`](tests/avr_con_test.4th) when those packages are present (skip otherwise). From a built project: `~/fsoc/tools/avr-con ./firmware.hex`. See [ATmega8](#atmega8).
+
 ## Blinky
 
 Blinky is one task. The leaf is [`rtl/blinky.v`](rtl/blinky.v) (`clk` / `led`, `LED_BIT` defaults to 25). [`designs/blinky_top.4th`](designs/blinky_top.4th) includes that file and instantiates it as `top`. Working solutions live under [`projects/`](projects/). **Git tracks only `target.4th` in each directory.** `fsoc --build` emits the rest (`top.v`, leaf copies, `firmware.hex`, `sim.sh` / `.qsf`, `obj_dir`, …) into that directory; `.gitignore` keeps those files out. After a clone, `projects/soc_blink/` is the manifest alone.
@@ -41,9 +43,9 @@ Blinky is one task. The leaf is [`rtl/blinky.v`](rtl/blinky.v) (`clk` / `led`, `
 Debug the task and the design in an `emulation` project (`blinky_emul`, `soc_emul`, `soc_blink`). A board project is the same task and design with `quartus` and `board:` — not a second HDL tree.
 
 ```text
-projects/blinky_emul/                  Verilator realtime, LED_BIT=25, console pin events
-projects/blinky_terasic_de0nano/       Quartus .qsf, Terasic DE0-Nano
-projects/blinky_colorlight_5a_75e_v6_0/  Yosys .lpf, nextpnr-ecp5, ecppack
+projects/baremetal/blinky_emul/                  Verilator realtime, LED_BIT=25, console pin events
+projects/baremetal/blinky_terasic_de0nano/       Quartus .qsf, Terasic DE0-Nano
+projects/baremetal/blinky_colorlight_5a_75e_v6_0/  Yosys .lpf, nextpnr-ecp5, ecppack
 projects/soc_blink_colorlight_5a_75e_v6_0/  lamp image, same board and tools
 ```
 
@@ -68,7 +70,7 @@ s" lamp" s" 1" option:      \ task option
 Emulation is Verilator. `fsoc --build` emits the project and runs in realtime (50 MHz wall pace) until Ctrl+C. The console prints one line per event, not per clock: `t=<ns> pin led <value>` when `led` changes (`LED_BIT=25`, ~0.67 s). The same printer is `con_uart` for a future serial decoder (one line per received byte).
 
 ```bash
-cd projects/blinky_emul
+cd projects/baremetal/blinky_emul
 fsoc --build
 ```
 
@@ -77,7 +79,7 @@ fsoc --build
 Quartus (`--build` writes the project files and does not run Quartus; the task maps `clk50`→`clk` and `user_led`→`led`). Open `<project>.qpf` in Quartus II 11 (`QUARTUS_VERSION` 11.0, revision name equal to the `.qsf`). `FAMILY` is quoted. Each name in `includes.lst` is a `VERILOG_FILE`, and those `` `include `` lines are removed from the top. A board `LVTTL` pin is `IO_STANDARD "3.3-V LVTTL"`. An output also gets `CURRENT_STRENGTH_NEW 8MA` and `SLEW_RATE 2`. `blinky.sdc` is listed as `SDC_FILE` and ends with `derive_clock_uncertainty`. Warning 169177, the AN 447 reminder on a 3.3-V LVTTL input, is suppressed. `--load` programs the board. On emulation `--load` does nothing.
 
 ```bash
-cd projects/blinky_terasic_de0nano
+cd projects/baremetal/blinky_terasic_de0nano
 fsoc --build
 fsoc --build --load
 ```
@@ -85,7 +87,7 @@ fsoc --build --load
 Yosys (`--build` writes the LPF and the scripts, then runs `sh build.sh`). The clock and the LED come from the board (`clk25` on the Colorlight 5A-75E). `yosys` and `nextpnr-ecp5` are taken from `PATH`. If they are not there and `~/oss-cad-suite` is installed, the tool run sources that suite's `environment` itself. `load.sh` calls `openFPGALoader` only when the manifest has `s" cable" s" <name>" option:`. `FSOC_SYNTH_SKIP` skips the tool run and still writes the files. The board database also has revisions 7.1 and 8.2; the working project is 6.0.
 
 ```bash
-cd projects/blinky_colorlight_5a_75e_v6_0
+cd projects/baremetal/blinky_colorlight_5a_75e_v6_0
 fsoc --clean
 fsoc --build
 ```
@@ -129,6 +131,37 @@ cd projects/soc_blink
 FSOC_EMU_CON=term FSOC_EMU_FAST=1 FSOC_EMU_CYCLES=800000 fsoc --build
 FSOC_EMU_CON=pin FSOC_EMU_FAST=1 FSOC_EMU_CYCLES=800000 fsoc --build
 ```
+
+## ATmega8
+
+`projects/soc_atmega8` is a Forth console (`s" fsys" sys:`): kernel plus `fsys/avr/extra-min.4th` (`cr`, `type`, arithmetic helpers), no ports, Intel HEX. `projects/soc_atmega8_blink` packs a **release** image: `s" image" s" release" option:` plus `firmware/blink.fs` (PB0 and USART text) on `fsys/avr/extra.4th`, not extra-min. `projects/baremetal/blinky_atmega` is the same **task** `blinky` as the FPGA copies, with `s" avr" cpu:`: fasm assembles `firmware/blink_avr.4th` (PB0), no kernel. The log prints `Hardware` / `atmega8(avr)` then `Software` / `image tool: fsys` or `fasm` / `firmware.hex: <used> bytes of 8192`. `fsoc --build` does not start Proteus. Clock, LED, and Virtual Terminal are in [doc/atmega8-proteus.md](doc/atmega8-proteus.md).
+
+Proteus with that HEX: USART at 9600 on `PD1`/`PD0` prints `blink on` / `blink off` in the Virtual Terminal.
+
+![ATmega8 in Proteus: Virtual Terminal showing blink on / blink off from blinky_atmega](doc/atmega8-proteus-blinky.jpg)
+
+```bash
+cd projects/soc_atmega8 && fsoc --build
+cd projects/soc_atmega8_blink && fsoc --build
+cd projects/baremetal/blinky_atmega && fsoc --build
+```
+
+On Linux, before Proteus, the UART console is [`tools/avr-con`](tools/avr-con) (simavr). The stock `simavr` CLI does not feed the keyboard to USART, so after `ok` the image waits on `KEY` with no input. Install the packages, then run the wrapper from the project directory that holds `firmware.hex`. First launch compiles `tools/avr-con.bin` with `gcc`.
+
+```bash
+sudo apt install simavr libsimavr-dev gcc
+cd projects/soc_atmega8 && fsoc --build
+~/fsoc/tools/avr-con ./firmware.hex
+```
+
+Type a Forth line and press Enter (sent as CR). Ctrl-D exits. Extra arguments are one-shot lines:
+
+```bash
+~/fsoc/tools/avr-con ./firmware.hex words
+~/fsoc/tools/avr-con ./firmware.hex '1 2 + .'
+```
+
+`simavr` provides `libsimavr.so.2`; `libsimavr-dev` is the headers (`/usr/include/simavr`). Without the -dev package the wrapper looks for headers in `/tmp/simavr-dev/usr/include/simavr`. The same schematic notes and GDB (`simavr -g`) are in [doc/atmega8-proteus.md](doc/atmega8-proteus.md).
 
 ## Data SPI NOR
 

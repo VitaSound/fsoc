@@ -78,13 +78,12 @@ ulist-new fsoc-cgs !
     stderr flush-file throw
     true abort" stopped" ;
 
-\ CG=E and CG=F do not build a hex image in this slice.
+\ CG=E does not build a hex image. CG=F is registered once, later.
 : cg-halt ( project cpu -- )
     nip
     s" has no hex image" cpu-stop ;
 
 s" E" ' cg-halt cg-register
-s" F" ' cg-halt cg-register
 
 \ Copy the current kit onto the current cpu. The kit file is the source.
 : cpu-take-kit ( -- )
@@ -165,3 +164,15 @@ s" S" cpu-exc
 s" F" cpu-cg
 s" C" cpu-bm
 s" cerberus-z80" cpu-ref
+
+\ ATmega8: Harvard MCU, STC colon, host fasm.
+s" avr" cpu-new
+1 cpu-class
+s" D-S-A-M-3-F" cpu-fmap
+s" D" cpu-mm
+s" S" cpu-exc
+s" F" cpu-cg
+s" C" cpu-bm
+16 cpu-width
+s" atmega8" cpu-ref
+s" intel hex" cpu-note

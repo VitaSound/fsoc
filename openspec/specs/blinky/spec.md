@@ -24,7 +24,7 @@
 Логика blinky MUST жить в `rtl/blinky.v`. Топ MUST генерироваться из `designs/blinky_top.4th` и MUST инстанцировать этот лист. Каталога `tasks/` MUST NOT быть.
 
 #### Scenario: Три проекта с собственными копиями
-- **WHEN** собраны `projects/blinky_emul`, `projects/blinky_terasic_de0nano` и `projects/blinky_colorlight_5a_75e_v6_0`
+- **WHEN** собраны `projects/baremetal/blinky_emul`, `projects/baremetal/blinky_terasic_de0nano` и `projects/baremetal/blinky_colorlight_5a_75e_v6_0`
 - **THEN** в каждом есть свой `top.v` и копия `blinky.v`, а источник листа по-прежнему `rtl/blinky.v`
 
 ### Requirement: Эмуляция печатает смену led
@@ -46,7 +46,7 @@
 - **THEN** `.qsf` содержит `FAMILY "Cyclone II"` и `DEVICE EP2C5T144C8`
 
 #### Scenario: Проект Quartus II 11 и DE0-Nano
-- **WHEN** собран `projects/blinky_terasic_de0nano`
+- **WHEN** собран `projects/baremetal/blinky_terasic_de0nano`
 - **THEN** `blinky.qpf` содержит `QUARTUS_VERSION = "11.0"` и `PROJECT_REVISION = "blinky"`, `blinky.qsf` содержит `PIN_R8 -to clk`, `PIN_A15 -to led`, `DEVICE EP4CE22F17C6`, `FAMILY "Cyclone IV E"`, `VERILOG_FILE blinky.v` и `VERILOG_FILE top.v`, а `top.v` платы не содержит `` `include ``
 
 ### Requirement: Такт blinky берётся с платы
@@ -57,8 +57,15 @@
 - **THEN** `blinky.sdc` содержит `create_clock -name clk -period 20.000` и `derive_clock_uncertainty`, а `blinky.qsf` содержит `SDC_FILE blinky.sdc`
 
 #### Scenario: LPF Colorlight V6.0
-- **WHEN** собран `projects/blinky_colorlight_5a_75e_v6_0` с `FSOC_SYNTH_SKIP=1`
+- **WHEN** собран `projects/baremetal/blinky_colorlight_5a_75e_v6_0` с `FSOC_SYNTH_SKIP=1`
 - **THEN** `blinky.lpf` содержит `SITE "P6"`, `SITE "T6"` и `FREQUENCY PORT "clk" 25.000 MHz`
+
+### Requirement: HDL-blinky собирается из baremetal
+Эмуляция, Quartus и Yosys для задачи `blinky` MUST читать манифест из `projects/baremetal/`.
+
+#### Scenario: Три проекта под baremetal
+- **WHEN** собраны `projects/baremetal/blinky_emul`, `projects/baremetal/blinky_terasic_de0nano` и `projects/baremetal/blinky_colorlight_5a_75e_v6_0`
+- **THEN** в каждом есть свой `top.v` и копия `blinky.v`, а источник листа по-прежнему `rtl/blinky.v`
 
 ### Requirement: Канал uart того же вида
 Канал UART MUST оставаться в общей консоли рядом с `con_pin`. В виде `log` декодированный байт MUST печататься строкой `t=<ns> uart <имя> <байт>`. Blinky этот канал MUST NOT вызывать и экран строки набора MUST NOT открывать. Строки `pin` MUST печататься по-прежнему: `t=<ns> pin led <значение>` только при смене уровня.

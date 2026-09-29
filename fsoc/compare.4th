@@ -360,8 +360,8 @@ variable cmp-seen?
     p-a p-u fjson.str-free ;
 
 \ Emulation only, and only when this profile can build an image.
-\ A synthesis toolchain is recorded and not launched. CG other than I
-\ has no hex image, so its cycles cell stays empty.
+\ A synthesis toolchain is recorded and not launched. Only CG=I is
+\ launched, so any other profile leaves the cycle cell empty.
 : cmp-live? { cpu tool-a tool-u -- flag }
     tool-a tool-u s" emulation" compare 0= 0= IF false EXIT THEN
     cpu cpu.cg$ @ fsoc-fetch s" I" compare 0= 0= IF false EXIT THEN

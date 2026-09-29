@@ -18,11 +18,19 @@
 - **THEN** кросс читает `swapforth/j1a/nuc.fs`
 
 ### Requirement: Излучатель выбирается по CG
-Профиль MUST хранить класс, строку FMAP, MM, EX-C, CG и BM. Сборка образа MUST вызывать излучатель, зарегистрированный для CG этого профиля. Профили `j1a` и `j1b` MUST иметь класс 0, MM=V, EX-C=V, CG=I, BM=C. Профиль `stm8` MUST иметь класс 1 и CG=E. Профиль `z80` MUST иметь класс 2 и CG=F. CG=E и CG=F MUST NOT собирать hex в этом срезе.
+Профиль MUST хранить класс, строку FMAP, MM, EX-C, CG и BM. Сборка образа MUST вызывать излучатель, зарегистрированный для CG этого профиля. Профили `j1a` и `j1b` MUST иметь класс 0, MM=V, EX-C=V, CG=I, BM=C. Профиль `stm8` MUST иметь класс 1 и CG=E. Профиль `z80` MUST иметь класс 2 и CG=F. Профиль `avr` MUST иметь класс 1, MM=D, EX-C=S, CG=F и BM=C. CG=E MUST NOT собирать hex. CG=F MUST писать Intel HEX только для `avr` при `s" fsys" sys:`. Для `z80` сборка MUST останавливаться до hex. Для `avr` без `fsys` сборка MUST останавливаться до hex.
 
 #### Scenario: Каркас без образа
 - **WHEN** манифест содержит `s" stm8" cpu:` или `s" z80" cpu:`
 - **THEN** сборка останавливается до запуска `gforth`, и в дереве нет скопированного `forth.asm`
+
+#### Scenario: ATmega8 пишет Intel HEX
+- **WHEN** манифест содержит `s" soc" task:`, `s" proteus" target:`, `s" avr" cpu:`, `s" fsys" sys:` и выполняется `fsoc --build`
+- **THEN** `firmware.hex` — Intel HEX с записью `:00000001FF`, в журнале нет `gforth cross.fs`, и симулятор Proteus не запускается
+
+#### Scenario: Текст blink
+- **WHEN** к манифесту `avr` с `s" fsys" sys:` добавлено `s" blink" s" 1" option:` и `s" image" s" release" option:` и выполняется `fsoc --build`
+- **THEN** `firmware.hex` содержит байты строки `blink on`
 
 ### Requirement: J1B не затирает J1a
 Исходники J1B MUST быть взяты из каталога `original/j1b` репозитория wzab/AFCK_J1B_FORTH: `cross.fs`, `basewords.fs`, `nuc.fs`, `swapforth.fs`, `verilog/j1.v`, `verilog/stack.v`, `verilog/common.h`. Файл ядра в fsoc MUST называться `j1b.v` и лежать в комплекте `cpu/j1/j1b/`. Существующий `cpu/j1/j1a/j1.v` MUST остаться с `` `define WIDTH 16 ``. VHDL, I2C и проект Vivado платы AFCK MUST NOT копироваться. Рядом MUST лежать текст лицензии BSD Боумана.
@@ -59,3 +67,31 @@
 #### Scenario: В kit нет каталога swapforth
 - **WHEN** читаются `cpu/j1/j1a/kit.4th` и `cpu/j1/j1b/kit.4th`
 - **THEN** в них нет строки `swapforth` и нет слова, которое подставляет путь кросса
+
+### Requirement: Новый id процессора — семейство ISA
+Новый идентификатор `cpu:` MUST означать новое семейство ISA. Профиль в `fsoc/cpu.4th` MUST задавать класс FMAP, MM, EX-C, CG и BM. Другой корпус того же ISA (`atmega328p` рядом с `atmega8`) MUST быть файлом части в `fsys/fasm/<id>/` и MUST NOT быть новым `cpu:`.
+
+#### Scenario: Чип не есть новый cpu
+- **WHEN** в репозитории есть `fsys/fasm/avr/atmega328p.4th` и `fsys/fasm/avr/atmega8.4th`
+- **THEN** зарегистрированный id профиля остаётся `avr`, и отдельного `cpu:` для 328p нет
+
+### Requirement: Сборка MCU ветвится по CG
+Задача `soc` MUST выбирать излучатель по полю CG профиля. `fsoc/tasks/soc.4th` MUST NOT ветвить сборку по литералу id MCU (`avr`, `stm8`, `z80` и любому следующему). Ветвление по CG MUST жить в уже зарегистрированном излучателе (`cg-f.4th` для CG=F, путь CG=I для J1). Новый CG=F с `fsys` MUST писать Intel HEX тем же излучателем CG=F.
+
+#### Scenario: soc.4th не знает MCU-профили
+- **WHEN** читается `fsoc/tasks/soc.4th`
+- **THEN** в нём нет литерала `avr` и нет литерала `stm8` как ветвления сборки образа
+
+### Requirement: MCU без SwapForth требует fsys
+Пустое `sys:` MUST оставаться `swapforth`. Профиль без дерева SwapForth MUST требовать `s" fsys" sys:` и MUST останавливать сборку при пустом `sys:`. CG=E MUST NOT писать hex, пока профиль не сменит CG.
+
+#### Scenario: AVR без fsys останавливается
+- **WHEN** манифест содержит `s" avr" cpu:` без `sys:` и выполняется `fsoc --build`
+- **THEN** сборка останавливается до записи hex
+
+### Requirement: AVR печатает Hardware и Software
+Сборка образа AVR MUST напечатать `Start build`, `Hardware`, строку `atmega8(avr)`, `Hardware complete`, `Software`, `image tool: fsys` или `image tool: fasm`, пути собранных исходников, `firmware.hex: <байт> bytes of <ёмкость flash>`, `Software complete`. Ёмкость MUST быть `avr-flash` в байтах (у ATmega8 — 8192). Строка `ATmega8 Intel HEX` MUST NOT печататься.
+
+#### Scenario: Консоль AVR называет чип и размер
+- **WHEN** манифест содержит `s" soc" task:`, `s" proteus" target:`, `s" avr" cpu:`, `s" fsys" sys:` и выполняется `fsoc --build`
+- **THEN** в журнале есть `atmega8(avr)`, `image tool: fsys` и `bytes of 8192`

@@ -10,11 +10,11 @@
 Билдер MUST выполняться в текущем каталоге и MUST NOT переходить в корень репозитория. Идентичность проекта MUST читаться из `target.4th` в этом каталоге словами манифеста: `s" <задача>" task:`, `s" <таргет>" target:`, `s" <плата>" board:` (пустая строка — без платы), `s" <путь>" design:`, `s" <id>" cpu:`, `s" <id>" sys:`, `s" <имя>" s" <значение>" option:`. Слова манифеста MUST жить в ядре билдера и MUST NOT быть словами задачи. Билдер MUST остановиться с ошибкой, если `task:` или `target:` отсутствуют. Пустое `sys:` MUST NOT быть ошибкой и MUST означать `swapforth`. Неизвестный id в `sys:` MUST останавливать сборку до кросса.
 
 #### Scenario: Сборка эмуляции blinky
-- **WHEN** в `projects/blinky_emul` лежит `target.4th` со строками `s" blinky" task:` и `s" emulation" target:` и выполняется `fsoc --build`
+- **WHEN** в `projects/baremetal/blinky_emul` лежит `target.4th` со строками `s" blinky" task:` и `s" emulation" target:` и выполняется `fsoc --build`
 - **THEN** в этом каталоге появляются `top.v`, `blinky.v` и `sim.sh`, Verilator компилируется и реалтайм-просмотр идёт до Ctrl+C
 
 #### Scenario: Сборка платы
-- **WHEN** в `projects/blinky_terasic_de0nano` лежит `target.4th` со строками `s" blinky" task:`, `s" quartus" target:`, `s" terasic_de0nano" board:` и выполняется `fsoc --build`
+- **WHEN** в `projects/baremetal/blinky_terasic_de0nano` лежит `target.4th` со строками `s" blinky" task:`, `s" quartus" target:`, `s" terasic_de0nano" board:` и выполняется `fsoc --build`
 - **THEN** в этом каталоге появляются `top.v`, `blinky.qpf`, `blinky.qsf`, `blinky.sdc`, `build.sh` и `load.sh`, а Quartus не запускается
 
 #### Scenario: Опция проекта
@@ -37,11 +37,11 @@
 `fsoc --build --load` MUST сначала выполнить сборку, затем прошивку. На эмуляции `--load` MUST игнорироваться без ошибки. На проекте с платой `--load` MUST запустить `load.sh`.
 
 #### Scenario: Оба флага на плате
-- **WHEN** в `projects/blinky_terasic_de0nano` выполняется `fsoc --build --load`
+- **WHEN** в `projects/baremetal/blinky_terasic_de0nano` выполняется `fsoc --build --load`
 - **THEN** сначала записываются файлы проекта, затем выполняется `load.sh`
 
 #### Scenario: Load на эмуляции
-- **WHEN** в `projects/blinky_emul` выполняется `fsoc --build --load`
+- **WHEN** в `projects/baremetal/blinky_emul` выполняется `fsoc --build --load`
 - **THEN** сборка и реалтайм-просмотр идут как при одном `--build`, а `--load` ничего не печатает как ошибку и не меняет код возврата
 
 ### Requirement: Диспетчер не знает имя задачи
@@ -88,7 +88,7 @@
 Библиотека MUST находить файлы репозитория (`rtl/`, `cpu/`, `emu/`, `firmware/`, `designs/`, `boards/`, `fsoc/`) только через `FSOC_HOME`. Слово MUST NOT пробовать несколько относительных префиксов, чтобы угадать каталог вызывающего. Каталог проекта MUST читаться один раз как текущий каталог и передаваться дальше в манифесте. Без `FSOC_HOME` билдер MUST остановиться с сообщением об этом.
 
 #### Scenario: Один и тот же лист из проекта и из теста
-- **WHEN** `fsoc --build` запущен из `projects/blinky_emul`, а `fmix test` из корня репозитория, и оба задают `FSOC_HOME`
+- **WHEN** `fsoc --build` запущен из `projects/baremetal/blinky_emul`, а `fmix test` из корня репозитория, и оба задают `FSOC_HOME`
 - **THEN** в обоих случаях скопирован `rtl/blinky.v` из `FSOC_HOME`, и `cmp` копии с оригиналом успешен
 
 #### Scenario: FSOC_HOME не задан
@@ -103,7 +103,7 @@
 - **THEN** предупреждений нет, и `rg "pick3|ulist-head|unode-" fsoc/ targets/ designs/` пусто
 
 #### Scenario: Лог сборки одинаков для задач
-- **WHEN** выполняется `fsoc --build` в `projects/blinky_emul` и в `projects/soc_emul`
+- **WHEN** выполняется `fsoc --build` в `projects/baremetal/blinky_emul` и в `projects/soc_emul`
 - **THEN** оба лога начинаются со строки `fsoc: <имя каталога> - Start build`
 
 ### Requirement: Тесты не трогают рабочие каталоги
@@ -131,3 +131,10 @@
 #### Scenario: Консоль на эмуляции с платой
 - **WHEN** в `projects/soc_emul_colorlight_5a_75e_v6_0` выполняется `fsoc --build` с `FSOC_EMU_FAST=1` и `FSOC_EMU_UART_IN`, равным `1 2 + .`
 - **THEN** каталог содержит `sim.sh` и не содержит `soc.qsf` и `soc.lpf`, а `fsoc/tasks/soc.4th` не сравнивает имя таргета со строками `quartus`, `emulation` и `yosys`
+
+### Requirement: Blinky без Forth лежит в baremetal
+Рабочие копии задачи `blinky` MUST жить в `projects/baremetal/<имя>/`. Git MUST хранить только `target.4th` на втором уровне. `projects/soc_*` MUST оставаться прямо в `projects/`.
+
+#### Scenario: Манифест HDL-blinky не игнорируется
+- **WHEN** выполняется `git check-ignore -q projects/baremetal/blinky_emul/target.4th`
+- **THEN** код возврата не 0

@@ -3,12 +3,18 @@ build/
 # writes top.v, firmware.hex, sim.sh, .qsf, obj_dir, … locally.
 projects/*
 !projects/*/
+!projects/baremetal/
 projects/*/*
 !projects/*/target.4th
+projects/baremetal/*
+!projects/baremetal/*/
+projects/baremetal/*/*
+!projects/baremetal/*/target.4th
 forth-packages/
 .fcov/
 .fmcp/
 *.o
+tools/avr-con.bin
 out.vcd
 trace.vcd
 /tmp/

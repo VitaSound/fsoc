@@ -4,7 +4,7 @@
 
 - Platform DSL and three boards
 - Quartus + Verilator emit; `fsoc --build` / `--load` from the project directory, `target.4th` names task, target, board
-- Blinky vertical slice: `rtl/blinky.v`, `designs/blinky_top.4th`, `projects/blinky_emul`, `blinky_terasic_de0nano`
+- Blinky vertical slice: `rtl/blinky.v`, `designs/blinky_top.4th`, `projects/baremetal/blinky_emul`, `blinky_terasic_de0nano`
 - SwapForth J1a cross-compiled from source, `projects/soc_emul` answers a line with ` ok`; ncurses terminal, `FSOC_EMU_CON` views
 - `regio` and interval `timer` on the J1 `io` bus (`h# 400`, `h# 800`), `'BOOT` cell, `projects/soc_blink` lamp loop
 - Stubs awaiting hardware: `firmware/midi_foot.4th` (host mock of FOOTSWITCH-SCAN)
@@ -13,8 +13,8 @@
 ## Blinky architecture (current)
 
 - Task: leaf [`rtl/blinky.v`](../rtl/blinky.v) (`clk` / `led`, `LED_BIT` default 25) plus [`designs/blinky_top.4th`](../designs/blinky_top.4th)
-- Working solutions under [`projects/`](../projects/): `blinky_emul` (Verilator realtime until Ctrl+C; [`emu/con.h`](../emu/con.h) prints `t=<ns> pin led <value>` on change), `blinky_terasic_de0nano`, `blinky_colorlight_5a_75e_v6_0` (Yosys / nextpnr-ecp5)
-- Emit: from `projects/blinky_emul`, `fsoc --build` (sim.sh from [`targets/emulation.4th`](../targets/emulation.4th), then Verilator until Ctrl+C); from a Quartus board project, `fsoc --build` (`.qsf` from [`targets/quartus.4th`](../targets/quartus.4th)); from the Colorlight project, `fsoc --build` (`.lpf` from [`targets/yosys.4th`](../targets/yosys.4th), then synthesis). The task maps the board clock to `clk` and `user_led` to `led`. Task and board are in `target.4th`
+- Working solutions under [`projects/baremetal/`](../projects/baremetal/): `blinky_emul` (Verilator realtime until Ctrl+C; [`emu/con.h`](../emu/con.h) prints `t=<ns> pin led <value>` on change), `blinky_terasic_de0nano`, `blinky_colorlight_5a_75e_v6_0` (Yosys / nextpnr-ecp5), `blinky_atmega` (AVR fasm HEX)
+- Emit: from `projects/baremetal/blinky_emul`, `fsoc --build` (sim.sh from [`targets/emulation.4th`](../targets/emulation.4th), then Verilator until Ctrl+C); from a Quartus board project, `fsoc --build` (`.qsf` from [`targets/quartus.4th`](../targets/quartus.4th)); from the Colorlight project, `fsoc --build` (`.lpf` from [`targets/yosys.4th`](../targets/yosys.4th), then synthesis). The task maps the board clock to `clk` and `user_led` to `led`. Task and board are in `target.4th`
 
 ## Path 1 — later (not a blinky blocker)
 

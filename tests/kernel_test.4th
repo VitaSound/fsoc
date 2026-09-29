@@ -72,5 +72,23 @@ s" gforth cross.fs" s" sim.log" tmp-grep? expect-false
 s" swapforth/" s" sim.log" tmp-grep? expect-false
 test-teardown
 
+s" ../fsys/kernel/avr/kernel.4th" included
+s" ../fsys/host/avr-cross.4th" included
+: avr-khas ( c-addr u -- )
+   ax-find 0= expect-false drop drop ;
+s" quit" avr-khas
+s" words" avr-khas
+s" depth" avr-khas
+s" u." avr-khas
+s" ." avr-khas
+s" .s" avr-khas
+s" :" avr-khas
+s" ;" avr-khas
+s" if" avr-khas
+s" then" avr-khas
+s" begin" avr-khas
+s" again" avr-khas
+fasm-pc @ 200 u> expect-true
+
 test-finish
 cr ." kernel_test ok" cr

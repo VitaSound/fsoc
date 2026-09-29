@@ -1,7 +1,5 @@
-\ fsoc/tasks/blinky.4th — blinky task: copy rtl/blinky.v, emit top.v,
-\ name the harness, and map board resources to ports when a board is loaded.
-\ Paths come from FSOC_HOME; the output directory is the project.
-\ Option led-bit → LED_BIT parameter of the leaf (default stays in blinky.v).
+\ fsoc/tasks/blinky.4th — blinky task: Verilog LED, or MCU fasm HEX when cpu: is set.
+\ Option led-bit → LED_BIT of the Verilog leaf. AVR pin is PORTB bit 0 in firmware/blink_avr.4th.
 
 : blinky-design ( project -- c-addr u )
     s" designs/blinky_top.4th" rot project.design-or ;
@@ -39,7 +37,7 @@ variable blinky-clk
     blinky-clk @ io.name$ @ fsoc-fetch blinky-clk @ io.index @ s" clk" quartus-map
     s" user_led" 0 s" led" quartus-map ;
 
-: blinky-emit ( project -- )
+: blinky-hdl ( project -- )
     >r
     s" Start build" fsoc-note
     s" Hardware" fsoc-note
@@ -50,5 +48,20 @@ variable blinky-clk
     r@ blinky-map-board
     s" Hardware complete" fsoc-note
     rdrop ;
+
+defer blinky-mcu
+
+: blinky-mcu-none ( project -- )
+    drop true abort" blinky: no fasm for this cpu" ;
+
+' blinky-mcu-none is blinky-mcu
+
+\ No cpu: → Verilog. cpu: → MCU fasm (CG=F), not a separate task named fasm.
+: blinky-emit ( project -- )
+    dup project.cpu@ nip IF
+        blinky-mcu
+    ELSE
+        blinky-hdl
+    THEN ;
 
 s" blinky" ' blinky-emit task-register

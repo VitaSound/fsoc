@@ -1,0 +1,41 @@
+---
+description: How to add a new fsoc CPU/MCU platform (fsys layers, CG, not a blink HEX)
+alwaysApply: true
+---
+
+# New CPU / MCU platform (fsoc)
+
+Canon: `openspec/specs/forth-cross/spec.md`, `openspec/specs/fsys/spec.md`. Skill: `add-cpu-target`.
+
+A new **ISA family** is a new `cpu:` **id** in `fsoc/cpu.4th` (FMAP class, MM, EX-C, CG, BM). A **chip variant** of an existing family (`atmega328p` next to `atmega8`) is a part file under `fsys/fasm/<id>/`, not a new id.
+
+## Layers (same canvas as j1a / j1b / avr)
+
+| Layer | Path | Role |
+|-------|------|------|
+| Assembler | `fsys/fasm/<id>/` | Comma words only. No dictionary, no `quit`, no app loop. |
+| Kernel | `fsys/kernel/<id>/kernel.4th` | Forth **console** in that fasm: stacks, `@` `!`, UART `KEY`/`EMIT`, `:` `;`, `quit`, `words`, ` ok`. Not blink/lamp. |
+| Host cross | `fsys/host/<id>-cross.4th` | Host compiles Forth into the image. Do **not** reuse J1 ALU ops for an MCU colon. |
+| Extra / release | `fsys/<id>/extra.4th`, `release.4th` | Chip words on the kernel. Not the assembler. |
+| App | `firmware/<name>.fs` | `'BOOT` / I/O loop. Option on the manifest (`lamp`, `blink`). |
+
+`fsys/common` is **one** text for ids whose cross can read it. If it cannot, the cross supplies the same **names** (`if` `then` `variable` …); do not copy `common.4th` per CPU.
+
+## Build wiring
+
+- Manifest `cpu:` picks the profile; **CG** picks the emitter (`cg-register`). `target:` is how it runs (emulation, quartus, proteus).
+- Put **no** new cpu id literal in `fsoc/tasks/soc.4th`. Branch inside the CG file already registered (`cg-f.4th` for CG=F, `soc-cg-i` for CG=I).
+- Empty `sys:` is **swapforth**. An MCU with no SwapForth image **must** require `s" fsys" sys:` and stop otherwise (see `avr`). Baremetal blink is task `blinky` plus `cpu:`; it does not read `sys:`. fasm is the assembler in the log, not a task name.
+- **CG=I** (class 0 J1): Verilog kit under `cpu/j1/<id>/`, image via `soc-fsys` / SwapForth.
+- **CG=F** (class 1/2 MCU, HEX): host fasm + fsys layers, no `Vtop_feed`. The log matches J1: `Hardware` prints `atmega8(avr)`, `Software` prints `firmware.hex: <used> bytes of <flash>`.
+- **CG=E** (stm8 today): no hex; external kernel (e.g. stm8ef). Do not invent a fasm kernel unless the profile changes.
+
+## Do not
+
+- Treat the kernel as “the whole program” (no `sbi DDRB` as `kernel.4th`).
+- Put application source in `fsys/fasm/<id>/`.
+- Mix Gforth hosted idioms into the target kernel without an FMAP/EX-C decision.
+- Import AmForth/FlashForth as the fsoc kernel unless the user names that tool as `sys:`.
+- Hardcode a stand-in word list when the image source is missing — stop and ask.
+
+Example: `avr` = class 1, MM=D, EX-C=S (STC `rcall`/`ret`), CG=F. `j1a` = class 0, MM=V, EX-C=V, CG=I.
