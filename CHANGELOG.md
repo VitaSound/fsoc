@@ -4,6 +4,8 @@
 
 ### Added
 
+- fsys release image for a named program. `s" fsys" sys:` and `s" image" s" release" option:` next to an application option such as `lamp` load the program's word closure plus `fsys/<cpu>/release.4th`, not the whole dictionary layers. On `projects/soc_blink`, j1a release is `firmware.hex: 2822 bytes of 8192` and debug is `7752 bytes of 8192`. j1b release is `2956 bytes of 32768` and debug is `9156 bytes of 32768`. The lamp still runs; the console compiler stays in the image.
+
 - j1b host compiler packs colon bodies two instructions per 32-bit cell. `constant`, `create`, and `variable` keep the literal and `exit` in separate cells and the data at `cfa + 2 cells`, so console `lit!` and `does>` still write a whole cell. `here` at byte 16384 stops the build (`call out of range`). A call of a literal word followed by `@` becomes a literal and `[T]`; `dup @`, `2dup rshift`, and `2dup lshift` fuse on j1b only. `!` stays a call. j1a hex is unchanged (shared 7550, extra-min 8008). j1b shared 8280 of 32768, with extra 8934 (was 11636 and 12692).
 
 - Host fsys dictionary: Gforth on the build machine compiles `fsys/common` (and j1b `extra.4th`, optional j1a `extra-min.4th`) into the kernel image with call shortcut, j1a `@i`, and ALU pairs. The target only runs `firmware.hex`; this path does not use `Vtop_feed`. Console `;` stays call→jump. j1a shared layer 7550 of 8192; with `s" extra-min" s" 1" option:` 8008 (below TIB 8066). j1b shared 11636, with extra 12692 of 32768. Lamp on j1a is 7754. SwapForth j1a full image remains 5006 of 8192 (nuc alone historically 3404).

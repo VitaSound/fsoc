@@ -40,6 +40,11 @@ variable k-at
 
 \ ( name-a name-u flags pc -- ) one dictionary entry, code is a jump
 : k-word { na nu fl pc -- }
+    na nu s" keep-name?" find-name ?dup if
+        name>interpret execute 0= if exit then
+    else
+        2drop
+    then
     fasm-pc @ 2* dup k-at ! { entry }
     k-latest @ fl if 1 or then
     dup $ff and k-b,
@@ -117,7 +122,7 @@ variable k-fid
     s" resolve" 0 s" thenw" k-pc k-word
     s" jump" 0 s" againw" k-pc k-word
     s" immediate" 0 s" immw" k-pc k-word
-    s" um/mod" 0 s" umod" k-pc k-word
+    s" u/mod" 0 s" umod" k-pc k-word
     s" tibc" 0 s" tibc" k-pc k-word
     s" parse-name" 0 s" token" k-pc k-word
     s" namec" 0 s" namecw" k-pc k-word

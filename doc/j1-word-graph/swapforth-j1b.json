@@ -1,0 +1,4649 @@
+{
+  "noop": {
+    "file": "swapforth/j1b/basewords.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": ":: noop      T                       alu ;\n"
+  },
+  "depths": {
+    "file": "swapforth/j1b/basewords.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": ":: depths    status T->N         d+1 alu ;\n"
+  },
+  "2dupand": {
+    "file": "swapforth/j1b/basewords.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": ":: 2dupand   T&N   T->N          d+1 alu ;\n"
+  },
+  "2dup<": {
+    "file": "swapforth/j1b/basewords.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": ":: 2dup<     N<T   T->N          d+1 alu ;\n"
+  },
+  "2dup=": {
+    "file": "swapforth/j1b/basewords.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": ":: 2dup=     N==T  T->N          d+1 alu ;\n"
+  },
+  "2dupor": {
+    "file": "swapforth/j1b/basewords.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": ":: 2dupor    T|N   T->N          d+1 alu ;\n"
+  },
+  "2duprshift": {
+    "file": "swapforth/j1b/basewords.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": ":: 2duprshift N>>T T->N          d+1 alu ;\n"
+  },
+  "2dup+": {
+    "file": "swapforth/j1b/basewords.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": ":: 2dup+     T+N   T->N          d+1 alu ;\n"
+  },
+  "2dupu<": {
+    "file": "swapforth/j1b/basewords.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": ":: 2dupu<    Nu<T  T->N          d+1 alu ;\n"
+  },
+  "2dupxor": {
+    "file": "swapforth/j1b/basewords.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": ":: 2dupxor   T^N   T->N          d+1 alu ;\n"
+  },
+  "dup>r": {
+    "file": "swapforth/j1b/basewords.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": ":: dup>r     T     T->R      r+1     alu ;\n"
+  },
+  "dup@": {
+    "file": "swapforth/j1b/basewords.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": ":: dup@      [T]   T->N          d+1 alu ;\n"
+  },
+  "overand": {
+    "file": "swapforth/j1b/basewords.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": ":: overand   T&N                     alu ;\n"
+  },
+  "over>": {
+    "file": "swapforth/j1b/basewords.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": ":: over>     N<T                     alu ;\n"
+  },
+  "over=": {
+    "file": "swapforth/j1b/basewords.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": ":: over=     N==T                    alu ;\n"
+  },
+  "overor": {
+    "file": "swapforth/j1b/basewords.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": ":: overor    T|N                     alu ;\n"
+  },
+  "over+": {
+    "file": "swapforth/j1b/basewords.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": ":: over+     T+N                     alu ;\n"
+  },
+  "overu>": {
+    "file": "swapforth/j1b/basewords.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": ":: overu>    Nu<T                    alu ;\n"
+  },
+  "overxor": {
+    "file": "swapforth/j1b/basewords.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": ":: overxor   T^N                     alu ;\n"
+  },
+  "rdrop": {
+    "file": "swapforth/j1b/basewords.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": ":: rdrop     T                   r-1 alu ;\n"
+  },
+  "tuck!": {
+    "file": "swapforth/j1b/basewords.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": ":: tuck!     T     N->[T]        d-1 alu ;\n"
+  },
+  "1+": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "+"
+    ],
+    "missing": [],
+    "src": "header 1+       : 1+        d# 1 + ;\n"
+  },
+  "1-": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "+"
+    ],
+    "missing": [],
+    "src": "header 1-       : 1-        d# -1 + ;\n"
+  },
+  "0=": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "="
+    ],
+    "missing": [],
+    "src": "header 0=       : 0=        d# 0 = ;\n"
+  },
+  "cell+": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "+"
+    ],
+    "missing": [],
+    "src": "header cell+    : cell+     d# 4 + ;\n"
+  },
+  "cells": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "lshift"
+    ],
+    "missing": [],
+    "src": "header cells    : cells     d# 2 lshift ;\n"
+  },
+  "<>": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "=",
+      "invert"
+    ],
+    "missing": [],
+    "src": "header <>       : <>        = invert ;\n"
+  },
+  ">": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "swap",
+      "<"
+    ],
+    "missing": [],
+    "src": "header >        : >         swap < ;\n"
+  },
+  "0<": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "<"
+    ],
+    "missing": [],
+    "src": "header 0<       : 0<        d# 0 < ;\n"
+  },
+  "0>": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">"
+    ],
+    "missing": [],
+    "src": "header 0>       : 0>        d# 0 > ;\n"
+  },
+  "0<>": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "<>"
+    ],
+    "missing": [],
+    "src": "header 0<>      : 0<>       d# 0 <> ;\n"
+  },
+  "u>": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "swap",
+      "u<"
+    ],
+    "missing": [],
+    "src": "header u>       : u>        swap u< ;\n"
+  },
+  "key?": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "uart-stat"
+    ],
+    "missing": [],
+    "src": "header key?\n: key?\n    d# 2\n"
+  },
+  "key": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      "key?",
+      "until",
+      "UART-D",
+      "io@"
+    ],
+    "missing": [],
+    "src": "header key\n: key\n    begin\n        key?\n    until\n    UART-D io@\n;\n"
+  },
+  "emit": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      "uart-stat",
+      "until",
+      "UART-D",
+      "io!"
+    ],
+    "missing": [],
+    "src": "header emit\n: emit\n    begin\n        d# 1 uart-stat \n    until\n    UART-D io!\n;\n"
+  },
+  "cr": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "emit"
+    ],
+    "missing": [],
+    "src": "header cr\n: cr\n    d# 13 emit\n    d# 10 emit\n;\n"
+  },
+  "space": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "emit"
+    ],
+    "missing": [],
+    "src": "header space\n: space\n    d# 32 emit\n;\n"
+  },
+  "bl": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [],
+    "missing": [],
+    "src": "header bl\n: bl\n    d# 32\n;\n"
+  },
+  ".x": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "hex8",
+      "space"
+    ],
+    "missing": [],
+    "src": "header .x\n: . hex8 space ;\n"
+  },
+  "false": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [],
+    "missing": [],
+    "src": "header false    : false d# 0 ;\n"
+  },
+  "true": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [],
+    "missing": [],
+    "src": "header true     : true  d# -1 ;\n"
+  },
+  "rot": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "swap",
+      "r>"
+    ],
+    "missing": [],
+    "src": "header rot      : rot   >r swap r> swap ;\n"
+  },
+  "-rot": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "swap",
+      ">r",
+      "r>"
+    ],
+    "missing": [],
+    "src": "header -rot     : -rot  swap >r swap r> ;\n"
+  },
+  "tuck": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "swap",
+      "over"
+    ],
+    "missing": [],
+    "src": "header tuck     : tuck  swap over ;\n"
+  },
+  "2drop": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "drop"
+    ],
+    "missing": [],
+    "src": "header 2drop    : 2drop drop drop ;\n"
+  },
+  "?dup": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "if",
+      "then"
+    ],
+    "missing": [],
+    "src": "header ?dup     : ?dup  dup if dup then ;\n"
+  },
+  "2dup": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "over"
+    ],
+    "missing": [],
+    "src": "header 2dup     : 2dup  over over ;\n"
+  },
+  "+!": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "tuck",
+      "@",
+      "+",
+      "swap",
+      "!"
+    ],
+    "missing": [],
+    "src": "header +!       : +!    tuck @ + swap ! ;\n"
+  },
+  "2swap": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "rot",
+      ">r",
+      "r>"
+    ],
+    "missing": [],
+    "src": "header 2swap    : 2swap rot >r rot r> ;\n"
+  },
+  "2over": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "2dup",
+      "r>",
+      "2swap"
+    ],
+    "missing": [],
+    "src": "header 2over    : 2over >r >r 2dup r> r> 2swap ;\n"
+  },
+  "min": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "2dup<",
+      "if",
+      "drop",
+      "else",
+      "nip",
+      "then"
+    ],
+    "missing": [],
+    "src": "header min      : min   2dup< if drop else nip then ;\n"
+  },
+  "max": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "2dup<",
+      "if",
+      "nip",
+      "else",
+      "drop",
+      "then"
+    ],
+    "missing": [],
+    "src": "header max      : max   2dup< if nip else drop then ;\n"
+  },
+  "c@": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup@",
+      "swap",
+      "lshift",
+      "rshift",
+      "and"
+    ],
+    "missing": [],
+    "src": "header c@\n: c@\n    dup@ swap\n    d# 3 lshift rshift\n    d# 255 and\n;\n"
+  },
+  "uw@": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "dup@",
+      "swap",
+      "and",
+      "lshift",
+      "rshift",
+      "lo16"
+    ],
+    "missing": [],
+    "src": "header uw@\n: uw@\n    dup@ swap\n    d# 2 and d# 3 lshift rshift\n    lo16\n;\n"
+  },
+  "w@": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "uw@",
+      "overand",
+      "if",
+      "+",
+      "then"
+    ],
+    "missing": [],
+    "src": "header w@\n: w@\n    uw@\n    h# 8000 overand if\n        h# -10000 +\n    then\n;\n"
+  },
+  "w!": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "dup>r",
+      "and",
+      "if",
+      "lshift",
+      "r@",
+      "@",
+      "lo16",
+      "else",
+      "hi16",
+      "then",
+      "or",
+      "r>",
+      "!"
+    ],
+    "missing": [],
+    "src": "header w!\n: w! ( u c-addr -- )\n    dup>r d# 2 and if\n        d# 16 lshift\n        r@ @ lo16\n    else\n        lo16\n        r@ @ hi16\n    then\n    or r> !\n;\n"
+  },
+  "c!": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup>r",
+      "and",
+      "if",
+      "lshift",
+      "else",
+      "then",
+      "r@",
+      "uw@",
+      "or",
+      "r>",
+      "w!"
+    ],
+    "missing": [],
+    "src": "header c!\n: c! ( u c-addr -- )\n    dup>r d# 1 and if\n        d# 8 lshift\n        h# 00ff\n    else\n        h# 00ff and\n        h# ff00\n    then\n    r@ uw@ and\n    or r> w!\n;\n"
+  },
+  "count": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "1+",
+      "swap",
+      "c@"
+    ],
+    "missing": [],
+    "src": "header count\n: count\n    dup 1+ swap c@\n;\n"
+  },
+  "bounds": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "over",
+      "+",
+      "swap"
+    ],
+    "missing": [],
+    "src": "header bounds\n: bounds ( a n -- a+n a )\n    over + swap\n;\n"
+  },
+  "type": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "bounds",
+      "begin",
+      "2dupxor",
+      "while",
+      "dup",
+      "c@",
+      "emit",
+      "1+",
+      "repeat",
+      "2drop"
+    ],
+    "missing": [],
+    "src": "header type\n: type\n    bounds\n    begin\n        2dupxor\n    while\n        dup c@ emit\n        1+\n    repeat\n    2drop\n;\n"
+  },
+  "dp": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "dp"
+    ],
+    "missing": [],
+    "src": "header dp    :noname dp ;\n"
+  },
+  "cp": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "cp"
+    ],
+    "missing": [],
+    "src": "header cp    :noname cp ;\n"
+  },
+  "state": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "state"
+    ],
+    "missing": [],
+    "src": "header state :noname state ;\n"
+  },
+  "base": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "base"
+    ],
+    "missing": [],
+    "src": "header base  :noname base ;\n"
+  },
+  ">in": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">in"
+    ],
+    "missing": [],
+    "src": "header >in   :noname >in  ;\n"
+  },
+  "forth": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "forth"
+    ],
+    "missing": [],
+    "src": "header forth :noname forth ;\n"
+  },
+  "tth": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "tethered"
+    ],
+    "missing": [],
+    "src": "\\ tethered mode flag\nheader tth\n: tth\n    tethered\n;\n"
+  },
+  "words": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "forth",
+      "uw@",
+      "begin",
+      "dup",
+      "while",
+      "+",
+      "count",
+      "type",
+      "space",
+      "nextword",
+      "repeat",
+      "drop"
+    ],
+    "missing": [],
+    "src": "header words : words\n    forth uw@\n    begin\n        dup\n    while\n        dup d# 2 +\n        count type\n        space\n        nextword\n    repeat\n    drop\n;\n"
+  },
+  "negate": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "invert",
+      "1+"
+    ],
+    "missing": [],
+    "src": "header negate   : negate    invert 1+ ;\n"
+  },
+  "-": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "negate",
+      "+"
+    ],
+    "missing": [],
+    "src": "header -        : -         negate + ;\n"
+  },
+  "abs": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "0<",
+      "if",
+      "negate",
+      "then"
+    ],
+    "missing": [],
+    "src": "header abs      : abs       dup 0< if negate then ;\n"
+  },
+  "2*": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "lshift"
+    ],
+    "missing": [],
+    "src": "header 2*       : 2*        d# 1 lshift ;\n"
+  },
+  "2/": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "0<",
+      "if",
+      "invert",
+      "rshift",
+      "else",
+      "then"
+    ],
+    "missing": [],
+    "src": "header 2/       : 2/        dup 0< if invert d# 1 rshift invert else d# 1 rshift then ;\n"
+  },
+  "here": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dp",
+      "@"
+    ],
+    "missing": [],
+    "src": "header here     : here      dp @ ;\n"
+  },
+  "depth": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "depths",
+      "and"
+    ],
+    "missing": [],
+    "src": "header depth    : depth     depths h# 1f and ;\n"
+  },
+  "/string": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      ">r",
+      "-",
+      "swap",
+      "r>",
+      "+"
+    ],
+    "missing": [],
+    "src": "header /string\n: /string\n    dup >r - swap r> + swap\n;\n"
+  },
+  "aligned": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "+",
+      "and"
+    ],
+    "missing": [],
+    "src": "header aligned\n: aligned\n    d# 3 + d# -4 and\n;\n"
+  },
+  "d+": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "rot",
+      "+",
+      ">r",
+      "over+",
+      "swap",
+      "over",
+      "u<",
+      "if",
+      "r>",
+      "1+",
+      "else",
+      "then"
+    ],
+    "missing": [],
+    "src": "header d+\n: d+                              ( augend . addend . -- sum . ) \n    rot + >r                      ( augend addend) \n    over+                         ( augend sum) \n    swap over swap                ( sum sum augend)\n    u< if                         ( sum) \n        r> 1+ \n    else \n        r> \n    then                          ( sum . ) \n;\n"
+  },
+  "dnegate": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "invert",
+      "swap",
+      "d+"
+    ],
+    "missing": [],
+    "src": "header dnegate\n: dnegate \n    invert swap invert swap \n    d# 1. d+\n;\n"
+  },
+  "dabs": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "0<",
+      "if",
+      "dnegate",
+      "then"
+    ],
+    "missing": [],
+    "src": "header dabs\n: dabs ( d -- ud )\n    dup 0< if dnegate then\n;\n"
+  },
+  "s>d": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "0<"
+    ],
+    "missing": [],
+    "src": "header s>d\n: s>d dup 0< ;\n"
+  },
+  "2@": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "cell+",
+      "@",
+      "swap"
+    ],
+    "missing": [],
+    "src": "header 2@\n: 2@ \\ ( a -- lo hi )\n    dup cell+ @ swap @\n;\n"
+  },
+  "2!": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "tuck",
+      "!",
+      "cell+"
+    ],
+    "missing": [],
+    "src": "header 2!\n: 2! \\ ( lo hi a -- )\n    tuck !\n    cell+ !\n;\n"
+  },
+  "2rot": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "2swap",
+      "r>"
+    ],
+    "missing": [],
+    "src": "header 2rot\n: 2rot\n    >r >r 2swap r> r> 2swap\n;\n"
+  },
+  "d>s": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "drop"
+    ],
+    "missing": [],
+    "src": "header d>s\n: d>s   drop ;\n"
+  },
+  "d=": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "rot",
+      "=",
+      "swap",
+      "r>",
+      "and"
+    ],
+    "missing": [],
+    "src": "header d=\n: d=                        \\ a b c d -- f ) \n    >r                      \\ a b c \n    rot =                   \\ b a=c \n    swap r> =               \\ a=c b=d \n    and\n;\n"
+  },
+  "d<": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "rot",
+      "2dup",
+      "=",
+      "if",
+      "2drop",
+      "u<",
+      "else",
+      ">",
+      "nip",
+      "then"
+    ],
+    "missing": [],
+    "src": "header d<\n: d<            \\ ( al ah bl bh -- flag ) \n    rot         \\ al bl bh ah \n    2dup = \n    if \n        2drop u< \n    else \n        > nip nip\n    then \n;\n"
+  },
+  "du<": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "rot",
+      "2dup",
+      "=",
+      "if",
+      "2drop",
+      "u<",
+      "else",
+      "u>",
+      "nip",
+      "then"
+    ],
+    "missing": [],
+    "src": "header du<\n: du<           \\ ( al ah bl bh -- flag ) \n    rot         \\ al bl bh ah \n    2dup = \n    if \n        2drop u< \n    else \n        u> nip nip\n    then \n;\n"
+  },
+  "d-": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dnegate",
+      "d+"
+    ],
+    "missing": [],
+    "src": "header d-\n: d-\n    dnegate d+\n;\n"
+  },
+  "d0<": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "nip",
+      "0<"
+    ],
+    "missing": [],
+    "src": "header d0<\n: d0<\n    nip 0<\n;\n"
+  },
+  "d0=": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "or",
+      "0="
+    ],
+    "missing": [],
+    "src": "header d0=\n: d0=\n    or 0=\n;\n"
+  },
+  "d2*": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "2dup",
+      "d+"
+    ],
+    "missing": [],
+    "src": "header d2*\n: d2*\n    2dup d+\n;\n"
+  },
+  "d2/": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "rshift",
+      "r@",
+      "lshift",
+      "or",
+      "r>",
+      "2/"
+    ],
+    "missing": [],
+    "src": "header d2/\n: d2/\n    >r d# 1 rshift r@\n    d# 31 lshift\n    or r> 2/\n;\n"
+  },
+  "um*": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "scratch",
+      "!",
+      "rot",
+      "mulstep",
+      "drop"
+    ],
+    "missing": [],
+    "src": "header um*\n: um*  ( u1 u2 -- ud ) \n    scratch ! \n    d# 0. rot\n    mulstep\n    drop \n;\n"
+  },
+  "*": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "scratch",
+      "!",
+      "swap",
+      "mul32step",
+      "drop"
+    ],
+    "missing": [],
+    "src": "header *\n: *\n    scratch !\n    d# 0 swap\n    mul32step\n    drop\n;\n"
+  },
+  "um/mod": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "divstep",
+      "drop",
+      "swap"
+    ],
+    "missing": [],
+    "src": "header um/mod\n: um/mod \\ ( ud u1 -- u2 u3 ) ( 6.1.2370 ) \n    divstep\n    drop swap \n;\n"
+  },
+  "accept": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "tethered",
+      "@",
+      "if",
+      "emit",
+      "then",
+      ">r",
+      "begin",
+      "key",
+      "over=",
+      "drop",
+      "dup",
+      "u>",
+      "over",
+      "r@",
+      "u<",
+      "0=",
+      "2dup",
+      "+",
+      "swap",
+      "c!",
+      "1+",
+      "r>",
+      "delchar",
+      "=",
+      "or",
+      "until",
+      "rdrop",
+      "nip",
+      "space"
+    ],
+    "missing": [],
+    "src": "header accept\n: accept\n    tethered @ if d# 30 emit then\n    \n    >r d# 0  ( addr len R: maxlen )\n\n    begin\n        key    ( addr len key R: maxlen )\n        \n        d# 9 over= if drop d# 32 then\n        d# 127 over= if drop d# 8 then\n        \n        dup d# 31 u>\n        if\n            over r@ u<\n            if\n                tethered @ 0= if dup emit then\n                >r 2dup + r@ swap c! 1+ r>\n            then\n        then\n        \n        d# 8 over= if >r delchar r> then\n          \n        d# 10 over= swap d# 13 = or\n    until\n    \n    rdrop nip\n    space\n;\n"
+  },
+  "caligned": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "1+",
+      "and"
+    ],
+    "missing": [],
+    "src": "header caligned\n: caligned\n    1+ d# -2 and\n;\n"
+  },
+  "calign": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "dp",
+      "@",
+      "caligned",
+      "!"
+    ],
+    "missing": [],
+    "src": "header calign\n: calign\n    dp @\n    caligned\n    dp !\n;\n"
+  },
+  "sfind": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "forth",
+      "uw@",
+      "begin",
+      "dup",
+      "while",
+      "sameword",
+      "if",
+      "nip",
+      ">xt",
+      "swap",
+      "isimmediate",
+      "exit",
+      "then",
+      "nextword",
+      "repeat"
+    ],
+    "missing": [],
+    "src": "header sfind\n: sfind\n    forth uw@\n    begin\n        dup\n    while\n        sameword\n        if \n            nip nip\n            dup >xt\n            swap isimmediate\n            exit\n        then\n        nextword\n    repeat\n;\n"
+  },
+  ">number": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      "dup",
+      "while",
+      "over",
+      "c@",
+      "digit?",
+      "0=",
+      "if",
+      "drop",
+      "exit",
+      "then",
+      ">r",
+      "2swap",
+      "base",
+      "@",
+      "ud*",
+      "r>",
+      "s>d",
+      "d+",
+      "/string",
+      "repeat"
+    ],
+    "missing": [],
+    "src": "header >number\n: >number ( ud1 c-addr1 u1 -- ud2 c-addr2 u2 )\n    begin\n        dup\n    while\n        over c@ digit?\n        0= if drop exit then\n        >r 2swap base @ ud*\n        r> s>d d+ 2swap\n        d# 1 /string\n    repeat\n;\n"
+  },
+  "fill": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "bounds",
+      "begin",
+      "2dupxor",
+      "while",
+      "r@",
+      "over",
+      "c!",
+      "1+",
+      "repeat",
+      "r>",
+      "drop",
+      "2drop"
+    ],
+    "missing": [],
+    "src": "header fill\n: fill ( c-addr u char -- ) ( 6.1.1540 ) \n  >r  bounds \n  begin\n    2dupxor \n  while\n    r@ over c! 1+ \n  repeat\n  r> drop 2drop\n;\n"
+  },
+  "cmove": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "bounds",
+      "rot",
+      ">r",
+      "begin",
+      "2dupxor",
+      "while",
+      "r@",
+      "c@",
+      "over",
+      "c!",
+      "r>",
+      "1+",
+      "repeat",
+      "rdrop",
+      "2drop"
+    ],
+    "missing": [],
+    "src": "header cmove\n: cmove ( addr1 addr2 u -- )\n    bounds rot >r\n    begin\n        2dupxor\n    while\n        r@ c@ over c!\n        r> 1+ >r\n        1+\n    repeat\n    rdrop 2drop\n;\n"
+  },
+  "cmove>": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      "dup",
+      "while",
+      "1-",
+      ">r",
+      "over",
+      "r@",
+      "+",
+      "c@",
+      "c!",
+      "r>",
+      "repeat",
+      "drop",
+      "2drop"
+    ],
+    "missing": [],
+    "src": "header cmove>\n: cmove> \\ ( addr1 addr2 u -- )\n    begin\n        dup\n    while\n        1- >r\n        over r@ + c@\n        over r@ + c!\n        r>\n    repeat\n    drop 2drop\n;\n"
+  },
+  "execute": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r"
+    ],
+    "missing": [],
+    "src": "header execute\n: execute\n    >r\n;\n"
+  },
+  "source": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "sourceC",
+      "2@"
+    ],
+    "missing": [],
+    "src": "header source\n: source\n    sourceC 2@\n;\n"
+  },
+  "source-id": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "sourceid",
+      "@"
+    ],
+    "missing": [],
+    "src": "header source-id\n: source-id\n    sourceid @\n;\n"
+  },
+  "parse-name": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "source",
+      ">in",
+      "@",
+      "/string",
+      "[']",
+      "isspace?",
+      "xt-skip",
+      "over",
+      ">r",
+      "isnotspace?",
+      "2dup",
+      "min",
+      "+",
+      "drop",
+      "-",
+      "!",
+      "r>",
+      "tuck"
+    ],
+    "missing": [],
+    "src": "header parse-name\n: parse-name ( \"name\" -- c-addr u )\n    source >in @ /string\n    ['] isspace? xt-skip over >r\n    ['] isnotspace? xt-skip ( end-word restlen r: start-word )\n    2dup d# 1 min + source drop - >in !\n    drop r> tuck -\n;\n"
+  },
+  "parse": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "delim",
+      "!",
+      "source",
+      ">in",
+      "@",
+      "/string",
+      "over",
+      ">r",
+      "[']",
+      "isnotdelim",
+      "xt-skip",
+      "2dup",
+      "min",
+      "+",
+      "drop",
+      "-",
+      "r>",
+      "tuck"
+    ],
+    "missing": [],
+    "src": "header parse\n: parse ( \"ccc<char\" -- c-addr u )\n    delim !\n    source >in @ /string\n    over >r\n    ['] isnotdelim xt-skip\n    2dup d# 1 min + source drop - >in !\n    drop r> tuck -\n;\n"
+  },
+  "allot": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dp",
+      "+!"
+    ],
+    "missing": [],
+    "src": "header allot\n: tallot\n    dp +!\n;\n"
+  },
+  ",": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "here",
+      "!",
+      "tallot"
+    ],
+    "missing": [],
+    "src": "header ,\n:noname\n    here !\n    d# 4 tallot\n;\n"
+  },
+  "w,": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "here",
+      "w!",
+      "tallot"
+    ],
+    "missing": [],
+    "src": "header w,\n: w,\n    here w!\n    d# 2 tallot\n;\n"
+  },
+  "c,": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "here",
+      "c!",
+      "tallot"
+    ],
+    "missing": [],
+    "src": "header c,\n: tc,\n    here c!\n    d# 1 tallot\n;\n"
+  },
+  "s,": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "dup",
+      "tc,",
+      "bounds",
+      "begin",
+      "2dupxor",
+      "while",
+      "count",
+      "repeat",
+      "2drop"
+    ],
+    "missing": [],
+    "src": "header s,\n: s,\n    dup tc,\n    bounds\n    begin\n        2dupxor\n    while\n        count tc,\n    repeat\n    2drop\n;\n"
+  },
+  "immediate": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "lastword",
+      "@",
+      "dup",
+      "uw@",
+      "or",
+      "swap",
+      "w!"
+    ],
+    "missing": [],
+    "src": "header immediate\n:noname\n    lastword @\n    dup uw@ d# 1 or\n    swap w!\n;\n"
+  },
+  "]": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "state",
+      "!"
+    ],
+    "missing": [],
+    "src": "header ]\n: t]\n    d# 3 state !\n;\n"
+  },
+  "[": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "state",
+      "!"
+    ],
+    "missing": [],
+    "src": "header-imm [\n: t[\n    d# 0 state !\n;\n"
+  },
+  ":": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "mkheader",
+      "t]"
+    ],
+    "missing": [],
+    "src": "header :\n:noname\n    mkheader t]\n;\n"
+  },
+  ":noname": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "calign",
+      "cp",
+      "@",
+      "dup",
+      "thisxt",
+      "!",
+      "lastword",
+      "sync",
+      "t]"
+    ],
+    "missing": [],
+    "src": "header :noname\n:noname\n    calign cp @\n    dup thisxt !\n    d# 0 lastword !\n    sync\n    t]\n;\n"
+  },
+  "exit": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": true,
+    "bind": "ans",
+    "needs": [
+      "cp",
+      "@",
+      "thisxt",
+      "<>",
+      "if",
+      "prev",
+      "uw@",
+      "jumpable",
+      "xor",
+      "w!",
+      "exit",
+      "then"
+    ],
+    "missing": [],
+    "src": "header-imm exit\n: texit\n    cp @ thisxt @ <> if\n        prev uw@ jumpable if\n            prev\n            uw@\n            h# 4000 xor\n            prev w!\n            \\ cp @ syncpt @ <> if\n                inline: exit\n            \\ then\n            exit\n        then\n    then\n    inline: exit\n;\n"
+  },
+  ";": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "attach",
+      "texit",
+      "t["
+    ],
+    "missing": [],
+    "src": "header-imm ;\n:noname\n    attach\n    texit\n    t[\n;\n"
+  },
+  "if": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "cp",
+      "@",
+      "code,"
+    ],
+    "missing": [],
+    "src": "header-imm if\n: tif\n    cp @\n    h# 2000 code,\n;\n"
+  },
+  "ahead": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "cp",
+      "@",
+      "code,"
+    ],
+    "missing": [],
+    "src": "header-imm ahead\n:noname\n    cp @\n    h# 0000 code,\n;\n"
+  },
+  "then": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "uw@",
+      "cp",
+      "@",
+      "2/",
+      "or",
+      "swap",
+      "w!",
+      "sync"
+    ],
+    "missing": [],
+    "src": "header-imm then\n: tthen\n    dup uw@\n    cp @ 2/ or\n    swap w!\n    sync\n;\n"
+  },
+  "begin": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "cp",
+      "@",
+      "2/"
+    ],
+    "missing": [],
+    "src": "header-imm begin\n: tbegin\n    cp @ 2/\n;\n"
+  },
+  "again": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "code,"
+    ],
+    "missing": [],
+    "src": "header-imm again\n: tagain\n    code,\n;\n"
+  },
+  "until": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "or",
+      "code,"
+    ],
+    "missing": [],
+    "src": "header-imm until\n: tuntil\n    h# 2000 or code,\n;\n"
+  },
+  "compile,": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "uw@",
+      "isreturn",
+      "if",
+      "and",
+      "code,",
+      "else",
+      "isliteral",
+      "2/",
+      "or",
+      "then"
+    ],
+    "missing": [],
+    "src": "header compile,\n: compile,\n    dup uw@ isreturn if\n        uw@ h# ff73 and\n        code,\n    else\n        dup isliteral if\n            uw@ code,\n        else\n            2/ h# 4000 or\n            code,\n        then\n    then\n;\n"
+  },
+  "does>": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "r>",
+      "2/",
+      "lastword",
+      "@",
+      ">xt",
+      "+",
+      "w!"
+    ],
+    "missing": [],
+    "src": "header does>\n:noname\n    r> 2/\n    lastword @\n    >xt d# 2 +  \\ ready to patch the RETURN\n    w!\n;\n"
+  },
+  "recurse": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "thisxt",
+      "@",
+      "compile,"
+    ],
+    "missing": [],
+    "src": "header-imm recurse\n:noname\n    thisxt @ compile,\n;\n"
+  },
+  "do": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": true,
+    "bind": "ans",
+    "needs": [
+      "leaves",
+      "@",
+      "!",
+      "[']",
+      "(do)",
+      "compile,",
+      "tbegin",
+      ">r"
+    ],
+    "missing": [],
+    "src": "header-imm do\n:noname\n    leaves @ d# 0 leaves !\n    ['] (do) compile,\n    tbegin\n    inline: >r\n;\n"
+  },
+  "loop": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": true,
+    "bind": "ans",
+    "needs": [
+      "r>",
+      "[']",
+      "(loopnext)",
+      "compile,",
+      "tif",
+      "swap",
+      "tagain",
+      "tthen",
+      "resolveleaves"
+    ],
+    "missing": [],
+    "src": "header-imm loop\n:noname\n    inline: r>\n    ['] (loopnext) compile,\n    tif\n    swap tagain\n    tthen\n    resolveleaves\n;\n"
+  },
+  "+loop": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": true,
+    "bind": "ans",
+    "needs": [
+      "r>",
+      "[']",
+      "(+loopnext)",
+      "compile,",
+      "tuntil",
+      "resolveleaves"
+    ],
+    "missing": [],
+    "src": "header-imm +loop\n:noname\n    inline: r>\n    ['] (+loopnext) compile,\n    tuntil\n    resolveleaves\n;\n"
+  },
+  "leave": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": true,
+    "bind": "ans",
+    "needs": [
+      "r>",
+      "cp",
+      "@",
+      "leaves",
+      "code,",
+      "!"
+    ],
+    "missing": [],
+    "src": "header-imm leave\n: leave\n    inline: r>\n    cp @\n    leaves @ code,\n    leaves !\n;\n"
+  },
+  "?do": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": true,
+    "bind": "ans",
+    "needs": [
+      "leaves",
+      "@",
+      "!",
+      "[']",
+      "(?do)",
+      "compile,",
+      "tif",
+      "cp",
+      "code,",
+      "tthen",
+      "tbegin",
+      ">r"
+    ],
+    "missing": [],
+    "src": "header-imm ?do\n:noname\n    leaves @ d# 0 leaves !\n    ['] (?do) compile,\n    tif\n        cp @\n        leaves @ code,\n        leaves !\n    tthen\n    tbegin\n    inline: >r\n;\n"
+  },
+  "i": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "r>",
+      "r@",
+      "rO",
+      "@",
+      "+",
+      "swap",
+      ">r"
+    ],
+    "missing": [],
+    "src": "header i\n: i\n    r>\n    r@ rO @ +\n    swap >r\n;\n"
+  },
+  "j": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "r>",
+      "2dup",
+      "+",
+      "-rot",
+      ">r"
+    ],
+    "missing": [],
+    "src": "header j\n: j\n    r> r>\n    r> r> 2dup + -rot\n    >r >r\n    -rot\n    >r >r\n;\n"
+  },
+  "unloop": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": true,
+    "bind": "ans",
+    "needs": [
+      "r>",
+      "[']",
+      "(loopdone)",
+      "compile,"
+    ],
+    "missing": [],
+    "src": "header-imm unloop\n:noname\n    inline: r>\n    ['] (loopdone) compile,\n;\n"
+  },
+  "decimal": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "setbase"
+    ],
+    "missing": [
+      ";fallthru"
+    ],
+    "src": "header decimal\n: decimal\n    d# 10\n;fallthru\n"
+  },
+  "!": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "!"
+    ],
+    "missing": [],
+    "src": "header !        :noname     !        ;\n"
+  },
+  "+": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "+"
+    ],
+    "missing": [],
+    "src": "header +        :noname     +        ;\n"
+  },
+  "xor": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "xor"
+    ],
+    "missing": [],
+    "src": "header xor      :noname     xor      ;\n"
+  },
+  "and": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "and"
+    ],
+    "missing": [],
+    "src": "header and      :noname     and      ;\n"
+  },
+  "or": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "or"
+    ],
+    "missing": [],
+    "src": "header or       :noname     or       ;\n"
+  },
+  "invert": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "invert"
+    ],
+    "missing": [],
+    "src": "header invert   :noname     invert   ;\n"
+  },
+  "=": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "="
+    ],
+    "missing": [],
+    "src": "header =        :noname     =        ;\n"
+  },
+  "<": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "<"
+    ],
+    "missing": [],
+    "src": "header <        :noname     <        ;\n"
+  },
+  "u<": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "u<"
+    ],
+    "missing": [],
+    "src": "header u<       :noname     u<       ;\n"
+  },
+  "swap": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "swap"
+    ],
+    "missing": [],
+    "src": "header swap     :noname     swap     ;\n"
+  },
+  "dup": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup"
+    ],
+    "missing": [],
+    "src": "header dup      :noname     dup      ;\n"
+  },
+  "drop": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "drop"
+    ],
+    "missing": [],
+    "src": "header drop     :noname     drop     ;\n"
+  },
+  "over": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "over"
+    ],
+    "missing": [],
+    "src": "header over     :noname     over    ;\n"
+  },
+  "nip": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "nip"
+    ],
+    "missing": [],
+    "src": "header nip      :noname     nip      ;\n"
+  },
+  "@": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "@"
+    ],
+    "missing": [],
+    "src": "header @        :noname     @        ;\n"
+  },
+  "io!": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "io!"
+    ],
+    "missing": [],
+    "src": "header io!      :noname     io!      ;\n"
+  },
+  "io@": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "io@"
+    ],
+    "missing": [],
+    "src": "header io@      :noname     io@      ;\n"
+  },
+  "rshift": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "rshift"
+    ],
+    "missing": [],
+    "src": "header rshift   :noname     rshift   ;\n"
+  },
+  "lshift": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "lshift"
+    ],
+    "missing": [],
+    "src": "header lshift   :noname     lshift   ;\n"
+  },
+  ">r": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": true,
+    "bind": "ans",
+    "needs": [
+      ">r"
+    ],
+    "missing": [],
+    "src": "header-imm >r   :noname     inline: >r ;\n"
+  },
+  "r>": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": true,
+    "bind": "ans",
+    "needs": [
+      "r>"
+    ],
+    "missing": [],
+    "src": "header-imm r>   :noname     inline: r> ;\n"
+  },
+  "r@": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": true,
+    "bind": "ans",
+    "needs": [
+      "r@",
+      "noop"
+    ],
+    "missing": [],
+    "src": "header-imm r@   :noname     inline: r@ noop ;\n"
+  },
+  "throw": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "?dup",
+      "if",
+      "[char]",
+      "emit"
+    ],
+    "missing": [],
+    "src": "header throw\n: throw\n    ?dup if\n        [char] e emit\n        [char] r emit\n        [char] r emit\n        [char] o emit\n        [char] r emit\n        [char]\n"
+  },
+  "2literal": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "swap",
+      "literal"
+    ],
+    "missing": [
+      "DOUBLE"
+    ],
+    "src": "header-imm 2literal\n: 2literal\n    swap DOUBLE\n"
+  },
+  "literal": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": true,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "0<",
+      "if",
+      "invert",
+      "tliteral",
+      "else",
+      "and",
+      "rshift",
+      "lshift",
+      "or",
+      "code,",
+      "then"
+    ],
+    "missing": [],
+    "src": "header-imm literal\n: tliteral\n    dup 0< if\n        invert tliteral\n        inline: invert\n    else\n        dup h# ffff8000 and if\n            dup d# 15 rshift tliteral\n            d# 15 tliteral\n            inline: lshift\n            h# 7fff and tliteral\n            inline: or\n        else\n            h# 8000 or code,\n        then\n    then\n    \n;\n"
+  },
+  "postpone": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "parse-name",
+      "sfind",
+      "dup",
+      "0=",
+      "-throw",
+      "0<",
+      "if",
+      "tliteral",
+      "[']",
+      "compile,",
+      "then"
+    ],
+    "missing": [],
+    "src": "header-imm postpone\n:noname\n    parse-name sfind\n    dup 0= d# 13 -throw\n    0< if\n        tliteral\n        ['] compile,\n    then\n    compile,\n;\n"
+  },
+  "refill": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "source-id",
+      "0=",
+      "dup",
+      "if",
+      "tib",
+      "accept",
+      "source!",
+      ">in",
+      "!",
+      "then"
+    ],
+    "missing": [],
+    "src": "header refill\n: refill\n    source-id 0= dup\n    if\n        tib dup d# 128 accept\n        source!\n        d# 0 >in !\n    then\n;\n"
+  },
+  "evaluate": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "source",
+      ">r",
+      ">in",
+      "@",
+      "source-id",
+      "sourceid",
+      "!",
+      "source!",
+      "interpret",
+      "r>"
+    ],
+    "missing": [],
+    "src": "header evaluate\n:noname\n    source >r >r >in @ >r\n    source-id >r d# -1 sourceid !\n    source! d# 0 >in !\n    interpret\n    r> sourceid !\n    r> >in ! r> r> source!\n;\n"
+  },
+  "quit": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      "refill",
+      "drop",
+      "interpret",
+      "space",
+      "[char]",
+      "emit",
+      "cr",
+      "again"
+    ],
+    "missing": [],
+    "src": "header quit\n: quit\n    begin\n        refill drop\n        interpret\n        space\n        [char] o emit\n        [char] k emit\n        cr\n    again\n;\n"
+  },
+  "UART-D": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "constant UART-D\n"
+  },
+  "UART-STATUS": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "constant UART-STATUS\n"
+  },
+  "off": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "swap",
+      "!"
+    ],
+    "missing": [],
+    "src": ": off\n    d# 0 swap !\n;\n"
+  },
+  "uart-stat": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "io@",
+      "and",
+      "0<>"
+    ],
+    "missing": [],
+    "src": ": uart-stat ( mask -- f ) \\ is bit in UART status register on?\n    h# 2000 io@ and 0<>\n;\n"
+  },
+  "hex8": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "dup",
+      "rshift"
+    ],
+    "missing": [
+      "DOUBLE"
+    ],
+    "src": ": hex8 dup d# 16 rshift DOUBLE\n"
+  },
+  "hex4": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "dup",
+      "rshift"
+    ],
+    "missing": [
+      "DOUBLE"
+    ],
+    "src": ": hex4 dup d# 8 rshift DOUBLE\n"
+  },
+  "hex2": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "dup",
+      "rshift"
+    ],
+    "missing": [
+      "DOUBLE"
+    ],
+    "src": ": hex2 dup d# 4 rshift DOUBLE\n"
+  },
+  "hex1": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "and",
+      "dup",
+      "<",
+      "if",
+      "[char]",
+      "else",
+      "then",
+      "+",
+      "emit"
+    ],
+    "missing": [],
+    "src": ": hex1\n    h# f and\n    dup d# 10 < if\n        [char] 0\n    else\n        d# 55\n    then\n    +\n    emit\n;\n"
+  },
+  "hi16": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "rshift",
+      "lshift"
+    ],
+    "missing": [],
+    "src": ": hi16\n    d# 16 rshift d# 16 lshift\n;\n"
+  },
+  "lo16": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "lshift",
+      "rshift"
+    ],
+    "missing": [],
+    "src": ": lo16\n    d# 16 lshift d# 16 rshift\n;\n"
+  },
+  "w+!": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "tuck",
+      "uw@",
+      "+",
+      "swap",
+      "w!"
+    ],
+    "missing": [],
+    "src": ": w+!   ( u a -- ) \\ like +! but for 16-bit a\n    tuck uw@ + swap w!\n;\n"
+  },
+  "\"cold\"": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "create \"cold\"\n    'c' c, 'o' c, 'l' c, 'd' c,\n"
+  },
+  "lastword": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "create lastword 0 ,\n"
+  },
+  "thisxt": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "create thisxt   0 ,\n"
+  },
+  "syncpt": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "create syncpt   0 ,\n"
+  },
+  "sourceC": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "create sourceC  0 , 0 ,\n"
+  },
+  "sourceid": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "create sourceid 0 ,\n"
+  },
+  "delim": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "create delim    0 ,\n"
+  },
+  "rO": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "create rO       0 ,\n"
+  },
+  "leaves": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "create leaves   0 ,\n"
+  },
+  "tethered": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "create tethered 0 ,\n"
+  },
+  "tib": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "create tib $80 allot\n"
+  },
+  "nextword": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "uw@",
+      "and"
+    ],
+    "missing": [],
+    "src": ": nextword\n    uw@ d# -2 and\n;\n"
+  },
+  "scratch": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "create scratch 0 ,\n"
+  },
+  "mulstep": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      ">r",
+      "lshift",
+      "over",
+      "rshift",
+      "+",
+      "swap",
+      "r@",
+      "<",
+      "if",
+      "scratch",
+      "@",
+      "d+",
+      "then",
+      "r>"
+    ],
+    "missing": [
+      "DOUBLE"
+    ],
+    "src": ": mulstep ( ud u1 -- ud u1 )\n    DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE\n    >r\n    d# 1 lshift over d# 31 rshift + swap d# 1 lshift swap\n    r@ d# 0 < if \n        scratch @ d# 0 d+ \n    then \n    r> d# 1 lshift\n;\n"
+  },
+  "mul32step": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      ">r",
+      "lshift",
+      "r@",
+      "<",
+      "if",
+      "scratch",
+      "@",
+      "+",
+      "then",
+      "r>"
+    ],
+    "missing": [
+      "DOUBLE"
+    ],
+    "src": ": mul32step ( u2 u1 -- u2 u1 )\n    DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE\n    >r\n    d# 1 lshift\n    r@ d# 0 < if \n        scratch @ +\n    then \n    r> d# 1 lshift\n;\n"
+  },
+  "divstep": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      ">r",
+      "dup",
+      "0<",
+      "2dup",
+      "d+",
+      "r>",
+      "or",
+      "r@",
+      "u<",
+      "invert",
+      "if",
+      "-",
+      "swap",
+      "1+",
+      "then"
+    ],
+    "missing": [
+      "DOUBLE"
+    ],
+    "src": ": divstep  \\ ( y x z )\n    DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE\n    >r\n    dup 0< >r\n    2dup d+\n    dup r> or r@ u< invert if\n        r@ -\n        swap 1+ swap\n    then\n    r>\n;\n"
+  },
+  "delchar": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "dup",
+      "if",
+      "emit",
+      "then",
+      "begin",
+      "0=",
+      "exit",
+      "1-",
+      "2dup",
+      "+",
+      "c@",
+      "and",
+      "<>",
+      "until"
+    ],
+    "missing": [],
+    "src": ": delchar ( addr len -- addr len )\n    dup if d# 8 emit d# 32 emit d# 8 emit then\n\n    begin\n        dup 0= if exit then\n        1- 2dup + c@\n        h# C0 and h# 80 <>\n      until\n;\n"
+  },
+  "3rd": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      ">r",
+      "over",
+      "r>",
+      "swap"
+    ],
+    "missing": [],
+    "src": ": 3rd   >r over r> swap ;\n"
+  },
+  "3dup": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "3rd"
+    ],
+    "missing": [],
+    "src": ": 3dup  3rd 3rd 3rd ;\n"
+  },
+  "lower": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "over",
+      "<",
+      "and",
+      "+"
+    ],
+    "missing": [],
+    "src": ": lower ( c1 -- c2 ) \\ c2 is the lower-case of c1\n    h# 40 over <\n    over h# 5b < and\n    h# 20 and +\n;\n"
+  },
+  "i<>": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "2dupxor",
+      "and",
+      "if",
+      "drop",
+      "exit",
+      "then",
+      "lower",
+      "swap",
+      "xor"
+    ],
+    "missing": [],
+    "src": ": i<> ( c1 c2 -- f ) \\ case-insensitive difference\n    2dupxor h# 1f and if\n        drop exit\n    then\n    lower swap lower xor\n;\n"
+  },
+  "sameword": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "2dup",
+      "+",
+      "c@",
+      "=",
+      "if",
+      "3dup",
+      ">r",
+      "bounds",
+      "begin",
+      "2dupxor",
+      "while",
+      "dup",
+      "r@",
+      "i<>",
+      "2drop",
+      "rdrop",
+      "false",
+      "exit",
+      "then",
+      "1+",
+      "r>",
+      "repeat",
+      "true",
+      "else"
+    ],
+    "missing": [],
+    "src": ": sameword ( c-addr u wp -- c-addr u wp flag )\n    2dup d# 2 + c@ = if\n        3dup\n        d# 3 + >r\n        bounds\n        begin\n            2dupxor\n        while\n            dup c@ r@ c@ i<> if\n                2drop rdrop false exit\n            then\n            1+\n            r> 1+ >r\n        repeat\n        2drop rdrop true\n    else\n        false\n    then\n;\n"
+  },
+  ">xt": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "+",
+      "count",
+      "caligned",
+      "uw@"
+    ],
+    "missing": [],
+    "src": ": >xt\n    d# 2 +\n    count +\n    caligned\n    uw@\n;\n"
+  },
+  "isimmediate": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "uw@",
+      "and",
+      "2*",
+      "1-"
+    ],
+    "missing": [],
+    "src": "\\     1 means immediate,     return  1\n: isimmediate ( wp -- -1 | 1 )\n    uw@ d# 1 and 2* 1-\n;\n"
+  },
+  "digit?": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "lower",
+      "dup",
+      ">",
+      "and",
+      "+",
+      "-",
+      "base",
+      "@",
+      "u<"
+    ],
+    "missing": [],
+    "src": ": digit? ( c -- u f )\n   lower\n   dup h# 39 > h# 100 and +\n   dup h# 160 > h# 127 and - h# 30 -\n   dup base @ u<\n;\n"
+  },
+  "ud*": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "tuck",
+      "*",
+      ">r",
+      "um*",
+      "r>",
+      "+"
+    ],
+    "missing": [],
+    "src": ": ud* ( ud1 u -- ud2 ) \\ ud2 is the product of ud1 and u\n    tuck * >r\n    um* r> +\n;\n"
+  },
+  "source!": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "sourceC",
+      "2!"
+    ],
+    "missing": [],
+    "src": ": source! ( addr u -- ) \\ set the source\n    sourceC 2!\n;\n"
+  },
+  "isspace?": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "u<"
+    ],
+    "missing": [],
+    "src": ": isspace? ( c -- f )\n    h# 21 u< ;\n"
+  },
+  "isnotspace?": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "isspace?",
+      "0="
+    ],
+    "missing": [],
+    "src": ": isnotspace? ( c -- f )\n    isspace? 0= ;\n"
+  },
+  "xt-skip": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      ">r",
+      "begin",
+      "over",
+      "c@",
+      "r@",
+      "execute",
+      "overand",
+      "while",
+      "/string",
+      "repeat",
+      "r>",
+      "drop"
+    ],
+    "missing": [],
+    "src": ": xt-skip   ( addr1 n1 xt -- addr2 n2 ) \\ gforth\n    \\ skip all characters satisfying xt ( c -- f )\n    >r\n    BEGIN\n        over c@ r@ execute\n        overand\n    WHILE\n        d# 1 /string\n    REPEAT\n    r> drop ;\n"
+  },
+  "isnotdelim": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "delim",
+      "@",
+      "<>"
+    ],
+    "missing": [],
+    "src": ": isnotdelim\n    delim @ <>\n;\n"
+  },
+  "tallot": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "dp",
+      "+!"
+    ],
+    "missing": [],
+    "src": ": tallot\n    dp +!\n;\n"
+  },
+  "tc,": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "here",
+      "c!",
+      "tallot"
+    ],
+    "missing": [],
+    "src": ": tc,\n    here c!\n    d# 1 tallot\n;\n"
+  },
+  "code,": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "cp",
+      "@",
+      "w!",
+      "+!"
+    ],
+    "missing": [],
+    "src": ": code,\n    cp @ w!\n    d# 2 cp +!\n;\n"
+  },
+  "attach": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "lastword",
+      "@",
+      "?dup",
+      "if",
+      "forth",
+      "!",
+      "then"
+    ],
+    "missing": [],
+    "src": ": attach\n    lastword @ ?dup if\n        forth !\n    then\n;\n"
+  },
+  "sync": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "cp",
+      "@",
+      "syncpt",
+      "!"
+    ],
+    "missing": [],
+    "src": ": sync\n    cp @ syncpt !\n;\n"
+  },
+  "mkheader": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "calign",
+      "here",
+      "lastword",
+      "!",
+      "forth",
+      "@",
+      "w,",
+      "parse-name",
+      "s,",
+      "cp",
+      "thisxt",
+      "sync"
+    ],
+    "missing": [],
+    "src": ": mkheader\n    calign\n    here lastword !\n    forth @ w,\n    parse-name\n    s,\n    calign\n    cp @ w,\n    cp @ thisxt !\n    sync\n;\n"
+  },
+  "t]": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "state",
+      "!"
+    ],
+    "missing": [],
+    "src": ": t]\n    d# 3 state !\n;\n"
+  },
+  "t[": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "state",
+      "!"
+    ],
+    "missing": [],
+    "src": ": t[\n    d# 0 state !\n;\n"
+  },
+  "inline:": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [
+      "r>",
+      "dup",
+      "uw@",
+      "code,",
+      "+",
+      ">r"
+    ],
+    "missing": [],
+    "src": ": inline:\n    r>\n    dup uw@ code,\n    d# 2 + >r\n;\n"
+  },
+  "prev": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "cp",
+      "@",
+      "+"
+    ],
+    "missing": [],
+    "src": ": prev\n    cp @ d# -2 +\n;\n"
+  },
+  "(loopdone)": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "drop",
+      "r>",
+      "rO",
+      "!",
+      ">r"
+    ],
+    "missing": [],
+    "src": ": (loopdone)  ( 0 -- )\n    drop\n    r> r> rO ! >r\n;\n"
+  },
+  "jumpable": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "dup",
+      "and",
+      "=",
+      "swap",
+      "2*",
+      "[']",
+      "(loopdone)",
+      "<>"
+    ],
+    "missing": [],
+    "src": ": jumpable ( op -- f )\n    dup h# e000 and h# 4000 =       \\ is a call\n    swap h# 1fff and 2* ['] (loopdone) <> and\n;\n"
+  },
+  "texit": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [
+      "cp",
+      "@",
+      "thisxt",
+      "<>",
+      "if",
+      "prev",
+      "uw@",
+      "jumpable",
+      "xor",
+      "w!",
+      "exit",
+      "then"
+    ],
+    "missing": [],
+    "src": ": texit\n    cp @ thisxt @ <> if\n        prev uw@ jumpable if\n            prev\n            uw@\n            h# 4000 xor\n            prev w!\n            \\ cp @ syncpt @ <> if\n                inline: exit\n            \\ then\n            exit\n        then\n    then\n    inline: exit\n;\n"
+  },
+  "tif": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "cp",
+      "@",
+      "code,"
+    ],
+    "missing": [],
+    "src": ": tif\n    cp @\n    h# 2000 code,\n;\n"
+  },
+  "tthen": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "dup",
+      "uw@",
+      "cp",
+      "@",
+      "2/",
+      "or",
+      "swap",
+      "w!",
+      "sync"
+    ],
+    "missing": [],
+    "src": ": tthen\n    dup uw@\n    cp @ 2/ or\n    swap w!\n    sync\n;\n"
+  },
+  "tbegin": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "cp",
+      "@",
+      "2/"
+    ],
+    "missing": [],
+    "src": ": tbegin\n    cp @ 2/\n;\n"
+  },
+  "tagain": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "code,"
+    ],
+    "missing": [],
+    "src": ": tagain\n    code,\n;\n"
+  },
+  "tuntil": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "or",
+      "code,"
+    ],
+    "missing": [],
+    "src": ": tuntil\n    h# 2000 or code,\n;\n"
+  },
+  "isreturn": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "and",
+      "="
+    ],
+    "missing": [],
+    "src": ": isreturn ( opcode -- f )\n    h# e080 and\n    h# 6080 =\n;\n"
+  },
+  "isliteral": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "dup",
+      "uw@",
+      "and",
+      "0<>",
+      "swap",
+      "+",
+      "="
+    ],
+    "missing": [],
+    "src": ": isliteral ( ptr -- f)\n    dup uw@ h# 8000 and 0<>\n    swap d# 2 + uw@ h# 608c = and\n;\n"
+  },
+  "(do)": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "r>",
+      "rO",
+      "@",
+      ">r",
+      "over",
+      "!",
+      "swap",
+      "-"
+    ],
+    "missing": [],
+    "src": ": (do)  ( limit start -- start-limit )\n    r> rO @ >r >r\n    over rO !\n    swap -\n;\n"
+  },
+  "(?do)": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "r>",
+      "rO",
+      "@",
+      ">r",
+      "over",
+      "!",
+      "swap",
+      "-",
+      "dup",
+      "0="
+    ],
+    "missing": [],
+    "src": ": (?do)  ( limit start -- start-limit start!=limit )\n    r> rO @ >r >r\n    over rO !\n    swap -\n    dup 0=\n;\n"
+  },
+  "(loopnext)": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "+",
+      "dup"
+    ],
+    "missing": [],
+    "src": ": (loopnext)\n    d# 1 + dup\n;\n"
+  },
+  "resolveleaves": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "leaves",
+      "@",
+      "begin",
+      "dup",
+      "while",
+      "uw@",
+      "swap",
+      "cp",
+      "2/",
+      "w!",
+      "repeat",
+      "drop",
+      "!",
+      "[']",
+      "(loopdone)",
+      "compile,"
+    ],
+    "missing": [],
+    "src": "\\ compile a call to (loopdone)\n: resolveleaves\n    leaves @\n    begin\n        dup\n    while\n        dup uw@ swap        ( next leafptr )\n        cp @ 2/ swap w!\n    repeat\n    drop\n    leaves !\n    ['] (loopdone) compile,\n;\n"
+  },
+  "(+loopnext)": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "over",
+      "0<",
+      "if",
+      "dup>r",
+      "+",
+      "r>",
+      "u<",
+      "else",
+      "u>",
+      "then"
+    ],
+    "missing": [],
+    "src": ": (+loopnext) ( inc R -- R finished )\n    over 0< if\n        dup>r +\n        r> over ( R old new )\n        u<\n    else\n        dup>r +\n        r> over ( R old new )\n        u>\n    then\n;\n"
+  },
+  "setbase": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "base",
+      "!"
+    ],
+    "missing": [],
+    "src": ": setbase\n    base !\n;\n"
+  },
+  "jumptable": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "r>",
+      "+",
+      ">r"
+    ],
+    "missing": [],
+    "src": ": jumptable ( u -- ) \\ add u to the return address\n    r> + >r ;\n"
+  },
+  "-throw": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "negate",
+      "and",
+      "throw"
+    ],
+    "missing": [],
+    "src": ": -throw ( a b -- ) \\ if a is nonzero, throw -b\n    negate and throw\n;\n"
+  },
+  "tliteral": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [
+      "dup",
+      "0<",
+      "if",
+      "invert",
+      "tliteral",
+      "else",
+      "and",
+      "rshift",
+      "lshift",
+      "or",
+      "code,",
+      "then"
+    ],
+    "missing": [],
+    "src": ": tliteral\n    dup 0< if\n        invert tliteral\n        inline: invert\n    else\n        dup h# ffff8000 and if\n            dup d# 15 rshift tliteral\n            d# 15 tliteral\n            inline: lshift\n            h# 7fff and tliteral\n            inline: or\n        else\n            h# 8000 or code,\n        then\n    then\n    \n;\n"
+  },
+  "isvoid": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "nip",
+      "0<>",
+      "-throw"
+    ],
+    "missing": [],
+    "src": ": isvoid ( caddr u -- ) \\ any char remains, throw -13\n    nip 0<> d# 13 -throw\n;\n"
+  },
+  "consume1": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      ">r",
+      "over",
+      "c@",
+      "r>",
+      "=",
+      "0<>",
+      "and",
+      "dup>r",
+      "/string"
+    ],
+    "missing": [],
+    "src": ": consume1 ( caddr u ch -- caddr' u' f )\n    >r over c@ r> =\n    over 0<> and\n    dup>r d# 1 and /string r>\n;\n"
+  },
+  "((doubleAlso))": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "2swap",
+      "[char]",
+      "consume1",
+      ">r",
+      ">number",
+      "if",
+      "isvoid",
+      "r>",
+      "dnegate",
+      "then",
+      "[']",
+      "2literal",
+      "exit",
+      "drop",
+      "negate"
+    ],
+    "missing": [],
+    "src": ": ((doubleAlso))\n    h# 0. 2swap\n    [char] - consume1 >r\n    >number\n    [char] . consume1 if\n        isvoid              \\ double number\n        r> if dnegate then\n        ['] 2literal exit\n    then\n                            \\ single number\n    isvoid drop\n    r> if negate then\n"
+  },
+  "single": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "[']",
+      "tliteral"
+    ],
+    "missing": [],
+    "src": ": single\n    ['] tliteral\n;\n"
+  },
+  "base((doubleAlso))": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "base",
+      "@",
+      ">r",
+      "setbase",
+      "((doubleAlso))",
+      "r>"
+    ],
+    "missing": [],
+    "src": ": base((doubleAlso))\n    base @ >r setbase\n    ((doubleAlso))\n    r> setbase\n;\n"
+  },
+  "is'c'": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "=",
+      "over",
+      "c@",
+      "[char]",
+      "and",
+      "swap",
+      "1+"
+    ],
+    "missing": [],
+    "src": ": is'c' ( caddr u -- f )\n    d# 3 =\n    over c@ [char] ' = and\n    swap 1+ 1+ c@ [char] ' = and\n;\n"
+  },
+  "(doubleAlso)": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "[char]",
+      "consume1",
+      "if",
+      "base((doubleAlso))",
+      "exit",
+      "then",
+      "2dup",
+      "is'c'",
+      "drop",
+      "1+",
+      "c@",
+      "single",
+      "((doubleAlso))"
+    ],
+    "missing": [],
+    "src": ": (doubleAlso)\n    [char] $ consume1 if\n        d# 16 base((doubleAlso)) exit\n    then\n    [char] # consume1 if\n        d# 10 base((doubleAlso)) exit\n    then\n    [char] % consume1 if\n        d# 2 base((doubleAlso)) exit\n    then\n    2dup is'c' if\n        drop 1+ c@ single exit\n    then\n    ((doubleAlso))\n;\n"
+  },
+  "doubleAlso": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "(doubleAlso)",
+      "drop"
+    ],
+    "missing": [],
+    "src": ": doubleAlso\n    (doubleAlso) drop\n;\n"
+  },
+  "doubleAlso,": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "(doubleAlso)",
+      "execute"
+    ],
+    "missing": [],
+    "src": ": doubleAlso,\n    (doubleAlso)\n    execute\n;\n"
+  },
+  "dispatch": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "jumptable",
+      "execute",
+      "doubleAlso",
+      "compile,",
+      "doubleAlso,"
+    ],
+    "missing": [
+      ";fallthru",
+      "jmp"
+    ],
+    "src": ": dispatch\n    jumptable ;fallthru\n    jmp execute                 \\      -1      0       non-immediate\n    jmp doubleAlso              \\      0       0       number\n    jmp execute                 \\      1       0       immediate\n\n    jmp compile,                \\      -1      2       non-immediate\n    jmp doubleAlso,             \\      0       2       number\n    jmp execute\n"
+  },
+  "interpret": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "begin",
+      "parse-name",
+      "dup",
+      "while",
+      "sfind",
+      "state",
+      "@",
+      "+",
+      "1+",
+      "2*",
+      "dispatch",
+      "repeat",
+      "2drop"
+    ],
+    "missing": [],
+    "src": ": interpret\n    begin\n        parse-name dup\n    while\n        sfind\n        state @ +\n        1+ 2* dispatch\n    repeat\n    2drop\n;\n"
+  },
+  "main": {
+    "file": "swapforth/j1b/nuc.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "cr",
+      "decimal",
+      "tethered",
+      "off",
+      "\"cold\"",
+      "sfind",
+      "if",
+      "execute",
+      "else",
+      "2drop",
+      "then",
+      "quit"
+    ],
+    "missing": [],
+    "src": ": main\n    cr\n    decimal\n    tethered off\n    \"cold\" d# 4 sfind if\n        execute\n    else\n        2drop\n    then\n    quit\n;\n"
+  },
+  "char+": {
+    "file": "swapforth/common/core0.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "1+"
+    ],
+    "missing": [],
+    "src": ": char+     1+ ;\n"
+  },
+  "chars": {
+    "file": "swapforth/common/core0.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [],
+    "missing": [],
+    "src": ": chars     ;\n"
+  },
+  "abort": {
+    "file": "swapforth/common/core0.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "throw"
+    ],
+    "missing": [],
+    "src": ": abort     -1 throw ;\n"
+  },
+  "'": {
+    "file": "swapforth/common/core0.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "parse-name",
+      "sfind",
+      "0=",
+      "and",
+      "throw"
+    ],
+    "missing": [],
+    "src": ": '\n    parse-name\n    sfind\n    0= -13 and throw\n;\n"
+  },
+  "[']": {
+    "file": "swapforth/common/core0.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "'",
+      "postpone",
+      "literal"
+    ],
+    "missing": [],
+    "src": ": [']\n    ' postpone literal\n; immediate\n"
+  },
+  "char": {
+    "file": "swapforth/common/core0.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "parse-name",
+      "drop",
+      "c@"
+    ],
+    "missing": [],
+    "src": ": char\n    parse-name drop c@\n;\n"
+  },
+  "[char]": {
+    "file": "swapforth/common/core0.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "char",
+      "literal"
+    ],
+    "missing": [],
+    "src": ": [char]\n    char postpone literal\n; immediate\n"
+  },
+  "(": {
+    "file": "swapforth/common/core0.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "[char]",
+      "parse",
+      "2drop"
+    ],
+    "missing": [],
+    "src": ": (\n    [char] ) parse 2drop\n; immediate\n"
+  },
+  "else": {
+    "file": "swapforth/common/core0.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "postpone",
+      "ahead",
+      "swap",
+      "then"
+    ],
+    "missing": [],
+    "src": ": else\n    postpone ahead\n    swap\n    postpone then\n; immediate\n"
+  },
+  "while": {
+    "file": "swapforth/common/core0.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "postpone",
+      "if",
+      "swap"
+    ],
+    "missing": [],
+    "src": ": while\n    postpone if\n    swap\n; immediate\n"
+  },
+  "repeat": {
+    "file": "swapforth/common/core0.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "postpone",
+      "again",
+      "then"
+    ],
+    "missing": [],
+    "src": ": repeat\n     postpone again\n     postpone then\n; immediate\n"
+  },
+  "2variable": {
+    "file": "swapforth/common/double.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "create",
+      "cells",
+      "allot"
+    ],
+    "missing": [],
+    "src": ": 2variable\n    create 2 cells allot\n;\n"
+  },
+  "2constant": {
+    "file": "swapforth/common/double.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "create",
+      ",",
+      "does>",
+      "2@"
+    ],
+    "missing": [],
+    "src": ": 2constant\n    create , ,\n    does> 2@\n;\n"
+  },
+  "dmax": {
+    "file": "swapforth/common/double.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "2over",
+      "d<",
+      "if",
+      "2swap",
+      "then",
+      "2drop"
+    ],
+    "missing": [],
+    "src": ": dmax\n    2over 2over d< if\n        2swap\n    then\n    2drop\n;\n"
+  },
+  "dmin": {
+    "file": "swapforth/common/double.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "2over",
+      "d<",
+      "invert",
+      "if",
+      "2swap",
+      "then",
+      "2drop"
+    ],
+    "missing": [],
+    "src": ": dmin\n    2over 2over d< invert if\n        2swap\n    then\n    2drop\n;\n"
+  },
+  "m+": {
+    "file": "swapforth/common/double.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "s>d",
+      "d+"
+    ],
+    "missing": [],
+    "src": ": m+    s>d d+ ;\n"
+  },
+  "m*": {
+    "file": "swapforth/common/double.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "2dup",
+      "xor",
+      ">r",
+      "abs",
+      "swap",
+      "um*",
+      "r>",
+      "0<",
+      "if",
+      "dnegate",
+      "then"
+    ],
+    "missing": [],
+    "src": ": m*\n    2dup xor >r\n    abs swap abs um*\n    r> 0< if dnegate then\n;\n"
+  },
+  "tnegate": {
+    "file": "swapforth/common/double.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      ">r",
+      "2dup",
+      "or",
+      "dup",
+      "if",
+      "drop",
+      "dnegate",
+      "then",
+      "r>",
+      "+",
+      "negate"
+    ],
+    "missing": [],
+    "src": ": tnegate                           ( t . . -- -t . . )\n    >r  2dup or dup if drop  dnegate 1  then\n    r> +  negate ;\n"
+  },
+  "t*": {
+    "file": "swapforth/common/double.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "2dup",
+      "xor",
+      ">r",
+      "dabs",
+      "r>",
+      "abs",
+      "2>r",
+      "r@",
+      "um*",
+      "2r>",
+      "d+",
+      "0<",
+      "if",
+      "tnegate",
+      "then"
+    ],
+    "missing": [],
+    "src": ": t*                                ( d . n -- t . . )\n                                    ( d0 d1 n)\n    2dup xor >r                     ( r: sign)\n    >r dabs r> abs\n    2>r                             ( d0)( r: sign d1 n)\n    r@ um* 0                        ( t0 d1 0)\n    2r> um*                         ( t0 d1 0 d1*n .)( r: sign)\n    d+                              ( t0 t1 t2)\n    r> 0< if tnegate then ;\n"
+  },
+  "t/": {
+    "file": "swapforth/common/double.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "over",
+      ">r",
+      "dup",
+      "0<",
+      "if",
+      "tnegate",
+      "then",
+      "r@",
+      "um/mod",
+      "rot",
+      "r>",
+      "nip",
+      "swap",
+      "dnegate"
+    ],
+    "missing": [],
+    "src": ": t/                                ( t . . u -- d . )\n                                    ( t0 t1 t2 u)\n    over >r >r                      ( t0 t1 t2)( r: t2 u)\n    dup 0< if tnegate then\n    r@ um/mod                       ( t0 rem d1)\n    rot rot                         ( d1 t0 rem)\n    r> um/mod                       ( d1 rem' d0)( r: t2)\n    nip swap                        ( d0 d1)\n    r> 0< if dnegate then ;\n"
+  },
+  "m*/": {
+    "file": "swapforth/common/double.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "t*",
+      "r>",
+      "t/"
+    ],
+    "missing": [],
+    "src": ": m*/  ( d . n u -- d . )  >r t*  r> t/ ;\n"
+  },
+  "variable": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "create",
+      ","
+    ],
+    "missing": [],
+    "src": ": variable\n    create 0 ,\n;\n"
+  },
+  "constant": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ":",
+      "postpone",
+      "literal",
+      ";"
+    ],
+    "missing": [],
+    "src": ": constant  : postpone literal postpone ; ;\n"
+  },
+  "sgn": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "0<",
+      "if",
+      "negate",
+      "then"
+    ],
+    "missing": [],
+    "src": ": sgn ( u1 n1 -- n2 ) \\ n2 is u1 with the sign of n1\n    0< if negate then\n;\n"
+  },
+  "sm/rem": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "2dup",
+      "xor",
+      ">r",
+      "over",
+      "abs",
+      "dabs",
+      "r>",
+      "um/mod",
+      "swap",
+      "sgn"
+    ],
+    "missing": [],
+    "src": "\\ n2.\n: sm/rem ( d1 n1 -- n2 n3 )\n    2dup xor >r     \\ combined sign, for quotient\n    over >r         \\ sign of dividend, for remainder\n    abs >r dabs r>\n    um/mod          ( remainder quotient )\n    swap r> sgn     \\ apply to remainder\n    swap r> sgn     \\ apply to quotient\n;\n"
+  },
+  "fm/mod": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      ">r",
+      "2dup",
+      "xor",
+      "dabs",
+      "r@",
+      "abs",
+      "um/mod",
+      "r>",
+      "0<",
+      "if",
+      "swap",
+      "negate",
+      "then",
+      "over",
+      "rot",
+      "-",
+      "1-",
+      "drop"
+    ],
+    "missing": [],
+    "src": "\\ Adapted from hForth\n: fm/mod ( d1 n1 -- n2 n3 )\n    dup >r 2dup xor >r\n    >r dabs r@ abs\n    um/mod\n    r> 0< if\n        swap negate swap\n    then\n    r> 0< if\n        negate         \\ negative quotient\n        over if\n            r@ rot - swap 1-\n        then\n    then\n    r> drop\n;\n"
+  },
+  "*/mod": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "m*",
+      "r>",
+      "sm/rem"
+    ],
+    "missing": [],
+    "src": ": */mod     >r m* r> sm/rem ;\n"
+  },
+  "*/": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "*/mod",
+      "nip"
+    ],
+    "missing": [],
+    "src": ": */        */mod nip ;\n"
+  },
+  "spaces": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      "dup",
+      "0>",
+      "while",
+      "space",
+      "1-",
+      "repeat",
+      "drop"
+    ],
+    "missing": [],
+    "src": ": spaces\n    begin\n        dup 0>\n    while\n        space 1-\n   repeat\n    drop\n;\n"
+  },
+  "BUF0": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "create BUF0\n"
+  },
+  "BUF": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "constant BUF\n"
+  },
+  "hld": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "variable hld\n"
+  },
+  "<#": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "BUF",
+      "hld",
+      "!"
+    ],
+    "missing": [],
+    "src": ": <#\n    BUF hld !\n;\n"
+  },
+  "hold": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "hld",
+      "+!",
+      "@",
+      "c!"
+    ],
+    "missing": [],
+    "src": ": hold\n    -1 hld +! hld @ c!\n;\n"
+  },
+  "sign": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "0<",
+      "if",
+      "[char]",
+      "hold",
+      "then"
+    ],
+    "missing": [],
+    "src": ": sign\n    0< if\n        [char] - hold\n    then\n;\n"
+  },
+  "#": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "base",
+      "@",
+      "um/mod",
+      ">r",
+      "swap",
+      "over",
+      "<",
+      "[",
+      "char",
+      "+",
+      "-",
+      "]",
+      "literal",
+      "and",
+      "[char]",
+      "hold",
+      "r>"
+    ],
+    "missing": [],
+    "src": ": #\n    0 base @ um/mod >r base @ um/mod swap\n    9 over < [ char A char 9 1 + - ] literal and +\n    [char] 0 + hold r>\n;\n"
+  },
+  "#s": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      "#",
+      "2dup",
+      "d0=",
+      "until"
+    ],
+    "missing": [],
+    "src": ": #s\n    begin\n        #\n        2dup d0=\n    until\n;\n"
+  },
+  "#>": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "2drop",
+      "hld",
+      "@",
+      "BUF",
+      "over",
+      "-"
+    ],
+    "missing": [],
+    "src": ": #>\n    2drop hld @ BUF over -\n;\n"
+  },
+  "d.r": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "dup",
+      "dabs",
+      "<#",
+      "#s",
+      "r>",
+      "sign",
+      "#>",
+      "over",
+      "-",
+      "spaces",
+      "type"
+    ],
+    "missing": [],
+    "src": ": d.r  ( d n -- )\n    >r\n    dup >r dabs <# #s r> sign #>\n    r> over - spaces type\n;\n"
+  },
+  "d.": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "d.r",
+      "space"
+    ],
+    "missing": [],
+    "src": ": d.  ( d -- )\n    0 d.r space\n;\n"
+  },
+  ".": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "s>d",
+      "d."
+    ],
+    "missing": [],
+    "src": ": .  ( n -- )\n    s>d d.\n;\n"
+  },
+  "u.": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "d."
+    ],
+    "missing": [],
+    "src": ": u.  ( u -- )\n    0 d.\n;\n"
+  },
+  ".r": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "s>d",
+      "r>",
+      "d.r"
+    ],
+    "missing": [],
+    "src": ": .r  ( n1 n2 -- )\n    >r s>d r> d.r\n;\n"
+  },
+  "u.r": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "swap",
+      "d.r"
+    ],
+    "missing": [],
+    "src": ": u.r  ( u n -- )\n    0 swap d.r\n;\n"
+  },
+  "move": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "2dup",
+      "u<",
+      "if",
+      "r>",
+      "cmove>",
+      "else",
+      "cmove",
+      "then"
+    ],
+    "missing": [],
+    "src": ": move \\ ( addr1 addr2 u -- )\n    >r 2dup u< if\n        r> cmove>\n    else\n        r> cmove\n    then\n;\n"
+  },
+  "word": {
+    "file": "swapforth/common/core.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      "source",
+      ">r",
+      ">in",
+      "@",
+      "+",
+      "c@",
+      "over",
+      "=",
+      "r>",
+      "xor",
+      "and",
+      "while",
+      "+!",
+      "repeat",
+      "parse",
+      "dup",
+      "BUF0",
+      "c!",
+      "1+",
+      "swap",
+      "cmove"
+    ],
+    "missing": [],
+    "src": ": word\n    begin\n        source >r >in @ + c@ over =\n        r> >in @ xor and\n    while\n        1 >in +!\n    repeat\n\n    parse\n    dup BUF0 c!\n    BUF0 1+ swap cmove\n    BUF0\n;\n"
+  },
+  "roll": {
+    "file": "swapforth/common/core-ext0.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "?dup",
+      "if",
+      "swap",
+      ">r",
+      "1-",
+      "recurse",
+      "r>",
+      "then"
+    ],
+    "missing": [],
+    "src": ": roll\n    ?dup if\n        swap >r\n        1- recurse\n        r> swap\n    then\n;\n"
+  },
+  "pick": {
+    "file": "swapforth/common/core-ext0.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "?dup",
+      "if",
+      "swap",
+      ">r",
+      "1-",
+      "recurse",
+      "r>",
+      "else",
+      "dup",
+      "then"
+    ],
+    "missing": [],
+    "src": ": pick\n    ?dup if\n        swap >r\n        1- recurse\n        r> swap\n    else\n        dup\n    then\n;\n"
+  },
+  "erase": {
+    "file": "swapforth/common/core-ext.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "fill"
+    ],
+    "missing": [],
+    "src": ": erase     0 fill ;\n"
+  },
+  "within": {
+    "file": "swapforth/common/core-ext.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "over",
+      "-",
+      ">r",
+      "r>",
+      "u<"
+    ],
+    "missing": [],
+    "src": ": within    over - >r - r> u< ;\n"
+  },
+  ".(": {
+    "file": "swapforth/common/core-ext.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "[char]",
+      "parse",
+      "type"
+    ],
+    "missing": [],
+    "src": ": .(\n    [char] ) parse type\n; immediate\n"
+  },
+  "find": {
+    "file": "swapforth/common/core-ext.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "count",
+      "sfind",
+      "dup",
+      "0=",
+      "if",
+      "2drop",
+      "1-",
+      "then"
+    ],
+    "missing": [],
+    "src": ": find\n    count sfind\n    dup 0= if\n        2drop 1- 0\n    then\n;\n"
+  },
+  "[compile]": {
+    "file": "swapforth/common/core-ext.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "'",
+      "compile,"
+    ],
+    "missing": [],
+    "src": ": [compile]\n    ' compile,\n; immediate\n"
+  },
+  "_": {
+    "file": "swapforth/common/core-ext.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "create _ 80 allot  \\ The \"temporary buffer\" in ANS: A.11.6.1.2165\n"
+  },
+  "s\"": {
+    "file": "swapforth/common/core-ext.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "[char]",
+      "parse",
+      "state",
+      "@",
+      "if",
+      "postpone",
+      "sliteral",
+      "else",
+      "tuck",
+      "_",
+      "swap",
+      "cmove",
+      "then"
+    ],
+    "missing": [],
+    "src": ": s\"\n    [char] \" parse\n    state @ if\n        postpone sliteral\n    else\n        tuck _ swap cmove\n        _ swap\n    then\n; immediate\n"
+  },
+  "case": {
+    "file": "swapforth/common/core-ext.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [],
+    "missing": [],
+    "src": "constant case immediate  ( init count of ofs )\n"
+  },
+  "of": {
+    "file": "swapforth/common/core-ext.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "1+",
+      "postpone",
+      "over",
+      "=",
+      "if",
+      "drop",
+      "swap"
+    ],
+    "missing": [],
+    "src": ": of  ( #of -- orig #of+1 / x -- )\n    1+    ( count ofs )\n    postpone over  postpone = ( copy and test case value)\n    postpone if    ( add orig to control flow stack )\n    postpone drop  ( discards case value if = )\n    swap           ( bring count back now )\n; immediate\n"
+  },
+  "endof": {
+    "file": "swapforth/common/core-ext.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "postpone",
+      "else",
+      "r>"
+    ],
+    "missing": [],
+    "src": ": endof ( orig1 #of -- orig2 #of )\n    >r   ( move off the stack in case the control-flow )\n         ( stack is the data stack. )\n    postpone else\n    r>   ( we can bring count back now )\n; immediate\n"
+  },
+  "endcase": {
+    "file": "swapforth/common/core-ext.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "postpone",
+      "drop",
+      "begin",
+      "dup",
+      "while",
+      "swap",
+      "then",
+      "1-",
+      "repeat"
+    ],
+    "missing": [],
+    "src": ": endcase  ( orig1..orign #of -- )\n    postpone drop  ( discard case value )\n    begin\n        dup\n    while\n        swap postpone then 1-\n    repeat drop\n; immediate\n"
+  },
+  "hex": {
+    "file": "swapforth/common/core-ext.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "base",
+      "!"
+    ],
+    "missing": [],
+    "src": ": hex\n    16 base !\n;\n"
+  },
+  "save-input": {
+    "file": "swapforth/common/core-ext.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">in",
+      "@"
+    ],
+    "missing": [],
+    "src": ": save-input\n    >in @ 1\n;\n"
+  },
+  "restore-input": {
+    "file": "swapforth/common/core-ext.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "drop",
+      ">in",
+      "!",
+      "true"
+    ],
+    "missing": [],
+    "src": ": restore-input\n    drop >in !\n    true\n;\n"
+  },
+  "convert": {
+    "file": "swapforth/common/core-ext.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "1+",
+      ">number",
+      "drop"
+    ],
+    "missing": [],
+    "src": "\\ From ANS specification A.6.2.0970\n: convert   1+ 511 >number drop ;\n"
+  },
+  "\\": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "source",
+      "nip",
+      ">in",
+      "!"
+    ],
+    "missing": [],
+    "src": ": \\     source nip >in ! ; immediate\n"
+  },
+  "align": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "here",
+      "aligned",
+      "dp",
+      "!"
+    ],
+    "missing": [],
+    "src": ": align     here aligned dp ! ;\n"
+  },
+  "2>r": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "r>",
+      "-rot",
+      "swap",
+      ">r"
+    ],
+    "missing": [],
+    "src": ": 2>r   r> -rot swap >r >r >r ;\n"
+  },
+  "2r>": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "postpone",
+      "r>",
+      "swap"
+    ],
+    "missing": [],
+    "src": ": 2r>\n    postpone r>\n    postpone r>\n    postpone swap\n; immediate\n"
+  },
+  "2r@": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "r>",
+      "2r>",
+      "2dup",
+      "2>r",
+      "rot",
+      ">r"
+    ],
+    "missing": [],
+    "src": ": 2r@   r> 2r> 2dup 2>r rot >r ;\n"
+  },
+  "create": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ":",
+      "align",
+      "here",
+      "postpone",
+      "literal",
+      ";"
+    ],
+    "missing": [],
+    "src": ": create\n    :\n    align here postpone literal\n    postpone ;\n;\n"
+  },
+  ">body": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "uw@",
+      "and"
+    ],
+    "missing": [],
+    "src": ": >body\n    uw@ 32767 and\n;\n"
+  },
+  "(.s)": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "depth",
+      "if",
+      ">r",
+      "recurse",
+      "r>",
+      "dup",
+      ".",
+      "then"
+    ],
+    "missing": [],
+    "src": ": (.s)\n    depth if\n        >r recurse r>\n        dup .\n    then\n;\n"
+  },
+  ".s": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "[char]",
+      "emit",
+      "depth",
+      ".r",
+      "space",
+      "(.s)"
+    ],
+    "missing": [],
+    "src": ": .s\n    [char] < emit depth 0 .r [char] > emit space\n    (.s)\n;\n"
+  },
+  "/mod": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "s>d",
+      "r>",
+      "sm/rem"
+    ],
+    "missing": [],
+    "src": ": /mod      >r s>d r> sm/rem ;\n"
+  },
+  "/": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "/mod",
+      "nip"
+    ],
+    "missing": [],
+    "src": ": /         /mod nip ;\n"
+  },
+  "mod": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "/mod",
+      "drop"
+    ],
+    "missing": [],
+    "src": ": mod       /mod drop ;\n"
+  },
+  "c\"": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "here",
+      "postpone",
+      "literal",
+      "[char]",
+      "parse",
+      "s,"
+    ],
+    "missing": [],
+    "src": ": c\"\n    here postpone literal\n    [char] \" parse\n    s,\n; immediate\n"
+  },
+  "sliteral": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "here",
+      "postpone",
+      "literal",
+      "count",
+      "s,"
+    ],
+    "missing": [],
+    "src": ": sliteral\n    here postpone literal\n    postpone count\n    s,\n; immediate\n"
+  },
+  "(.\")": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "count",
+      "type"
+    ],
+    "missing": [],
+    "src": ": (.\")\n    count type\n;\n"
+  },
+  ".\"": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "[char]",
+      "parse",
+      "state",
+      "@",
+      "if",
+      "here",
+      "postpone",
+      "literal",
+      "s,",
+      "(.\")",
+      "else",
+      "type",
+      "then"
+    ],
+    "missing": [],
+    "src": ": .\"\n    [char] \" parse\n    state @ if\n        here postpone literal\n        s,\n        postpone (.\")\n    else\n        type\n    then\n; immediate\n"
+  },
+  "unused": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "cp",
+      "@",
+      "-",
+      "here",
+      "+"
+    ],
+    "missing": [],
+    "src": ": unused $4000 cp @ - $8000 here - + ;\n"
+  },
+  "pad": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "here",
+      "aligned"
+    ],
+    "missing": [],
+    "src": ": pad here aligned ;\n"
+  },
+  "marker": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "forth",
+      "@",
+      "dp",
+      "cp",
+      "create",
+      ",",
+      "does>",
+      "dup",
+      "!",
+      "cell+"
+    ],
+    "missing": [],
+    "src": ": marker\n    forth @ dp @ cp @\n    create\n        , , ,\n    does>\n        dup @ cp !\n        cell+ dup @ dp !\n        cell+ @ forth !\n;\n"
+  },
+  ".xt": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      ">r",
+      "forth",
+      "@",
+      "begin",
+      "dup",
+      "0=",
+      "if",
+      "r>",
+      "2drop",
+      "exit",
+      "then",
+      "+",
+      "count",
+      "caligned",
+      "uw@",
+      "r@",
+      "<>",
+      "while",
+      "and",
+      "repeat",
+      "drop",
+      "type"
+    ],
+    "missing": [],
+    "src": ": .xt  ( xt -- ) \\ print xt's name\n    >r\n    forth @\n    begin\n        dup 0= if\n            r> 2drop exit\n        then\n        dup\n        2 +\n        count + caligned\n        uw@ r@ <>\n    while\n        uw@ -2 and\n    repeat\n    r> drop\n    2 + count type\n;\n"
+  },
+  "op4": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "create op4          \\ 4-bit field names, bits [11:8]\n    s\" T\"           s,\n    s\" N\"           s,\n    s\" T+N\"         s,\n    s\" T&N\"         s,\n    s\" T|N\"         s,\n    s\" T^N\"         s,\n    s\" ~T\"          s,\n    s\" N==T\"        s,\n    s\" N<T\"         s,\n    s\" N>>T\"        s,\n    s\" N<<T\"        s,\n    s\" rT\"          s,\n    s\" [T]\"         s,\n    s\" io[T]\"       s,\n    s\" status\"      s,\n    s\" Nu<T\"        s,\n"
+  },
+  "op3": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "create op3          \\ 3-bit operation, bits [6:4]\n    s\" \"            s,\n    s\" T->N\"        s,\n    s\" T->R\"        s,\n    s\" N->[T]\"      s,\n    s\" N->io[T]\"    s,\n    s\" _IORD_\"      s,\n"
+  },
+  "opr": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "create opr          \\ 2-bit R stack delta, bits [3:2]\n    s\" \"            s,\n    s\" r+1\"         s,\n    s\" \"            s,\n    s\" r-1\"         s,\n"
+  },
+  "opd": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "create opd          \\ 2-bit D stack delta, bits [1:0]\n    s\" \"            s,\n    s\" d+1\"         s,\n    s\" \"            s,\n    s\" d-1\"         s,\n"
+  },
+  "skip.\"": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "?do",
+      "count",
+      "+",
+      "loop",
+      "(.\")",
+      "space"
+    ],
+    "missing": [],
+    "src": ": skip.\" ( addr u -- ) \\ skip u strings, then print\n    0 ?do\n        count +\n    loop (.\")\n    space\n;\n"
+  },
+  ".alu": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      ".\"",
+      "op4",
+      "over",
+      "rshift",
+      "skip.\"",
+      "op3",
+      "and",
+      "opr",
+      "opd",
+      "space",
+      "if",
+      "then"
+    ],
+    "missing": [],
+    "src": ": .alu\n    .\" ALU \"\n\n    op4 over 8 rshift skip.\"\n\n    op3 over 4 rshift 7 and skip.\"\n\n    opr over 2 rshift 3 and skip.\"\n\n    opd over 3 and skip.\"\n\n    space\n    $80 and if .\" ;\" then\n;\n"
+  },
+  "J1op": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "create J1op , , , ,\n"
+  },
+  "see": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "base",
+      "@",
+      "hex",
+      "'",
+      "bounds",
+      "begin",
+      "cr",
+      "dup",
+      ".",
+      "uw@",
+      ".r",
+      "space",
+      "rshift",
+      "if",
+      "and",
+      "[char]",
+      "emit",
+      "decimal",
+      "else",
+      "2*",
+      "swap",
+      "cells",
+      "J1op",
+      "+",
+      "execute",
+      "then",
+      "2dup",
+      "=",
+      "until",
+      "2drop",
+      "!"
+    ],
+    "missing": [],
+    "src": ": see\n    base @ hex\n    '\n    64 bounds\n    begin\n        cr dup .\n        dup uw@\n        dup 4 .r space\n        dup 15 rshift if\n            32767 and\n            [char] $ emit dup .\n            decimal\n            [char] # emit .\n            hex\n        else\n            dup 8191 and 2* swap\n            13 rshift cells J1op + @ execute\n        then\n        2 +\n        2dup =\n    until\n    2drop\n    base !\n;\n"
+  },
+  "environment?": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "2drop",
+      "false"
+    ],
+    "missing": [],
+    "src": ": environment?\n    2drop false\n;\n"
+  },
+  "new": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "s\"",
+      "evaluate"
+    ],
+    "missing": [],
+    "src": ": new\n    s\" | marker |\" evaluate\n;\n"
+  },
+  "|": {
+    "file": "swapforth/j1b/swapforth.fs",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "marker |\n"
+  }
+}

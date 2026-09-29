@@ -13,7 +13,7 @@
 : negate invert 1+ ;
 : abs dup 0< if negate then ;
 \ ( n1 n2 -- rem quot ) remainder keeps the sign of n1
-: /mod dup 0< >r abs swap dup 0< >r abs swap um/mod
+: /mod dup 0< >r abs swap dup 0< >r abs swap u/mod
   r> r> over >r xor if negate then r> if swap negate swap then ;
 : / /mod swap drop ;
 : mod /mod drop ;
@@ -78,7 +78,7 @@
   drop dup r> u< >r 0 r> then ;
 \ ( lo hi u -- lo' hi' )
 : d-u swap >r 2dup u< if - r> 1- else - r> then ;
-\ ( lo hi u -- rem quot ) /mod keeps the single-cell kernel word
+\ ( ud u -- urem uquot ) ANS double divide. Single-cell divide is u/mod.
 : um/mod >r 0 begin rot rot r@ d<u if rot true else
   r@ d-u rot 1+ false then until r> drop swap drop ;
 \ ( lo hi n -- rem quot ) remainder keeps the sign of the dividend

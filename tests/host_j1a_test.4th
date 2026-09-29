@@ -11,9 +11,9 @@ s" fsys/host/cross.4th" fsoc-path 2dup included fjson.str-free
 
 s" fsys/common/common.4th" j1a-xc
 s" fsys/common/core.4th" j1a-xc
-xc-here@ 7550 expect=
+xc-here@ 7548 expect=
 s" fsys/j1a/extra-min.4th" j1a-xc
-xc-here@ 8008 expect=
+xc-here@ 8006 expect=
 
 test-finish
 cr ." host_j1a_test ok" cr

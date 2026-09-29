@@ -318,6 +318,56 @@ variable flatten-n
 
 \ fsys image: assemble the kernel, then the host compiles fsys/common.
 \ SwapForth's cross is not used. lamp.fs is appended only when the option asks.
+\ image=release and an application option: the second pass loads release-image.4th
+\ instead of the common / core / extra layers. The first pass always rewrites
+\ the dictionary JSON from those full layers.
+
+\ Application options. A new program is another flag here and a file in soc-release-files.
+: soc-app? ( project -- f )
+    s" lamp" rot project.opt@ s" 1" compare 0= ;
+
+: soc-release? ( project -- f )
+    >r
+    s" image" r@ project.opt@ s" release" compare 0=
+    r> soc-app? and ;
+
+: soc-dict-rel ( project -- c-addr u )
+    >r
+    s" j1b" soc-port compare 0= if
+        rdrop
+        s" doc/j1-word-graph/fsys-j1b.json"
+    else
+        s" extra-min" r> project.opt@ s" 1" compare 0= if
+            s" doc/j1-word-graph/fsys-j1a-extra-min.json"
+        else
+            s" doc/j1-word-graph/fsys-j1a.json"
+        then
+    then ;
+
+: soc-dict-write ( -- )
+    s" python3 " s" doc/j1-word-graph/build.py" fsoc-path fjson.str-concat
+    s"  write" fjson.str-concat
+    s" dictionary" sh-run+ ;
+
+: soc-release-files ( project -- )
+    >r
+    s" python3 " s" doc/j1-word-graph/build.py" fsoc-path fjson.str-concat
+    s"  release " fjson.str-concat
+    r@ soc-dict-rel fsoc-path fjson.str-concat
+    s"  " fjson.str-concat
+    s" fsys/" soc-port fjson.str-concat s" /release.4th" fjson.str-concat
+    fsoc-path fjson.str-concat
+    s"  " fjson.str-concat
+    s" release-keep.4th" r@ project.file fjson.str-concat
+    s"  " fjson.str-concat
+    s" release-image.4th" r@ project.file fjson.str-concat
+    s" lamp" r@ project.opt@ s" 1" compare 0= if
+        s"  " fjson.str-concat
+        s" firmware/lamp.fs" fsoc-path fjson.str-concat
+    then
+    rdrop
+    s" release image" sh-run+ ;
+
 : soc-kernel ( -- )
     s" fsys/kernel/" soc-port fjson.str-concat
     s" /kernel.4th" fjson.str-concat
@@ -352,20 +402,34 @@ variable flatten-n
 
 : soc-fsys ( project -- )
     >r
+    soc-dict-write
+    r@ soc-release? if
+        r@ soc-release-files
+        s" keep-name?" find-name 0= if
+            s" fsys/host/keep.4th" fsoc-path 2dup included fjson.str-free
+        then
+        s" keep-count" find-name name>interpret execute off
+        s" release-keep.4th" r@ project.file 2dup included fjson.str-free
+    then
     soc-kernel
     s" fsys/host/cross.4th" fsoc-path 2dup included fjson.str-free
-    ."     fsys/common/common.4th" cr
-    s" fsys/common/common.4th" soc-fsys-load
-    ."     fsys/common/core.4th" cr
-    s" fsys/common/core.4th" soc-fsys-load
-    s" j1b" soc-port compare 0= if
-        ."     fsys/j1b/extra.4th" cr
-        s" fsys/j1b/extra.4th" soc-fsys-load
+    r@ soc-release? if
+        ."     release-image.4th" cr
+        s" release-image.4th" r@ project.file soc-xc-load
     else
-        \ Optional: leaves little room under TIB for interactive compile.
-        s" extra-min" r@ project.opt@ s" 1" compare 0= if
-            ."     fsys/j1a/extra-min.4th" cr
-            s" fsys/j1a/extra-min.4th" soc-fsys-load
+        ."     fsys/common/common.4th" cr
+        s" fsys/common/common.4th" soc-fsys-load
+        ."     fsys/common/core.4th" cr
+        s" fsys/common/core.4th" soc-fsys-load
+        s" j1b" soc-port compare 0= if
+            ."     fsys/j1b/extra.4th" cr
+            s" fsys/j1b/extra.4th" soc-fsys-load
+        else
+            \ Optional: leaves little room under TIB for interactive compile.
+            s" extra-min" r@ project.opt@ s" 1" compare 0= if
+                ."     fsys/j1a/extra-min.4th" cr
+                s" fsys/j1a/extra-min.4th" soc-fsys-load
+            then
         then
     then
     s" lamp" r@ project.opt@ s" 1" compare 0= if

@@ -120,6 +120,8 @@ FSOC_EMU_FAST=1 FSOC_EMU_UART_IN='1 2 + .' fsoc --build
 
 `projects/soc_blink` is the same core with a `'BOOT` word that does not return to the prompt. The loop writes `0` and `1` to `IO-LED`. That bit leaves `top` as `led`. The pause is a read of `IO-TIMER`. The loop also sends `lamp on` and `lamp off` on the UART. A background task and an interrupt controller are a later step, described in [doc/stm8ef-hw.md](doc/stm8ef-hw.md).
 
+With `s" fsys" sys:` the dictionary can be cut down. `s" image" s" release" option:` next to `s" lamp" s" 1" option:` keeps the lamp and the compiler roots in `fsys/<cpu>/release.4th`. Omit `image`, or set it to `debug`, and the full layers stay. Measured on this project: j1a release `firmware.hex: 2822 bytes of 8192`, debug `7752 bytes of 8192`; j1b release `2956 bytes of 32768`, debug `9156 bytes of 32768`. The empty soc row and these four pairs are in [doc/j1-word-graph/soc-sizes.md](doc/j1-word-graph/soc-sizes.md). Regenerate that file with `python3 doc/j1-word-graph/build.py sizes`.
+
 `FSOC_EMU_CON` picks the view. `term` writes the UART bytes, so the lamp phrases show as text. `log` prints each UART byte as `t=<ns> uart tx <byte>`. `pin` prints only `t=<ns> pin led 0` and `t=<ns> pin led 1` and does not write the UART bytes. A run without a scripted UART line ends at Ctrl+C or `FSOC_EMU_CYCLES`. Tests use `FSOC_EMU_CYCLES=800000` with `FSOC_EMU_FAST=1`.
 
 ```bash

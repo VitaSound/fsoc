@@ -381,7 +381,7 @@ s\" s\" soc\" task:\ns\" emulation\" target:\ns\" designs/soc_console.4th\" desi
 s\" FSOC_EMU_FAST=1 FSOC_EMU_CYCLES=5000000 FSOC_EMU_CON=term FSOC_EMU_UART_IN=\"$(printf '%s\n' 'hex abcd .x')\"" s" --build" in-tmp-fsoc
 expect-true
 s" fsys/j1a/extra-min.4th" s" sim.log" tmp-grep? expect-true
-s" firmware.hex: 8008" s" sim.log" tmp-grep? expect-true
+s" firmware.hex: 8006" s" sim.log" tmp-grep? expect-true
 s" ABCD" s" sim.log" tmp-grep? expect-true
 test-teardown
 
@@ -398,12 +398,23 @@ s" fsys/j1a/extra-min.4th" s" sim.log" tmp-grep? expect-false
 test-teardown
 
 test-setup
+s\" s\" soc\" task:\ns\" emulation\" target:\ns\" designs/soc_top.4th\" design:\ns\" j1a\" cpu:\ns\" fsys\" sys:\ns\" lamp\" s\" 1\" option:\ns\" image\" s\" release\" option:\n" tmp-manifest
+s" env -u FSOC_EMU_UART_IN FSOC_EMU_FAST=1 FSOC_EMU_CON=term FSOC_EMU_CYCLES=800000" s" --build" in-tmp-fsoc
+expect-true
+s" release-image.4th" s" sim.log" tmp-grep? expect-true
+s" fsys/common/core.4th" s" sim.log" tmp-grep? expect-false
+s" lamp on" s" sim.log" tmp-grep? expect-true
+s" lamp off" s" sim.log" tmp-grep? expect-true
+s"  ok" s" sim.log" tmp-grep? expect-false
+test-teardown
+
+test-setup
 s\" s\" soc\" task:\ns\" emulation\" target:\ns\" designs/soc_console.4th\" design:\ns\" j1b\" cpu:\ns\" fsys\" sys:\n" tmp-manifest
 s\" FSOC_EMU_FAST=1 FSOC_EMU_CYCLES=30000000 FSOC_EMU_CON=term FSOC_EMU_UART_IN=\"$(printf '%s\n' '1 2 + .' 'variable x' '5 x !' 'x @ .' ': t 1 2 + . ;' 't')\"" s" --build" in-tmp-fsoc
 expect-true
 s" 3  ok" s" sim.log" tmp-grep? expect-true
 s" 5  ok" s" sim.log" tmp-grep? expect-true
-s" firmware.hex: 8934" s" sim.log" tmp-grep? expect-true
+s" firmware.hex: 8930" s" sim.log" tmp-grep? expect-true
 s" bytes of 32768" s" sim.log" tmp-grep? expect-true
 test-teardown
 

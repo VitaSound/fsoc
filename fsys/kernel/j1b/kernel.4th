@@ -49,6 +49,11 @@ variable jb-at
 
 \ ( name-a name-u flags pc -- ) header, code is a jump in the low half
 : jb-word { na nu fl pc -- }
+    na nu s" keep-name?" find-name ?dup if
+        name>interpret execute 0= if exit then
+    else
+        2drop
+    then
     fasm-pc @ 2* dup jb-at ! { entry }
     jb-latest @ fl if 1 or then
     dup $ff and jb-b,
@@ -132,7 +137,7 @@ variable jb-fid
     s" resolve" 0 s" thenw" jb-pc jb-word
     s" jump" 0 s" againw" jb-pc jb-word
     s" immediate" 0 s" immw" jb-pc jb-word
-    s" um/mod" 0 s" umod" jb-pc jb-word
+    s" u/mod" 0 s" umod" jb-pc jb-word
     s" tibc" 0 s" tibc" jb-pc jb-word
     s" parse-name" 0 s" token" jb-pc jb-word
     s" namec" 0 s" namecw" jb-pc jb-word

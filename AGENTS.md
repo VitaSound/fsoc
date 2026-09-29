@@ -16,7 +16,7 @@ cpu/j1/         Core kits `j1a/` and `j1b/` (core, stack, memory wrap) plus shar
 swapforth/      SwapForth image tool, moved intact: `j1a/`, `j1b/`, `common/`
 fsys/fasm/      Host assembler for j1a and j1b: comma words, labels, `[asm]`/`[endasm]`
 fsoc/cpu.4th    Forth profiles (`j1a`, `j1b`, `stm8`, `z80`). Manifest `cpu:`; empty on task `soc` is `j1a`
-fsoc/sys.4th    Image tool named by `sys:`. Empty is `swapforth`. `fsys` assembles `fsys/kernel/<cpu>`, then the host compiles `fsys/common` (j1b then `fsys/j1b/extra.4th`; j1a with `extra-min=1` then `fsys/j1a/extra-min.4th`)
+fsoc/sys.4th    Image tool named by `sys:`. Empty is `swapforth`. `fsys` assembles `fsys/kernel/<cpu>`, then the host compiles `fsys/common` (j1b then `fsys/j1b/extra.4th`; j1a with `extra-min=1` then `fsys/j1a/extra-min.4th`). `s" image" s" release" option:` with an application option such as `lamp` loads only the closure of those programs plus `fsys/<cpu>/release.4th`; otherwise the full layers are loaded. The dictionary JSON is `doc/j1-word-graph/<cpu-sys>.json`
 
 fsoc/kit.4th    Core kit: file names, cell width, stack depths, RAM words. The kit does not name the image tool
 fsoc/compare.4th One scenario, several `cpu:` rows: cell width, image bytes, Verilator cycles. No synthesis. A row stays empty when that profile cannot build an image

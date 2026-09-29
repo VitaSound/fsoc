@@ -1,0 +1,3676 @@
+{
+  "+": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "tlen": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  ":": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  ";": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "opti": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "if": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "then": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "begin": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "again": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "words": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "dup": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "drop": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "swap": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "over": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "emit": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "@": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "!": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "u<": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "=": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "-": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "cell+": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "cells": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "here": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  ",": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "allot": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "header": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "literal": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "compile-exit": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "compile-emit": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "ahead": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "mark-if": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "resolve": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "jump": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "immediate": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "u/mod": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "tibc": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "parse-name": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "namec": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "and": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "or": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "xor": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "invert": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "nip": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  ">r": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "r>": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "r@": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "i": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "<": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "lshift": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "rshift": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "byte-off": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "depth": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "execute": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "key": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "io@": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "io!": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "nidx": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "radix": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "tchar": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "nhook": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "base": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "latest": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "state": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "find": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "branch0": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  ">in": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "ntib": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "tib": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "abort": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "accept": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "exit": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "unloop": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "quit": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "src": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "interp": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "'BOOT": {
+    "file": "fsys/kernel/j1a/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "else": {
+    "file": "fsys/common/common.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "ahead",
+      "swap",
+      "resolve"
+    ],
+    "missing": [],
+    "src": ": else ahead swap resolve ; immediate\n"
+  },
+  "while": {
+    "file": "fsys/common/common.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "mark-if",
+      "swap"
+    ],
+    "missing": [],
+    "src": ": while mark-if swap ; immediate\n"
+  },
+  "repeat": {
+    "file": "fsys/common/common.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "jump",
+      "resolve"
+    ],
+    "missing": [],
+    "src": ": repeat jump resolve ; immediate\n"
+  },
+  "until": {
+    "file": "fsys/common/common.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "rshift",
+      "branch0"
+    ],
+    "missing": [],
+    "src": "\\ ( dest -- ) dest is the byte address begin left.\n: until 1 rshift branch0 ; immediate\n"
+  },
+  "create": {
+    "file": "fsys/common/common.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "parse-name",
+      "drop",
+      "header",
+      "here",
+      "cells",
+      "+",
+      "literal",
+      "compile-exit"
+    ],
+    "missing": [],
+    "src": ": create parse-name drop header here 2 cells + literal compile-exit ;\n"
+  },
+  "variable": {
+    "file": "fsys/common/common.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "create",
+      ","
+    ],
+    "missing": [],
+    "src": ": variable create 0 , ;\n"
+  },
+  "constant": {
+    "file": "fsys/common/common.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "parse-name",
+      "drop",
+      "header",
+      "literal",
+      "compile-exit"
+    ],
+    "missing": [],
+    "src": ": constant parse-name drop header literal compile-exit ;\n"
+  },
+  "1+": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "+"
+    ],
+    "missing": [],
+    "src": ": 1+ 1 + ;\n"
+  },
+  "1-": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "-"
+    ],
+    "missing": [],
+    "src": ": 1- 1 - ;\n"
+  },
+  "0=": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "="
+    ],
+    "missing": [],
+    "src": ": 0= 0 = ;\n"
+  },
+  "<>": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "=",
+      "invert"
+    ],
+    "missing": [],
+    "src": ": <> = invert ;\n"
+  },
+  ">": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "swap",
+      "<"
+    ],
+    "missing": [],
+    "src": ": > swap < ;\n"
+  },
+  "0<": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "<"
+    ],
+    "missing": [],
+    "src": ": 0< 0 < ;\n"
+  },
+  "0>": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">"
+    ],
+    "missing": [],
+    "src": ": 0> 0 > ;\n"
+  },
+  "0<>": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "<>"
+    ],
+    "missing": [],
+    "src": ": 0<> 0 <> ;\n"
+  },
+  "u>": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "swap",
+      "u<"
+    ],
+    "missing": [],
+    "src": ": u> swap u< ;\n"
+  },
+  "negate": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "invert",
+      "1+"
+    ],
+    "missing": [],
+    "src": ": negate invert 1+ ;\n"
+  },
+  "abs": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "0<",
+      "if",
+      "negate",
+      "then"
+    ],
+    "missing": [],
+    "src": ": abs dup 0< if negate then ;\n"
+  },
+  "/mod": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "0<",
+      ">r",
+      "abs",
+      "swap",
+      "u/mod",
+      "r>",
+      "over",
+      "xor",
+      "if",
+      "negate",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ ( n1 n2 -- rem quot ) remainder keeps the sign of n1\n: /mod dup 0< >r abs swap dup 0< >r abs swap u/mod\n  r> r> over >r xor if negate then r> if swap negate swap then ;\n"
+  },
+  "/": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "/mod",
+      "swap",
+      "drop"
+    ],
+    "missing": [],
+    "src": ": / /mod swap drop ;\n"
+  },
+  "mod": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "/mod",
+      "drop"
+    ],
+    "missing": [],
+    "src": ": mod /mod drop ;\n"
+  },
+  "true": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "invert"
+    ],
+    "missing": [],
+    "src": ": true 0 invert ;\n"
+  },
+  "false": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [],
+    "missing": [],
+    "src": ": false 0 ;\n"
+  },
+  "*": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "begin",
+      "r@",
+      "while",
+      "and",
+      "if",
+      "over",
+      "+",
+      "then",
+      "swap",
+      "lshift",
+      "r>",
+      "rshift",
+      "repeat",
+      "nip",
+      "drop"
+    ],
+    "missing": [],
+    "src": "\\ ( a b -- a*b )\n: * >r 0 begin r@ while\n  r@ 1 and if over + then\n  swap 1 lshift swap r> 1 rshift >r\n  repeat nip r> drop ;\n"
+  },
+  "digit": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "dup",
+      "u<",
+      "if",
+      "drop",
+      "false",
+      "else",
+      "-",
+      "true",
+      "or",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ ( c -- n true | false )\n: digit dup 48 u< if drop false else\n  dup 58 u< if 48 - true else\n  32 or dup 97 u< if drop false else\n  dup 103 u< if 87 - true else\n  drop false then then then then ;\n"
+  },
+  "number": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "tlen",
+      "@",
+      "0=",
+      "if",
+      "false",
+      "else",
+      "nidx",
+      "!",
+      "base",
+      "radix",
+      ">",
+      "tchar",
+      "=",
+      "then",
+      "begin",
+      "true",
+      "dup",
+      "digit",
+      "drop",
+      "u<",
+      "swap",
+      "*",
+      "+",
+      "1+",
+      "until"
+    ],
+    "missing": [],
+    "src": "\\ ( -- n true | false ) whole token, base, or a leading $\n: number tlen @ 0= if false else\n  0 nidx ! base @ radix !\n  tlen @ 1 > if 0 tchar 36 = if\n    1 nidx ! 16 radix ! then then\n  0 begin nidx @ tlen @ = if true dup else\n    nidx @ tchar digit 0= if drop false true else\n    dup radix @ u< if\n      swap radix @ * + nidx @ 1+ nidx ! false\n    else drop drop false true then then then\n  until then ;\n"
+  },
+  "bl": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [],
+    "missing": [],
+    "src": ": bl 32 ;\n"
+  },
+  "space": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "bl",
+      "emit"
+    ],
+    "missing": [],
+    "src": ": space bl emit ;\n"
+  },
+  "cr": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "emit"
+    ],
+    "missing": [],
+    "src": ": cr 13 emit 10 emit ;\n"
+  },
+  "rot": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "swap",
+      "r>"
+    ],
+    "missing": [],
+    "src": ": rot >r swap r> swap ;\n"
+  },
+  "-rot": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "swap",
+      ">r",
+      "r>"
+    ],
+    "missing": [],
+    "src": ": -rot swap >r swap r> ;\n"
+  },
+  "tuck": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "swap",
+      "over"
+    ],
+    "missing": [],
+    "src": ": tuck swap over ;\n"
+  },
+  "2drop": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "drop"
+    ],
+    "missing": [],
+    "src": ": 2drop drop drop ;\n"
+  },
+  "?dup": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "if",
+      "then"
+    ],
+    "missing": [],
+    "src": ": ?dup dup if dup then ;\n"
+  },
+  "2dup": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "over"
+    ],
+    "missing": [],
+    "src": ": 2dup over over ;\n"
+  },
+  "+!": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "tuck",
+      "@",
+      "+",
+      "swap",
+      "!"
+    ],
+    "missing": [],
+    "src": ": +! tuck @ + swap ! ;\n"
+  },
+  "2swap": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "rot",
+      ">r",
+      "r>"
+    ],
+    "missing": [],
+    "src": ": 2swap rot >r rot r> ;\n"
+  },
+  "2over": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "2dup",
+      "r>",
+      "2swap"
+    ],
+    "missing": [],
+    "src": ": 2over >r >r 2dup r> r> 2swap ;\n"
+  },
+  "min": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "2dup",
+      "<",
+      "if",
+      "drop",
+      "else",
+      "nip",
+      "then"
+    ],
+    "missing": [],
+    "src": ": min 2dup < if drop else nip then ;\n"
+  },
+  "max": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "2dup",
+      "<",
+      "if",
+      "nip",
+      "else",
+      "drop",
+      "then"
+    ],
+    "missing": [],
+    "src": ": max 2dup < if nip else drop then ;\n"
+  },
+  "2*": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "lshift"
+    ],
+    "missing": [],
+    "src": ": 2* 1 lshift ;\n"
+  },
+  "2/": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "0<",
+      "if",
+      "invert",
+      "rshift",
+      "else",
+      "then"
+    ],
+    "missing": [],
+    "src": ": 2/ dup 0< if invert 1 rshift invert else 1 rshift then ;\n"
+  },
+  "+c": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "over",
+      ">r",
+      "+",
+      "dup",
+      "r>",
+      "u<",
+      "if",
+      "else",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ ( a b -- sum cy ) cy is 0 or 1\n: +c over >r + dup r> u< if 1 else 0 then ;\n"
+  },
+  "d+": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "rot",
+      "swap",
+      ">r",
+      "+c",
+      "r>",
+      "+"
+    ],
+    "missing": [],
+    "src": "\\ ( lo1 hi1 lo2 hi2 -- lo hi )\n: d+ rot swap >r >r +c r> +c swap r> + + ;\n"
+  },
+  "d2*": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "swap",
+      "dup",
+      "0<",
+      ">r",
+      "2*",
+      "r>",
+      "if",
+      "1+",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ ( lo hi -- lo' hi' ) logical shift left\n: d2* swap dup 0< >r 2* swap 2* r> if 1+ then ;\n"
+  },
+  "m+": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "2swap",
+      "2dup",
+      ">r",
+      "d+",
+      "r>"
+    ],
+    "missing": [],
+    "src": "\\ ( mlo mhi plo phi -- mlo mhi plo' phi' )\n: m+ 2swap 2dup >r >r d+ r> r> 2swap ;\n"
+  },
+  "um*": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "begin",
+      "r@",
+      "while",
+      "and",
+      "if",
+      "m+",
+      "then",
+      "d2*",
+      "r>",
+      "rshift",
+      "repeat",
+      "drop",
+      "2swap",
+      "2drop"
+    ],
+    "missing": [],
+    "src": "\\ ( u1 u2 -- lo hi )\n: um* >r 0 0 0 begin r@ while\n  r@ 1 and if m+ then >r >r d2* r> r>\n  r> 1 rshift >r repeat r> drop 2swap 2drop ;\n"
+  },
+  "dnegate": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "swap",
+      "invert",
+      "d+"
+    ],
+    "missing": [],
+    "src": "\\ ( lo hi -- lo' hi' )\n: dnegate swap invert swap invert 1 0 d+ ;\n"
+  },
+  "m*": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "2dup",
+      "xor",
+      ">r",
+      "abs",
+      "swap",
+      "um*",
+      "r>",
+      "0<",
+      "if",
+      "dnegate",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ ( n1 n2 -- lo hi )\n: m* 2dup xor >r abs swap abs um* r> 0< if dnegate then ;\n"
+  },
+  "d<u": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      ">r",
+      "dup",
+      "if",
+      "r>",
+      "drop",
+      "false",
+      "else",
+      "u<",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ ( lo hi u -- lo hi flag ) below a single-cell u\n: d<u >r dup if r> drop false else\n  drop dup r> u< >r 0 r> then ;\n"
+  },
+  "d-u": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "swap",
+      ">r",
+      "2dup",
+      "u<",
+      "if",
+      "-",
+      "r>",
+      "1-",
+      "else",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ ( lo hi u -- lo' hi' )\n: d-u swap >r 2dup u< if - r> 1- else - r> then ;\n"
+  },
+  "um/mod": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "begin",
+      "rot",
+      "r@",
+      "d<u",
+      "if",
+      "true",
+      "else",
+      "d-u",
+      "1+",
+      "false",
+      "then",
+      "until",
+      "r>",
+      "drop",
+      "swap"
+    ],
+    "missing": [],
+    "src": "\\ ( ud u -- urem uquot ) ANS double divide. Single-cell divide is u/mod.\n: um/mod >r 0 begin rot rot r@ d<u if rot true else\n  r@ d-u rot 1+ false then until r> drop swap drop ;\n"
+  },
+  "sm/rem": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "0<",
+      ">r",
+      "abs",
+      "-rot",
+      "r@",
+      "if",
+      "dnegate",
+      "then",
+      "rot",
+      "um/mod",
+      "r>",
+      "swap",
+      "negate"
+    ],
+    "missing": [],
+    "src": "\\ ( lo hi n -- rem quot ) remainder keeps the sign of the dividend\n: sm/rem dup 0< >r abs -rot dup 0< >r\n  r@ if dnegate then rot um/mod\n  r> if swap negate swap negate then r> if negate then ;\n"
+  },
+  "*/mod": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "m*",
+      "r>",
+      "sm/rem"
+    ],
+    "missing": [],
+    "src": "\\ ( n1 n2 n3 -- rem quot )\n: */mod >r m* r> sm/rem ;\n"
+  },
+  "*/": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "*/mod",
+      "nip"
+    ],
+    "missing": [],
+    "src": "\\ ( n1 n2 n3 -- n )\n: */ */mod nip ;\n"
+  },
+  "key?": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "io@",
+      "and"
+    ],
+    "missing": [],
+    "src": ": key? 8192 io@ 2 and ;\n"
+  },
+  "c@": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "@",
+      "swap",
+      "byte-off",
+      "rshift",
+      "and"
+    ],
+    "missing": [],
+    "src": ": c@ dup @ swap byte-off rshift 255 and ;\n"
+  },
+  "c!": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      ">r",
+      "byte-off",
+      "@",
+      "r@",
+      "lshift",
+      "invert",
+      "and",
+      "swap",
+      "r>",
+      "or",
+      "!"
+    ],
+    "missing": [],
+    "src": ": c! dup >r dup byte-off >r @ 255 r@ lshift invert and swap 255 and r> lshift or r> ! ;\n"
+  },
+  "type": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      "dup",
+      "while",
+      "over",
+      "c@",
+      "emit",
+      "swap",
+      "1+",
+      "1-",
+      "repeat",
+      "drop"
+    ],
+    "missing": [],
+    "src": "\\ ( c-addr u -- ) emit u bytes\n: type begin dup while over c@ emit swap 1+ swap 1- repeat drop drop ;\n"
+  },
+  "count": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "1+",
+      "swap",
+      "c@"
+    ],
+    "missing": [],
+    "src": ": count dup 1+ swap c@ ;\n"
+  },
+  "bounds": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "over",
+      "+",
+      "swap"
+    ],
+    "missing": [],
+    "src": ": bounds over + swap ;\n"
+  },
+  "decimal": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "base",
+      "!"
+    ],
+    "missing": [],
+    "src": ": decimal 10 base ! ;\n"
+  },
+  "hex": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "base",
+      "!"
+    ],
+    "missing": [],
+    "src": ": hex 16 base ! ;\n"
+  },
+  "fill": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "rot",
+      "begin",
+      "dup",
+      "while",
+      "1-",
+      ">r",
+      "2dup",
+      "c!",
+      "1+",
+      "r>",
+      "repeat",
+      "drop"
+    ],
+    "missing": [],
+    "src": ": fill rot rot begin dup while 1- >r 2dup c! 1+ r> repeat drop drop drop ;\n"
+  },
+  "cmove": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      "dup",
+      "while",
+      "1-",
+      ">r",
+      "over",
+      "c@",
+      "c!",
+      "1+",
+      "swap",
+      "r>",
+      "repeat",
+      "drop"
+    ],
+    "missing": [],
+    "src": ": cmove begin dup while 1- >r over c@ over c! 1+ swap 1+ swap r> repeat drop drop drop ;\n"
+  },
+  "'": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "parse-name",
+      "drop",
+      "find",
+      "0=",
+      "if",
+      "emit",
+      "else",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ ( \"name\" -- xt )\n: ' parse-name drop find 0= if 63 emit else drop then ;\n"
+  },
+  "[']": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "'",
+      "literal"
+    ],
+    "missing": [],
+    "src": ": ['] ' literal ; immediate\n"
+  },
+  "char": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "parse-name",
+      "drop",
+      "namec"
+    ],
+    "missing": [],
+    "src": "\\ ( \"<spaces>name\" -- c ) first character of the next word\n: char parse-name drop namec ;\n"
+  },
+  "[char]": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "char"
+    ],
+    "missing": [],
+    "src": "\\ ( \"<spaces>name\" -- ) compile that character\n: [char] char literal ;\nimmediate\n"
+  },
+  "spaces": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      "dup",
+      "while",
+      "1-",
+      "space",
+      "repeat",
+      "drop"
+    ],
+    "missing": [],
+    "src": "\\ ( n -- ) emit n spaces\n: spaces begin dup while 1- space repeat drop ;\n"
+  },
+  "c,": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "here",
+      "c!",
+      "allot"
+    ],
+    "missing": [],
+    "src": "\\ ( c -- ) store one byte and advance here\n: c, here c! 1 allot ;\n"
+  },
+  "aligned": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "cells",
+      "1-",
+      "+",
+      "invert",
+      "and"
+    ],
+    "missing": [],
+    "src": "\\ ( addr -- a-addr ) round up to a cell\n: aligned 1 cells 1- + 1 cells 1- invert and ;\n"
+  },
+  "2@": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "cell+",
+      "@",
+      "swap"
+    ],
+    "missing": [],
+    "src": "\\ ( a-addr -- x1 x2 )\n: 2@ dup cell+ @ swap @ ;\n"
+  },
+  "2!": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "swap",
+      "over",
+      "!",
+      "cell+"
+    ],
+    "missing": [],
+    "src": "\\ ( x1 x2 a-addr -- )\n: 2! swap over ! cell+ ! ;\n"
+  },
+  "2variable": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "create",
+      "depth",
+      "drop",
+      ","
+    ],
+    "missing": [],
+    "src": "\\ ( \"name\" -- ) allot two cells\n: 2variable create depth drop 0 , 0 , ;\n"
+  },
+  "cmove>": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      "dup",
+      "while",
+      "1-",
+      ">r",
+      "over",
+      "r@",
+      "+",
+      "c@",
+      "c!",
+      "r>",
+      "repeat",
+      "drop"
+    ],
+    "missing": [],
+    "src": "\\ ( c-addr1 c-addr2 u -- ) copy the last byte first\n: cmove> begin dup while 1- >r over r@ + c@ over r@ + c! r> repeat drop drop drop ;\n"
+  },
+  "compile,": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "2/",
+      "or",
+      "lshift",
+      ","
+    ],
+    "missing": [],
+    "src": "\\ ( xt -- ) compile a call. J1b keeps a nop in the high half.\n: compile, 2/ 16384 or 24576 16 lshift or , ;\n"
+  },
+  "lastcfa": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "latest",
+      "@",
+      "dup",
+      "+",
+      "c@",
+      "aligned"
+    ],
+    "missing": [],
+    "src": "\\ ( -- xt ) code field of the word being defined\n: lastcfa latest @ dup 2 + c@ 3 + + aligned ;\n"
+  },
+  "recurse": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "lastcfa",
+      "compile,"
+    ],
+    "missing": [],
+    "src": "\\ ( -- ) compile a call to the word being defined\n: recurse lastcfa compile, ; immediate\n"
+  },
+  "postponed": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "if",
+      "compile,",
+      "else",
+      "literal",
+      "[']",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ ( cfa flags -- ) compile or postpone the compilation\n: postponed if compile, else literal ['] compile, compile, then ;\n"
+  },
+  "postpone": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "parse-name",
+      "drop",
+      "find",
+      "dup",
+      "0=",
+      "if",
+      "emit",
+      "else",
+      "postponed",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ ( \"<spaces>name\" -- ) append the compilation of the next word\n: postpone parse-name drop find dup 0= if drop 63 emit else drop postponed then ;\nimmediate\n"
+  },
+  "lsp": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "variable lsp\n"
+  },
+  "lstk": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "create lstk 16 cells allot\n"
+  },
+  "unleaves": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "dup",
+      "begin",
+      "lsp",
+      "@",
+      "<",
+      "while",
+      "cells",
+      "lstk",
+      "+",
+      "resolve",
+      "1+",
+      "repeat",
+      "drop",
+      "!"
+    ],
+    "missing": [],
+    "src": "\\ ( saved -- ) point every leave in this loop at here\n: unleaves dup begin dup lsp @ < while\n  dup cells lstk + @ resolve 1+ repeat drop lsp ! ;\n"
+  },
+  "leave": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "postpone",
+      "r>",
+      "drop",
+      "ahead",
+      "lsp",
+      "@",
+      "cells",
+      "lstk",
+      "+",
+      "!",
+      "+!"
+    ],
+    "missing": [],
+    "src": "\\ ( -- ) drop this loop and jump past it\n: leave postpone r> postpone drop postpone r> postpone drop\n  ahead lsp @ cells lstk + ! 1 lsp +! ;\nimmediate\n"
+  },
+  "(loop)": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "postpone",
+      "r>",
+      "swap",
+      "+",
+      "dup",
+      "r@",
+      "<",
+      "if",
+      ">r",
+      "jump",
+      "then",
+      "drop",
+      "else",
+      "2drop",
+      "unleaves"
+    ],
+    "missing": [],
+    "src": "\\ ( after-orig body -- ) The increment is already compiled.\n: (loop) postpone r> postpone swap postpone +\n  postpone dup postpone r@ postpone <\n  postpone if postpone >r swap jump postpone then\n  postpone drop postpone r> postpone drop\n  postpone else postpone 2drop postpone then unleaves ;\n"
+  },
+  "do": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "lsp",
+      "@",
+      "postpone",
+      "2dup",
+      "swap",
+      "<",
+      "if",
+      ">r",
+      "here"
+    ],
+    "missing": [],
+    "src": "\\ ( limit index -- ) ( R: -- limit index ) Leave the body address.\n: do lsp @ postpone 2dup postpone swap postpone < postpone if\n  postpone swap postpone >r postpone >r here ;\nimmediate\n"
+  },
+  "?do": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "postpone",
+      "do"
+    ],
+    "missing": [],
+    "src": ": ?do postpone do ; immediate\n"
+  },
+  "+loop": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "(loop)"
+    ],
+    "missing": [],
+    "src": ": +loop (loop) ; immediate\n"
+  },
+  "loop": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "literal",
+      "(loop)"
+    ],
+    "missing": [],
+    "src": ": loop 1 literal (loop) ; immediate\n"
+  },
+  "does>": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "r>",
+      "2/",
+      "lshift",
+      "or",
+      "lastcfa",
+      "cell+",
+      "!"
+    ],
+    "missing": [],
+    "src": "\\ ( -- ) ( R: body -- ) body runs for the word just created\n: does> r> 2/ 24576 16 lshift or lastcfa cell+ ! ;\n"
+  },
+  "2constant": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "create",
+      "over",
+      "drop",
+      ",",
+      "does>",
+      "2@"
+    ],
+    "missing": [],
+    "src": "\\ ( x1 x2 \"name\" -- )\n: 2constant create over drop , , does> 2@ ;\n"
+  },
+  "lit!": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "swap",
+      "lshift",
+      "or",
+      "!"
+    ],
+    "missing": [],
+    "src": "\\ ( n a -- ) store a literal instruction\n: lit! swap 1 15 lshift or 24576 16 lshift or swap ! ;\n"
+  },
+  "quote,": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "here",
+      "begin",
+      "tibc",
+      "dup",
+      "=",
+      "0=",
+      "while",
+      "c,",
+      "1+",
+      "repeat",
+      "drop",
+      "aligned",
+      "-",
+      "allot",
+      "opti",
+      "!"
+    ],
+    "missing": [],
+    "src": "\\ store the bytes up to char 34 and align here\n: quote, here 0 begin tibc dup 34 = 0= while c, 1+ repeat drop\n  here aligned here - allot 0 opti ! ;\n"
+  },
+  "pic": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "create pic 40 allot\n"
+  },
+  "hld": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "variable hld\n"
+  },
+  "<#": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "pic",
+      "+",
+      "hld",
+      "!"
+    ],
+    "missing": [],
+    "src": "\\ ( -- ) start pictured output at the end of the buffer\n: <# pic 40 + hld ! ;\n"
+  },
+  "hold": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "hld",
+      "@",
+      "1-",
+      "dup",
+      "!",
+      "c!"
+    ],
+    "missing": [],
+    "src": "\\ ( c -- ) prepend one character\n: hold hld @ 1- dup hld ! c! ;\n"
+  },
+  "#": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "base",
+      "@",
+      "/mod",
+      "swap",
+      "dup",
+      ">",
+      "if",
+      "+",
+      "then",
+      "hold"
+    ],
+    "missing": [],
+    "src": "\\ ( u -- u ) prepend one digit in the current base\n: # base @ /mod swap dup 9 > if 7 + then 48 + hold ;\n"
+  },
+  "#s": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      "#",
+      "dup",
+      "0=",
+      "until"
+    ],
+    "missing": [],
+    "src": "\\ ( u -- u ) prepend every digit\n: #s begin # dup 0= until ;\n"
+  },
+  "#>": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "drop",
+      "hld",
+      "@",
+      "pic",
+      "+",
+      "over",
+      "-"
+    ],
+    "missing": [],
+    "src": "\\ ( u -- c-addr u )\n: #> drop hld @ pic 40 + over - ;\n"
+  },
+  "sign": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "0<",
+      "if",
+      "hold",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ ( n -- ) prepend a minus when n is negative\n: sign 0< if 45 hold then ;\n"
+  },
+  "u.": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "<#",
+      "#s",
+      "#>",
+      "type"
+    ],
+    "missing": [],
+    "src": "\\ ( u -- )\n: u. <# #s #> type ;\n"
+  },
+  ".": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "0<",
+      "if",
+      "emit",
+      "negate",
+      "then",
+      "u.",
+      "space"
+    ],
+    "missing": [],
+    "src": "\\ ( n -- ) print a signed number and a space\n: . dup 0< if 45 emit negate then u. space ;\n"
+  },
+  "(.s)": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "depth",
+      "if",
+      ">r",
+      "(.s)",
+      "r>",
+      "dup",
+      ".",
+      "then"
+    ],
+    "missing": [],
+    "src": ": (.s) depth if >r (.s) r> dup . then ;\n"
+  },
+  ".s": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "emit",
+      "depth",
+      "u.",
+      "space",
+      "(.s)"
+    ],
+    "missing": [],
+    "src": ": .s 60 emit depth u. 62 emit space (.s) ;\n"
+  },
+  "u.r": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "<#",
+      "#s",
+      "#>",
+      "r>",
+      "over",
+      "-",
+      "max",
+      "spaces",
+      "type"
+    ],
+    "missing": [],
+    "src": "\\ ( u width -- ) right-align an unsigned number\n: u.r >r <# #s #> r> over - 0 max spaces type ;\n"
+  },
+  ".r": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "dup",
+      "0<",
+      "if",
+      "negate",
+      "true",
+      "else",
+      "false",
+      "then",
+      "swap",
+      "<#",
+      "#s",
+      "sign",
+      "#>",
+      "r>",
+      "over",
+      "-",
+      "max",
+      "spaces",
+      "type"
+    ],
+    "missing": [],
+    "src": "\\ ( n width -- ) right-align a signed number\n: .r >r dup 0< if negate true else false then\n  swap <# #s swap sign #> r> over - 0 max spaces type ;\n"
+  },
+  "(": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      "tibc",
+      "dup",
+      "=",
+      ">in",
+      "@",
+      "ntib",
+      "u<",
+      "0=",
+      "or",
+      ">r",
+      "drop",
+      "r>",
+      "until"
+    ],
+    "missing": [],
+    "src": "\\ ( \"ccc<paren>\" -- ) skip through the closing parenthesis\n: ( begin tibc dup 41 = >in @ ntib @ u< 0= or >r drop r> until ;\nimmediate\n"
+  },
+  "\\": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "ntib",
+      "@",
+      ">in",
+      "!"
+    ],
+    "missing": [],
+    "src": "\\ skip the rest of the line\n: \\ ntib @ >in ! ; immediate\n"
+  },
+  "pl,": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      ">r",
+      "swap",
+      "resolve",
+      "r>",
+      "rot",
+      "lit!"
+    ],
+    "missing": [],
+    "src": "\\ plant the two literals of a compiled string\n: pl, >r swap resolve r> >r rot lit! r> swap lit! ;\n"
+  },
+  "s\"": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "tibc",
+      "drop",
+      "state",
+      "@",
+      "if",
+      "here",
+      "literal",
+      "ahead",
+      "quote,",
+      "pl,",
+      "else",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ c-addr u -- text up to char 34\n: s\" tibc drop state @ if\n  here 0 literal here 0 literal ahead quote, pl,\n  else quote, then ;\nimmediate\n"
+  },
+  ".\"": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "tibc",
+      "drop",
+      "begin",
+      "dup",
+      "=",
+      "while",
+      "literal",
+      "compile-emit",
+      "repeat"
+    ],
+    "missing": [],
+    "src": ": .\" tibc drop begin tibc dup 34 = 0 = while literal compile-emit repeat drop ;\nimmediate\n"
+  },
+  "j": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "r>",
+      "r@",
+      "swap",
+      ">r"
+    ],
+    "missing": [],
+    "src": "\\ ( -- n ) index of the loop outside the current one\n: j r> r> r> r@ swap >r swap >r swap >r ;\n"
+  },
+  "char+": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "1+"
+    ],
+    "missing": [],
+    "src": ": char+ 1+ ;\n"
+  },
+  "chars": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [],
+    "missing": [],
+    "src": ": chars ;\n"
+  },
+  "align": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "here",
+      "dup",
+      "aligned",
+      "swap",
+      "-",
+      "allot"
+    ],
+    "missing": [],
+    "src": ": align here dup aligned swap - allot ;\n"
+  },
+  ">body": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "cells",
+      "+"
+    ],
+    "missing": [],
+    "src": "\\ ( xt -- a-addr ) data field after the literal and the exit\n: >body 2 cells + ;\n"
+  },
+  "within": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "over",
+      "-",
+      ">r",
+      "r>",
+      "u<"
+    ],
+    "missing": [],
+    "src": ": within over - >r - r> u< ;\n"
+  },
+  "erase": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "fill"
+    ],
+    "missing": [],
+    "src": ": erase 0 fill ;\n"
+  },
+  "move": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "2dup",
+      "u<",
+      "if",
+      "r>",
+      "cmove>",
+      "else",
+      "cmove",
+      "then"
+    ],
+    "missing": [],
+    "src": ": move >r 2dup u< if r> cmove> else r> cmove then ;\n"
+  },
+  "/string": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      ">r",
+      "-",
+      "swap",
+      "r>",
+      "+"
+    ],
+    "missing": [],
+    "src": ": /string dup >r - swap r> + swap ;\n"
+  },
+  "2>r": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "r>",
+      "rot",
+      ">r",
+      "swap"
+    ],
+    "missing": [],
+    "src": "\\ ( x1 x2 -- ) ( R: -- x1 x2 )\n: 2>r r> rot >r swap >r >r ;\n"
+  },
+  "2r>": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "r>",
+      "swap",
+      "rot",
+      ">r"
+    ],
+    "missing": [],
+    "src": ": 2r> r> r> r> swap rot >r ;\n"
+  },
+  "2r@": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "r>",
+      "2dup",
+      ">r",
+      "swap",
+      "rot"
+    ],
+    "missing": [],
+    "src": ": 2r@ r> r> r> 2dup >r >r swap rot >r ;\n"
+  },
+  "pick": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "if",
+      "swap",
+      ">r",
+      "1-",
+      "recurse",
+      "r>",
+      "else",
+      "drop",
+      "then"
+    ],
+    "missing": [],
+    "src": ": pick dup if swap >r 1- recurse r> swap else drop dup then ;\n"
+  },
+  "roll": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "if",
+      "swap",
+      ">r",
+      "1-",
+      "recurse",
+      "r>",
+      "else",
+      "drop",
+      "then"
+    ],
+    "missing": [],
+    "src": ": roll dup if swap >r 1- recurse r> swap else drop then ;\n"
+  },
+  "s>d": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "0<"
+    ],
+    "missing": [],
+    "src": ": s>d dup 0< ;\n"
+  },
+  "d0=": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "or",
+      "0="
+    ],
+    "missing": [],
+    "src": ": d0= or 0= ;\n"
+  },
+  "d0<": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "nip",
+      "0<"
+    ],
+    "missing": [],
+    "src": ": d0< nip 0< ;\n"
+  },
+  "dabs": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "2dup",
+      "d0<",
+      "if",
+      "dnegate",
+      "then"
+    ],
+    "missing": [],
+    "src": ": dabs 2dup d0< if dnegate then ;\n"
+  },
+  "d=": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "rot",
+      "=",
+      ">r",
+      "r>",
+      "and"
+    ],
+    "missing": [],
+    "src": ": d= rot = >r = r> and ;\n"
+  },
+  "d<": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "rot",
+      "2dup",
+      "=",
+      "if",
+      "2drop",
+      "u<",
+      "else",
+      "2swap",
+      ">",
+      "then"
+    ],
+    "missing": [],
+    "src": ": d< rot 2dup = if 2drop u< else 2swap 2drop > then ;\n"
+  },
+  "du<": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "rot",
+      "2dup",
+      "=",
+      "if",
+      "2drop",
+      "u<",
+      "else",
+      "2swap",
+      "u>",
+      "then"
+    ],
+    "missing": [],
+    "src": ": du< rot 2dup = if 2drop u< else 2swap 2drop u> then ;\n"
+  },
+  "d-": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dnegate",
+      "d+"
+    ],
+    "missing": [],
+    "src": ": d- dnegate d+ ;\n"
+  },
+  "d2/": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      ">r",
+      "2/",
+      "swap",
+      "rshift",
+      "r>",
+      "and",
+      "if",
+      "cells",
+      "*",
+      "1-",
+      "lshift",
+      "or",
+      "then"
+    ],
+    "missing": [],
+    "src": ": d2/ dup >r 2/ swap 1 rshift r> 1 and if\n  1 cells 8 * 1- 1 swap lshift or then swap ;\n"
+  },
+  "d>s": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "drop"
+    ],
+    "missing": [],
+    "src": ": d>s drop ;\n"
+  },
+  "dmax": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "2over",
+      "d<",
+      "if",
+      "2swap",
+      "then",
+      "2drop"
+    ],
+    "missing": [],
+    "src": ": dmax 2over 2over d< if 2swap then 2drop ;\n"
+  },
+  "dmin": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "2over",
+      "d<",
+      "0=",
+      "if",
+      "2swap",
+      "then",
+      "2drop"
+    ],
+    "missing": [],
+    "src": ": dmin 2over 2over d< 0= if 2swap then 2drop ;\n"
+  },
+  "db": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "variable db\n"
+  },
+  "dr": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "variable dr\n"
+  },
+  "dq": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "variable dq\n"
+  },
+  "cell/mod": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "db",
+      "!",
+      "swap",
+      "dr",
+      "dq",
+      "cells",
+      "*",
+      "begin",
+      "dup",
+      "while",
+      "1-",
+      "over",
+      "0<",
+      "if",
+      "2*",
+      "@",
+      "1+",
+      "else",
+      "then",
+      "u<",
+      "-",
+      "repeat",
+      "drop"
+    ],
+    "missing": [],
+    "src": "\\ ( rem u base -- rem quot ) one cell, high bit first\n: cell/mod db ! swap dr ! 0 dq ! 1 cells 8 *\n  begin dup while 1- over 0< if\n    swap 2* swap dr @ 2* 1+ dr !\n  else swap 2* swap dr @ 2* dr ! then\n    dr @ db @ u< if dq @ 2* dq !\n    else dr @ db @ - dr ! dq @ 2* 1+ dq ! then\n  repeat drop drop dr @ dq @ ;\n"
+  },
+  "ud/mod": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      ">r",
+      "swap",
+      "r@",
+      "cell/mod",
+      "rot",
+      "r>"
+    ],
+    "missing": [],
+    "src": "\\ ( lo hi base -- rem lo' hi' )\n: ud/mod >r 0 swap r@ cell/mod swap rot r> cell/mod rot ;\n"
+  },
+  "d.": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "0<",
+      "if",
+      "emit",
+      "dnegate",
+      "then",
+      "<#",
+      "2dup",
+      "or",
+      "0=",
+      "hold",
+      "begin",
+      "while",
+      "base",
+      "@",
+      "ud/mod",
+      "rot",
+      ">",
+      "+",
+      "repeat",
+      "2drop",
+      "#>",
+      "type",
+      "space"
+    ],
+    "missing": [],
+    "src": ": d. dup 0< if 45 emit dnegate then <#\n  2dup or 0= if 48 hold then\n  begin 2dup or while base @ ud/mod rot\n    dup 9 > if 7 + then 48 + hold\n  repeat 2drop #> type space ;\n"
+  },
+  "d.r": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "dup",
+      "0<",
+      "if",
+      "dnegate",
+      "then",
+      "<#",
+      "2dup",
+      "or",
+      "0=",
+      "hold",
+      "begin",
+      "while",
+      "base",
+      "@",
+      "ud/mod",
+      "rot",
+      ">",
+      "+",
+      "repeat",
+      "2drop",
+      "r>",
+      "#>",
+      "over",
+      "-",
+      "max",
+      "spaces",
+      "type"
+    ],
+    "missing": [],
+    "src": ": d.r >r dup 0< dup >r if dnegate then <#\n  2dup or 0= if 48 hold then\n  begin 2dup or while base @ ud/mod rot\n    dup 9 > if 7 + then 48 + hold\n  repeat 2drop r> if 45 hold then\n  #> r> over - 0 max spaces type ;\n"
+  },
+  "d*u": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "dup",
+      ">r",
+      "swap",
+      "r@",
+      "um*",
+      "rot",
+      "r>",
+      "drop",
+      "+"
+    ],
+    "missing": [],
+    "src": "\\ ( lo hi u -- lo' hi' )\n: d*u dup >r >r swap r@ um* rot r> um* drop + r> drop ;\n"
+  },
+  "nstep": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      ">r",
+      "2swap",
+      "base",
+      "@",
+      "d*u",
+      "r>",
+      "d+",
+      "swap",
+      "1+",
+      "1-"
+    ],
+    "missing": [],
+    "src": "\\ ( lo hi addr u n -- lo hi addr' u' )\n: nstep >r 2swap base @ d*u r> 0 d+ 2swap\n  swap 1+ swap 1- ;\n"
+  },
+  ">number": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      "dup",
+      "0=",
+      "if",
+      "true",
+      "else",
+      "over",
+      "c@",
+      "digit",
+      "base",
+      "@",
+      "u<",
+      "nstep",
+      "false",
+      "drop",
+      "then",
+      "until"
+    ],
+    "missing": [],
+    "src": ": >number begin dup 0= if true else\n  over c@ digit 0= if true else\n  dup base @ u< if nstep false else drop true then\n  then then until ;\n"
+  },
+  "parse": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "here",
+      "begin",
+      "tibc",
+      "dup",
+      "r@",
+      "=",
+      ">in",
+      "@",
+      "ntib",
+      "u<",
+      "0=",
+      "or",
+      "if",
+      "drop",
+      "true",
+      "else",
+      "c,",
+      "1+",
+      "false",
+      "then",
+      "until",
+      "r>",
+      "aligned",
+      "-",
+      "allot"
+    ],
+    "missing": [],
+    "src": "\\ ( char \"ccc<char>\" -- c-addr u )\n: parse >r here 0 begin tibc dup r@ =\n  >in @ ntib @ u< 0= or if drop true\n  else c, 1+ false then until r> drop\n  here aligned here - allot ;\n"
+  },
+  "fm/mod": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      ">r",
+      "sm/rem",
+      "over",
+      "0<>",
+      "swap",
+      "0<",
+      "r@",
+      "xor",
+      "and",
+      "if",
+      "1-",
+      "r>",
+      "+",
+      "else",
+      "drop",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ ( lo hi n -- rem quot ) remainder keeps the sign of the divisor\n: fm/mod dup >r sm/rem over dup 0<> swap 0< r@ 0< xor and if\n  1- swap r> + swap else r> drop then ;\n"
+  },
+  "source": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "src",
+      "@",
+      "ntib"
+    ],
+    "missing": [],
+    "src": "\\ ( -- c-addr u ) current input, one byte per character\n: source src @ ntib @ ;\n"
+  },
+  "sliteral": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "here",
+      "cells",
+      "+",
+      ">r",
+      "r@",
+      "literal",
+      "dup",
+      "ahead",
+      "begin",
+      "while",
+      "over",
+      "c@",
+      "c,",
+      "1-",
+      "swap",
+      "1+",
+      "repeat",
+      "drop",
+      "aligned",
+      "-",
+      "allot",
+      "r>",
+      "resolve"
+    ],
+    "missing": [],
+    "src": "\\ ( c-addr u -- ) compile a string literal\n: sliteral here 3 cells + >r r@ literal dup literal ahead >r\n  begin dup while over c@ c, 1- swap 1+ swap repeat\n  drop drop here aligned here - allot r> resolve r> drop ;\nimmediate\n"
+  },
+  "abort\"": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "postpone",
+      "if",
+      "s\"",
+      "type",
+      "abort",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ ( \"ccc<quote>\" -- ) if the flag is true, print ccc and abort\n: abort\" ( \" ) postpone if postpone s\" postpone type\n  postpone abort postpone then ;\nimmediate\n"
+  },
+  "]": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "state",
+      "!"
+    ],
+    "missing": [],
+    "src": "\\ ( -- ) enter compilation\n: ] 1 state ! ;\n"
+  },
+  "[": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "state",
+      "!"
+    ],
+    "missing": [],
+    "src": "\\ ( -- ) enter interpretation\n: [ 0 state ! ; immediate\n"
+  },
+  ".(": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "tibc",
+      "drop",
+      "parse",
+      "type"
+    ],
+    "missing": [],
+    "src": "\\ ( \"ccc<paren>\" -- ) print the text up to the parenthesis\n: .( tibc drop 41 parse type ; immediate\n"
+  },
+  "[compile]": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "parse-name",
+      "drop",
+      "find",
+      "dup",
+      "0=",
+      "if",
+      "emit",
+      "else",
+      "compile,",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ ( \"<spaces>name\" -- ) compile the next word\n: [compile] parse-name drop find dup 0= if\n  drop 63 emit else drop drop compile, then ;\nimmediate\n"
+  },
+  "sid": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "\\ 0 while reading the console, -1 while evaluate is running\nvariable sid\n"
+  },
+  "source-id": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "sid",
+      "@"
+    ],
+    "missing": [],
+    "src": "\\ ( -- n )\n: source-id sid @ ;\n"
+  },
+  "evaluate": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "sid",
+      "@",
+      ">r",
+      "true",
+      "!",
+      "src",
+      "ntib",
+      ">in",
+      "interp",
+      "r>"
+    ],
+    "missing": [],
+    "src": "\\ ( i*x c-addr u -- j*x ) interpret the string as a line\n: evaluate sid @ >r true sid !\n  src @ >r ntib @ >r >in @ >r\n  ntib ! 0 >in ! src ! interp\n  r> >in ! r> ntib ! r> src ! r> sid ! ;\n"
+  },
+  "word": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "begin",
+      ">in",
+      "@",
+      "ntib",
+      "u<",
+      "0=",
+      "if",
+      "true",
+      "else",
+      "tibc",
+      "dup",
+      "r@",
+      "=",
+      "drop",
+      "false",
+      "1-",
+      "!",
+      "then",
+      "until",
+      "pic",
+      "1+",
+      "over",
+      "-",
+      "c!",
+      "r>",
+      "tuck"
+    ],
+    "missing": [],
+    "src": "\\ ( char \"<chars>ccc<char>\" -- c-addr ) counted string in the pictured buffer\n: word >r begin >in @ ntib @ u< 0= if true else\n  tibc dup r@ = if drop false else drop >in @ 1- >in ! true then then until\n  pic 1+ begin >in @ ntib @ u< 0= if true else\n  tibc dup r@ = if drop true else\n  over pic - 38 u< if over c! 1+ else drop then false then then until\n  r> drop pic tuck - 1- pic c! ;\n"
+  },
+  ":noname": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "here",
+      "]"
+    ],
+    "missing": [],
+    "src": "\\ ( -- xt ) start a colon definition with no name\n: :noname here ] ;\n"
+  },
+  "value": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "constant"
+    ],
+    "missing": [],
+    "src": "\\ ( x \"<name>\" -- ) a cell that to can replace\n: value constant ;\n"
+  },
+  "to": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "'",
+      "state",
+      "@",
+      "if",
+      "literal",
+      "[']",
+      "lit!",
+      "compile,",
+      "else",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ ( x \"<name>\" -- ) replace the literal inside a value\n: to ' state @ if literal ['] lit! compile, else lit! then ;\nimmediate\n"
+  },
+  "buffer:": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "create",
+      "allot"
+    ],
+    "missing": [],
+    "src": "\\ ( u \"<name>\" -- ) name a buffer of u bytes\n: buffer: create allot ;\n"
+  },
+  "defer": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "parse-name",
+      "drop",
+      "header",
+      "here",
+      "cells",
+      "+",
+      "literal",
+      "compile-exit",
+      "[']",
+      "abort",
+      ",",
+      "does>",
+      "@",
+      "execute"
+    ],
+    "missing": [],
+    "src": "\\ ( \"<name>\" -- ) a word whose action starts as abort\n: defer parse-name drop header here 2 cells + literal compile-exit\n  ['] abort , does> @ execute ;\n"
+  },
+  "defer!": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      ">body",
+      "!"
+    ],
+    "missing": [],
+    "src": "\\ ( xt2 xt1 -- ) store the action of a defer\n: defer! >body ! ;\n"
+  },
+  "defer@": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      ">body",
+      "@"
+    ],
+    "missing": [],
+    "src": "\\ ( xt1 -- xt2 ) fetch the action of a defer\n: defer@ >body @ ;\n"
+  },
+  "is": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "'",
+      ">body",
+      "state",
+      "@",
+      "if",
+      "literal",
+      "[']",
+      "!",
+      "compile,",
+      "else",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ ( xt \"<name>\" -- ) set the action of a defer\n: is ' >body state @ if literal ['] ! compile, else ! then ;\nimmediate\n"
+  },
+  "action-of": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [
+      "'",
+      "state",
+      "@",
+      "if",
+      "literal",
+      "[']",
+      "defer@",
+      "compile,",
+      "else",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ ( \"<name>\" -- xt ) fetch the action, and compile that fetch\n: action-of ' state @ if literal ['] defer@ compile, else defer@ then ;\nimmediate\n"
+  },
+  "case": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [],
+    "missing": [],
+    "src": "\\ ( -- 0 ) mark the bottom of a case while compiling\n: case 0 ; immediate\n"
+  },
+  "of": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "postpone",
+      "over",
+      "=",
+      "if",
+      "drop"
+    ],
+    "missing": [],
+    "src": "\\ ( x1 x2 -- x1 ) take this arm when x2 equals the selector\n: of postpone over postpone = postpone if postpone drop ; immediate\n"
+  },
+  "endof": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "postpone",
+      "else"
+    ],
+    "missing": [],
+    "src": "\\ ( -- ) leave this arm and try the next one\n: endof postpone else ; immediate\n"
+  },
+  "endcase": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "postpone",
+      "drop",
+      "begin",
+      "?dup",
+      "while",
+      "then",
+      "repeat"
+    ],
+    "missing": [],
+    "src": "\\ ( x -- ) drop the selector when no arm matched\n: endcase postpone drop begin ?dup while postpone then repeat ; immediate\n"
+  },
+  "holds": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      "dup",
+      "while",
+      "1-",
+      "2dup",
+      "+",
+      "c@",
+      "hold",
+      "repeat",
+      "2drop"
+    ],
+    "missing": [],
+    "src": "\\ ( c-addr u -- ) prepend the string to the pictured output\n: holds begin dup while 1- 2dup + c@ hold repeat 2drop ;\n"
+  },
+  "pad": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "here",
+      "+"
+    ],
+    "missing": [],
+    "src": "\\ ( -- c-addr ) transient buffer above here\n: pad here 34 + ;\n"
+  },
+  "unused": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "tib",
+      "here",
+      "-"
+    ],
+    "missing": [],
+    "src": "\\ ( -- u ) bytes left below the terminal buffer\n: unused tib here - ;\n"
+  },
+  "et": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "local",
+    "needs": [],
+    "missing": [],
+    "src": "\\ a through z. x is read as hex. m is two characters, handled apart\ncreate et\n  7 c, 8 c, 99 c, 100 c, 27 c, 12 c,\n  103 c, 104 c, 105 c, 106 c, 107 c, 10 c,\n  109 c, 10 c, 111 c, 112 c, 34 c, 13 c,\n  115 c, 9 c, 117 c, 11 c, 119 c, 120 c,\n  121 c, 0 c,\n"
+  },
+  "q": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "tibc",
+      "dup",
+      "=",
+      "if",
+      "drop",
+      "false",
+      "else",
+      "c,",
+      "true",
+      "digit",
+      "0=",
+      "then",
+      "swap",
+      "*",
+      "+",
+      "u>",
+      "over",
+      "u<",
+      "and",
+      "-",
+      "et",
+      "c@"
+    ],
+    "missing": [],
+    "src": "\\ ( -- n true | false ) store the next character of an escaped string\n: q tibc dup 34 = if drop false else\n  dup 92 = if drop tibc dup 109 = if drop 13 c, 10 c, 2 true else\n    dup 120 = if drop tibc digit 0= if 0 then\n      tibc digit 0= if 0 then swap 16 * +\n    else dup 96 u> over 123 u< and if 97 - et + c@ then then\n    c, 1 true then else c, 1 true then then ;\n"
+  },
+  "es,": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "here",
+      "begin",
+      "q",
+      "while",
+      "+",
+      "repeat",
+      "aligned",
+      "-",
+      "allot",
+      "opti",
+      "!"
+    ],
+    "missing": [],
+    "src": "\\ ( -- c-addr u ) copy up to the closing quote and align here\n: es, here 0 begin q while + repeat\n  here aligned here - allot 0 opti ! ;\n"
+  },
+  "c\"": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "tibc",
+      "drop",
+      "here",
+      "literal",
+      "ahead",
+      ">r",
+      "c,",
+      "quote,",
+      "r>",
+      "swap",
+      "over",
+      "c!",
+      "nip",
+      "resolve",
+      "lit!"
+    ],
+    "missing": [],
+    "src": "\\ ( \"ccc<quote>\" -- c-addr ) counted string while compiling\n: c\" ( \" cstr) tibc drop here 0 literal ahead here >r 0 c, quote,\n  r> swap over c! nip swap resolve swap lit! ;\nimmediate\n"
+  },
+  "s\\\"": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "tibc",
+      "drop",
+      "state",
+      "@",
+      "if",
+      "here",
+      "literal",
+      "ahead",
+      "es,",
+      "pl,",
+      "else",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ ( \"ccc<quote>\" -- c-addr u ) string with escapes\n: s\\\" ( \" sesc) tibc drop state @ if\n  here 0 literal here 0 literal ahead es, pl,\n  else es, then ;\nimmediate\n"
+  },
+  "refill": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "source-id",
+      "if",
+      "false",
+      "else",
+      "tib",
+      "src",
+      "!",
+      "accept",
+      "true",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ ( -- flag ) a new console line, or false while evaluate is running\n: refill source-id if false else tib src ! accept true then ;\n"
+  },
+  "save-input": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">in",
+      "@",
+      "ntib",
+      "src",
+      "sid"
+    ],
+    "missing": [],
+    "src": "\\ ( -- >in ntib src sid 4 ) the four input cells\n: save-input >in @ ntib @ src @ sid @ 4 ;\n"
+  },
+  "restore-input": {
+    "file": "fsys/common/core.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "=",
+      "if",
+      "drop",
+      "sid",
+      "!",
+      "src",
+      "ntib",
+      ">in",
+      "false",
+      "else",
+      "begin",
+      "while",
+      "1-",
+      "swap",
+      "repeat",
+      "true",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ ( >in ntib src sid n -- flag ) false when n is 4\n: restore-input dup 4 = if drop sid ! src ! ntib ! >in ! false else\n  begin dup while 1- swap drop repeat drop true then ;\n"
+  },
+  "dig": {
+    "file": "fsys/j1a/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "and",
+      "dup",
+      ">",
+      "if",
+      "+",
+      "then"
+    ],
+    "missing": [],
+    "src": "\\ j1a console extras for a 16-bit cell. Smaller than j1b/extra.4th (no halfword words).\n: dig 15 and dup 9 > if 7 + then 48 + ;\n"
+  },
+  "nib": {
+    "file": "fsys/j1a/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "rshift",
+      "dig"
+    ],
+    "missing": [],
+    "src": ": nib rshift dig ;\n"
+  },
+  ".x2": {
+    "file": "fsys/j1a/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "dup",
+      "rshift",
+      "dig",
+      "emit",
+      "space"
+    ],
+    "missing": [],
+    "src": ": .x2 dup 4 rshift dig emit dig emit space ;\n"
+  },
+  ".x": {
+    "file": "fsys/j1a/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "dup",
+      "rshift",
+      "dig",
+      "emit",
+      ".x2"
+    ],
+    "missing": [],
+    "src": ": .x dup 12 rshift dig emit dup 8 rshift dig emit .x2 ;\n"
+  },
+  "nbytes": {
+    "file": "fsys/j1a/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "begin",
+      "dup",
+      "while",
+      "1-",
+      "over",
+      "c@",
+      ".x2",
+      "swap",
+      "1+",
+      "repeat",
+      "drop"
+    ],
+    "missing": [],
+    "src": ": nbytes begin dup while 1- over c@ .x2 swap 1+ swap repeat drop ;\n"
+  },
+  "dump": {
+    "file": "fsys/j1a/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      "dup",
+      "while",
+      "over",
+      ".x",
+      "min",
+      ">r",
+      "swap",
+      "r@",
+      "nbytes",
+      "cr",
+      "r>",
+      "-",
+      "repeat",
+      "2drop"
+    ],
+    "missing": [],
+    "src": ": dump begin dup while over .x\n  dup 16 min >r swap r@ nbytes swap cr r> - repeat 2drop ;\n"
+  },
+  "ms": {
+    "file": "fsys/j1a/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      "dup",
+      "while",
+      "1-",
+      "repeat",
+      "drop"
+    ],
+    "missing": [],
+    "src": ": ms begin dup while 1- 4 begin dup while 1- repeat drop repeat drop ;\n"
+  },
+  "leds": {
+    "file": "fsys/j1a/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "io!"
+    ],
+    "missing": [],
+    "src": ": leds 4 io! ;\n"
+  },
+  "convert": {
+    "file": "fsys/j1a/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "1+",
+      ">number",
+      "drop"
+    ],
+    "missing": [],
+    "src": ": convert 1+ 511 >number drop ;\n"
+  },
+  "2rot": {
+    "file": "fsys/j1a/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "2>r",
+      "2swap",
+      "2r>"
+    ],
+    "missing": [],
+    "src": ": 2rot 2>r 2swap 2r> 2swap ;\n"
+  },
+  "tneg": {
+    "file": "fsys/j1a/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      ">r",
+      "2dup",
+      "or",
+      "dup",
+      "if",
+      "drop",
+      "dnegate",
+      "then",
+      "r>",
+      "+",
+      "negate"
+    ],
+    "missing": [],
+    "src": ": tneg >r 2dup or dup if drop dnegate 1 then r> + negate ;\n"
+  },
+  "t*": {
+    "file": "fsys/j1a/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "2dup",
+      "xor",
+      ">r",
+      "dabs",
+      "r>",
+      "abs",
+      "2>r",
+      "r@",
+      "um*",
+      "2r>",
+      "d+",
+      "0<",
+      "if",
+      "tneg",
+      "then"
+    ],
+    "missing": [],
+    "src": ": t* 2dup xor >r >r dabs r> abs 2>r\n  r@ um* 0 2r> um* d+ r> 0< if tneg then ;\n"
+  },
+  "t/": {
+    "file": "fsys/j1a/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "over",
+      ">r",
+      "dup",
+      "0<",
+      "if",
+      "tneg",
+      "then",
+      "r@",
+      "um/mod",
+      "rot",
+      "r>",
+      "nip",
+      "swap",
+      "dnegate"
+    ],
+    "missing": [],
+    "src": ": t/ over >r >r dup 0< if tneg then\n  r@ um/mod rot rot r> um/mod nip swap\n  r> 0< if dnegate then ;\n"
+  },
+  "m*/": {
+    "file": "fsys/j1a/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "t*",
+      "r>",
+      "t/"
+    ],
+    "missing": [],
+    "src": ": m*/ >r t* r> t/ ;\n"
+  },
+  "throw": {
+    "file": "fsys/j1a/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "if",
+      ".\"",
+      ".",
+      "abort",
+      "then",
+      "drop"
+    ],
+    "missing": [],
+    "src": ": throw dup if .\" error: \" . abort then drop ;\n"
+  },
+  "floor": {
+    "file": "fsys/j1a/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": "variable floor\n"
+  },
+  "flink": {
+    "file": "fsys/j1a/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [],
+    "missing": [],
+    "src": "variable flink\n"
+  },
+  "new": {
+    "file": "fsys/j1a/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "floor",
+      "@",
+      "here",
+      "-",
+      "allot",
+      "flink",
+      "latest",
+      "!"
+    ],
+    "missing": [],
+    "src": ": new floor @ here - allot flink @ latest ! ;\n"
+  }
+}
