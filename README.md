@@ -1,7 +1,7 @@
 # fsoc
 
 [![License](https://img.shields.io/badge/License-COPL-red.svg)](LICENSE)
-[![Ver](https://img.shields.io/badge/Ver-0.8.0-green.svg)](https://github.com/VitaSound/fsoc)
+[![Ver](https://img.shields.io/badge/Ver-0.9.0-green.svg)](https://github.com/VitaSound/fsoc)
 
 Forth-native SoC builder: **boards**, **Quartus/Yosys/Verilator toolchains**, **iomap**, **J1 firmware**. Analogue of LiteX `build` + `soc` on Gforth. Verilog modules come from [fhdlgen](https://github.com/VitaSound/fhdlgen) and [hdl-modules](https://github.com/VitaSound/hdl-modules).
 
@@ -160,7 +160,7 @@ gforth tools/fterm.4th /dev/ttyUSB0
 
 `fterm` without a path still answers `ok` from memory.
 
-`projects/soc_blink_colorlight_5a_75e_v6_0` is the lamp image on the Colorlight 5A-75E v6.0 (`LFE5U-25F-6BG256C`, CABGA256, speed 6, nextpnr `--25k`). The clock is `clk25` on `P6`, 25 MHz, LVCMOS33. `T6` is the user LED and `R7` is the button, so this board has no UART pins. The board `top` ties `uart_rx` to `1'b1`, leaves `uart_tx` on an unused wire, and ties `rst` and `dump` to `1'b0`. The LED is active-low: a stored `1` drives `T6` low (`assign led = ~led_q`). The timer counts milliseconds (`TIMER_DIV = 25000`, which is `CLK_HZ/1000`). While `DIV` is greater than 1 it holds `0` until the next write, so the Forth poll can see the zero. The lamp period in `firmware/lamp.fs` is 500 counts, about half a second. `BAUD` on the wrapper stays 115200. The SwapForth feed that writes `firmware.hex` still runs at 50 MHz, the same bit time as emulation; the board `top.v` is written again at 25 MHz. `--build` writes `soc.lpf` and runs Yosys with `read_verilog -DSYNTHESIS`, so `$writememh` in the wrapper is not part of synthesis. `FSOC_SYNTH_SKIP` writes the files and skips the tools. `load.sh` needs a `cable` option; this manifest does not set one.
+`projects/soc_blink_colorlight_5a_75e_v6_0` is the lamp image on the Colorlight 5A-75E v6.0 (`LFE5U-25F-6BG256C`, CABGA256, speed 6, nextpnr `--25k`). The clock is `clk25` on `P6`, 25 MHz, LVCMOS33. `T6` is the user LED and `R7` is the button, so this board has no UART pins. The board `top` ties `uart_rx` to `1'b1`, leaves `uart_tx` on an unused wire, and ties `rst` and `dump` to `1'b0`. The LED is active-low: a stored `1` drives `T6` low (`assign led = ~led_q`). The timer counts milliseconds (`TIMER_DIV = 25000`, which is `CLK_HZ/1000`). At zero the count stays there until the next write, so the Forth poll can see it. The lamp period in `firmware/lamp.fs` is 500 counts, about half a second. `BAUD` on the wrapper stays 115200. The SwapForth feed that writes `firmware.hex` still runs at 50 MHz, the same bit time as emulation; the board `top.v` is written again at 25 MHz. `--build` writes `soc.lpf` and runs Yosys with `read_verilog -DSYNTHESIS`, so `$writememh` in the wrapper is not part of synthesis. `FSOC_SYNTH_SKIP` writes the files and skips the tools. `load.sh` needs a `cable` option; this manifest does not set one.
 
 One routed nextpnr fit of that image (2026-09-26) met the 25.00 MHz constraint at 71.55 MHz. The bitstream `soc.bit` is 591641 bytes. The critical path starts at a block-RAM data pin, `u.ram.0.3.DOB`.
 

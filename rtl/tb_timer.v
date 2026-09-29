@@ -65,8 +65,8 @@ module tb_timer;
             $fatal(1);
         end
         tick;
-        if (value !== 16'd4) begin
-            $display("timer reload got %0d", value);
+        if (value !== 16'd0) begin
+            $display("timer hold zero got %0d", value);
             $fatal(1);
         end
         write(16'd0);

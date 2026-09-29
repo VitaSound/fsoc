@@ -1,3 +1,6 @@
+// Modified version. Both RAM ports are synchronous reads so the
+// memory maps to ECP5 DP16KD. @ takes one extra cycle while the
+// data register fills. Author of the change: Alexey Bolshakov.
 // Vendored from https://github.com/wzab/AFCK_J1B_FORTH original/j1b/verilog/j1.v
 // James Bowman, BSD-3-Clause. Cell WIDTH 32 is defined in common.h.
 `include "common.h"
@@ -30,12 +33,22 @@ module j1(
   wire [12:0] pc_plus_1 = pc + 1;
 
   assign mem_addr = st0[15:0];
-  assign code_addr = {pcN};
+
+  // @ (011_?1100) reads synchronous RAM. The address is already in
+  // st0; mem_din is valid on the next clock. Hold pc, the stacks
+  // and st0 for that cycle, and fetch pc again so the same
+  // instruction stays in insn.
+  wire is_alu = (insn[15:13] == 3'b011);
+  reg mem_phase = 1'b0;
+  wire mem_at = !reboot & is_alu & (insn[11:8] == 4'b1100);
+  wire mem_stall = mem_at & !mem_phase;
+  assign code_addr = mem_stall ? pc : pcN;
+  reg [1:0] dspI, rspI;
 
   // The D and R stacks
   wire [`WIDTH-1:0] st1, rst0;
-  stack #(.DEPTH(32)) dstack(.clk(clk), .rd(st1),  .we(dstkW), .wd(st0),   .delta(dspI));
-  stack #(.DEPTH(32)) rstack(.clk(clk), .rd(rst0), .we(rstkW), .wd(rstkD), .delta(rspI));
+  stack #(.DEPTH(32)) dstack(.clk(clk), .rd(st1),  .we(dstkW & !mem_stall), .wd(st0),   .delta(mem_stall ? 2'b00 : dspI));
+  stack #(.DEPTH(32)) rstack(.clk(clk), .rd(rst0), .we(rstkW & !mem_stall), .wd(rstkD), .delta(mem_stall ? 2'b00 : rspI));
 
   always @*
   begin
@@ -71,7 +84,6 @@ module j1(
   wire func_iow =   (insn[6:4] == 4);
   wire func_ior =   (insn[6:4] == 5);
 
-  wire is_alu = (insn[15:13] == 3'b011);
   assign mem_wr = !reboot & is_alu & func_write;
   assign dout = st1;
   assign io_wr = !reboot & is_alu & func_iow;
@@ -79,7 +91,6 @@ module j1(
 
   assign rstkD = (insn[13] == 1'b0) ? {{(`WIDTH - 14){1'b0}}, pc_plus_1, 1'b0} : st0;
 
-  reg [1:0] dspI, rspI;
   always @*
   begin
     casez ({insn[15:13]})
@@ -110,9 +121,13 @@ module j1(
   begin
     if (!resetq) begin
       reboot <= 1'b1;
+      mem_phase <= 1'b0;
       { pc, dsp, st0 } <= 0;
+    end else if (mem_stall) begin
+      mem_phase <= 1'b1;
     end else begin
-      reboot <= 0;
+      reboot <= 1'b0;
+      mem_phase <= 1'b0;
       { pc, dsp, st0 } <= { pcN, dspN, st0N };
     end
   end

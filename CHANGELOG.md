@@ -1,6 +1,12 @@
 # Changelog
 
-## [Unreleased]
+## [0.9.0] - 2026-09-29
+
+### Changed
+
+- j1b firmware RAM reads on the clock, so Yosys maps the 8192×32 array to 16 ECP5 `DP16KD` blocks instead of LUT RAM. The instruction word is latched whole and the half is chosen after that register. `@` waits one cycle for `mem_din`. Colorlight nextpnr fit: j1b 3653/24288 LUT4, 0/3036 RAM LUT, 16/56 `DP16KD`, 67.13 MHz. j1a stays 4 `DP16KD`. The numbers are in `doc/j1-word-graph/soc-fit.md`.
+
+- The interval timer stays at 0 until the next write. It no longer reloads the period on the following clock, so the lamp poll sees the zero on j1b as well as on j1a.
 
 ### Added
 
