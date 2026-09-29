@@ -7,10 +7,11 @@ forth-package
     key-value description Forth-native SoC builder: boards, toolchains, iomap, J1
     key-value main fsoc.4th
     key-value fmix ~> 0.8
-    key-value flint ~> 0.2
+    key-value flint ~> 0.3
     key-value fcov ~> 0.3
     key-list fcov-exclude boards
     key-list fcov-exclude targets
+    key-list flint-exclude fsys/j1a/extra-min.4th
     key-list tags gforth
     key-list tags soc
     key-list tags fpga

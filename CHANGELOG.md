@@ -4,7 +4,15 @@
 
 ### Added
 
-- j1b fsys dictionary ends here. `s" fsys" sys:` on j1b assembles the kernel, compiles the shared layer, then feeds `fsys/j1b/extra.4th`. The image is 13248 bytes of 32768. j1a stays on the shared layer, 7862 of 8192. Empty `sys:` remains `swapforth`.
+- Host fsys dictionary: Gforth on the build machine compiles `fsys/common` (and j1b `extra.4th`, optional j1a `extra-min.4th`) into the kernel image with call shortcut, j1a `@i`, and ALU pairs. The target only runs `firmware.hex`; this path does not use `Vtop_feed`. Console `;` stays call→jump. j1a shared layer 7550 of 8192; with `s" extra-min" s" 1" option:` 8008 (below TIB 8066). j1b shared 11636, with extra 12692 of 32768. Lamp on j1a is 7754. SwapForth j1a full image remains 5006 of 8192 (nuc alone historically 3404).
+
+- j1a console extras in `fsys/j1a/extra-min.4th` (16-bit cell), loaded only when `extra-min=1`: `nib`, `.x`, `.x2`, `nbytes`, `dump`, `ms`, `leds`, `convert`, `2rot`, `tneg`, `t*`, `t/`, `m*/`, `throw`, `new` with `floor`/`flink`. Not j1b `extra.4th` and not halfword words. `package.4th` lists `key-list flint-exclude fsys/j1a/extra-min.4th` so flint does not treat those names as duplicates of j1b's extra.
+
+### Changed
+
+- j1b fsys dictionary ends at `fsys/j1b/extra.4th`. Empty `sys:` remains `swapforth`.
+
+### Added
 
 - `cpu-compare` reports one task and one scenario for a list of `cpu:` profiles: MM, EX-C, CG, cell width, image bytes, and Verilator cycles. The cycle winner is only among rows that share MM, EX-C, and CG and have a filled cycle count. A smaller image at a different cell width is not ranked. Rows from different synthesis toolchains are not marked as a core comparison. A profile with no image leaves the cycle cell empty. The report does not run Yosys, nextpnr, or Quartus.
 

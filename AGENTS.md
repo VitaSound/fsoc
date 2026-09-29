@@ -16,7 +16,8 @@ cpu/j1/         Core kits `j1a/` and `j1b/` (core, stack, memory wrap) plus shar
 swapforth/      SwapForth image tool, moved intact: `j1a/`, `j1b/`, `common/`
 fsys/fasm/      Host assembler for j1a and j1b: comma words, labels, `[asm]`/`[endasm]`
 fsoc/cpu.4th    Forth profiles (`j1a`, `j1b`, `stm8`, `z80`). Manifest `cpu:`; empty on task `soc` is `j1a`
-fsoc/sys.4th    Image tool named by `sys:`. Empty is `swapforth`. `fsys` assembles `fsys/kernel/<cpu>` and then compiles `fsys/common`. j1b then feeds `fsys/j1b/extra.4th`; that file is the end of the j1b dictionary
+fsoc/sys.4th    Image tool named by `sys:`. Empty is `swapforth`. `fsys` assembles `fsys/kernel/<cpu>`, then the host compiles `fsys/common` (j1b then `fsys/j1b/extra.4th`; j1a with `extra-min=1` then `fsys/j1a/extra-min.4th`)
+
 fsoc/kit.4th    Core kit: file names, cell width, stack depths, RAM words. The kit does not name the image tool
 fsoc/compare.4th One scenario, several `cpu:` rows: cell width, image bytes, Verilator cycles. No synthesis. A row stays empty when that profile cannot build an image
 firmware/       lamp.fs (J1 lamp loop), midi_foot.4th (host mock, stub)

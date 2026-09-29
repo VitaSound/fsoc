@@ -68,7 +68,7 @@ s" test -f cpu/j1/j1b/kit.4th" system
 $? 0= expect-true
 s" find . -name j1.vhd -o -name forth.asm -o -name asmz80.4th | grep -q ." system
 $? 0= expect-false
-s" grep -q 'j1a/' fsoc/tasks/soc.4th" system
+s" grep -Eq 'swapforth/j1a|cpu/j1/j1a' fsoc/tasks/soc.4th" system
 $? 0= expect-false
 s" grep -Eq 'stm8|z80' fsoc/tasks/soc.4th" system
 $? 0= expect-false

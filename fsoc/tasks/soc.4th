@@ -316,7 +316,7 @@ variable flatten-n
     dup soc-cross
     soc-feed ;
 
-\ fsys image: assemble the kernel, then let that kernel compile fsys/common.
+\ fsys image: assemble the kernel, then the host compiles fsys/common.
 \ SwapForth's cross is not used. lamp.fs is appended only when the option asks.
 : soc-kernel ( -- )
     s" fsys/kernel/" soc-port fjson.str-concat
@@ -361,6 +361,12 @@ variable flatten-n
     s" j1b" soc-port compare 0= if
         ."     fsys/j1b/extra.4th" cr
         s" fsys/j1b/extra.4th" soc-fsys-load
+    else
+        \ Optional: leaves little room under TIB for interactive compile.
+        s" extra-min" r@ project.opt@ s" 1" compare 0= if
+            ."     fsys/j1a/extra-min.4th" cr
+            s" fsys/j1a/extra-min.4th" soc-fsys-load
+        then
     then
     s" lamp" r@ project.opt@ s" 1" compare 0= if
         s" firmware/lamp.fs" fsoc-path
