@@ -4,6 +4,8 @@
 
 ### Added
 
+- j1b host compiler packs colon bodies two instructions per 32-bit cell. `constant`, `create`, and `variable` keep the literal and `exit` in separate cells and the data at `cfa + 2 cells`, so console `lit!` and `does>` still write a whole cell. `here` at byte 16384 stops the build (`call out of range`). A call of a literal word followed by `@` becomes a literal and `[T]`; `dup @`, `2dup rshift`, and `2dup lshift` fuse on j1b only. `!` stays a call. j1a hex is unchanged (shared 7550, extra-min 8008). j1b shared 8280 of 32768, with extra 8934 (was 11636 and 12692).
+
 - Host fsys dictionary: Gforth on the build machine compiles `fsys/common` (and j1b `extra.4th`, optional j1a `extra-min.4th`) into the kernel image with call shortcut, j1a `@i`, and ALU pairs. The target only runs `firmware.hex`; this path does not use `Vtop_feed`. Console `;` stays call→jump. j1a shared layer 7550 of 8192; with `s" extra-min" s" 1" option:` 8008 (below TIB 8066). j1b shared 11636, with extra 12692 of 32768. Lamp on j1a is 7754. SwapForth j1a full image remains 5006 of 8192 (nuc alone historically 3404).
 
 - j1a console extras in `fsys/j1a/extra-min.4th` (16-bit cell), loaded only when `extra-min=1`: `nib`, `.x`, `.x2`, `nbytes`, `dump`, `ms`, `leds`, `convert`, `2rot`, `tneg`, `t*`, `t/`, `m*/`, `throw`, `new` with `floor`/`flink`. Not j1b `extra.4th` and not halfword words. `package.4th` lists `key-list flint-exclude fsys/j1a/extra-min.4th` so flint does not treat those names as duplicates of j1b's extra.

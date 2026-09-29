@@ -3,6 +3,9 @@
 \ This file is included after the kernel image is in fasm-buf.
 \ It reads the same Forth text the console would, and writes firmware.hex.
 \ Shortcut, @i, and ALU pairs happen here. The console ; only folds a call.
+\ An instruction is one halfword on both cores. j1b packs two of them
+\ into a data cell. constant and create still keep a nop beside the
+\ literal so the target lit! and does> can write a whole cell.
 
 \ Cell width and fixed cells: j1b overrides after the j1a defaults.
 2 value xc-cell
@@ -21,6 +24,11 @@ false to xc-ati?
 [THEN]
 
 : xc-wide ( -- f ) xc-cell 4 = ;
+
+\ Bytes one instruction occupies. 4 only while emitting a data word on j1b.
+2 value xc-step
+: xc-cell-insns ( -- ) xc-wide if 4 to xc-step then ;
+: xc-half-insns ( -- ) 2 to xc-step ;
 : xc-mask ( u -- u ) xc-wide if $ffffffff and else $ffff and then ;
 : xc-up ( a -- a' ) xc-cell 1- + xc-cell 1- invert and ;
 
@@ -62,6 +70,7 @@ false to xc-ati?
 : xc-here@ ( -- a ) xc-hp xc-@ ;
 : xc-here! ( a -- )
     dup xc-tib u< 0= abort" dictionary overlaps tib"
+    dup 16384 u< 0= abort" call out of range"
     dup xc-hp xc-!
     2/ fasm-pc ! ;
 : xc-latest@ ( -- a ) xc-lp xc-@ ;
@@ -71,16 +80,29 @@ false to xc-ati?
 \ Previous call is a candidate for @i or an ALU pair. Cleared by every other emit.
 variable xc-p?
 
-\ One instruction. j1b keeps a nop in the high half, same as comma.
+\ One instruction, one halfword. Step 4 (j1b data words) also writes a nop.
 : xc-i, ( insn -- )
     $ffff and
-    xc-here@ 2/ { slot }
-    slot xc-slot!
-    xc-wide if $6000 slot 1+ xc-slot! then
-    xc-here@ xc-cell + xc-here!
+    xc-step 4 = if
+        xc-here@ 3 and 0<> abort" unaligned cell"
+        xc-here@ 2/ { slot }
+        slot xc-slot!
+        $6000 slot 1+ xc-slot!
+        xc-here@ 4 + xc-here!
+    else
+        xc-here@ 2/ xc-slot!
+        xc-here@ 2 + xc-here!
+    then
     0 xc-p? ! ;
 
+\ Pad a trailing halfword so the data cell does not share a command.
 : xc-d, ( u -- )
+    xc-half-insns
+    begin
+        xc-here@ xc-cell 1- and
+    while
+        $6000 xc-i,
+    repeat
     xc-here@ xc-!
     xc-here@ xc-cell + xc-here!
     0 xc-p? ! ;
@@ -161,6 +183,8 @@ variable xc-hit
     then ;
 
 \ Follow one kernel jump, then a literal and a real exit.
+\ Exit sits in the next halfword, or in the next cell when the
+\ literal keeps a nop beside it (constant and create on j1b).
 : xc-lit-exit ( cfa -- n true | false )
     dup xc-hw dup $e000 and 0= if
         $1fff and 2* nip
@@ -168,14 +192,14 @@ variable xc-hit
         drop
     then
     dup xc-hw
-    dup $8000 and if
-        $7fff and swap dup 2 + xc-hw $ffff and $608c = swap xc-cell + xc-hw $ffff and $608c = or if
-            true
-        else
-            drop false
-        then
+    dup $8000 and 0= if 2drop false exit then
+    $7fff and swap { n cfa }
+    cfa 2 + xc-hw $ffff and $608c = if n true exit then
+    cfa 2 + xc-hw $ffff and $6000 =
+    cfa xc-cell + xc-hw $ffff and $608c = and if
+        n true
     else
-        2drop false
+        false
     then ;
 
 variable xc-fd
@@ -271,9 +295,18 @@ create xc-btgt xc-bmax cells allot
         a2 u2 s" +" compare 0= if T+N T->N d+1 $6000 or true exit then
         a2 u2 s" u<" compare 0= if Nu<T T->N d+1 $6000 or true exit then
         a2 u2 s" xor" compare 0= if T^N T->N d+1 $6000 or true exit then
+        \ $0900 and $0a00 are shifts only on j1b. On j1a they are not.
+        xc-wide if
+            a2 u2 s" rshift" compare 0= if
+                $0900 T->N d+1 $6000 or true exit then
+            a2 u2 s" lshift" compare 0= if
+                $0a00 T->N d+1 $6000 or true exit then
+        then
     then
     a1 u1 s" dup" compare 0= if
         a2 u2 s" >r" compare 0= if T T->R r+1 $6000 or true exit then
+        xc-wide a2 u2 s" @" compare 0= and if
+            $6c00 T->N d+1 $6000 or true exit then
     then
     a1 u1 s" over" compare 0= if
         a2 u2 s" and" compare 0= if T&N $6000 or true exit then
@@ -291,9 +324,25 @@ create xc-btgt xc-bmax cells allot
 
 \ @i is j1a-only; xc-ati? is set above.
 
+\ j1b stand-in for @i: a constant call plus @ becomes lit and [T].
+\ A literal with bit 15 set does not fit one instruction, so leave the calls.
+\ ! is not folded: store is two ALU ops, one more slot than the two calls.
+: xc-fold-fetch ( -- f )
+    xc-wide 0= if false exit then
+    xc-paddr @ xc-hw { hw }
+    hw $e000 and $4000 <> if false exit then
+    hw $1fff and 2* xc-lit-exit 0= if false exit then
+    dup $8000 and if drop false exit then
+    $7fff and $8000 or xc-paddr @ xc-hw!
+    $6c00 xc-i,
+    true ;
+
 \ Rewrite the previous call. True means this token is already in the image.
 : xc-try-opt { a u -- f }
     xc-p? @ 0= if false exit then
+    a u s" @" compare 0= if
+        xc-fold-fetch if true exit then
+    then
     xc-ati? a u s" @" compare 0= and if
         xc-paddr @ xc-hw
         dup $e000 and $4000 = if
@@ -322,11 +371,11 @@ create xc-btgt xc-bmax cells allot
 
 : xc-if ( -- orig )
     $2000 xc-i,
-    xc-here@ xc-cell - ;
+    xc-here@ 2 - ;
 
 : xc-ahead ( -- orig )
     0 xc-i,
-    xc-here@ xc-cell - ;
+    xc-here@ 2 - ;
 
 : xc-resolve ( orig -- )
     xc-nbr @ xc-bmax u< 0= abort" too many branches"
@@ -334,10 +383,10 @@ create xc-btgt xc-bmax cells allot
     xc-here@ xc-nbr @ cells xc-btgt + !
     1 xc-nbr +!
     >r
-    r@ xc-@
+    r@ xc-hw
     $1fff invert and
     xc-here@ 2/ $1fff and or
-    r> xc-! ;
+    r> xc-hw! ;
 
 : xc-begin ( -- dest ) xc-here@ ;
 
@@ -377,7 +426,7 @@ variable xc-fold
     xc-here@ xc-word0 @ = if
         xc-exit,
     else
-        xc-here@ xc-cell - xc-shortcut xc-fold !
+        xc-here@ 2 - xc-shortcut xc-fold !
         xc-nbr @ 0 ?do
             i cells xc-btgt + @ xc-here@ = if
                 0 xc-fold !
@@ -392,16 +441,22 @@ variable xc-fold
 : xc-colon ( -- )
     xc-token 0= abort" :"
     xc-header
+    xc-half-insns
     xc-here@ xc-word0 !
     0 xc-nbr !
     0 xc-p? !
     -1 xc-comp ! ;
 
+\ Literal and exit each take a cell on j1b, so lit! and does> still
+\ write a whole cell without touching the neighbouring instruction.
 : xc-create ( -- )
     xc-token 0= abort" create"
     xc-header
-    xc-here@ xc-cell 2* + xc-lit
-    xc-exit, ;
+    xc-here@ xc-cell 2* +
+    xc-cell-insns
+    xc-lit
+    xc-exit,
+    xc-half-insns ;
 
 : xc-variable ( -- )
     xc-create
@@ -410,8 +465,10 @@ variable xc-fold
 : xc-constant ( n -- )
     xc-token 0= abort" constant"
     xc-header
+    xc-cell-insns
     xc-lit
-    xc-exit, ;
+    xc-exit,
+    xc-half-insns ;
 
 : xc-allot ( n -- )
     xc-here@ + xc-here! ;

@@ -397,5 +397,15 @@ s"  ok" s" sim.log" tmp-grep? expect-false
 s" fsys/j1a/extra-min.4th" s" sim.log" tmp-grep? expect-false
 test-teardown
 
+test-setup
+s\" s\" soc\" task:\ns\" emulation\" target:\ns\" designs/soc_console.4th\" design:\ns\" j1b\" cpu:\ns\" fsys\" sys:\n" tmp-manifest
+s\" FSOC_EMU_FAST=1 FSOC_EMU_CYCLES=30000000 FSOC_EMU_CON=term FSOC_EMU_UART_IN=\"$(printf '%s\n' '1 2 + .' 'variable x' '5 x !' 'x @ .' ': t 1 2 + . ;' 't')\"" s" --build" in-tmp-fsoc
+expect-true
+s" 3  ok" s" sim.log" tmp-grep? expect-true
+s" 5  ok" s" sim.log" tmp-grep? expect-true
+s" firmware.hex: 8934" s" sim.log" tmp-grep? expect-true
+s" bytes of 32768" s" sim.log" tmp-grep? expect-true
+test-teardown
+
 test-finish
 cr ." common_test ok" cr
