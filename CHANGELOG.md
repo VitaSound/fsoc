@@ -4,6 +4,8 @@
 
 ### Added
 
+- Colorlight lamp fit table. `python3 doc/j1-word-graph/build.py fit` runs nextpnr for j1a and j1b, full and release, and rewrites `doc/j1-word-graph/soc-fit.md`. The command is not part of `fsoc --build`.
+
 - fsys release image for a named program. `s" fsys" sys:` and `s" image" s" release" option:` next to an application option such as `lamp` load the program's word closure plus `fsys/<cpu>/release.4th`, not the whole dictionary layers. On `projects/soc_blink`, j1a release is `firmware.hex: 2822 bytes of 8192` and debug is `7752 bytes of 8192`. j1b release is `2956 bytes of 32768` and debug is `9156 bytes of 32768`. The lamp still runs; the console compiler stays in the image.
 
 - j1b host compiler packs colon bodies two instructions per 32-bit cell. `constant`, `create`, and `variable` keep the literal and `exit` in separate cells and the data at `cfa + 2 cells`, so console `lit!` and `does>` still write a whole cell. `here` at byte 16384 stops the build (`call out of range`). A call of a literal word followed by `@` becomes a literal and `[T]`; `dup @`, `2dup rshift`, and `2dup lshift` fuse on j1b only. `!` stays a call. j1a hex is unchanged (shared 7550, extra-min 8008). j1b shared 8280 of 32768, with extra 8934 (was 11636 and 12692).

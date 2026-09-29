@@ -174,7 +174,7 @@ One routed nextpnr fit of that image (2026-09-26) met the 25.00 MHz constraint a
 | TRELLIS_IO | 2 | 197 |
 | MULT18X18D | 0 | 28 |
 
-The four `DP16KD` blocks are the J1 firmware array, `4096 × 16` (8 KB, 64 Kbit of data). Each block is 18 Kbit, so those four reserve 72 Kbit out of the 1008 Kbit block-RAM budget. Distributed LUT RAM is unused.
+The four `DP16KD` blocks are the J1 firmware array, `4096 × 16` (8 KB, 64 Kbit of data). Each block is 18 Kbit, so those four reserve 72 Kbit out of the 1008 Kbit block-RAM budget. Distributed LUT RAM is unused. The same lamp on j1a and j1b, full and release, is in [doc/j1-word-graph/soc-fit.md](doc/j1-word-graph/soc-fit.md). Regenerate that file with `python3 doc/j1-word-graph/build.py fit`. That command is not part of `fsoc --build`.
 
 ```bash
 cd projects/soc_blink_colorlight_5a_75e_v6_0

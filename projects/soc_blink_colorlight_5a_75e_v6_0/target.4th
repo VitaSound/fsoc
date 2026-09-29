@@ -5,3 +5,4 @@ s" yosys" target:
 s" colorlight_5a_75e_v6_0" board:
 s" designs/soc_top.4th" design:
 s" lamp" s" 1" option:
+s" fsys" sys:

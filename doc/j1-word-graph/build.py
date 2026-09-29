@@ -855,6 +855,112 @@ def host_size(cpu, mode, lamp):
         shutil.rmtree(tmp)
 
 
+def parse_fit(text):
+    """Rows from one nextpnr log. None when the log has no utilisation."""
+    def last(pattern):
+        found = re.findall(pattern, text)
+        return found[-1] if found else None
+
+    fw = last(r"firmware\.hex:\s+(\d+) bytes of (\d+)")
+    luts = last(r"Total LUT4s:\s+(\d+)/\s*(\d+)")
+    logic = last(r"logic LUTs:\s+(\d+)/")
+    carry = last(r"carry LUTs:\s+(\d+)/")
+    ram = last(r"RAM LUTs:\s+(\d+)/\s*(\d+)")
+    dff = last(r"Total DFFs:\s+(\d+)/\s*(\d+)")
+    dp = last(r"DP16KD:\s+(\d+)/\s*(\d+)")
+    if not all((fw, luts, logic, carry, ram, dff, dp)):
+        return None
+    placed = "Unable to place" not in text
+    fmax = last(r"Max frequency for clock '[^']+':\s+([0-9.]+) MHz")
+    lut = luts[0] + " / " + luts[1]
+    if not placed:
+        lut = lut + ", not placed"
+    return {
+        "firmware": fw[0] + " / " + fw[1],
+        "lut": lut,
+        "logic": logic + " / " + carry,
+        "ram": ram[0] + " / " + ram[1],
+        "dff": dff[0] + " / " + dff[1],
+        "dp": dp[0] + " / " + dp[1],
+        "fmax": (fmax + " MHz") if placed and fmax else "not placed",
+    }
+
+
+def render_fit(rows):
+    labels = (
+        ("firmware", "firmware"),
+        ("lut", "LUT4"),
+        ("logic", "logic / carry"),
+        ("ram", "RAM LUT"),
+        ("dff", "DFF"),
+        ("dp", "DP16KD"),
+        ("fmax", "Fmax"),
+    )
+    lines = [
+        "Routed nextpnr fit of the lamp on Colorlight 5A-75E v6.0"
+        " (`LFE5U-25F`, `--25k`, 25 MHz)."
+        " Full and release share the CPU and the RAM array;"
+        " release only changes how many firmware bytes are used."
+        " Regenerate with `python3 doc/j1-word-graph/build.py fit`."
+        " That command is not part of `fsoc --build`.",
+        "",
+        "| | j1a full | j1a release | j1b full | j1b release |",
+        "|---|---:|---:|---:|---:|",
+    ]
+    for key, label in labels:
+        cells = [row[key] for row in rows]
+        lines.append("| " + label + " | " + " | ".join(cells) + " |")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def emit_fit():
+    """Four Yosys builds of the Colorlight lamp. Not called from fsoc --build."""
+    rows = []
+    for cpu in ("j1a", "j1b"):
+        for mode in ("full", "release"):
+            rows.append(host_fit(cpu, mode))
+    (OUT / "soc-fit.md").write_text(render_fit(rows))
+
+
+def host_fit(cpu, mode):
+    tmp = Path(tempfile.mkdtemp(prefix="fsoc-fit-"))
+    try:
+        manifest = [
+            "\\ lamp fit on Colorlight 5A-75E v6.0",
+            "",
+            's" soc" task:',
+            's" yosys" target:',
+            's" colorlight_5a_75e_v6_0" board:',
+            's" designs/soc_top.4th" design:',
+            's" lamp" s" 1" option:',
+            's" fsys" sys:',
+            's" ' + cpu + '" cpu:',
+        ]
+        if mode == "release":
+            manifest.append('s" image" s" release" option:')
+        (tmp / "target.4th").write_text("\n".join(manifest) + "\n")
+        env = os.environ.copy()
+        env["FSOC_HOME"] = str(ROOT)
+        proc = subprocess.run(
+            [str(ROOT / "bin" / "fsoc"), "--build"],
+            cwd=str(tmp),
+            env=env,
+            capture_output=True,
+            text=True,
+        )
+        log = proc.stdout + "\n" + proc.stderr
+        row = parse_fit(log)
+        if row is None:
+            raise SystemExit(
+                cpu + " " + mode + " fit produced no utilisation\n"
+                + log[-4000:]
+            )
+        return row
+    finally:
+        shutil.rmtree(tmp)
+
+
 def main(argv):
     if len(argv) <= 1:
         write_all()
@@ -878,6 +984,9 @@ def main(argv):
         return
     if cmd == "sizes":
         emit_sizes()
+        return
+    if cmd == "fit":
+        emit_fit()
         return
     raise SystemExit("unknown command " + cmd)
 
