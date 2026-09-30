@@ -28,9 +28,32 @@
 : avr-include ( rel-a rel-u -- )
    fsoc-path 2dup included fjson.str-free ;
 
-: avr-chip-files ( -- )
+\ Empty model: uses cpu-ref (atmega8). Named model must be a part file.
+: avr-model ( project cpu -- c-addr u )
+   over project.model@ nip if
+      drop project.model@
+   else
+      nip cpu.ref$ @ fsoc-fetch
+   then ;
+
+: avr-chip-rel ( project cpu -- rel-a rel-u )
+   avr-model
+   s" fsys/fasm/avr/" 2swap fjson.str-concat
+   s" .4th" fsoc-cat+ ;
+
+: avr-no-model ( a u -- )
+   s" avr: no model " type type cr
+   true abort" avr: no model" ;
+
+: avr-chip-files { project cpu -- }
    s" fsys/fasm/avr/fasm.4th" avr-include
-   s" fsys/fasm/avr/atmega8.4th" avr-include ;
+   project cpu avr-chip-rel
+   2dup fsoc-path
+   2dup file-exists? 0= if
+      fjson.str-free fjson.str-free
+      project cpu avr-model avr-no-model
+   then
+   2dup included fjson.str-free fjson.str-free ;
 
 : avr-note-file ( a u -- )
    ."     " type cr ;
@@ -47,11 +70,11 @@
    ."  bytes of "
    s" avr-flash" find-name name>interpret execute 2* 0 u.r cr ;
 
-: avr-hw ( cpu -- )
+: avr-hw { project cpu -- }
    s" Start build" fsoc-note
    s" Hardware" fsoc-note
-   avr-chip-files
-   avr-part-line
+   project cpu avr-chip-files
+   cpu avr-part-line
    s" Hardware complete" fsoc-note ;
 
 : avr-blink? ( project -- f )
@@ -82,7 +105,7 @@
    s" k-seed!" find-name name>interpret execute ;
 
 : avr-fsys { project cpu -- }
-   cpu avr-hw
+   project cpu avr-hw
    s" Software" fsoc-note
    ."     image tool: fsys" cr
    s" fsys/kernel/avr/kernel.4th" avr-note-file
@@ -104,7 +127,7 @@
 
 \ Baremetal blinky: same task name as HDL, fasm is the image tool in the log.
 : avr-blinky { project cpu -- }
-   cpu avr-hw
+   project cpu avr-hw
    s" Software" fsoc-note
    ."     image tool: fasm" cr
    s" firmware/blink_avr.4th" avr-note-file

@@ -118,13 +118,13 @@ s" forth.asm" tmp-exists? expect-false
 s" firmware.hex" tmp-exists? expect-false
 test-teardown
 
-s\" s\" soc\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\n" cpu-build
+s\" s\" soc\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\ns\" atmega8\" model:\n" cpu-build
 expect-false
 s" avr needs fsys" s" sim.log" tmp-grep? expect-true
 s" firmware.hex" tmp-exists? expect-false
 test-teardown
 
-s\" s\" soc\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\ns\" fsys\" sys:\n" cpu-build
+s\" s\" soc\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\ns\" atmega8\" model:\ns\" fsys\" sys:\n" cpu-build
 expect-true
 s" Hardware" s" sim.log" tmp-grep? expect-true
 s" atmega8(avr)" s" sim.log" tmp-grep? expect-true
@@ -142,7 +142,7 @@ s" 6C696E6B206F" s" firmware.hex" tmp-grep? expect-false
 s" B89A" s" firmware.hex" tmp-grep? expect-false
 test-teardown
 
-s\" s\" soc\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\ns\" fsys\" sys:\ns\" blink\" s\" 1\" option:\ns\" image\" s\" release\" option:\n" cpu-build
+s\" s\" soc\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\ns\" atmega8\" model:\ns\" fsys\" sys:\ns\" blink\" s\" 1\" option:\ns\" image\" s\" release\" option:\n" cpu-build
 expect-true
 s" fsys/avr/extra.4th" s" sim.log" tmp-grep? expect-true
 s" fsys/avr/release.4th" s" sim.log" tmp-grep? expect-true
@@ -152,7 +152,7 @@ s" grep -aq 6C696E6B206F firmware.hex" in-tmp-sh expect-true
 s" gforth cross.fs" s" sim.log" tmp-grep? expect-false
 test-teardown
 
-s\" s\" blinky\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\n" cpu-build
+s\" s\" blinky\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\ns\" atmega8\" model:\n" cpu-build
 expect-true
 s" Hardware" s" sim.log" tmp-grep? expect-true
 s" atmega8(avr)" s" sim.log" tmp-grep? expect-true
@@ -162,6 +162,39 @@ s" bytes of 8192" s" sim.log" tmp-grep? expect-true
 s" :00000001FF" s" firmware.hex" tmp-grep? expect-true
 s" quit" s" firmware.hex" tmp-grep? expect-false
 s" gforth cross.fs" s" sim.log" tmp-grep? expect-false
+test-teardown
+
+\ Empty model: cpu-ref atmega8. Named model: that part file. Unknown: stop.
+project-new
+s" avr" cpu:
+project@ s" avr" cpu-find avr-model s" atmega8" expect-str-eq
+s" atmega328p" model:
+project@ s" avr" cpu-find avr-model s" atmega328p" expect-str-eq
+project@ s" avr" cpu-find avr-chip-files
+avr-part s" atmega328p" expect-str-eq
+avr-flash 16384 expect=
+project-new
+s" avr" cpu:
+s" no-such-chip" model:
+project@ s" avr" cpu-find
+' avr-chip-files catch 0<> expect-true 2drop
+
+s\" s\" blinky\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\n" cpu-build
+expect-true
+s" atmega8(avr)" s" sim.log" tmp-grep? expect-true
+s" bytes of 8192" s" sim.log" tmp-grep? expect-true
+test-teardown
+
+s\" s\" blinky\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\ns\" atmega328p\" model:\n" cpu-build
+drop
+s" atmega328p(avr)" s" sim.log" tmp-grep? expect-true
+s" Hardware complete" s" sim.log" tmp-grep? expect-true
+test-teardown
+
+s\" s\" blinky\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\ns\" no-such-chip\" model:\n" cpu-build
+expect-false
+s" no-such-chip" s" sim.log" tmp-grep? expect-true
+s" atmega8(avr)" s" sim.log" tmp-grep? expect-false
 test-teardown
 
 test-setup

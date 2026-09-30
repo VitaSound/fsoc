@@ -3,3 +3,4 @@
 s" blinky" task:
 s" proteus" target:
 s" avr" cpu:
+s" atmega8" model:

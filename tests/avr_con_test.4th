@@ -37,7 +37,7 @@ avr-con-ready? 0= [IF]
 [THEN]
 
 test-setup
-s\" s\" soc\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\ns\" fsys\" sys:\n" tmp-manifest
+s\" s\" soc\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\ns\" atmega8\" model:\ns\" fsys\" sys:\n" tmp-manifest
 s" " s" --build" in-tmp-fsoc expect-true
 s" firmware.hex" tmp-exists? expect-true
 
@@ -69,7 +69,7 @@ s"  c@i" con-has
 s"  um+" con-has
 s"  u/mod" con-has
 
-s\" s\" soc\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\ns\" fsys\" sys:\ns\" blink\" s\" 1\" option:\ns\" image\" s\" release\" option:\n" tmp-manifest
+s\" s\" soc\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\ns\" atmega8\" model:\ns\" fsys\" sys:\ns\" blink\" s\" 1\" option:\ns\" image\" s\" release\" option:\n" tmp-manifest
 s" " s" --build" in-tmp-fsoc expect-true
 s" ." con-line
 s" blink on" con-has

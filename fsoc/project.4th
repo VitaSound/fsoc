@@ -1,5 +1,5 @@
 \ fsoc/project.4th — project manifest. target.4th fills it with
-\ task: target: board: design: cpu: sys: option: . The CLI reads only this.
+\ task: target: board: design: cpu: model: sys: option: . The CLI reads only this.
 
 begin-structure opt%
     field: opt.name$
@@ -12,6 +12,7 @@ begin-structure project%
     field: project.board$
     field: project.design$
     field: project.cpu$
+    field: project.model$
     field: project.sys$
     field: project.dir$
     field: project.harness$
@@ -36,6 +37,7 @@ variable current-project
 : board:   ( c-addr u -- ) project@ project.board$   fsoc-store! ;
 : design:  ( c-addr u -- ) project@ project.design$  fsoc-store! ;
 : cpu:     ( c-addr u -- ) project@ project.cpu$     fsoc-store! ;
+: model:   ( c-addr u -- ) project@ project.model$   fsoc-store! ;
 : sys:     ( c-addr u -- ) project@ project.sys$     fsoc-store! ;
 : harness: ( c-addr u -- ) project@ project.harness$ fsoc-store! ;
 
@@ -50,6 +52,7 @@ variable current-project
 : project.board@   ( project -- c-addr u ) project.board$   @ fsoc-fetch ;
 : project.design@  ( project -- c-addr u ) project.design$  @ fsoc-fetch ;
 : project.cpu@     ( project -- c-addr u ) project.cpu$     @ fsoc-fetch ;
+: project.model@   ( project -- c-addr u ) project.model$   @ fsoc-fetch ;
 : project.sys@     ( project -- c-addr u ) project.sys$     @ fsoc-fetch ;
 : project.dir@     ( project -- c-addr u ) project.dir$     @ fsoc-fetch ;
 : project.harness@ ( project -- c-addr u ) project.harness$ @ fsoc-fetch ;

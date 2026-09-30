@@ -75,6 +75,17 @@
 - **WHEN** в репозитории есть `fsys/fasm/avr/atmega328p.4th` и `fsys/fasm/avr/atmega8.4th`
 - **THEN** зарегистрированный id профиля остаётся `avr`, и отдельного `cpu:` для 328p нет
 
+### Requirement: model: выбирает файл части
+Манифест MAY содержать `s" <id>" model:`. Для `cpu: avr` сборка MUST включить `fsys/fasm/avr/<id>.4th`. Ядро MUST NOT хардкодить `atmega8.4th`. Неизвестный id MUST останавливать сборку и MUST NOT подставлять `atmega8`. Пустой `model:` MAY брать `cpu-ref` (`atmega8` у профиля `avr`). Рабочие ATmega-проекты MUST писать модель явно.
+
+#### Scenario: Переключение части
+- **WHEN** манифест содержит `s" avr" cpu:` и `s" atmega328p" model:`
+- **THEN** сборка включает `fsys/fasm/avr/atmega328p.4th`, в журнале Hardware есть `atmega328p(avr)`, и `avr-flash` в словах — 16384
+
+#### Scenario: Неизвестная модель
+- **WHEN** манифест содержит `s" avr" cpu:` и `s" no-such-chip" model:`
+- **THEN** сборка останавливается с текстом, содержащим `no-such-chip` или `no model`, и восьмёрка не подставляется
+
 ### Requirement: Новый fsys-id входит в консольные тесты
 Новый `cpu:` с консольным kernel и `s" fsys" sys:` MUST попасть в `tests/con_core_test.4th` (манифест в `tests/con_session.4th`, эталон JSON через `doc/j1-word-graph/build.py`, теги в `tests/con_words.py`). `accept` MUST стирать байты 8 и 127 той же семантикой, что у `j1a` / `j1b` / `avr`. Другой корпус того же ISA MUST NOT требовать новый ряд `con_core`. Инструкция агента: `.cursor/rules/fsoc-cpu-target.mdc`, навык `add-cpu-target`.
 
@@ -97,10 +108,10 @@
 - **THEN** сборка останавливается до записи hex
 
 ### Requirement: AVR печатает Hardware и Software
-Сборка образа AVR MUST напечатать `Start build`, `Hardware`, строку `atmega8(avr)`, `Hardware complete`, `Software`, `image tool: fsys` или `image tool: fasm`, пути собранных исходников, `firmware.hex: <байт> bytes of <ёмкость flash>`, `Software complete`. Ёмкость MUST быть `avr-flash` в байтах (у ATmega8 — 8192). Строка `ATmega8 Intel HEX` MUST NOT печататься.
+Сборка образа AVR MUST напечатать `Start build`, `Hardware`, строку `<model>(avr)`, `Hardware complete`, `Software`, `image tool: fsys` или `image tool: fasm`, пути собранных исходников, `firmware.hex: <байт> bytes of <ёмкость flash>`, `Software complete`. Ёмкость MUST быть `avr-flash` в байтах (у ATmega8 — 8192). Строка `ATmega8 Intel HEX` MUST NOT печататься.
 
 #### Scenario: Консоль AVR называет чип и размер
-- **WHEN** манифест содержит `s" soc" task:`, `s" proteus" target:`, `s" avr" cpu:`, `s" fsys" sys:` и выполняется `fsoc --build`
+- **WHEN** манифест содержит `s" soc" task:`, `s" proteus" target:`, `s" avr" cpu:`, `s" atmega8" model:`, `s" fsys" sys:` и выполняется `fsoc --build`
 - **THEN** в журнале есть `atmega8(avr)`, `image tool: fsys` и `bytes of 8192`
 
 ### Requirement: Приёмка после кросса — Proteus и живая плата

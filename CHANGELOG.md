@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Manifest `model:` selects the AVR part file `fsys/fasm/avr/<id>.4th`. Working ATmega projects write `s" atmega8" model:`. Empty `model:` still uses `cpu-ref`. Unknown id stops; it does not fall back to ATmega8.
+
 ## [0.9.0] - 2026-09-30
 
 ### Changed

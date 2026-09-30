@@ -3,6 +3,7 @@
 s" soc" task:
 s" proteus" target:
 s" avr" cpu:
+s" atmega8" model:
 s" fsys" sys:
 s" blink" s" 1" option:
 s" image" s" release" option:

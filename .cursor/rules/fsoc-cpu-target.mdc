@@ -7,7 +7,7 @@ alwaysApply: true
 
 Canon: `openspec/specs/forth-cross/spec.md`, `openspec/specs/fsys/spec.md`. Skill: `add-cpu-target`.
 
-A new **ISA family** is a new `cpu:` **id** in `fsoc/cpu.4th` (FMAP class, MM, EX-C, CG, BM). A **chip variant** of an existing family (`atmega328p` next to `atmega8`) is a part file under `fsys/fasm/<id>/`, not a new id.
+A new **ISA family** is a new `cpu:` **id** in `fsoc/cpu.4th` (FMAP class, MM, EX-C, CG, BM). A **chip variant** of an existing family (`atmega328p` next to `atmega8`) is a part file under `fsys/fasm/<id>/`, not a new id. Manifest `model:` is that file id; `cg-f` includes `fsys/fasm/<cpu>/<model>.4th`. Empty `model:` uses `cpu-ref`.
 
 ## Layers (same canvas as j1a / j1b / avr)
 

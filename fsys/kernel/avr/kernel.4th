@@ -1,7 +1,7 @@
-\ fsys/kernel/avr/kernel.4th — ATmega8 STC Forth. Code in flash, stacks in SRAM.
+\ fsys/kernel/avr/kernel.4th — AVR STC Forth. Code in flash, stacks in SRAM.
+\ Chip file comes from model: (cg-f) or the host that includes this kernel.
 
 include ../../fasm/avr/fasm.4th
-include ../../fasm/avr/atmega8.4th
 include clock.4th
 0 fasm-print? !
 

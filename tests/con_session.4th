@@ -7,7 +7,7 @@
    s\" s\" soc\" task:\ns\" emulation\" target:\ns\" designs/soc_console.4th\" design:\ns\" j1b\" cpu:\ns\" fsys\" sys:\n" tmp-manifest ;
 
 : avr-fsys-manifest ( -- )
-   s\" s\" soc\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\ns\" fsys\" sys:\n" tmp-manifest ;
+   s\" s\" soc\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\ns\" atmega8\" model:\ns\" fsys\" sys:\n" tmp-manifest ;
 
 : con-py ( args-a args-u -- flag )
    s" python3 " fsoc-root fjson.str-concat s" /tests/con_words.py " fsoc-cat+

@@ -4,12 +4,14 @@ s" test_common.4th" included
 s" load.4th" included
 
 project-new
-s\" s\" blinky\" task:  s\" quartus\" target:  s\" terasic_de0nano\" board:  s\" designs/blinky_top.4th\" design:  s\" led-bit\" s\" 4\" option:  s\" lamp\" s\" 1\" option:" evaluate
+s\" s\" blinky\" task:  s\" quartus\" target:  s\" terasic_de0nano\" board:  s\" designs/blinky_top.4th\" design:  s\" avr\" cpu:  s\" atmega8\" model:  s\" led-bit\" s\" 4\" option:  s\" lamp\" s\" 1\" option:" evaluate
 
 project@ project.task@ s" blinky" expect-str-eq
 project@ project.target@ s" quartus" expect-str-eq
 project@ project.board@ s" terasic_de0nano" expect-str-eq
 project@ project.design@ s" designs/blinky_top.4th" expect-str-eq
+project@ project.cpu@ s" avr" expect-str-eq
+project@ project.model@ s" atmega8" expect-str-eq
 project@ project.dir@ cwd@ expect-str-eq
 s" led-bit" project@ project.opt@ s" 4" expect-str-eq
 s" lamp" project@ project.opt@ s" 1" expect-str-eq

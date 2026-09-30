@@ -72,6 +72,8 @@ s" gforth cross.fs" s" sim.log" tmp-grep? expect-false
 s" swapforth/" s" sim.log" tmp-grep? expect-false
 test-teardown
 
+s" ../fsys/fasm/avr/fasm.4th" included
+s" ../fsys/fasm/avr/atmega8.4th" included
 s" ../fsys/kernel/avr/kernel.4th" included
 s" ../fsys/host/avr-cross.4th" included
 : avr-khas ( c-addr u -- )
