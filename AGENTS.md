@@ -29,7 +29,8 @@ Blinky (no Forth) lives under `projects/baremetal/`. HDL copies omit `cpu:`. AVR
 
 ```bash
 fmix packages.get
-fmix test                # avr_con_test needs simavr + libsimavr-dev; skips if missing
+fmix test                # includes con_core_test (fsys j1a/j1b/avr REPL); avr_con_test needs simavr + libsimavr-dev; skips if missing
+# one file: cd tests && FSOC_HOME=$FSOC_HOME gforth con_core_test.4th
 fsoc version             # needs FSOC_HOME + PATH (see feco shell-setup)
 cd projects/baremetal/blinky_emul && fsoc --build
 cd projects/baremetal/blinky_atmega && fsoc --build
@@ -50,4 +51,6 @@ A value the build shows or uses comes from the project: a file it copies, genera
 
 ## New CPU / MCU
 
-A new ISA is a new `cpu:` id (FMAP + CG) with the same fsys layers as j1a/j1b/avr: `fsys/fasm/<id>/` → `fsys/kernel/<id>/` (Forth console, not blink) → `fsys/host/<id>-cross.4th` → `fsys/<id>/extra.4th` → `firmware/*.fs`. A new chip of an existing ISA is only a part file under fasm. Empty `sys:` is swapforth; an MCU without SwapForth requires `s" fsys" sys:`. Branch by CG in the existing emitter, not by a cpu id literal in `soc.4th`. Baremetal LED is task `blinky` plus `cpu:`, fasm is the assembler. AVR `--build` prints Hardware `atmega8(avr)` then Software `firmware.hex: N bytes of flash`. Agent rule: `.cursor/rules/fsoc-cpu-target.mdc`. Specs: `openspec/specs/forth-cross/spec.md`, `openspec/specs/fsys/spec.md`.
+A new ISA is a new `cpu:` id (FMAP + CG) with the same fsys layers as j1a/j1b/avr: `fsys/fasm/<id>/` → `fsys/kernel/<id>/` (Forth console, not blink) → `fsys/host/<id>-cross.4th` → `fsys/<id>/extra.4th` → `firmware/*.fs`. A new chip of an existing ISA is only a part file under fasm. Empty `sys:` is swapforth; an MCU without SwapForth requires `s" fsys" sys:`. Branch by CG in the existing emitter, not by a cpu id literal in `soc.4th`. Baremetal LED is task `blinky` plus `cpu:`, fasm is the assembler. AVR `--build` prints Hardware `atmega8(avr)` then Software `firmware.hex: N bytes of flash`.
+
+A new **fsys console** id MUST join `tests/con_core_test.4th`: manifest in `tests/con_session.4th`, JSON via `doc/j1-word-graph/build.py`, every name tagged in `tests/con_words.py`, BS/DEL in that kernel `accept`. Keep id-only words out of the shared script (`tests/avr_con_test.4th` is the AVR-only slice). A new chip of an existing ISA does not add a `con_core` row. Run `fmix test` or `cd tests && FSOC_HOME=<root> gforth con_core_test.4th`. Agent rule: `.cursor/rules/fsoc-cpu-target.mdc`. Skill: `add-cpu-target`. Specs: `openspec/specs/forth-cross/spec.md`, `openspec/specs/fsys/spec.md`.

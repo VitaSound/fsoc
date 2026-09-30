@@ -1,0 +1,541 @@
+{
+  "+": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "um+": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "@": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "!": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "c@": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "c@i": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "slit": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "c!": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "dup": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "drop": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "swap": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "over": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "and": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "or": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "xor": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "invert": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "0<": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "=": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "u<": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  ">r": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "r>": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "r@": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "execute": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "exit": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "emit": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "u.": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  ".": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  ".s": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "key": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "io@": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "io!": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "2/": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "2*": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "cell+": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "cells": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "u/mod": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "here": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "depth": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "allot": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  ",": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "base": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "state": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "latest": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "'BOOT": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  ">in": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "ntib": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "tib": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "tlen": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "parse-name": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "find": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "header": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "literal": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "compile-exit": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  ":": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  ";": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "if": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "then": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "begin": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "again": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "words": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "quit": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "0=": {
+    "file": "fsys/avr/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "="
+    ],
+    "missing": [],
+    "src": ": 0= 0 = ;\n"
+  },
+  "1+": {
+    "file": "fsys/avr/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "+"
+    ],
+    "missing": [],
+    "src": ": 1+ 1 + ;\n"
+  },
+  "1-": {
+    "file": "fsys/avr/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "invert",
+      "+"
+    ],
+    "missing": [],
+    "src": ": 1- 0 invert + ;\n"
+  },
+  "-": {
+    "file": "fsys/avr/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "invert",
+      "+"
+    ],
+    "missing": [],
+    "src": ": - invert 1 + + ;\n"
+  },
+  "2drop": {
+    "file": "fsys/avr/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "drop"
+    ],
+    "missing": [],
+    "src": ": 2drop drop drop ;\n"
+  },
+  "cr": {
+    "file": "fsys/avr/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "emit"
+    ],
+    "missing": [],
+    "src": ": cr 13 emit 10 emit ;\n"
+  },
+  "space": {
+    "file": "fsys/avr/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "emit"
+    ],
+    "missing": [],
+    "src": ": space 32 emit ;\n"
+  },
+  "type": {
+    "file": "fsys/avr/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      "dup",
+      "over",
+      "c@",
+      "emit",
+      "swap",
+      "1+",
+      "1-",
+      "2drop"
+    ],
+    "missing": [],
+    "src": ": type\n   begin dup while\n      over c@ emit\n      swap 1+ swap 1-\n   repeat 2drop ;\n"
+  },
+  "negate": {
+    "file": "fsys/avr/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "invert",
+      "1+"
+    ],
+    "missing": [],
+    "src": ": negate invert 1+ ;\n"
+  },
+  "DOUBLE": {
+    "file": "fsys/avr/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "dup",
+      "+"
+    ],
+    "missing": [],
+    "src": ": DOUBLE dup + ;\n"
+  }
+}

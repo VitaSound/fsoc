@@ -13,3 +13,4 @@
       swap 1+ swap 1-
    repeat 2drop ;
 : negate invert 1+ ;
+: DOUBLE dup + ;

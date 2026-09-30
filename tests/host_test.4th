@@ -24,9 +24,9 @@ variable seen
 
 s" fsys/common/common.4th" j1b-xc
 s" fsys/common/core.4th" j1b-xc
-xc-here@ 8276 expect=
+xc-here@ 8324 expect=
 s" fsys/j1b/extra.4th" j1b-xc
-xc-here@ 8930 expect=
+xc-here@ 8978 expect=
 
 s" : pack 1 2 + ;" host-load
 s" pack" cfa-of seen !

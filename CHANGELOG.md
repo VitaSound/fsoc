@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.9.0] - 2026-09-29
+## [0.9.0] - 2026-09-30
 
 ### Changed
 
@@ -10,16 +10,19 @@
 
 ### Added
 
-- `tests/avr_con_test.4th`: extra-min UART under `tools/avr-con` (simavr). Covers `1 2 + .`, two-digit `.`, `.s` on the next line after `1 2 3`, and `words`. Skips when `simavr` / `libsimavr-dev` are missing.
+- fsys `accept` on j1a, j1b, and avr treats BS (8) and DEL (127) as erase: drop the last TIB byte and send BS SPACE BS. Shared console tests in `tests/con_core_test.4th` run the same `sys: fsys` session on all three ids (input, erase, unknown word, stack, `+`, `.s`, `:`, `words`). `tests/con_words.py` checks every name in `fsys-j1a.json`, `fsys-j1b.json`, and `fsys-avr-extra-min.json`. `avr-con -f` reads scripted lines including raw BS.
+
+- `tests/avr_con_test.4th`: extra-min UART under `tools/avr-con` (simavr). AVR-only: 16-bit `.`, `u/mod`, `um+`, `words` has `c@i`. Shared REPL is `tests/con_core_test.4th`. Skips when `simavr` / `libsimavr-dev` are missing.
 
 - HDL `blinky_*` projects live under `projects/baremetal/`. `projects/baremetal/blinky_atmega` is task `blinky` with `s" avr" cpu:`: fasm assembles `firmware/blink_avr.4th` (PB0), no Forth kernel. AVR `--build` prints `Hardware` / `atmega8(avr)` then `Software` / `image tool: fasm` / `firmware.hex: <used> bytes of 8192`.
 
-- How to add another CPU/MCU: always-on rule `.cursor/rules/fsoc-cpu-target.mdc`, skill `add-cpu-target`, and OpenSpec requirements in `forth-cross` / `fsys`. A new `cpu:` id is an ISA family (fasm, kernel console, host cross, extra, firmware). A new chip of the same ISA is a part file under `fsys/fasm/<id>/`. `soc.4th` still names no MCU id; the CG emitter branches.
+- How to add another CPU/MCU: always-on rule `.cursor/rules/fsoc-cpu-target.mdc`, skill `add-cpu-target`, and OpenSpec requirements in `forth-cross` / `fsys`. A new `cpu:` id is an ISA family (fasm, kernel console, host cross, extra, firmware). A new chip of the same ISA is a part file under `fsys/fasm/<id>/`. `soc.4th` still names no MCU id; the CG emitter branches. A new fsys console id must join `tests/con_core_test.4th` (session, JSON, `con_words.py` tags, BS/DEL). Run: `fmix test` or `cd tests && FSOC_HOME=<root> gforth con_core_test.4th`. README section Adding a CPU.
 
 - ATmega8 profile `avr` (class 1, MM=D, EX-C=S, CG=F, BM=C). Empty `sys:` stops; `s" fsys" sys:` assembles the STC console kernel, host `avr-cross` compiles `fsys/avr/extra-min.4th` (console) or `fsys/avr/extra.4th` (blink), and writes Intel HEX. `s" blink" s" 1" option:` with `s" image" s" release" option:` appends `firmware/blink.fs` (PB0 and USART text), not `fsys/kernel/avr`. `avra` is not called. `z80` still stops before a hex image. Target `proteus` does not launch a simulator. `projects/soc_atmega8` is the extra-min console; `projects/soc_atmega8_blink` is a release blink image. The AVR assembler covers the classic opcode set. `atmega8`, `atmega328p`, and `atmega2560` each carry their own flash, SRAM, EEPROM, vector length, and register addresses. The Proteus schematic is in `doc/atmega8-proteus.md`.
 
 ### Fixed
 
+- AVR `litw` / `slit` / `branch` under Proteus and `avr-con`: first `POP` after `RCALL` is PCH (simavr 1.6 and Proteus AVR). The kernel treated it as PCL, so LPM walked off the image and PC landed on `0x0BB2`. Host `repeat` had an extra `swap`, so `begin while repeat` (`itype`) printed flash instead of `blink on`. Proteus 8.13 Virtual Terminal shows `blink on` / `blink off` (`doc/atmega8-proteus-blink.png`). Next acceptance is a live FPGA board plus Proteus, not only Verilator.
 - AVR console hung in Proteus after `ok`: `okmsg` and `wordsw` called Forth `emit` (which pops TOS) as if it were putchar, and `accept` stored TOS instead of the UART byte. A `tx` primitive writes UDR without touching the stack. CR and LF both end a line (VT100 Enter is CR). After extra-min the reset `seed` is patched so `cr` / `type` are in the target dictionary.
 
 ### Added

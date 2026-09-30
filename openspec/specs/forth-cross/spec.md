@@ -75,6 +75,13 @@
 - **WHEN** в репозитории есть `fsys/fasm/avr/atmega328p.4th` и `fsys/fasm/avr/atmega8.4th`
 - **THEN** зарегистрированный id профиля остаётся `avr`, и отдельного `cpu:` для 328p нет
 
+### Requirement: Новый fsys-id входит в консольные тесты
+Новый `cpu:` с консольным kernel и `s" fsys" sys:` MUST попасть в `tests/con_core_test.4th` (манифест в `tests/con_session.4th`, эталон JSON через `doc/j1-word-graph/build.py`, теги в `tests/con_words.py`). `accept` MUST стирать байты 8 и 127 той же семантикой, что у `j1a` / `j1b` / `avr`. Другой корпус того же ISA MUST NOT требовать новый ряд `con_core`. Инструкция агента: `.cursor/rules/fsoc-cpu-target.mdc`, навык `add-cpu-target`.
+
+#### Scenario: Платформа без ряда con_core не принята
+- **WHEN** добавляют новый id с `fsys` kernel и не трогают `con_core_test`
+- **THEN** требование не выполнено: сеанс, `words` и теги для этого id отсутствуют
+
 ### Requirement: Сборка MCU ветвится по CG
 Задача `soc` MUST выбирать излучатель по полю CG профиля. `fsoc/tasks/soc.4th` MUST NOT ветвить сборку по литералу id MCU (`avr`, `stm8`, `z80` и любому следующему). Ветвление по CG MUST жить в уже зарегистрированном излучателе (`cg-f.4th` для CG=F, путь CG=I для J1). Новый CG=F с `fsys` MUST писать Intel HEX тем же излучателем CG=F.
 
@@ -95,3 +102,14 @@
 #### Scenario: Консоль AVR называет чип и размер
 - **WHEN** манифест содержит `s" soc" task:`, `s" proteus" target:`, `s" avr" cpu:`, `s" fsys" sys:` и выполняется `fsoc --build`
 - **THEN** в журнале есть `atmega8(avr)`, `image tool: fsys` и `bytes of 8192`
+
+### Requirement: Приёмка после кросса — Proteus и живая плата
+Образ AVR MUST быть пригоден для Proteus (Intel HEX, таргет `proteus` не запускает симулятор). Образ J1 MUST быть пригоден для прошивки FPGA-плат из `boards/`. Автотест кросса MUST NOT заменять эту приёмку.
+
+#### Scenario: HEX для Proteus
+- **WHEN** собран `s" avr" cpu:` с `s" fsys" sys:` и `s" proteus" target:`
+- **THEN** в каталоге есть `firmware.hex`, и журнал предлагает открыть его в Proteus
+
+#### Scenario: Дальше — плита
+- **WHEN** профиль `j1a` или `j1b` собран под `quartus` или `yosys` с `board:`
+- **THEN** следующий шаг приёмки MUST быть прогон на железной плате, не только Verilator

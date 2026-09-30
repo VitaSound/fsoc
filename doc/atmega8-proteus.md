@@ -31,3 +31,7 @@ cd projects/soc_atmega8 && fsoc --build
 Без `libsimavr-dev` сборка ищет заголовки в `/tmp/simavr-dev/usr/include/simavr`. GDB: `simavr -g -m atmega8 -f 8000000 firmware.hex`, затем `avr-gdb` и `target remote :1234` (у HEX нет символов, PC в байтах). Ещё **simulavr** и **qemu-system-avr**.
 
 Сброс — включение питания в Proteus. Прерывания программа не включает, первая команда стоит по вектору сброса.
+
+`soc_atmega8_blink` в Proteus 8.13 (AVR 8.3SP0), 8 МГц, Virtual Terminal 9600. На `PB0` — пищалка. UART: TX терминала на `PD0` (RXD), RX на `PD1` (TXD). Строки `blink on` / `blink off` идут с переводами строки (`itype` + `cr`).
+
+![ATmega8 Forth blink in Proteus: Virtual Terminal prints blink on / blink off](atmega8-proteus-blink.png)

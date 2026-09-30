@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/License-COPL-red.svg)](LICENSE)
 [![Ver](https://img.shields.io/badge/Ver-0.9.0-green.svg)](https://github.com/VitaSound/fsoc)
 
-Forth-native SoC builder: **boards**, **Quartus/Yosys/Verilator toolchains**, **iomap**, **J1 firmware**. Analogue of LiteX `build` + `soc` on Gforth. Verilog modules come from [fhdlgen](https://github.com/VitaSound/fhdlgen) and [hdl-modules](https://github.com/VitaSound/hdl-modules).
+Forth-native SoC builder: **boards**, **Quartus/Yosys/Verilator toolchains**, **iomap**, **J1 firmware**. Analogue of LiteX `build` + `soc` on Gforth. Verilog modules come from [fhdlgen](https://github.com/VitaSound/fhdlgen) and [hdl-modules](https://github.com/VitaSound/hdl-modules). Russian release note: [doc/PRESS-RELEASE-ru.md](doc/PRESS-RELEASE-ru.md).
 
 ## Install
 
@@ -34,7 +34,14 @@ The agent skill in this repo is [`.cursor/skills/wavepeek`](.cursor/skills/wavep
 wavepeek skill .cursor/skills/wavepeek
 ```
 
-ATmega8 UART under simavr is optional for a clone. Packages: `simavr`, `libsimavr-dev`, `gcc`. `fmix test` runs [`tests/avr_con_test.4th`](tests/avr_con_test.4th) when those packages are present (skip otherwise). From a built project: `~/fsoc/tools/avr-con ./firmware.hex`. See [ATmega8](#atmega8).
+`fmix test` includes the shared fsys console grid [`tests/con_core_test.4th`](tests/con_core_test.4th) (j1a, j1b, avr: input, erase, unknown word, stack, `+`, `.s`, `:`, `words`). Oracle: [`tests/con_words.py`](tests/con_words.py) against `doc/j1-word-graph/fsys-*.json`. One file:
+
+```bash
+export FSOC_HOME="$HOME/fsoc"
+cd tests && gforth con_core_test.4th
+```
+
+ATmega8 UART under simavr is optional for a clone. Packages: `simavr`, `libsimavr-dev`, `gcc`. Without them the AVR slice of `con_core_test` and [`tests/avr_con_test.4th`](tests/avr_con_test.4th) skip. From a built project: `~/fsoc/tools/avr-con ./firmware.hex`. See [ATmega8](#atmega8). A new `cpu:` with an fsys kernel must extend this grid — [Adding a CPU](#adding-a-cpu) and `.cursor/rules/fsoc-cpu-target.mdc`.
 
 ## Blinky
 
@@ -136,9 +143,9 @@ FSOC_EMU_CON=pin FSOC_EMU_FAST=1 FSOC_EMU_CYCLES=800000 fsoc --build
 
 `projects/soc_atmega8` is a Forth console (`s" fsys" sys:`): kernel plus `fsys/avr/extra-min.4th` (`cr`, `type`, arithmetic helpers), no ports, Intel HEX. `projects/soc_atmega8_blink` packs a **release** image: `s" image" s" release" option:` plus `firmware/blink.fs` (PB0 and USART text) on `fsys/avr/extra.4th`, not extra-min. `projects/baremetal/blinky_atmega` is the same **task** `blinky` as the FPGA copies, with `s" avr" cpu:`: fasm assembles `firmware/blink_avr.4th` (PB0), no kernel. The log prints `Hardware` / `atmega8(avr)` then `Software` / `image tool: fsys` or `fasm` / `firmware.hex: <used> bytes of 8192`. `fsoc --build` does not start Proteus. Clock, LED, and Virtual Terminal are in [doc/atmega8-proteus.md](doc/atmega8-proteus.md).
 
-Proteus with that HEX: USART at 9600 on `PD1`/`PD0` prints `blink on` / `blink off` in the Virtual Terminal.
+Proteus with the release HEX: USART at 9600 on `PD1`/`PD0` prints `blink on` / `blink off` in the Virtual Terminal. The same text appears under `tools/avr-con`.
 
-![ATmega8 in Proteus: Virtual Terminal showing blink on / blink off from blinky_atmega](doc/atmega8-proteus-blinky.jpg)
+![ATmega8 Forth blink in Proteus: Virtual Terminal prints blink on / blink off](doc/atmega8-proteus-blink.png)
 
 ```bash
 cd projects/soc_atmega8 && fsoc --build
@@ -225,6 +232,24 @@ fsoc --build
 | `colorlight_5a_75e_v6_0` | LFE5U-25F-6BG256C | clk `P6` 25 MHz, led `T6` active-low, btn `R7` | — |
 | `colorlight_5a_75e_v7_1` | LFE5U-25F-6BG256C | clk `P6` 25 MHz, led `P11` active-low, btn `M13` | — |
 | `colorlight_5a_75e_v8_2` | LFE5U-25F-7BG256I | clk `P6` 25 MHz, led `T6` active-low, speed 7 | — |
+
+## Adding a CPU
+
+A new **ISA** is a new `cpu:` id (`fsoc/cpu.4th`, FMAP + CG) with the fsys layers: `fsys/fasm/<id>/` → `fsys/kernel/<id>/` (Forth console) → `fsys/host/<id>-cross.4th` → `fsys/<id>/extra.4th`. A new **chip** of an existing ISA is only a part file under fasm. Agent rule: [`.cursor/rules/fsoc-cpu-target.mdc`](.cursor/rules/fsoc-cpu-target.mdc). Skill: `add-cpu-target`. Specs: [`openspec/specs/forth-cross/spec.md`](openspec/specs/forth-cross/spec.md), [`openspec/specs/fsys/spec.md`](openspec/specs/fsys/spec.md).
+
+If the id has an fsys console kernel, extend the shared grid in the same change:
+
+1. BS/DEL in that kernel `accept` (bytes 8 and 127, `BS SPACE BS`, ignore on an empty line).
+2. Manifest in [`tests/con_session.4th`](tests/con_session.4th) and a row in [`tests/con_core_test.4th`](tests/con_core_test.4th).
+3. Dictionary JSON via [`doc/j1-word-graph/build.py`](doc/j1-word-graph/build.py).
+4. Every JSON name tagged in [`tests/con_words.py`](tests/con_words.py) (`run` / `colon` / `skip` with a reason).
+5. Id-only words in a separate `*_test.4th` — do not copy the shared REPL. A chip part does not add a `con_core` row.
+
+```bash
+export FSOC_HOME="$HOME/fsoc"
+cd tests && gforth con_core_test.4th
+fmix test
+```
 
 ## Related
 

@@ -3,12 +3,7 @@
 
 s" test_common.4th" included
 s" fixture.4th" included
-
-: avr-con-ready? ( -- flag )
-   s" test -f /usr/lib/x86_64-linux-gnu/libsimavr.so.2" system
-   $? 0= 0= if false exit then
-   s" test -d /usr/include/simavr -o -d /tmp/simavr-dev/usr/include/simavr" system
-   $? 0= ;
+s" con_session.4th" included
 
 : avr-con-run ( args-a args-u -- flag )
    fsoc-root s" /tools/avr-con ./firmware.hex " fjson.str-concat
@@ -46,16 +41,15 @@ s\" s\" soc\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\ns\" fsys\" sys:\n" t
 s" " s" --build" in-tmp-fsoc expect-true
 s" firmware.hex" tmp-exists? expect-true
 
-s\" '1 2 + .' " con-line
-s" 1 2 + .3" con-has
-s"  ok" con-has
+\ AVR-only extra-min / 16-bit .  Shared REPL lives in con_core_test.4th.
 
 s\" '11 .' " con-line
 s" 11 .11" con-has
 s" 267" con-lacks
 
-s\" '10 u.' " con-line
-s" 10 u.10" con-has
+s\" '4 1+ .' " con-line
+s" 5" con-has
+s"  ok" con-has
 
 s\" '100 .' " con-line
 s" 100 .100" con-has
@@ -63,30 +57,22 @@ s" 100 .100" con-has
 s\" '0 .' " con-line
 s" 0 .0" con-has
 
-s\" '1 2 3 .s' " con-line
-s" <3> 1 2 3" con-has
+s\" '10 3 u/mod . .' " con-line
+s" 3" con-has
+s"  ok" con-has
 
-s\" '1 2 3' .s" con-line
-s" <3> 1 2 3" con-has
-s" <3> 1 2 2" con-lacks
-s" <4>" con-lacks
-
-s" .s" con-line
-s" <0>" con-has
-
-s\" '1 2 3' + . " con-line
-s" .5" con-has
-
-s\" '51 emit' " con-line
-s" 51 emit3" con-has
-
-s\" '5 invert 1 + .' " con-line
-s" .-5" con-has
+s\" '1 2 um+ .' " con-line
+s" 3" con-has
 
 s" words" con-line
-s" .s" con-has
-s"  u." con-has
-s" quit" con-has
+s"  c@i" con-has
+s"  um+" con-has
+s"  u/mod" con-has
+
+s\" s\" soc\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\ns\" fsys\" sys:\ns\" blink\" s\" 1\" option:\ns\" image\" s\" release\" option:\n" tmp-manifest
+s" " s" --build" in-tmp-fsoc expect-true
+s" ." con-line
+s" blink on" con-has
 
 test-teardown
 test-finish

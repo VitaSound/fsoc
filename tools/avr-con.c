@@ -117,6 +117,30 @@ int main(int argc, char **argv)
 	if (drain_quiet(avr, 8000000))
 		return 2;
 
+	if (argc > 2 && strcmp(argv[2], "-f") == 0) {
+		FILE *in;
+		char buf[256];
+		if (argc < 4) {
+			fprintf(stderr, "avr-con: -f needs a path\n");
+			return 1;
+		}
+		in = fopen(argv[3], "rb");
+		if (!in) {
+			perror(argv[3]);
+			return 1;
+		}
+		while (fgets(buf, sizeof buf, in)) {
+			send_line(avr, buf);
+			if (drain_quiet(avr, 200000000L)) {
+				fclose(in);
+				return 2;
+			}
+		}
+		fclose(in);
+		fputc('\n', stdout);
+		return 0;
+	}
+
 	if (argc > 2) {
 		int a;
 		for (a = 2; a < argc; a++) {

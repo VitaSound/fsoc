@@ -274,7 +274,8 @@ wordlist constant ax-host
 ' ax-begin ax-hi: begin
 ' ax-jump ax-hi: again
 :noname ax-if swap ; ax-hi: while
-:noname swap ax-jump ax-resolve ; ax-hi: repeat
+\ after WHILE: orig dest. AGAIN then THEN — no extra swap.
+:noname ax-jump ax-resolve ; ax-hi: repeat
 ' ax-branch0 ax-hi: until
 :noname ; ax-hi: recursive
 ' ax-ahead ax-h: ahead

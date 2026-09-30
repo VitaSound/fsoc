@@ -37,5 +37,18 @@ A new **ISA family** is a new `cpu:` **id** in `fsoc/cpu.4th` (FMAP class, MM, E
 - Mix Gforth hosted idioms into the target kernel without an FMAP/EX-C decision.
 - Import AmForth/FlashForth as the fsoc kernel unless the user names that tool as `sys:`.
 - Hardcode a stand-in word list when the image source is missing — stop and ask.
+- Ship a new fsys console id without wiring `tests/con_core_test.4th`.
+
+## Console tests (required for a new fsys id)
+
+A new ISA with a Forth **console** kernel MUST join the shared REPL grid. A chip variant of an existing id does **not**.
+
+1. Same `accept` erase as j1a/j1b/avr: byte 8 and 127, decrement only when the line is non-empty, TX `BS SPACE BS`.
+2. Manifest helper in `tests/con_session.4th`; a row in `tests/con_core_test.4th`.
+3. Dictionary JSON via `doc/j1-word-graph/build.py` (`fsys-<id>*.json`).
+4. Every JSON name tagged in `tests/con_words.py` (`run` / `colon` / `skip` with a reason).
+5. Id-only words stay in a separate `*_test.4th` (see `tests/avr_con_test.4th`). Do not copy the shared echo/BS/`+`/`.s`/`: `/`words` lines.
+
+Run: `fmix test` from the repo root, or `cd tests && FSOC_HOME=<root> gforth con_core_test.4th`. AVR without simavr skips that slice. Spec: `openspec/specs/fsys/spec.md` (консольные тесты fsys).
 
 Example: `avr` = class 1, MM=D, EX-C=S (STC `rcall`/`ret`), CG=F. `j1a` = class 0, MM=V, EX-C=V, CG=I.
