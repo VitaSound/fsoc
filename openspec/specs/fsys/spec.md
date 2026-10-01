@@ -174,8 +174,15 @@
 - **WHEN** читается дерево `fsys/kernel/avr/`
 - **THEN** в нём нет `blink.4th`
 
+### Requirement: Перед сдачей нового ядра — три сеанса эмуляции
+То же требование, что в `openspec/specs/forth-cross/spec.md`: до передачи нового `cpu:` или другого корпуса того же ISA на проверку MUST быть прогнаны три сеанса. Голый `blinky` с `FSOC_EMU_EDGES=4` и `FSOC_EMU_CON=pin` MUST показать `pin led 0` и `pin led 1` каждый не меньше двух раз. Soc с опцией лампы или blink MUST показать то же повторное мигание; текст включения и выключения MUST быть в журнале, если образ его печатает. Сеанс `s" fsys" sys:` MUST ответить на `words` именами словаря этого образа и на не меньше двух выражений, среди них `1 2 + .` с `3  ok`. Для нового kernel это выполненный ряд `con_core`. Для другого корпуса того же ISA это скрипт словаря порта вне `*_test.4th` (как `tests/j1abs_words.4th`): он MUST быть выполнен на последнем шаге и MUST NOT входить в `fmix`. Одна сумма и один перепад светодиода MUST NOT считаться сдачей.
+
+#### Scenario: Короткий тест не заменяет три сеанса
+- **WHEN** для нового id зелёный только файл с `1 2 + .` и одним проходом `pin led`
+- **THEN** сдача не выполнена, пока нет повторного голого blink, повторного soc blink и ответа `words`
+
 ### Requirement: Следующая приёмка — плата и Proteus
-Автотесты (`fmix test`, Verilator, `avr-con`) MUST подтверждать сборку и консоль. Следующая приёмка после автотестов MUST идти на железных FPGA-платах из `boards/` (Colorlight 5A-75E, Terasic DE0-Nano и последующие) и в Proteus для профиля `avr`. Успех Verilator или `avr-con` MUST NOT считаться заменой прогона на живой плате или в Proteus.
+Три сеанса эмуляции из требования выше MUST быть пройдены до этой приёмки. Автотесты (`fmix test`, Verilator, `avr-con`) MUST подтверждать сборку и консоль и MUST NOT заменять эти три сеанса. Следующая приёмка после них MUST идти на железных FPGA-платах из `boards/` (Colorlight 5A-75E, Terasic DE0-Nano и последующие) и в Proteus для профиля `avr`. Успех Verilator или `avr-con` MUST NOT считаться заменой прогона на живой плате или в Proteus.
 
 #### Scenario: AVR blink в Proteus
 - **WHEN** собран `projects/soc_atmega8_blink` и HEX открыт в Proteus (ATMEGA8, 8 МГц, Virtual Terminal 9600)

@@ -6,7 +6,7 @@ Forth-native SoC builder (LiteX analogue) for VitaSound. Host language is **Gfor
 
 ```
 fsoc/           IR + DSL + emit
-boards/         ep2c5_mini, terasic_de0nano, colorlight_5a_75e_v6_0, colorlight_5a_75e_v7_1, colorlight_5a_75e_v8_2
+boards/         ep2c5_mini, terasic_de0nano, colorlight_5a_75e_v6_0, colorlight_5a_75e_v7_1, colorlight_5a_75e_v8_2, lfe5u25f_cabga256
 designs/        Forth design units (fhdlgen top; leaf RTL stays a .v file; no project dir, board, or launch method)
 emu/            Verilator library: con, clock, uart, script, trace (no task names)
 rtl/            Pure Verilog (blinky.v, …)
@@ -54,3 +54,5 @@ A value the build shows or uses comes from the project: a file it copies, genera
 A new ISA is a new `cpu:` id (FMAP + CG) with the same fsys layers as j1a/j1b/avr: `fsys/fasm/<id>/` → `fsys/kernel/<id>/` (Forth console, not blink) → `fsys/host/<id>-cross.4th` → `fsys/<id>/extra.4th` → `firmware/*.fs`. A new chip of an existing ISA is only a part file under fasm. Empty `sys:` is swapforth; an MCU without SwapForth requires `s" fsys" sys:`. Branch by CG in the existing emitter, not by a cpu id literal in `soc.4th`. Baremetal LED is task `blinky` plus `cpu:`, fasm is the assembler. AVR `--build` prints Hardware `atmega8(avr)` then Software `firmware.hex: N bytes of flash`.
 
 A new **fsys console** id MUST join `tests/con_core_test.4th`: manifest in `tests/con_session.4th`, JSON via `doc/j1-word-graph/build.py`, every name tagged in `tests/con_words.py`, BS/DEL in that kernel `accept`. Keep id-only words out of the shared script (`tests/avr_con_test.4th` is the AVR-only slice). A new chip of an existing ISA does not add a `con_core` row. Run `fmix test` or `cd tests && FSOC_HOME=<root> gforth con_core_test.4th`. Agent rule: `.cursor/rules/fsoc-cpu-target.mdc`. Skill: `add-cpu-target`. Specs: `openspec/specs/forth-cross/spec.md`, `openspec/specs/fsys/spec.md`.
+
+Before review of a new `cpu:` or a new body of the same ISA, the last step is three emulation sessions (spec: forth-cross, «три сеанса»). Baremetal blink and soc blink, `FSOC_EMU_CON=pin` and `FSOC_EMU_EDGES=4`, each show `pin led 0` and `pin led 1` at least twice. Soc with `s" fsys" sys:` answers `words` and at least two expressions (`1 2 + .` → `3  ok`, plus `:` or `.s`). A new kernel runs its `con_core` row. A port runs the word script that is not part of `fmix` (`gforth tests/j1abs_words.4th`). A short `1 2 + .` and one LED edge are not this step.

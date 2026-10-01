@@ -85,6 +85,28 @@ s" pin led 0" s" sim-pin.log" tmp-grep? expect-true
 s" lamp on" s" sim-pin.log" tmp-grep? expect-false
 test-teardown
 
+\ Colorlight project files. Synthesis itself is not part of this run.
+test-setup
+s" soc_j1abs_colorlight" tmp-use-project
+s" FSOC_SYNTH_SKIP=1" s" --build" in-tmp-fsoc expect-true
+s" image tool: fsys" s" sim.log" tmp-grep? expect-true
+s" fsys/kernel/j1a/kernel.4th" s" sim.log" tmp-grep? expect-true
+s" alu_rom" s" j1.v" tmp-grep? expect-true
+s" soc.lpf" tmp-exists? expect-true
+s\" SITE \"P6\"" s" soc.lpf" tmp-grep? expect-true
+s\" SITE \"T6\"" s" soc.lpf" tmp-grep? expect-true
+s\" FREQUENCY PORT \"clk\" 25.000 MHz;" s" soc.lpf" tmp-grep? expect-true
+s" CLK_HZ(25000000)" s" top.v" tmp-grep? expect-true
+s" assign led = ~led_q" s" top.v" tmp-grep? expect-true
+s" input wire uart_rx" s" top.v" tmp-grep? expect-false
+s" output wire uart_tx" s" top.v" tmp-grep? expect-false
+s" sim.sh" tmp-exists? expect-false
+s" rom_init.vh" tmp-exists? expect-true
+s" stacks.v" s" includes.lst" tmp-grep? expect-true
+s" stack2.v" s" includes.lst" tmp-grep? expect-false
+s" firmware.hex" tmp-exists? expect-true
+test-teardown
+
 test-finish
 expect-stack-clean
 cr ." j1abs_test ok" cr

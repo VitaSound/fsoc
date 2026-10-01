@@ -53,4 +53,12 @@ Run: `fmix test` from the repo root, or `cd tests && FSOC_HOME=<root> gforth con
 
 Same ISA, different body (j1abs, port j1a): do not add a `con_core` row. Run the port's word script on the new core. A core slower than one clock per instruction needs `FSOC_EMU_UART_GAP` and a cycle cap past 2^31; `FSOC_EMU_CYCLES` is `strtoull`. Failures already solved: `.cursor/rules/j1abs-core.mdc`, `.cursor/rules/bcpu-console.mdc`.
 
+## Last step before review
+
+A green short `*_test.4th` is not the handoff. Spec: `openspec/specs/forth-cross/spec.md` (три сеанса эмуляции). Do not hand a new `cpu:` or a new body of an existing ISA over until these three emulation logs exist:
+
+1. Baremetal `blinky` + `cpu:`, `FSOC_EMU_CON=pin FSOC_EMU_EDGES=4 FSOC_EMU_FAST=1`. `pin led 0` and `pin led 1` each appear at least twice. One pulse then a stop is a failure.
+2. Soc with that id's lamp or blink option, same pin settings. Both levels repeat. If the image prints text, both the on line and the off line are in the log. ` ok` is not required.
+3. Soc `s" fsys" sys:` answers `words` with names from that image's dictionary, and at least two expressions (`1 2 + .` → `3  ok`, plus a colon word or `.s`). A new kernel id: run its `con_core` row, do not only add the file. Same ISA, other body: run the port word script (`gforth tests/j1abs_words.4th`). Keep a multi-minute script out of `*_test.4th` so `fmix` does not sit silent; still run it at this step.
+
 Example: `avr` = class 1, MM=D, EX-C=S (STC `rcall`/`ret`), CG=F. `j1a` = class 0, MM=V, EX-C=V, CG=I. `j1abs` = class 0, MM=V, EX-C=V, CG=I, port j1a. `bcpu` = class 0, MM=U, EX-C=B, CG=F.

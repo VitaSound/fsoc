@@ -197,12 +197,13 @@ cd projects/soc_bcpu_colorlight && fsoc --build
 
 ## j1abs
 
-`j1abs` (A Bit Serial) keeps the J1a instruction set and runs it one bit per clock (class 0, FMAP `V-V-A-0-I`, MM=V, EX-C=V, CG=I). `alu_rom` and `ctrl_rom` are synchronous `512×32` tables, and the stack bodies sit in one block RAM. The image port is `j1a`, so SwapForth and `fsys/kernel/j1a` are unchanged. There is no `con_core` row. `projects/baremetal/blinky_j1abs` is task `blinky`. `projects/soc_j1abs` is the fsys console (`1 2 + .` prints `3` and ` ok`). `projects/soc_j1abs_blink` is the lamp loop.
+`j1abs` (A Bit Serial) keeps the J1a instruction set and runs it one bit per clock (class 0, FMAP `V-V-A-0-I`, MM=V, EX-C=V, CG=I). `alu_rom` and `ctrl_rom` are synchronous `512×32` tables, and the stack bodies sit in one block RAM. The image port is `j1a`, so SwapForth and `fsys/kernel/j1a` are unchanged. There is no `con_core` row. `projects/baremetal/blinky_j1abs` is task `blinky`. `projects/soc_j1abs` is the fsys console (`1 2 + .` prints `3` and ` ok`). `projects/soc_j1abs_blink` is the lamp loop. `projects/soc_j1abs_colorlight` is that fsys image on the Colorlight 5A-75E v6.0 (`LFE5U-25F`, 25 MHz, Yosys). The board has no UART pins, so the top ties `uart_rx` to `1'b1`, leaves `uart_tx` off the port list, and drives the active-low LED on `T6`.
 
 ```bash
 cd projects/baremetal/blinky_j1abs && fsoc --build
 cd projects/soc_j1abs && fsoc --build
 cd projects/soc_j1abs_blink && fsoc --build
+cd projects/soc_j1abs_colorlight && fsoc --build
 ```
 
 ## Data SPI NOR
@@ -256,6 +257,23 @@ cd projects/soc_blink_colorlight_5a_75e_v6_0
 fsoc --build
 ```
 
+`projects/standalone_j1a`, `projects/standalone_j1abs`, and `projects/standalone_j1b` are the core and its stacks alone, on board `lfe5u25f_cabga256`. That file is the CABGA256 ball map of this same `LFE5U-25F-6BG256C`: `clk` on `P6` at 25 MHz, then plain PIO, then PCLK balls. Task `standalone` ties every port of module `j1` to a pin of `top`. `j1b` is the 32-bit core, so `dout`, `io_din`, and `mem_din` are 32 bits. One routed nextpnr fit (2026-10-01) met 25.00 MHz. `TRELLIS_IO` equals the port count. Fmax below is the routed clock, the same line `doc/j1-word-graph/build.py` keeps for the lamp.
+
+| Resource | j1a | j1abs | j1b | On LFE5U-25F |
+|----------|-----|--------|-----|----------------|
+| LUT4 | 1484 (1436 logic, 48 carry) | 336 (310 logic, 26 carry) | 3920 (3836 logic, 84 carry) | 24288 |
+| DFF | 578 | 172 | 2164 | 24288 |
+| DP16KD | 0 | 3 | 0 | 56 |
+| TRELLIS_IO | 82 | 82 | 146 | 197 |
+| Fmax | 123.24 MHz | 75.16 MHz | 93.71 MHz | 25.00 MHz |
+
+The three `DP16KD` blocks on j1abs are the ALU table, the control table, and the stack RAM. j1a and j1b keep their stacks in flip-flops, so those two rows have no block RAM.
+
+```bash
+cd projects/standalone_j1a
+fsoc --build
+```
+
 `tools/fterm.4th` and `firmware/midi_foot.4th`: `fterm` talks to a real port when given a path; `midi_foot` is a host mock of FOOTSWITCH-SCAN.
 
 ## Boards
@@ -267,6 +285,7 @@ fsoc --build
 | `colorlight_5a_75e_v6_0` | LFE5U-25F-6BG256C | clk `P6` 25 MHz, led `T6` active-low, btn `R7` | — |
 | `colorlight_5a_75e_v7_1` | LFE5U-25F-6BG256C | clk `P6` 25 MHz, led `P11` active-low, btn `M13` | — |
 | `colorlight_5a_75e_v8_2` | LFE5U-25F-7BG256I | clk `P6` 25 MHz, led `T6` active-low, speed 7 | — |
+| `lfe5u25f_cabga256` | LFE5U-25F-6BG256C | package ball map, clk `P6` 25 MHz, then PIO, then PCLK | — |
 
 ## Adding a CPU
 

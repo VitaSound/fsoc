@@ -44,6 +44,10 @@ Quartus `--load` and a live `fterm` line on USB-UART still need a machine with Q
 - `projects/soc_blink_colorlight_5a_75e_v6_0`: lamp image on that board. Clock 25 MHz. No UART pins; the LED is active-low; the timer step is 1 ms (period 500, about 0.5 s). Feed stays at 50 MHz.
 - Routed fit on `LFE5U-25F`: 1135/24288 LUT4, 697/24288 DFF, 4/56 `DP16KD` (8 KB firmware). Fmax 71.55 MHz at a 25 MHz constraint.
 
+## Done — core-only ECP5 fit
+
+- `projects/standalone_j1a`, `standalone_j1abs`, and `standalone_j1b` on board `lfe5u25f_cabga256`. The image is the core and its stacks; every port of `j1` is a pin. Routed nextpnr, 2026-10-01, 25 MHz constraint: j1a 1484/24288 LUT4, 578 DFF, 0/56 `DP16KD`, 82 `TRELLIS_IO`, 123.24 MHz; j1abs 336/24288 LUT4, 172 DFF, 3/56 `DP16KD`, 82 `TRELLIS_IO`, 75.16 MHz; j1b 3920/24288 LUT4, 2164 DFF, 0/56 `DP16KD`, 146 `TRELLIS_IO`, 93.71 MHz. Table: [README](../README.md).
+
 ## Done — Quartus II 11 console 0.8.0
 
 - Working project `projects/soc_terasic_de0nano`. `USE_REGIO=1`, so `led` is the `IO-LED` register (`$400 io!`). `.qsf` lists `iomap.vh` and `firmware.hex`. A Verilog line longer than the read buffer is written whole.

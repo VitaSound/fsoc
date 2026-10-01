@@ -4,7 +4,11 @@
 
 ### Added
 
-- Profile `j1abs` (A Bit Serial): same J1a ISA, class 0, FMAP `V-V-A-0-I`, CG=I. `cpu-port` is `j1a`, so the image is `swapforth/j1a` or `fsys/kernel/j1a`. The core in `cpu/j1/j1abs/` keeps only processor state in registers; `alu_rom` and `ctrl_rom` are synchronous tables and the stacks are block RAM. No `con_core` row. `soc.4th` has no `j1abs` literal. Projects: `baremetal/blinky_j1abs`, `soc_j1abs`, `soc_j1abs_blink`.
+- Task `standalone` places the core and its stacks on `lfe5u25f_cabga256` (`j1a`, `j1abs`, `j1b`). Every port of module `j1` is a package ball, so nextpnr keeps one `TRELLIS_IO` per port. Routed fit on `LFE5U-25F`, 2026-10-01, constraint 25.00 MHz: j1a 1484/24288 LUT4 (1436 logic, 48 carry), 578 DFF, 0/56 `DP16KD`, 82/197 `TRELLIS_IO`, 123.24 MHz; j1abs 336/24288 LUT4 (310 logic, 26 carry), 172 DFF, 3/56 `DP16KD`, 82/197 `TRELLIS_IO`, 75.16 MHz; j1b 3920/24288 LUT4 (3836 logic, 84 carry), 2164 DFF, 0/56 `DP16KD`, 146/197 `TRELLIS_IO`, 93.71 MHz. The three j1abs blocks are the ALU table, the control table, and the stack RAM. The numbers are in `README.md`.
+
+- A new `cpu:` or another body of the same ISA is not ready for review after a short `*_test.4th`. The last step is three emulation sessions: baremetal blink and soc blink each show `pin led 0` and `pin led 1` at least twice (`FSOC_EMU_EDGES=4`), and `s" fsys" sys:` answers `words` plus two expressions. Spec: `openspec/specs/forth-cross/spec.md`.
+
+- Profile `j1abs` (A Bit Serial): same J1a ISA, class 0, FMAP `V-V-A-0-I`, CG=I. `cpu-port` is `j1a`, so the image is `swapforth/j1a` or `fsys/kernel/j1a`. The core in `cpu/j1/j1abs/` keeps only processor state in registers; `alu_rom` and `ctrl_rom` are synchronous tables and the stacks are block RAM. No `con_core` row. `soc.4th` has no `j1abs` literal. Projects: `baremetal/blinky_j1abs`, `soc_j1abs`, `soc_j1abs_blink`, `soc_j1abs_colorlight`.
 
 - Profile `bcpu` (class 0, FMAP `U-M-B-A-3-F`, MM=U, EX-C=B, CG=F). Verilog ALU in `cpu/bcpu/bcpu.v` follows the bit-serial instruction set; `bit.vhd` is not vendored. `s" fsys" sys:` assembles the fsys console; empty `sys:` stops. `bit.hex` stays for attribution and is not the soc image. The console is a row in `tests/con_core_test.4th`. Colorlight nextpnr fit: 694/24288 LUT4, 272/24288 DFF, 8/56 `DP16KD`, 54.48 MHz. The numbers are in `README.md`.
 

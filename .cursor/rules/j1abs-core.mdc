@@ -18,7 +18,7 @@ J1 UART RX holds one byte and arms on a falling edge. `accept` echoes BS as thre
 
 ## The word session dies at 2e9 cycles
 
-`atoi` into a signed int stops at 2^31−1. The j1a script on this core needs more. `FSOC_EMU_CYCLES` is `strtoull`. The full script is `gforth tests/j1abs_words.4th` (8e9 cycles, oracle cpu `j1a`, dictionary `fsys-j1a.json`). It is not named `*_test.4th`: fmix prints nothing until a file returns, and this run is several minutes. `tests/j1abs_test.4th` only sends `1 2 + .` and the backspace line. Grep `3  ok`, not `3` (`313 words` is in the build log).
+`atoi` into a signed int stops at 2^31−1. The j1a script on this core needs more. `FSOC_EMU_CYCLES` is `strtoull`. The full script is `gforth tests/j1abs_words.4th` (8e9 cycles, oracle cpu `j1a`, dictionary `fsys-j1a.json`). It is not named `*_test.4th`: fmix prints nothing until a file returns, and this run is several minutes. It is still the last step before review, together with baremetal blink and soc blink at `FSOC_EMU_EDGES=4` (both pin levels twice). Spec: `openspec/specs/forth-cross/spec.md`. `tests/j1abs_test.4th` only sends `1 2 + .` and the backspace line. Grep `3  ok`, not `3` (`313 words` is in the build log).
 
 ## Verilator 4 and 5 in one obj_dir
 
