@@ -17,6 +17,10 @@ forth-package
     key-list flint-exclude fsys/avr/extra-short.4th
     key-list flint-exclude fsys/kernel/avr/
     key-list flint-exclude fsys/fasm/avr/
+    key-list flint-exclude fsys/fasm/bcpu/
+    key-list flint-exclude fsys/bcpu/
+    key-list flint-exclude fsys/kernel/bcpu/
+    key-list flint-exclude fsys/host/bcpu-cross.4th
     key-list flint-exclude fsys/host/avr-cross.4th
     key-list flint-exclude projects/
     key-list tags gforth

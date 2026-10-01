@@ -36,6 +36,15 @@ s" avr" cpu-find cpu.cg$ @ fsoc-fetch s" F" expect-str-eq
 s" avr" cpu-find cpu.bm$ @ fsoc-fetch s" C" expect-str-eq
 s" avr" cpu-find cpu.width @ 16 expect=
 s" avr" cpu-find cpu.ref$ @ fsoc-fetch s" atmega8" expect-str-eq
+s" bcpu" cpu-find cpu.class @ 0 expect=
+s" bcpu" cpu-find cpu.fmap$ @ fsoc-fetch s" U-M-B-A-3-F" expect-str-eq
+s" bcpu" cpu-find cpu.mm$ @ fsoc-fetch s" U" expect-str-eq
+s" bcpu" cpu-find cpu.exc$ @ fsoc-fetch s" B" expect-str-eq
+s" bcpu" cpu-find cpu.cg$ @ fsoc-fetch s" F" expect-str-eq
+s" bcpu" cpu-find cpu.bm$ @ fsoc-fetch s" C" expect-str-eq
+s" bcpu" cpu-find cpu.width @ 16 expect=
+s" bcpu" cpu-find cpu.ref$ @ fsoc-fetch s" bcpu" expect-str-eq
+s" bcpu" cpu-find cpu.note$ @ fsoc-fetch s" word hex" expect-str-eq
 s" E" cg-find cg.emit @ s" F" cg-find cg.emit @ = expect-false
 s" F" cg-find 0<> expect-true
 s" I" cg-find cg.emit @ s" E" cg-find cg.emit @ = expect-false
@@ -82,6 +91,8 @@ $? 0= expect-false
 s" grep -Eq 'stm8|z80' fsoc/tasks/soc.4th" system
 $? 0= expect-false
 s" grep -q avr fsoc/tasks/soc.4th" system
+$? 0= expect-false
+s" grep -q bcpu fsoc/tasks/soc.4th" system
 $? 0= expect-false
 
 project-new

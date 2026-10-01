@@ -33,6 +33,7 @@ int main(int argc, char** argv) {
     else if (!pin_view) src = &host;
     Session sess(src, scripted, capture);
     RxShift rx(FSOC_UART_BIT);
+    rx.gap_clocks = env_int("FSOC_EMU_UART_GAP", 0) * FSOC_UART_BIT;
     TxDec txdec(FSOC_UART_BIT);
     int bytes = 0;
 

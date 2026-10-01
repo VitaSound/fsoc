@@ -87,9 +87,9 @@ variable soc-cpu
     s" swapforth/" 2swap fjson.str-concat
     fsoc-path+ ;
 
-\ <id>/<tail> under swapforth/. The id is the cpu profile.
+\ <id>/<tail> under swapforth/. Empty cpu-port means the profile id.
 : soc-port ( -- c-addr u )
-    soc-cpu @ cpu.id$ @ fsoc-fetch ;
+    soc-cpu @ cpu-image-id ;
 
 : soc-swap-rel { tail-a tail-u -- abs-a abs-u }
     soc-port
@@ -110,6 +110,16 @@ variable soc-cpu
 : soc-leaf-src ( name-a name-u -- abs-a abs-u )
     soc-cpu @ cpu.kit @ ?dup IF
         kit.id$ @ fsoc-fetch
+        s" cpu/j1/" 2swap fjson.str-concat
+        s" /" fsoc-cat+
+        2>r 2dup 2r@ soc-try-leaf IF
+            2r> fjson.str-free 2nip EXIT
+        THEN
+        fjson.str-free
+        2r> fjson.str-free
+    THEN
+    soc-cpu @ cpu.port$ @ ?dup IF
+        fsoc-fetch
         s" cpu/j1/" 2swap fjson.str-concat
         s" /" fsoc-cat+
         2>r 2dup 2r@ soc-try-leaf IF
@@ -146,6 +156,13 @@ variable leaf-fd
     repeat
     drop
     leaf-fd @ close-file throw
+    s" cpu/j1/" soc-cpu @ cpu.kit @ kit.id$ @ fsoc-fetch fjson.str-concat
+    s" /rom_init.vh" fsoc-cat+
+    2dup fsoc-path 2dup file-exists? >r fjson.str-free r> IF
+        r@ project-copy-in
+    ELSE
+        fjson.str-free
+    THEN
     rdrop ;
 
 : soc-ram-bytes ( -- n )
@@ -371,7 +388,8 @@ variable flatten-n
 : soc-kernel ( -- )
     s" fsys/kernel/" soc-port fjson.str-concat
     s" /kernel.4th" fjson.str-concat
-    fsoc-path included ;
+    2dup ."     " type cr
+    fsoc-path+ included ;
 
 \ The host writes the shared dictionary. The target only runs the hex.
 \ xc-load appears only after the kernel include, so resolve it at run time.

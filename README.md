@@ -34,7 +34,7 @@ The agent skill in this repo is [`.cursor/skills/wavepeek`](.cursor/skills/wavep
 wavepeek skill .cursor/skills/wavepeek
 ```
 
-`fmix test` includes the shared fsys console grid [`tests/con_core_test.4th`](tests/con_core_test.4th) (j1a, j1b, avr: input, erase, unknown word, stack, `+`, `.s`, `:`, `words`). Oracle: [`tests/con_words.py`](tests/con_words.py) against `doc/j1-word-graph/fsys-*.json`. One file:
+`fmix test` includes the shared fsys console grid [`tests/con_core_test.4th`](tests/con_core_test.4th) (j1a, j1b, avr, bcpu: input, erase, unknown word, stack, `+`, `.s`, `:`, `words`). Oracle: [`tests/con_words.py`](tests/con_words.py) against `doc/j1-word-graph/fsys-*.json`. One file:
 
 ```bash
 export FSOC_HOME="$HOME/fsoc"
@@ -170,6 +170,41 @@ Type a Forth line and press Enter (sent as CR). Ctrl-D exits. Extra arguments ar
 
 `simavr` provides `libsimavr.so.2`; `libsimavr-dev` is the headers (`/usr/include/simavr`). Without the -dev package the wrapper looks for headers in `/tmp/simavr-dev/usr/include/simavr`. The same schematic notes and GDB (`simavr -g`) are in [doc/atmega8-proteus.md](doc/atmega8-proteus.md).
 
+## bcpu
+
+`bcpu` is a 16-bit accumulator (class 0, FMAP `U-M-B-A-3-F`, MM=U, EX-C=B, CG=F). The instruction set follows [howerj/bit-serial](https://github.com/howerj/bit-serial) (MIT). `cpu/bcpu/bcpu.v` is a parallel ALU, not a copy of `bit.vhd`. Empty `sys:` stops. `s" fsys" sys:` assembles `fsys/kernel/bcpu` and the host cross compiles `fsys/bcpu/extra-min.4th` into a word-hex image. `cpu/bcpu/bit.hex` stays in the tree as the original eForth attribution image; the soc build does not load it. The console is a row in `tests/con_core_test.4th`.
+
+`projects/baremetal/blinky_bcpu` is task `blinky`: fasm assembles `firmware/blink_bcpu.4th` and the log shows `pin led` `0` and `1`. `projects/soc_bcpu` is the fsys console: `1 2 + .` prints `3` and ` ok`. `projects/soc_bcpu_blink` compiles `firmware/bcpu_blink.fs` onto that kernel. The pin log shows `0` and `1`, and the console prints `blink on` and `blink off`. `projects/soc_bcpu_colorlight` is the console image on the Colorlight 5A-75E v6.0. The board has no UART pins: `btn` (`R7`) is the receive line, and transmit is folded into the active-low LED (`leds[0] ^ uart_tx`, idle TX high).
+
+One routed nextpnr fit (2026-10-01, `LFE5U-25F`, `--25k`) met the 25.00 MHz constraint at 54.48 MHz. The bitstream `bcpu.bit` is 600913 bytes. The critical path starts at a block-RAM data pin, `cpu.mem.0.0.DOB1`.
+
+| Resource | Used | On LFE5U-25F |
+|----------|------|----------------|
+| LUT4 | 694 (604 logic, 90 carry) | 24288 (2%) |
+| DFF | 272 | 24288 (1%) |
+| RAM LUT | 0 | 3036 |
+| DP16KD | 8 | 56 (14%) |
+| TRELLIS_IO | 3 | 197 |
+
+The eight `DP16KD` blocks are the 8192×16 memory (128 Kbit of data). Each block is 18 Kbit, so those eight reserve 144 Kbit. The count includes the CPU, that memory, and `cpu/j1/uart.v`.
+
+```bash
+cd projects/baremetal/blinky_bcpu && fsoc --build
+cd projects/soc_bcpu && fsoc --build
+cd projects/soc_bcpu_blink && fsoc --build
+cd projects/soc_bcpu_colorlight && fsoc --build
+```
+
+## j1abs
+
+`j1abs` (A Bit Serial) keeps the J1a instruction set and runs it one bit per clock (class 0, FMAP `V-V-A-0-I`, MM=V, EX-C=V, CG=I). `alu_rom` and `ctrl_rom` are synchronous `512×32` tables, and the stack bodies sit in one block RAM. The image port is `j1a`, so SwapForth and `fsys/kernel/j1a` are unchanged. There is no `con_core` row. `projects/baremetal/blinky_j1abs` is task `blinky`. `projects/soc_j1abs` is the fsys console (`1 2 + .` prints `3` and ` ok`). `projects/soc_j1abs_blink` is the lamp loop.
+
+```bash
+cd projects/baremetal/blinky_j1abs && fsoc --build
+cd projects/soc_j1abs && fsoc --build
+cd projects/soc_j1abs_blink && fsoc --build
+```
+
 ## Data SPI NOR
 
 An extra SPI NOR is a data part, not a boot ROM. The J1 reset stays at the first word of internal RAM, and `firmware.hex` is still that image. The part is not named `rom`. A command on the io bus reads a contiguous range into an internal buffer; it is not a memory-map window. Chip rows live in `fsoc/soc/nor.4th`. `w25q32jv` is device id `$7016`, 4194304 bytes, page 256, opcode `$03`, and no dummy clocks. `w25q64jv` is the same 1-1-1 read with a different size. Both rows use one leaf, [`rtl/spi_nor.v`](rtl/spi_nor.v). `spi_clk` is a port of that module. A memory-map window of the flash, and a `main_ram` region with a base, a size, and a bus, are later slices and are not in this build. The command read is checked under Verilator and does not need a board. `csr.json` carries `regions` next to `devices`; with no region call, `regions` is `[]` and `led` stays at `$400`.
@@ -235,7 +270,7 @@ fsoc --build
 
 ## Adding a CPU
 
-A new **ISA** is a new `cpu:` id (`fsoc/cpu.4th`, FMAP + CG) with the fsys layers: `fsys/fasm/<id>/` → `fsys/kernel/<id>/` (Forth console) → `fsys/host/<id>-cross.4th` → `fsys/<id>/extra.4th`. A new **chip** of an existing ISA is only a part file under fasm. Agent rule: [`.cursor/rules/fsoc-cpu-target.mdc`](.cursor/rules/fsoc-cpu-target.mdc). Skill: `add-cpu-target`. Specs: [`openspec/specs/forth-cross/spec.md`](openspec/specs/forth-cross/spec.md), [`openspec/specs/fsys/spec.md`](openspec/specs/fsys/spec.md).
+A new **ISA** is a new `cpu:` id (`fsoc/cpu.4th`, FMAP + CG) with the fsys layers: `fsys/fasm/<id>/` → `fsys/kernel/<id>/` (Forth console) → `fsys/host/<id>-cross.4th` → `fsys/<id>/extra.4th`. A new **chip** of an existing ISA is only a part file under fasm. `bcpu` has those layers, and its console is a row in `tests/con_core_test.4th`. Agent rule: [`.cursor/rules/fsoc-cpu-target.mdc`](.cursor/rules/fsoc-cpu-target.mdc). Skill: `add-cpu-target`. Specs: [`openspec/specs/forth-cross/spec.md`](openspec/specs/forth-cross/spec.md), [`openspec/specs/fsys/spec.md`](openspec/specs/fsys/spec.md).
 
 If the id has an fsys console kernel, extend the shared grid in the same change:
 

@@ -82,7 +82,7 @@
 - **THEN** каждое имя `fsys-avr-extra-min.json` есть в передаче
 
 ### Requirement: Консольные тесты fsys сопровождают каждый id
-`tests/con_core_test.4th` MUST гонять один сеанс `s" fsys" sys:` на каждом id с консольным kernel (`j1a`, `j1b`, `avr` и любой следующий). Прогон MUST входить в `fmix test`. Новый id с `fsys` MUST: добавить манифест в `tests/con_session.4th`; включить его в `tests/con_core_test.4th`; завести эталон `doc/j1-word-graph/fsys-<id>*.json` через `doc/j1-word-graph/build.py`; пометить каждое имя в `tests/con_words.py` (`run` / `colon` / `skip` с причиной); обработать BS/DEL в `accept` этого kernel той же семантикой. Слова, уникальные для id, MUST жить в отдельном тесте (как `tests/avr_con_test.4th`) и MUST NOT дублировать общее ядро. SwapForth MUST NOT быть источником этого сеанса.
+`tests/con_core_test.4th` MUST гонять один сеанс `s" fsys" sys:` на каждом id с консольным kernel (`j1a`, `j1b`, `avr`, `bcpu` и любой следующий). Прогон MUST входить в `fmix test`. Новый id с `fsys` MUST: добавить манифест в `tests/con_session.4th`; включить его в `tests/con_core_test.4th`; завести эталон `doc/j1-word-graph/fsys-<id>*.json` через `doc/j1-word-graph/build.py`; пометить каждое имя в `tests/con_words.py` (`run` / `colon` / `skip` с причиной); обработать BS/DEL в `accept` этого kernel той же семантикой. Слова, уникальные для id, MUST жить в отдельном тесте (как `tests/avr_con_test.4th`) и MUST NOT дублировать общее ядро. SwapForth MUST NOT быть источником этого сеанса.
 
 Точечный прогон: из `tests/` при заданном `FSOC_HOME` — `gforth con_core_test.4th`. AVR без `simavr` / `libsimavr-dev` MUST пропускать свой кусок и MUST NOT валить набор.
 

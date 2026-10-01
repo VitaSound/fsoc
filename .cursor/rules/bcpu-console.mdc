@@ -1,0 +1,59 @@
+---
+description: bcpu console failures already solved (words hang, colon literals, UART queue, con_core, blink text)
+globs: "{cpu/bcpu/**,fsys/kernel/bcpu/**,fsys/bcpu/**,fsys/fasm/bcpu/**,fsys/host/bcpu-cross.4th,firmware/bcpu_blink.fs,firmware/blink_bcpu.4th,fsoc/tasks/cg-bcpu.4th,fsoc/tasks/cg-i-blink.4th,emu/script.cc}"
+alwaysApply: false
+---
+
+# bcpu console — problems and the fix that worked
+
+Read this before changing the kernel, the host cross, the UART queue, or the `con_core` row. The architectural sim (`/tmp/bcpu_sim.py`, not in the repo) is instruction-true and hides UART timing. A bug that shows up only after `NOWORD`, or only on a long line, is the FIFO or `q_gap`.
+
+The bit-serial J1a core hit a different UART limit. That write-up is `.cursor/rules/j1abs-core.mdc` (`FSOC_EMU_UART_GAP`, the cycle cap, the j1a word script on the new body). Do not replace the 128-deep bcpu queue with that gap.
+
+## `words` prints one character and hangs
+
+`ntype` stored its loop address in the one host variable `bcpu-spin`. Inlined `k-tx` then stored its delay loop in the same slot, so the jump re-entered the delay with `VCNT` already 0. A loop that emits before jumping back keeps its address in a private variable (`Lnt`). `key`, `compile,`, `name=`, and `header` still use `bcpu-spin` and do not emit before the jump.
+
+## A colon literal prints a code address
+
+`: tsemi 9 . ; tsemi` printed the CFA of `litw` (1962), and `1 2 +` inside a colon printed twice that. `begin`/`until` then never matched. `clit`, `cto`, and `czto` saved the payload in `VQ`. `compile,` uses `VQ` for the CFA it copies, so the inline cell received that CFA. Leave the payload on the data stack under the CFA, call `compile,`, then `k-pop` into `VT1` and store that.
+
+`k-push` clobbers `VT0` and `VT1`. `compile,` clobbers `VQ`, `VCELL`, `VT0`, `VI`, `VPTR`. `VT1` survives `compile,`. `k-ret` clears ACC, so a returned byte lives in `VT1`. `name=` passes the address in `VCELL`.
+
+## `.s` prints `<3>` and no items
+
+The loop was `depth 0 u<`. That asks whether the depth is below 0. `u<` against 0 is false, because `~0+1` wraps; the `b=0` case in `code-u<` must stay. The working loop is `depth 0 begin 2dup > while dup nth udot space 1+ repeat`. `nth` is from the bottom. `>` is signed and fine for a small depth.
+
+## `quit` must not empty the stack
+
+Clearing the stack at the start of each line made the shared REPL's `2drop drop` (after `1 2 3 .s`) underflow and corrupt memory. A later colon line then died mid-echo. j1 leaves the stack across lines. `quit` does not call `empty`. `tests/con_words.py` sends `empty` after each bcpu recipe. There is no `do`/`cs` on this console.
+
+## `?` then a long line corrupts the echo
+
+`NOWORD` answered, then `: DOUBLE dup + ;` echoed garbage and the next line started. `emu/script.cc` ends a line on ` ?` after `q_gap` idle clocks. bcpu still emits ` ok` after `?`, and that gap is longer than 8000 clocks, so the next line entered the RX queue early. `q_gap` is 200000. Do not put it back to one frame.
+
+## The RX queue must hold a whole line
+
+Echo is `k-tx`: 400 iterations, about 6400 clocks. One frame at 50 MHz / 115200 is about 4340 clocks. A shorter delay drops a TX byte in the 1-deep pending buffer (`tx_stb` only when `!pend`). Because echo is slower than the frame, a line arrives before it is drained. A 16-deep queue dropped the LF of `here 1 over ! 4 over +! @ .` and the session never saw ` ok`. The queue in `top_soc.v` and `top_fit.v` is 128 deep (an 80-byte TIB line). Verilator `-Wall` is fatal: pointer and count literals must match those widths (`7'd`, `8'd`).
+
+## `soc_bcpu_blink` is silent in the terminal
+
+`FSOC_EMU_CON=term` prints UART bytes. `pin` prints `pin led` and drops UART. The loop only stored the LED, so a terminal stayed blank while the pin toggled. `firmware/bcpu_blink.fs` prints `blink on` / `blink off` with `."` and `cr`, and still keeps the level on the stack (port 0 reads switches). Host `."` (`bx-dotq`) skips the one space after the word; without that skip the line is ` blink on`.
+
+## Baremetal `blinky` dies before "Start build"
+
+`blinky-mcu-i` used to evaluate `ibs-has-blink` on every cpu. That word reads `cpu.kit`. bcpu has no kit, so gforth reported `Invalid memory address`. Look at the J1 kit only when CG is I, and return false when `cpu.kit` is 0.
+
+## Host image build
+
+- The hex writer is `begin`/`while` in `cg-bcpu.4th`, compiled before the kernel. `?do` plus `write-file` SIGSEGV: both use the return stack. Pictured output with a file id on the return stack does the same.
+- `project.file` is `( a u project -- )`. `s" firmware.hex" swap project.file` is the wrong order.
+- `bcpu-patch`, `bcpu-set-boot`, and `bcpu-fit` exist only after the kernel is included. Call them with `find-name` at run time.
+- Save the project address in a variable before the image build. A `{ project }` frame does not survive that include.
+- flint treats the same colon names in `fsys/bcpu`, `fsys/kernel/bcpu`, and `bcpu-cross` as duplicates of common and j1a. `package.4th` excludes those paths, the same way it excludes the AVR kernel.
+
+## Already true — do not undo
+
+- `rdrop` is a primitive. A colon `r> drop` pops that word's own return and can `spc` to 0 (reboot, second CRLF, then `key` hangs).
+- A one-character `-` is not the number 0 (`48 -`, and `: < - 0< ;`).
+- `con_core` row is `bcpu-con-session` (Verilator, same shape as j1). Dictionary: `doc/j1-word-graph/fsys-bcpu.json`. Tags: `tests/con_words.py`. Run from the repo root: `FSOC_HOME=<root> gforth tests/bcpu_test.4th`. Shell `$(...)` strips a trailing newline; feed the sim with `$'...'`.

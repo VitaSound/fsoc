@@ -1,4 +1,4 @@
-\ tests/con_core_test.4th — fsys console core + words + behavior on j1a, j1b, avr
+\ tests/con_core_test.4th — fsys console core + words + behavior on j1a, j1b, avr, bcpu
 
 s" test_common.4th" included
 s" fixture.4th" included
@@ -12,6 +12,11 @@ test-teardown
 test-setup
 j1b-fsys-manifest
 s" j1b" j1-con-session
+test-teardown
+
+test-setup
+bcpu-fsys-manifest
+bcpu-con-session
 test-teardown
 
 avr-con-ready? 0= [IF]

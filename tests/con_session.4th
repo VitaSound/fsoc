@@ -9,6 +9,9 @@
 : avr-fsys-manifest ( -- )
    s\" s\" soc\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\ns\" atmega8\" model:\ns\" fsys\" sys:\n" tmp-manifest ;
 
+: bcpu-fsys-manifest ( -- )
+   s\" s\" soc\" task:\ns\" emulation\" target:\ns\" bcpu\" cpu:\ns\" fsys\" sys:\n" tmp-manifest ;
+
 : con-py ( args-a args-u -- flag )
    s" python3 " fsoc-root fjson.str-concat s" /tests/con_words.py " fsoc-cat+
    2swap fsoc-cat+
@@ -49,6 +52,11 @@
    2dup con-write-in
    j1-con-run expect-true
    s" sim.log" con-check ;
+
+: bcpu-con-session ( -- )
+   s" bcpu" con-write-in
+   j1-con-run expect-true
+   s" bcpu" s" sim.log" con-check ;
 
 : avr-con-session ( -- )
    s" avr" con-write-in

@@ -549,6 +549,15 @@ def check_avr(data):
         raise SystemExit("0= should come from extra-min")
 
 
+def check_bcpu(data):
+    for name in ("words", "quit", ".s", "+", ":", "0="):
+        require(data, name, "fsys-bcpu lost " + name)
+    if data["+"]["file"].find("kernel/bcpu") < 0:
+        raise SystemExit("+ should come from the bcpu kernel")
+    if data["0="]["file"].find("extra-min") < 0:
+        raise SystemExit("0= should come from extra-min")
+
+
 def check_sf_b(data):
     if "j1a" in data["lshift"]["file"]:
         raise SystemExit("j1b lshift points at j1a")
@@ -580,6 +589,10 @@ DICTS = [
         ("fsys/kernel/avr/kernel.4th", "kernel"),
         ("fsys/avr/extra-min.4th", "colon"),
     ], check_avr),
+    ("fsys-bcpu", [
+        ("fsys/kernel/bcpu/kernel.4th", "kernel"),
+        ("fsys/bcpu/extra-min.4th", "colon"),
+    ], check_bcpu),
     ("swapforth-j1a", [
         ("swapforth/j1a/basewords.fs", "primitive"),
         ("swapforth/j1a/nuc.fs", "header"),

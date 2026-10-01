@@ -1,0 +1,37 @@
+---
+description: j1abs failures already solved (blink once, UART start bit, cycle cap, word session, Verilator mix)
+globs: "{cpu/j1/j1abs/**,firmware/blink_j1abs.4th,fsoc/tasks/cg-i-blink.4th,emu/uart.cc,emu/clock.cc,tests/j1abs_test.4th}"
+alwaysApply: false
+---
+
+# j1abs — problems and the fix that worked
+
+Same J1a ISA, image port `j1a`, no kernel of its own, no `con_core` row. The word script still has to run on this body. bcpu's own kernel failures are `.cursor/rules/bcpu-console.mdc`. Do not give j1abs that queue or that row.
+
+## The baremetal blink fires once
+
+The first program stored 1, then 0, then spun. Reset re-executes address 0: `reboot` forces the next PC to 0 after the first instruction, and the stack effect still happens. `firmware/blink_j1abs.4th` is a loop. The `on` label is the first literal, so the extra push happens only at reset. `drop` after `io!` drops the address. Nested countdowns are about a tenth of a second at 50 MHz.
+
+## Backspace corrupts the next byte
+
+J1 UART RX holds one byte and arms on a falling edge. `accept` echoes BS as three `emit`s. On an 18-clock core those emits finish after the next start bit, so the edge is missed and the line never becomes `13 .`. j1a stays inside the start bit, so the same script passes there. `FSOC_EMU_UART_GAP` is extra mark bit-times after each host byte (default 0). The j1abs word session sets 40. Do not turn it on for j1a or bcpu.
+
+## The word session dies at 2e9 cycles
+
+`atoi` into a signed int stops at 2^31−1. The j1a script on this core needs more. `FSOC_EMU_CYCLES` is `strtoull`. The full script is `gforth tests/j1abs_words.4th` (8e9 cycles, oracle cpu `j1a`, dictionary `fsys-j1a.json`). It is not named `*_test.4th`: fmix prints nothing until a file returns, and this run is several minutes. `tests/j1abs_test.4th` only sends `1 2 + .` and the backspace line. Grep `3  ok`, not `3` (`313 words` is in the build log).
+
+## Verilator 4 and 5 in one obj_dir
+
+The user shell is `/usr/bin/verilator` 4.038. oss-cad-suite is 5.053 and is often first on the agent PATH. A leftover `verilated.o` is newer than the 2020 sources, so make does not rebuild it, and the link fails (`timeunit`, `VlThreadPool`). `fsoc --clean`, then one Verilator for that build. Tests use a fresh temp dir. Yosys is the oss-cad-suite binary; do not pass `-q` or `stat` is hidden. The gate is `3 DP16KD`.
+
+## Host strings and the image port
+
+`fsoc-path+` frees its input. `2dup` then `fsoc-path+` is a use-after-free and the copy prefix doubles. The `rom_init.vh` check uses `fsoc-path`, then frees only the absolute copy. `fasm-pc` does not exist when `cg-i-blink.4th` loads; resolve it with `find-name` at run time. Hardware log is `cpu-ref(id)` → `j1(j1abs)`. Gforth 0.7.3 has no `name>interpret`; the builder needs 0.7.9.
+
+## Already true — do not undo
+
+- `code_addr` stays on the current instruction until the commit cycle. The wrap loads `insn` on that edge.
+- `alu_q` and `ctrl_q` are a separate `always` with no reset, or the tables do not map to block RAM.
+- Do not compile this `j1.v` in the same iverilog run as j1a `j1.v` (`WIDTH` is global). Pass `-I cpu/j1/j1abs`.
+- Stack RAM init is `55aa`. Do not change it to match a word-test underflow.
+- `soc.4th` has no `j1abs` literal. `con_core_test.4th` has no `j1abs` row.

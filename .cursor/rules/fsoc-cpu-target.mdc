@@ -51,4 +51,6 @@ A new ISA with a Forth **console** kernel MUST join the shared REPL grid. A chip
 
 Run: `fmix test` from the repo root, or `cd tests && FSOC_HOME=<root> gforth con_core_test.4th`. AVR without simavr skips that slice. Spec: `openspec/specs/fsys/spec.md` (консольные тесты fsys).
 
-Example: `avr` = class 1, MM=D, EX-C=S (STC `rcall`/`ret`), CG=F. `j1a` = class 0, MM=V, EX-C=V, CG=I.
+Same ISA, different body (j1abs, port j1a): do not add a `con_core` row. Run the port's word script on the new core. A core slower than one clock per instruction needs `FSOC_EMU_UART_GAP` and a cycle cap past 2^31; `FSOC_EMU_CYCLES` is `strtoull`. Failures already solved: `.cursor/rules/j1abs-core.mdc`, `.cursor/rules/bcpu-console.mdc`.
+
+Example: `avr` = class 1, MM=D, EX-C=S (STC `rcall`/`ret`), CG=F. `j1a` = class 0, MM=V, EX-C=V, CG=I. `j1abs` = class 0, MM=V, EX-C=V, CG=I, port j1a. `bcpu` = class 0, MM=U, EX-C=B, CG=F.

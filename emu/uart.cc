@@ -1,7 +1,7 @@
 #include "uart.h"
 
 RxShift::RxShift(int clocks)
-    : busy(0), tick(0), biti(0), frame(0), bit_clocks(clocks) {}
+    : busy(0), tick(0), biti(0), frame(0), bit_clocks(clocks), hold(0), gap_clocks(0) {}
 
 int RxShift::idle() const { return !busy && q.empty(); }
 
@@ -14,7 +14,7 @@ void RxShift::push_line(const std::string& s) {
 
 int RxShift::level() {
     if (!busy) {
-        if (q.empty()) return 1;
+        if (hold > 0 || q.empty()) return 1;
         unsigned b = q.front();
         q.pop_front();
         frame = 1u << 9;
@@ -28,12 +28,21 @@ int RxShift::level() {
 }
 
 void RxShift::advance() {
+    if (hold > 0) {
+        hold--;
+        return;
+    }
     if (!busy) return;
     tick++;
     if (tick >= bit_clocks) {
         tick = 0;
         biti++;
-        if (biti >= 10) busy = 0;
+        if (biti >= 10) {
+            busy = 0;
+            // Mark time so a slow core can finish a multi-byte echo
+            // before the next start bit. Zero keeps the bytes back to back.
+            hold = gap_clocks;
+        }
     }
 }
 

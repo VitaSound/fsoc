@@ -8,3 +8,4 @@ s" compare.4th" included
 s" tasks/blinky.4th" included
 s" tasks/soc.4th" included
 s" tasks/cg-f.4th" included
+s" tasks/cg-i-blink.4th" included

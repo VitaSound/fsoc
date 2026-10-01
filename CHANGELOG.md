@@ -4,6 +4,10 @@
 
 ### Added
 
+- Profile `j1abs` (A Bit Serial): same J1a ISA, class 0, FMAP `V-V-A-0-I`, CG=I. `cpu-port` is `j1a`, so the image is `swapforth/j1a` or `fsys/kernel/j1a`. The core in `cpu/j1/j1abs/` keeps only processor state in registers; `alu_rom` and `ctrl_rom` are synchronous tables and the stacks are block RAM. No `con_core` row. `soc.4th` has no `j1abs` literal. Projects: `baremetal/blinky_j1abs`, `soc_j1abs`, `soc_j1abs_blink`.
+
+- Profile `bcpu` (class 0, FMAP `U-M-B-A-3-F`, MM=U, EX-C=B, CG=F). Verilog ALU in `cpu/bcpu/bcpu.v` follows the bit-serial instruction set; `bit.vhd` is not vendored. `s" fsys" sys:` assembles the fsys console; empty `sys:` stops. `bit.hex` stays for attribution and is not the soc image. The console is a row in `tests/con_core_test.4th`. Colorlight nextpnr fit: 694/24288 LUT4, 272/24288 DFF, 8/56 `DP16KD`, 54.48 MHz. The numbers are in `README.md`.
+
 - Manifest `model:` selects the AVR part file `fsys/fasm/avr/<id>.4th`. Working ATmega projects write `s" atmega8" model:`. Empty `model:` still uses `cpu-ref`. Unknown id stops; it does not fall back to ATmega8.
 
 ## [0.9.0] - 2026-09-30
@@ -16,7 +20,7 @@
 
 ### Added
 
-- fsys `accept` on j1a, j1b, and avr treats BS (8) and DEL (127) as erase: drop the last TIB byte and send BS SPACE BS. Shared console tests in `tests/con_core_test.4th` run the same `sys: fsys` session on all three ids (input, erase, unknown word, stack, `+`, `.s`, `:`, `words`). `tests/con_words.py` checks every name in `fsys-j1a.json`, `fsys-j1b.json`, and `fsys-avr-extra-min.json`. `avr-con -f` reads scripted lines including raw BS.
+- fsys `accept` on j1a, j1b, and avr treats BS (8) and DEL (127) as erase: drop the last TIB byte and send BS SPACE BS. Shared console tests in `tests/con_core_test.4th` run the same `sys: fsys` session on j1a, j1b, avr, and bcpu (input, erase, unknown word, stack, `+`, `.s`, `:`, `words`). `tests/con_words.py` checks every name in `fsys-j1a.json`, `fsys-j1b.json`, `fsys-avr-extra-min.json`, and `fsys-bcpu.json`. `avr-con -f` reads scripted lines including raw BS.
 
 - `tests/avr_con_test.4th`: extra-min UART under `tools/avr-con` (simavr). AVR-only: 16-bit `.`, `u/mod`, `um+`, `words` has `c@i`. Shared REPL is `tests/con_core_test.4th`. Skips when `simavr` / `libsimavr-dev` are missing.
 

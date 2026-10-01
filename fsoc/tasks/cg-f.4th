@@ -1,4 +1,4 @@
-\ fsoc/tasks/cg-f.4th — CG=F writes Intel HEX for avr with the fsys layers.
+\ fsoc/tasks/cg-f.4th — CG=F writes Intel HEX for avr, word hex for bcpu.
 
 \ Kernel reads these before it finishes the dictionary.
 \ 1 includes sayon. The short repl is the soc image without blink.
@@ -149,6 +149,8 @@ variable avr-want-repl
       s" needs fsys" cpu-stop
    then ;
 
+include cg-bcpu.4th
+
 \ Baremetal blinky: same task name as HDL, fasm is the image tool in the log.
 : avr-blinky { project cpu -- }
    project cpu avr-hw
@@ -167,7 +169,11 @@ variable avr-want-repl
       cpu cpu.id$ @ fsoc-fetch s" avr" compare 0= if
          project cpu avr-blinky
       else
-         cpu s" blinky: no fasm" cpu-stop
+         cpu cpu.id$ @ fsoc-fetch s" bcpu" compare 0= if
+            project cpu bcpu-blinky
+         else
+            cpu s" blinky: no fasm" cpu-stop
+         then
       then
    else
       cpu s" blinky: not CG=F" cpu-stop
@@ -177,9 +183,11 @@ variable avr-want-repl
 
 : cg-f ( project cpu -- )
    dup cpu.id$ @ fsoc-fetch s" avr" compare 0= if
-      avr-hex
-   else
-      cg-halt
-   then ;
+      avr-hex exit
+   then
+   dup cpu.id$ @ fsoc-fetch s" bcpu" compare 0= if
+      bcpu-soc exit
+   then
+   cg-halt ;
 
 s" F" ' cg-f cg-register

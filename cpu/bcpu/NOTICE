@@ -1,0 +1,5 @@
+bit.hex is the eForth 3.1 image from
+https://github.com/howerj/bit-serial
+Copyright (c) 2019,2023 Richard James Howe, MIT.
+The license text is LICENSE.bit-serial.
+bcpu.v is an fsoc implementation of that instruction set, not a copy of bit.vhd.

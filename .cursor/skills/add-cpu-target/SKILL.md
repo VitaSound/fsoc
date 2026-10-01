@@ -17,6 +17,7 @@ Follow `.cursor/rules/fsoc-cpu-target.mdc` and the specs `openspec/specs/forth-c
 6. **Tests** — host dictionary names, HEX/EOF or the CG-E stop; `fcov` on each new fsys directory ≥ 90%. `soc.4th` still has no cpu id literals. AVR log has `Hardware` `atmega8(avr)` and `firmware.hex: N bytes of` flash.
 7. **Console grid** — if this id has an fsys kernel console, extend `tests/con_session.4th` + `tests/con_core_test.4th`, add `doc/j1-word-graph/fsys-<id>*.json` via `build.py`, tag every name in `tests/con_words.py`, and implement BS/DEL in that `accept`. Id-only words go in a new or existing `*_test.4th`, not a copy of the shared REPL. A chip part file does not add a `con_core` row. Verify: `cd tests && FSOC_HOME=<root> gforth con_core_test.4th` (and `fmix test`). Specs: `openspec/specs/fsys/spec.md`, `openspec/specs/forth-cross/spec.md`.
 8. **Docs** — `AGENTS.md` layout line for that id; OpenSpec delta if the profile or CG behaviour changes.
+9. **Failures already solved** — read `.cursor/rules/j1abs-core.mdc` and `.cursor/rules/bcpu-console.mdc` before debugging a console. Same ISA, new body: no `con_core` row; run the port dictionary on the new core, with `FSOC_EMU_UART_GAP` if `accept` emits more than one byte per key. New kernel id: a `con_core` row, and do not clear the stack in `quit`. A CG=I blink hook must not touch `cpu.kit` when the kit is 0. One Verilator per `obj_dir`.
 
 ## Anti-patterns
 

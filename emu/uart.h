@@ -14,6 +14,8 @@ struct RxShift {
     int biti;
     unsigned frame;
     int bit_clocks;
+    int hold;
+    int gap_clocks;
     explicit RxShift(int clocks);
     int idle() const;
     void push(unsigned b);

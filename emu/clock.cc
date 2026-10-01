@@ -25,7 +25,9 @@ Clock::Clock()
     : t(0), cycles(0), cycle_cap(0), fast(0),
       wall0(std::chrono::steady_clock::now()) {
     std::signal(SIGINT, on_sigint);
-    cycle_cap = (unsigned long long)env_int("FSOC_EMU_CYCLES", 0);
+    const char* cap_s = std::getenv("FSOC_EMU_CYCLES");
+    if (cap_s != 0 && cap_s[0] != 0)
+        cycle_cap = std::strtoull(cap_s, 0, 10);
     fast = env_int("FSOC_EMU_FAST", 0);
 }
 

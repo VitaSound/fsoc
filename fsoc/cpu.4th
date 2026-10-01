@@ -20,6 +20,7 @@ begin-structure cpu%
     field: cpu.note$
     field: cpu.wrap$
     field: cpu.kit
+    field: cpu.port$
 end-structure
 
 begin-structure cg%
@@ -56,6 +57,15 @@ ulist-new fsoc-cgs !
 : cpu-ref   ( c-addr u -- ) cpu@ cpu.ref$   fsoc-store! ;
 : cpu-note  ( c-addr u -- ) cpu@ cpu.note$  fsoc-store! ;
 : cpu-wrap  ( c-addr u -- ) cpu@ cpu.wrap$  fsoc-store! ;
+: cpu-port  ( c-addr u -- ) cpu@ cpu.port$  fsoc-store! ;
+
+\ Empty port means the profile id. j1abs names j1a so the image stays there.
+: cpu-image-id ( cpu -- c-addr u )
+    dup cpu.port$ @ ?dup IF
+        nip fsoc-fetch
+    ELSE
+        cpu.id$ @ fsoc-fetch
+    THEN ;
 
 : cpu-find ( c-addr u -- cpu|0 )
     fsoc-cpus @ reg-find ;
@@ -135,6 +145,19 @@ s" j1" cpu-ref
 s" external interpreter" cpu-note
 s" cpu/j1/j1a/kit.4th" cpu-load-kit
 
+\ Same ISA as j1a. One bit per clock; alu and control are ROM tables.
+s" j1abs" cpu-new
+0 cpu-class
+s" V-V-A-0-I" cpu-fmap
+s" V" cpu-mm
+s" V" cpu-exc
+s" I" cpu-cg
+s" C" cpu-bm
+s" j1" cpu-ref
+s" bit-serial alu" cpu-note
+s" j1a" cpu-port
+s" cpu/j1/j1abs/kit.4th" cpu-load-kit
+
 s" j1b" cpu-new
 0 cpu-class
 s" V-V-A-0-I" cpu-fmap
@@ -176,3 +199,15 @@ s" C" cpu-bm
 16 cpu-width
 s" atmega8" cpu-ref
 s" intel hex" cpu-note
+
+\ Accumulator. Soc image is the fsys console (s" fsys" sys:).
+s" bcpu" cpu-new
+0 cpu-class
+s" U-M-B-A-3-F" cpu-fmap
+s" U" cpu-mm
+s" B" cpu-exc
+s" F" cpu-cg
+s" C" cpu-bm
+16 cpu-width
+s" bcpu" cpu-ref
+s" word hex" cpu-note

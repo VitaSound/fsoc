@@ -112,8 +112,11 @@ void Session::on_tx_byte(unsigned b, RxShift& rx) {
     int query = !window.empty() && window[window.size() - 1] == '?' &&
         (window.size() == 1 || window[window.size() - 2] == ' ');
     int thrown = window.find("error:") != std::string::npos;
+    // bcpu prints '?' and then still reaches " ok", but the gap is
+    // longer than one UART frame. A short gap starts the next line
+    // while the reply is unfinished and the RX queue drops a byte.
     if (want_ok && rx.idle() && (query || thrown))
-        q_gap = 8000;
+        q_gap = 200000;
     else
         q_gap = 0;
     if (line_done) finish_reply();
