@@ -605,6 +605,10 @@ def write_all():
     ans = load_ans()
     for name, specs, check in DICTS:
         data = to_json(assemble(specs, ans))
+        # pause/sayon/sayoff are linked only on the short shelf.
+        if name == "fsys-avr-extra-min":
+            for key in ("pause", "sayon", "sayoff"):
+                data.pop(key, None)
         check(data)
         path = OUT / f"{name}.json"
         write_json(path, data)

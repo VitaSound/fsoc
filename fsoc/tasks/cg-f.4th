@@ -1,5 +1,10 @@
 \ fsoc/tasks/cg-f.4th — CG=F writes Intel HEX for avr with the fsys layers.
 
+\ Kernel reads these before it finishes the dictionary.
+\ 1 includes sayon. The short repl is the soc image without blink.
+variable avr-want-blink
+variable avr-want-repl
+
 : avr-image ( name-a name-u -- )
    s" fsys/kernel/avr/" 2swap fjson.str-concat
    fsoc-path+ 2dup included fjson.str-free ;
@@ -86,18 +91,31 @@
 : avr-load ( rel-a rel-u -- )
    2dup avr-note-file avr-ax-load ;
 
-\ Console: extra-min (quit still in the kernel). Blink+release: extra ports, not extra-min.
+: avr-shelf@ ( -- n )
+   s" avr-shelf" find-name name>interpret execute ;
+
+\ Console: extra-min. Short: extra-short. Blink+release stays on the console shelf.
 : avr-layers ( project -- )
    >r
-   r@ avr-blink? if
-      r@ avr-release? if
-         s" fsys/avr/release.4th" avr-note-file
+   avr-shelf@ 2 = if
+      r@ avr-blink? if
+         r@ avr-release? if
+            s" fsys/avr/release.4th" avr-note-file
+         then
+         s" fsys/avr/extra.4th" avr-load
+         s" firmware/blink.fs" avr-load
+         avr-patch-boot
+      else
+         s" fsys/avr/extra-min.4th" avr-load
       then
-      s" fsys/avr/extra.4th" avr-load
-      s" firmware/blink.fs" avr-load
-      avr-patch-boot
    else
-      s" fsys/avr/extra-min.4th" avr-load
+      avr-shelf@ 1 = if
+         s" fsys/avr/extra-short.4th" avr-load
+      then
+      r@ avr-blink? if
+         s" firmware/blink_soc.fs" avr-load
+         avr-patch-boot
+      then
    then
    rdrop ;
 
@@ -106,9 +124,15 @@
 
 : avr-fsys { project cpu -- }
    project cpu avr-hw
+   s" avr-part" find-name name>interpret execute
+   s" attiny13" compare 0= if
+      cpu s" fasm only" cpu-stop
+   then
    s" Software" fsoc-note
    ."     image tool: fsys" cr
    s" fsys/kernel/avr/kernel.4th" avr-note-file
+   project avr-blink? 0= avr-want-repl !
+   project avr-blink? avr-want-blink !
    s" kernel.4th" avr-image
    avr-cross-load
    project avr-layers

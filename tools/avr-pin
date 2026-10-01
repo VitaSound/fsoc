@@ -1,0 +1,28 @@
+#!/bin/sh
+# PB0 watcher for an AVR HEX under simavr. Compiles tools/avr-pin.bin on first use.
+set -e
+root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+src=$root/tools/avr-pin.c
+bin=$root/tools/avr-pin.bin
+inc=
+if [ -d /usr/include/simavr ]; then
+	inc=/usr/include/simavr
+elif [ -d /tmp/simavr-dev/usr/include/simavr ]; then
+	inc=/tmp/simavr-dev/usr/include/simavr
+else
+	echo "avr-pin: install headers: sudo apt install libsimavr-dev" >&2
+	exit 1
+fi
+lib=/usr/lib/x86_64-linux-gnu/libsimavr.so.2
+if [ ! -f "$lib" ]; then
+	echo "avr-pin: missing $lib (sudo apt install simavr)" >&2
+	exit 1
+fi
+need=1
+if [ -x "$bin" ] && [ "$bin" -nt "$src" ]; then
+	need=0
+fi
+if [ "$need" -eq 1 ]; then
+	gcc -O2 -I"$inc" -o "$bin" "$src" "$lib" -lelf
+fi
+exec "$bin" "$@"

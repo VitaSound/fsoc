@@ -11,7 +11,12 @@ isa-m323 atmega328p-chip avr.isa !
 $08FF    atmega328p-chip avr.ramend !
 $3FFF    atmega328p-chip avr.flashend !
 $0100    atmega328p-chip avr.srambase !
-1        atmega328p-chip avr.vector !
+2        atmega328p-chip avr.vector !
+
+port-b port-c or port-d or atmega328p-chip avr.ports !
+0 1 8 pbit 2 8 pbit 3 8 pbit atmega328p-chip avr.pwidth !
+unit-t0 unit-t1 or unit-t2 or unit-spi or unit-twi or unit-adc or unit-usart or
+   atmega328p-chip avr.units !
 
 $03 atmega328p-chip avr.pinb !
 $04 atmega328p-chip avr.ddrb !

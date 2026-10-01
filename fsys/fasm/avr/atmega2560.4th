@@ -13,6 +13,17 @@ $1FFFF   atmega2560-chip avr.flashend !
 $0200    atmega2560-chip avr.srambase !
 2        atmega2560-chip avr.vector !
 
+port-a port-b or port-c or port-d or port-e or port-f or port-g or
+   port-h or port-j or port-k or port-l or
+   atmega2560-chip avr.ports !
+0
+   0 8 pbit 1 8 pbit 2 8 pbit 3 8 pbit 4 8 pbit 5 8 pbit
+   6 6 pbit 7 8 pbit 9 8 pbit 10 8 pbit 11 8 pbit
+   atmega2560-chip avr.pwidth !
+unit-t0 unit-t1 or unit-t2 or unit-t3 or unit-t4 or unit-t5 or
+   unit-spi or unit-twi or unit-adc or unit-usart or
+   atmega2560-chip avr.units !
+
 $03 atmega2560-chip avr.pinb !
 $04 atmega2560-chip avr.ddrb !
 $05 atmega2560-chip avr.portb !

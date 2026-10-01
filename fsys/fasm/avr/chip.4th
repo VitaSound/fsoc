@@ -31,6 +31,39 @@ $8000 constant isa-rmw
 : isa-m128 ( -- u ) isa-m323 isa-elpm or isa-elpmx or ;
 : isa-m256 ( -- u ) isa-m128 isa-eind or ;
 
+\ avr25: SRAM, MOVW, LPM into a register. No MUL, no JMP/CALL.
+: avr25 ( -- u ) isa-2xxx isa-movw or isa-lpmx or ;
+
+\ avr.ports bit 0 = A … bit 11 = L. Bit 8 (I) is unused.
+$0001 constant port-a
+$0002 constant port-b
+$0004 constant port-c
+$0008 constant port-d
+$0010 constant port-e
+$0020 constant port-f
+$0040 constant port-g
+$0080 constant port-h
+$0200 constant port-j
+$0400 constant port-k
+$0800 constant port-l
+
+\ avr.units: timers 0…5, then USI, SPI, TWI, ADC, USART. Presence, not an address.
+$0001 constant unit-t0
+$0002 constant unit-t1
+$0004 constant unit-t2
+$0008 constant unit-t3
+$0010 constant unit-t4
+$0020 constant unit-t5
+$0040 constant unit-usi
+$0080 constant unit-spi
+$0100 constant unit-twi
+$0200 constant unit-adc
+$0400 constant unit-usart
+
+\ Pack a port width into nibble i (0 = A … 11 = L).
+: pbit ( acc i w -- acc' )
+   swap 4 * lshift or ;
+
 begin-structure avr%
    field: avr.isa
    field: avr.flash
@@ -60,6 +93,9 @@ begin-structure avr%
    field: avr.spl
    field: avr.sph
    field: avr.sreg
+   field: avr.ports
+   field: avr.pwidth
+   field: avr.units
 end-structure
 
 variable avr-chip
@@ -116,5 +152,10 @@ variable avr-part-n
 : spl ( -- u ) chip avr.spl @ ;
 : sph ( -- u ) chip avr.sph @ ;
 : sreg ( -- u ) chip avr.sreg @ ;
+
+: avr-ports ( -- u ) chip avr.ports @ ;
+: avr-units ( -- u ) chip avr.units @ ;
+: avr-pwidth ( i -- u )
+   4 * chip avr.pwidth @ swap rshift $0F and ;
 
 [THEN]

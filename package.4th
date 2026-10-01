@@ -14,6 +14,7 @@ forth-package
     key-list flint-exclude fsys/j1a/extra-min.4th
     key-list flint-exclude fsys/avr/extra.4th
     key-list flint-exclude fsys/avr/extra-min.4th
+    key-list flint-exclude fsys/avr/extra-short.4th
     key-list flint-exclude fsys/kernel/avr/
     key-list flint-exclude fsys/fasm/avr/
     key-list flint-exclude fsys/host/avr-cross.4th

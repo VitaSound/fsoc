@@ -242,6 +242,12 @@ wordlist constant ax-host
       true abort" avr-cross: interpret"
    then ;
 
+\ Host values of the active part, compiled as literals into a colon body.
+: ax-part-lit ( a u -- f )
+   2dup s" ddrb" compare 0= if 2drop ddrb ax-lit true exit then
+   2dup s" portb" compare 0= if 2drop portb ax-lit true exit then
+   2drop false ;
+
 : ax-one { a u -- }
    a u ax-bs? if ax-skip-line exit then
    a u ax-semi? if ax-semi-w exit then
@@ -249,6 +255,7 @@ wordlist constant ax-host
       drop execute
       exit
    then
+   ax-state @ if a u ax-part-lit if exit then then
    a u ax-number if
       ax-state @ if ax-lit then
       exit

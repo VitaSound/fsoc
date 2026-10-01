@@ -34,20 +34,6 @@
     "needs": [],
     "missing": []
   },
-  "c@i": {
-    "file": "fsys/kernel/avr/kernel.4th",
-    "asm": true,
-    "bind": "cpu",
-    "needs": [],
-    "missing": []
-  },
-  "slit": {
-    "file": "fsys/kernel/avr/kernel.4th",
-    "asm": true,
-    "bind": "cpu",
-    "needs": [],
-    "missing": []
-  },
   "c!": {
     "file": "fsys/kernel/avr/kernel.4th",
     "asm": true,
@@ -111,27 +97,6 @@
     "needs": [],
     "missing": []
   },
-  "0<": {
-    "file": "fsys/kernel/avr/kernel.4th",
-    "asm": true,
-    "bind": "ans",
-    "needs": [],
-    "missing": []
-  },
-  "=": {
-    "file": "fsys/kernel/avr/kernel.4th",
-    "asm": true,
-    "bind": "ans",
-    "needs": [],
-    "missing": []
-  },
-  "u<": {
-    "file": "fsys/kernel/avr/kernel.4th",
-    "asm": true,
-    "bind": "ans",
-    "needs": [],
-    "missing": []
-  },
   ">r": {
     "file": "fsys/kernel/avr/kernel.4th",
     "asm": true,
@@ -161,41 +126,6 @@
     "missing": []
   },
   "exit": {
-    "file": "fsys/kernel/avr/kernel.4th",
-    "asm": true,
-    "bind": "ans",
-    "needs": [],
-    "missing": []
-  },
-  "emit": {
-    "file": "fsys/kernel/avr/kernel.4th",
-    "asm": true,
-    "bind": "ans",
-    "needs": [],
-    "missing": []
-  },
-  "u.": {
-    "file": "fsys/kernel/avr/kernel.4th",
-    "asm": true,
-    "bind": "cpu",
-    "needs": [],
-    "missing": []
-  },
-  ".": {
-    "file": "fsys/kernel/avr/kernel.4th",
-    "asm": true,
-    "bind": "ans",
-    "needs": [],
-    "missing": []
-  },
-  ".s": {
-    "file": "fsys/kernel/avr/kernel.4th",
-    "asm": true,
-    "bind": "ans",
-    "needs": [],
-    "missing": []
-  },
-  "key": {
     "file": "fsys/kernel/avr/kernel.4th",
     "asm": true,
     "bind": "ans",
@@ -248,6 +178,76 @@
     "file": "fsys/kernel/avr/kernel.4th",
     "asm": true,
     "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "0<": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "=": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "u<": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "emit": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "c@i": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "slit": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "u.": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  ".": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  ".s": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "key": {
+    "file": "fsys/kernel/avr/kernel.4th",
+    "asm": true,
+    "bind": "ans",
     "needs": [],
     "missing": []
   },

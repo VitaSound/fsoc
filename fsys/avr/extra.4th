@@ -14,7 +14,7 @@
    repeat 2drop ;
 : port@ io@ ;
 : port! io! ;
-: DDRB 23 ;
-: PORTB 24 ;
+: DDRB ddrb ;
+: PORTB portb ;
 : pause
    0 begin 1+ dup 0= until drop ;

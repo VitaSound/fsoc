@@ -13,6 +13,11 @@ $0FFF    atmega8-chip avr.flashend !
 $0060    atmega8-chip avr.srambase !
 1        atmega8-chip avr.vector !
 
+port-b port-c or port-d or atmega8-chip avr.ports !
+0 1 8 pbit 2 8 pbit 3 8 pbit atmega8-chip avr.pwidth !
+unit-t0 unit-t1 or unit-t2 or unit-spi or unit-twi or unit-adc or unit-usart or
+   atmega8-chip avr.units !
+
 $16 atmega8-chip avr.pinb !
 $17 atmega8-chip avr.ddrb !
 $18 atmega8-chip avr.portb !

@@ -193,6 +193,14 @@ variable fasm-print?
     fasm-pass2
     fasm-print? @ if fasm-print then ;
 
+\ Append another block and assemble the whole token list again.
+: [asm+] ( -- )
+    0 fasm-label-n !
+    fasm-read
+    fasm-pass1
+    fasm-pass2
+    fasm-print? @ if fasm-print then ;
+
 4096 fasm-max !
 0 fasm-pack? !
 
