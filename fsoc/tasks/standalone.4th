@@ -42,6 +42,17 @@ variable sa-port-u
     13 s" code_addr" sa-bus
     16 s" insn" sa-bus ;
 
+\ Experimental micro-core. https://github.com/cpldcpu/MCPU
+\ clk, rst, oe, we, adress[5:0], data[7:0].
+: sa-ports-mcpu ( -- )
+    0 sa-pad !
+    s" clk25" 0 s" clk" quartus-map
+    s" rst" sa-map1
+    s" oe" sa-map1
+    s" we" sa-map1
+    6 s" adress" sa-bus
+    8 s" data" sa-bus ;
+
 : sa-clock ( -- )
     s" clk"
     plat-clock io.clock-hz@ 1000000000 swap /
@@ -76,15 +87,26 @@ variable sa-port-u
         s" cpu/j1/j1a/standalone.v" s" top.v" r> sa-as
         false EXIT
     THEN
+    2dup s" mcpu" compare 0= IF
+        2drop
+        s" cpu/mcpu/MCPU_0.1a.v" r@ project-copy-in
+        s" cpu/mcpu/standalone.v" s" top.v" r> sa-as
+        sa-ports-mcpu
+        false EXIT
+    THEN
     rdrop
-    true abort" standalone needs j1a, j1abs, or j1b" ;
+    true abort" standalone needs j1a, j1abs, j1b, or mcpu" ;
 
 : sa-emit ( project -- )
     quartus-reset
     >r
     s" Start build" fsoc-note
     s" Hardware" fsoc-note
-    r@ project.cpu@ r@ sa-one sa-ports
+    r@ project.cpu@ 2dup s" mcpu" compare 0= IF
+        r@ sa-one drop
+    ELSE
+        r@ sa-one sa-ports
+    THEN
     s" standalone" quartus-project
     s" top" quartus-top
     s" top.v" quartus-vfile

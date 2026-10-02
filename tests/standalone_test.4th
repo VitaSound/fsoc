@@ -46,6 +46,13 @@ s" common.h" tmp-exists? expect-true
 s" mem_din" s" top.v" tmp-grep? expect-true
 test-teardown
 
+test-setup
+s" standalone_mcpu" tmp-use-project
+18 s" MCPU_0.1a.v" sa-shape
+s" adress" s" top.v" tmp-grep? expect-true
+s" uart.v" tmp-exists? expect-false
+test-teardown
+
 test-finish
 expect-stack-clean
 cr ." standalone_test ok" cr

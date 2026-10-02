@@ -1,0 +1,8 @@
+Experimental micro-core. Not a Forth profile.
+
+MCPU_0.1a.v is vendored from https://github.com/cpldcpu/MCPU
+(Tim Böscke, 2001). Upstream readme licenses that source under GPL-2.
+standalone.v is the fsoc pin wrapper around that module.
+
+This directory stays under GPL-2. The rest of the repository is not
+relicensed by these files.

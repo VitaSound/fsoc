@@ -274,6 +274,21 @@ cd projects/standalone_j1a
 fsoc --build
 ```
 
+`projects/standalone_mcpu` is an experimental micro-core: [MCPU](https://github.com/cpldcpu/MCPU) (GPL-2). Notes: [doc/mcpu.md](doc/mcpu.md). It is not a Forth profile. There is no row in `fsoc/cpu.4th`, no console, and no soc image. The host assembler is `fsys/fasm/mcpu`: 64 bytes, `nor,` `add,` `sta,` `jcc,` `dcb,`. Task `standalone` ties `clk`, `rst`, `oe`, `we`, `adress[5:0]`, and `data[7:0]` to pins of `top` on the same package board. One routed nextpnr fit (2026-10-02) met 25.00 MHz. `oe` and `we` still depend on `clk` in the vendored equations; nextpnr promoted that pin onto a global net and finished.
+
+| Resource | mcpu | On LFE5U-25F |
+|----------|------|----------------|
+| LUT4 | 45 (29 logic, 16 carry) | 24288 |
+| DFF | 24 | 24288 |
+| DP16KD | 0 | 56 |
+| TRELLIS_IO | 18 | 197 |
+| Fmax | 245.22 MHz | 25.00 MHz |
+
+```bash
+cd projects/standalone_mcpu
+fsoc --build
+```
+
 `tools/fterm.4th` and `firmware/midi_foot.4th`: `fterm` talks to a real port when given a path; `midi_foot` is a host mock of FOOTSWITCH-SCAN.
 
 ## Boards
