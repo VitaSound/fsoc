@@ -475,6 +475,11 @@ variable flatten-n
     THEN
     soc-cpu !
     >r
+    soc-cpu @ cpu.uart-gap @ ?dup IF
+        fjson.u>str
+        s" uart.gap" r@ project.file
+        2swap fsoc-write-file
+    THEN
     s" Start build" fsoc-note
     s" Hardware" fsoc-note
     s" fsoc/tasks/soc_main.cpp" harness:

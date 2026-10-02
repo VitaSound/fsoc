@@ -9,7 +9,7 @@ s" con_session.4th" included
 : j1abs-word-session ( -- )
    s" j1a" con-write-in
    cr ." j1abs full word session" cr
-   s\" FSOC_EMU_FAST=1 FSOC_EMU_UART_GAP=40 FSOC_EMU_CYCLES=8000000000 FSOC_EMU_CON=term FSOC_EMU_UART_IN=\"$(cat uart.in)\" "
+   s\" FSOC_EMU_FAST=1 FSOC_EMU_UART_GAP=120 FSOC_EMU_CYCLES=24000000000 FSOC_EMU_CON=term FSOC_EMU_UART_IN=\"$(cat uart.in)\" "
    s" --build" in-tmp-fsoc expect-true
    s" j1a" s" sim.log" con-check ;
 

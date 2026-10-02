@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
 """Build alu_rom and ctrl_rom for the bit-serial J1a core.
 
-Address bits are the function inputs. The word at that address is the result.
+alu_rom is 512x9. Address bits are the function inputs. Bits [2:0] are
+the result, carry, and compare. Bits [8:3] are flags of `op` alone.
+
+ctrl_rom holds the instruction decode in words 0..255 and a linear
+microcode at 256..304. The microcode program is the same for every
+instruction. Bit `last` is not part of the decode address.
+
 Run from anywhere: python3 cpu/j1/j1abs/gen_rom.py
 --check verifies the tables and does not write.
 """
@@ -11,6 +17,34 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "rom_init.vh")
+
+# ALU word, matching the localparams in j1.v.
+ALU_Y = 0
+ALU_COUT = 1
+ALU_MATCH = 2
+ALU_USE_IO = 3
+ALU_USE_DSP = 4
+ALU_CIN = 5
+ALU_CMP_EQ = 6
+ALU_CMP_SG = 7
+ALU_CMP_UL = 8
+
+# Microcode word, matching the localparams in j1.v.
+U_SHIFT_T = 0
+U_SHIFT_NR = 1
+U_ALU_ISSUE = 2
+U_ALU_CAP = 3
+U_FLAG = 4
+U_STACK_WR = 5
+U_COMMIT = 6
+U_BIT_INC = 7
+U_BIT_CLR = 8
+U_SIGN_N = 9
+
+# ucode[i] is fetched while step == i+1 and steers step == i+2.
+# Steps 0 and 1 are fixed in the core: decode, then the first bit.
+U_COUNT = 49
+CTRL_DEPTH = 320
 
 
 def alu_bit(op, t, t_next, n, r, cin):
@@ -55,7 +89,24 @@ def alu_bit(op, t, t_next, n, r, cin):
         y = t
     else:
         y = 0
-    return (match << 2) | (cout << 1) | (y & 1)
+    return (match << ALU_MATCH) | (cout << ALU_COUT) | (y & 1)
+
+
+def alu_flags(op):
+    word = 0
+    if op == 0xD:
+        word |= 1 << ALU_USE_IO
+    if op == 0xE:
+        word |= 1 << ALU_USE_DSP
+    if op in (8, 0xC, 0xF):
+        word |= 1 << ALU_CIN
+    if op == 7:
+        word |= 1 << ALU_CMP_EQ
+    if op == 8:
+        word |= 1 << ALU_CMP_SG
+    if op == 0xF:
+        word |= 1 << ALU_CMP_UL
+    return word
 
 
 def alu_addr(op, t, t_next, n, r, cin):
@@ -65,13 +116,14 @@ def alu_addr(op, t, t_next, n, r, cin):
 def build_alu():
     rom = [0] * 512
     for op in range(16):
+        flags = alu_flags(op)
         for t in range(2):
             for t_next in range(2):
                 for n in range(2):
                     for r in range(2):
                         for cin in range(2):
                             addr = alu_addr(op, t, t_next, n, r, cin)
-                            rom[addr] = alu_bit(op, t, t_next, n, r, cin)
+                            rom[addr] = alu_bit(op, t, t_next, n, r, cin) | flags
     return rom
 
 
@@ -99,20 +151,55 @@ def ctrl_word(kind, t_zero, insn7, xfer):
     if kind == 4:
         return pack(1, 0, 0, 1, 1, 0, 0, 0, 0, 1)
     if kind == 5:
-        return pack(2 if insn7 else 0, 0, 0, 0, 0, int(xfer == 3), int(xfer == 4), int(xfer == 5), 1, 0)
+        # d_we / r_we follow insn[6:4]. Deltas stay in the instruction.
+        return pack(
+            2 if insn7 else 0,
+            1 if xfer == 1 else 0,
+            0,
+            1 if xfer == 2 else 0,
+            0,
+            int(xfer == 3),
+            int(xfer == 4),
+            int(xfer == 5),
+            1,
+            0,
+        )
     if kind == 6:
         return pack(2, 1, 1, 0, 3, 0, 0, 0, 5, 0)
     return 0
 
 
 def build_ctrl():
-    rom = [0] * 512
-    for addr in range(512):
+    rom = [0] * 256
+    for addr in range(256):
         xfer = addr & 7
         insn7 = (addr >> 3) & 1
         t_zero = (addr >> 4) & 1
-        kind = (addr >> 6) & 7
+        kind = (addr >> 5) & 7
         rom[addr] = ctrl_word(kind, t_zero, insn7, xfer)
+    return rom
+
+
+def ubit(*bits):
+    word = 0
+    for bit in bits:
+        word |= 1 << bit
+    return word
+
+
+def build_ucode():
+    """49 words. See the step map in j1.v."""
+    rom = [0] * U_COUNT
+    consume = ubit(U_SHIFT_T, U_SHIFT_NR, U_ALU_ISSUE, U_ALU_CAP, U_BIT_INC)
+    for i in range(15):
+        rom[i] = consume
+    rom[14] |= 1 << U_SIGN_N
+    rom[15] = ubit(U_ALU_CAP, U_BIT_CLR)
+    for i in range(16, 32):
+        rom[i] = ubit(U_FLAG)
+    for i in range(32, 48):
+        rom[i] = ubit(U_STACK_WR, U_BIT_INC)
+    rom[48] = ubit(U_COMMIT)
     return rom
 
 
@@ -144,10 +231,21 @@ def word_op(op, t, n, r=0, io=0, dsp=0):
 
 def check():
     alu = build_alu()
-    # 1+1, low bit: y=0, cout=1, t==n.
+    # 1+1, low bit: y=0, cout=1, t==n. Flags of op 2 are zero.
     addr = alu_addr(2, 1, 0, 1, 0, 0)
     if alu[addr] != 0x6:
         raise SystemExit("alu 1+1 low bit is %x" % alu[addr])
+    if alu[alu_addr(0xD, 0, 0, 0, 0, 0)] & (1 << ALU_USE_IO) == 0:
+        raise SystemExit("use_io flag")
+    if alu[alu_addr(0xE, 0, 0, 0, 0, 0)] & (1 << ALU_USE_DSP) == 0:
+        raise SystemExit("use_dsp flag")
+    if alu[alu_addr(8, 0, 0, 0, 0, 0)] & (1 << ALU_CIN) == 0:
+        raise SystemExit("cin flag")
+    if alu[alu_addr(7, 0, 0, 0, 0, 0)] & (1 << ALU_CMP_EQ) == 0:
+        raise SystemExit("cmp eq flag")
+    # Flags do not depend on the data bits.
+    if (alu[alu_addr(0xF, 1, 1, 1, 1, 1)] >> 3) != (alu_flags(0xF) >> 3):
+        raise SystemExit("flag bits vary inside an op")
     y, cout, eq = word_op(2, 0x1234, 0x1111)
     if y != ((0x1234 + 0x1111) & 0xFFFF) or eq != 0:
         raise SystemExit("add %04x cout %d" % (y, cout))
@@ -173,26 +271,48 @@ def check():
     if cout != 1:
         raise SystemExit("u>= cout %d" % cout)
     ctrl = build_ctrl()
-    # kind in [8:6], t_zero in [4]. 0branch taken: kind 3, t_zero 1 → pc_sel 1.
-    taken = ctrl[(3 << 6) | (1 << 4)]
+    # kind in [7:5], t_zero in [4]. 0branch taken: kind 3, t_zero 1.
+    taken = ctrl[(3 << 5) | (1 << 4)]
     if (taken & 3) != 1 or ((taken >> 3) & 3) != 3:
         raise SystemExit("0branch taken %x" % taken)
-    fall = ctrl[3 << 6]
+    fall = ctrl[3 << 5]
     if (fall & 3) != 0:
         raise SystemExit("0branch fall %x" % fall)
-    # ALU write: kind 5, xfer 3.
-    store = ctrl[(5 << 6) | 3]
+    store = ctrl[(5 << 5) | 3]
     if ((store >> 8) & 1) != 1:
         raise SystemExit("store %x" % store)
-    return alu, ctrl
+    # ALU T->N is xfer == 1. d_we comes from the table.
+    tn = ctrl[(5 << 5) | 1]
+    if ((tn >> 2) & 1) != 1 or ((tn >> 5) & 1) != 0:
+        raise SystemExit("alu d_we %x" % tn)
+    tr = ctrl[(5 << 5) | 2]
+    if ((tr >> 5) & 1) != 1:
+        raise SystemExit("alu r_we %x" % tr)
+    ucode = build_ucode()
+    if len(ucode) != U_COUNT:
+        raise SystemExit("ucode length")
+    if ucode[48] != (1 << U_COMMIT):
+        raise SystemExit("commit word %x" % ucode[48])
+    if any((word >> U_COMMIT) & 1 for word in ucode[:48]):
+        raise SystemExit("commit set early")
+    if sum((word >> U_FLAG) & 1 for word in ucode) != 16:
+        raise SystemExit("flag cycles")
+    if sum((word >> U_STACK_WR) & 1 for word in ucode) != 16:
+        raise SystemExit("write cycles")
+    return alu, ctrl, ucode
 
 
-def emit(alu, ctrl):
+def emit(alu, ctrl, ucode):
     lines = ["// Generated by gen_rom.py. Do not edit.", "initial begin"]
     for i, word in enumerate(alu):
-        lines.append("    alu_rom[%d] = 32'h%08x;" % (i, word))
+        lines.append("    alu_rom[%d] = 9'h%03x;" % (i, word))
+    image = [0] * CTRL_DEPTH
     for i, word in enumerate(ctrl):
-        lines.append("    ctrl_rom[%d] = 32'h%08x;" % (i, word))
+        image[i] = word
+    for i, word in enumerate(ucode):
+        image[256 + i] = word
+    for i, word in enumerate(image):
+        lines.append("    ctrl_rom[%d] = 16'h%04x;" % (i, word))
     lines.append("end")
     lines.append("")
     text = "\n".join(lines)
@@ -201,16 +321,19 @@ def emit(alu, ctrl):
 
 
 def main():
-    alu, ctrl = check()
+    alu, ctrl, ucode = check()
     if "--check" in sys.argv:
         with open(OUT, encoding="utf-8") as fh:
             body = fh.read()
         addr = alu_addr(2, 1, 0, 1, 0, 0)
-        needle = "alu_rom[%d] = 32'h%08x;" % (addr, alu[addr])
+        needle = "alu_rom[%d] = 9'h%03x;" % (addr, alu[addr])
         if needle not in body:
             raise SystemExit("rom_init.vh missing " + needle)
+        commit = "ctrl_rom[%d] = 16'h%04x;" % (256 + 48, ucode[48])
+        if commit not in body:
+            raise SystemExit("rom_init.vh missing " + commit)
         return
-    emit(alu, ctrl)
+    emit(alu, ctrl, ucode)
 
 
 if __name__ == "__main__":

@@ -261,11 +261,11 @@ fsoc --build
 
 | Resource | j1a | j1abs | j1b | On LFE5U-25F |
 |----------|-----|--------|-----|----------------|
-| LUT4 | 1484 (1436 logic, 48 carry) | 336 (310 logic, 26 carry) | 3920 (3836 logic, 84 carry) | 24288 |
-| DFF | 578 | 172 | 2164 | 24288 |
+| LUT4 | 1484 (1436 logic, 48 carry) | 277 (239 logic, 38 carry) | 3920 (3836 logic, 84 carry) | 24288 |
+| DFF | 578 | 170 | 2164 | 24288 |
 | DP16KD | 0 | 3 | 0 | 56 |
 | TRELLIS_IO | 82 | 82 | 146 | 197 |
-| Fmax | 123.24 MHz | 75.16 MHz | 93.71 MHz | 25.00 MHz |
+| Fmax | 123.24 MHz | 84.08 MHz | 93.71 MHz | 25.00 MHz |
 
 The three `DP16KD` blocks on j1abs are the ALU table, the control table, and the stack RAM. j1a and j1b keep their stacks in flip-flops, so those two rows have no block RAM.
 

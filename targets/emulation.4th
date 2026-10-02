@@ -43,6 +43,10 @@ variable emu-use-board-clk
     s\"   cp obj_dir_feed/V${mod}_feed obj_dir/" fsoc-emit-line
     s" fi" fsoc-emit-line
     s\" if [ -n \"$FSOC_EMU_COMPILE_ONLY\" ]; then exit 0; fi" fsoc-emit-line
+    s\" if [ -z \"$FSOC_EMU_UART_GAP\" ] && [ -f uart.gap ]; then" fsoc-emit-line
+    s"   FSOC_EMU_UART_GAP=$(cat uart.gap)" fsoc-emit-line
+    s"   export FSOC_EMU_UART_GAP" fsoc-emit-line
+    s" fi" fsoc-emit-line
     s" trap 'exit 0' INT" fsoc-emit-line
     s\" ./obj_dir/V${mod}" fsoc-emit-line
     fsoc-emit-close ;

@@ -1,5 +1,5 @@
-// Bit-serial J1a on the same program as tb_j1_ref. One commit is one
-// pass through phase S_CAP. The printout should match the one-cycle core.
+// Bit-serial J1a on the same program as tb_j1_ref. One commit is the
+// microcode commit cycle. The printout should match the one-cycle core.
 `default_nettype none
 `timescale 1ns/1ps
 
@@ -31,7 +31,7 @@ module tb_j1abs;
             insn <= ram[0];
         else
             insn <= ram[code_addr[11:0]];
-        if (resetq && cpu.phase == 2'd3)
+        if (resetq && cpu.commit)
             commits <= commits + 1;
     end
 

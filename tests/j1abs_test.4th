@@ -5,9 +5,9 @@ s" fixture.4th" included
 s" con_session.4th" included
 
 \ Two lines, not the 262-word script. That script is tests/j1abs_words.4th
-\ and is not a *_test.4th, so fmix does not run its 8e9-cycle session.
+\ and is not a *_test.4th, so fmix does not run its 24e9-cycle session.
 : j1abs-gap-session ( -- )
-   s\" FSOC_EMU_FAST=1 FSOC_EMU_UART_GAP=40 FSOC_EMU_CYCLES=40000000 FSOC_EMU_CON=term FSOC_EMU_UART_IN=\"$(printf '1 2 + .\\n12\\0103 .\\n')\" "
+   s\" FSOC_EMU_FAST=1 FSOC_EMU_UART_GAP=120 FSOC_EMU_CYCLES=40000000 FSOC_EMU_CON=term FSOC_EMU_UART_IN=\"$(printf '1 2 + .\\n12\\0103 .\\n')\" "
    s" --build" in-tmp-fsoc expect-true
    s" 3  ok" s" sim.log" tmp-grep? expect-true
    s" 13  ok" s" sim.log" tmp-grep? expect-true ;
@@ -50,15 +50,18 @@ s" pin led 1" s" sim.log" tmp-grep? expect-true
 s" bytes of 8192" s" sim.log" tmp-grep? expect-true
 test-teardown
 
-\ Console: 1 2 + . answers 3 and ok. The image is the j1a kernel.
+\ Hand launch. The panel buffers keys and Enter is push_line, same as
+\ UART_IN. The environment does not export the gap; uart.gap must.
 test-setup
 s" soc_j1abs" tmp-use-project
-s\" FSOC_EMU_FAST=1 FSOC_EMU_CON=term FSOC_EMU_CYCLES=40000000 FSOC_EMU_UART_IN='1 2 + .' " s" --build" in-tmp-fsoc expect-true
+s" env -u FSOC_EMU_UART_GAP FSOC_EMU_FAST=1 FSOC_EMU_CON=term FSOC_EMU_CYCLES=40000000 FSOC_EMU_UART_IN='1 2 + .' " s" --build" in-tmp-fsoc expect-true
 s" image tool: fsys" s" sim.log" tmp-grep? expect-true
 s" fsys/kernel/j1a/kernel.4th" s" sim.log" tmp-grep? expect-true
 s" alu_rom" s" j1.v" tmp-grep? expect-true
 s" rom_init.vh" tmp-exists? expect-true
 s" 3  ok" s" sim.log" tmp-grep? expect-true
+s" 120" s" uart.gap" tmp-grep? expect-true
+s" uart.gap" s" sim.sh" tmp-grep? expect-true
 test-teardown
 
 \ Backspace: three emits must not eat the next byte. Prints 13.

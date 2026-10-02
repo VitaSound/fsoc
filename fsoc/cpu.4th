@@ -21,6 +21,7 @@ begin-structure cpu%
     field: cpu.wrap$
     field: cpu.kit
     field: cpu.port$
+    field: cpu.uart-gap
 end-structure
 
 begin-structure cg%
@@ -58,6 +59,8 @@ ulist-new fsoc-cgs !
 : cpu-note  ( c-addr u -- ) cpu@ cpu.note$  fsoc-store! ;
 : cpu-wrap  ( c-addr u -- ) cpu@ cpu.wrap$  fsoc-store! ;
 : cpu-port  ( c-addr u -- ) cpu@ cpu.port$  fsoc-store! ;
+\ Extra mark bit-times after each host UART byte. 0 leaves bytes back to back.
+: cpu-uart-gap ( n -- ) cpu@ cpu.uart-gap ! ;
 
 \ Empty port means the profile id. j1abs names j1a so the image stays there.
 : cpu-image-id ( cpu -- c-addr u )
@@ -155,6 +158,7 @@ s" I" cpu-cg
 s" C" cpu-bm
 s" j1" cpu-ref
 s" bit-serial alu" cpu-note
+120 cpu-uart-gap
 s" j1a" cpu-port
 s" cpu/j1/j1abs/kit.4th" cpu-load-kit
 
