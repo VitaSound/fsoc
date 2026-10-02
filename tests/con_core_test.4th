@@ -1,5 +1,6 @@
 \ tests/con_core_test.4th — fsys console core + words + behavior on j1a, j1b, avr, bcpu
 
+s" long_gate.4th" included
 s" test_common.4th" included
 s" fixture.4th" included
 s" con_session.4th" included

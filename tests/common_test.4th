@@ -1,5 +1,6 @@
 \ tests/common_test.4th — fsys/common on the host and on both consoles
 
+s" long_gate.4th" included
 s" test_common.4th" included
 s" fixture.4th" included
 

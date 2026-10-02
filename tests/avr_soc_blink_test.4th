@@ -1,5 +1,6 @@
 \ tests/avr_soc_blink_test.4th — Forth PB0 blink on every AVR part, then simavr.
 
+s" long_gate.4th" included
 s" test_common.4th" included
 s" fixture.4th" included
 s" ../fsys/fasm/avr/fasm.4th" included

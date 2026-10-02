@@ -1,5 +1,6 @@
 \ tests/bcpu_test.4th — opcodes, blink, fsys console, soc blink, word hex.
 
+s" long_gate.4th" included
 s" test_common.4th" included
 s" fixture.4th" included
 

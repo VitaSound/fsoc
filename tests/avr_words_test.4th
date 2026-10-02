@@ -1,6 +1,7 @@
 \ tests/avr_words_test.4th — words on every AVR soc image except attiny13.
 \ attiny13 stays fasm: sys: fsys stops. The other 22 print a dictionary.
 
+s" long_gate.4th" included
 s" test_common.4th" included
 s" fixture.4th" included
 s" ../fsys/fasm/avr/fasm.4th" included

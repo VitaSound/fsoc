@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- `pre-push` no longer runs the long core suites on every push. `tools/pre-push.sh` always runs the short tests and flint. `con_core`, `common`, `j1abs`, `bcpu`, and the AVR dictionary, words, console, pin, and blink tests run only when the push touches that core. `fmix test` still runs the full suite.
+
 ### Added
 
 - Experimental micro-core [MCPU](https://github.com/cpldcpu/MCPU) (GPL-2). Host fasm is `fsys/fasm/mcpu` (64 bytes, `nor,` `add,` `sta,` `jcc,` `dcb,`). `projects/standalone_mcpu` pins every port on `lfe5u25f_cabga256`. Routed nextpnr, 2026-10-02, constraint 25.00 MHz: 45/24288 LUT4 (29 logic, 16 carry), 24 DFF, 0/56 `DP16KD`, 18/197 `TRELLIS_IO`, 245.22 MHz. Not a Forth profile. Notes: `doc/mcpu.md`.

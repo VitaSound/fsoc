@@ -1,5 +1,6 @@
 \ tests/avr_dict_test.4th — shortened dictionary on every AVR part.
 
+s" long_gate.4th" included
 s" test_common.4th" included
 s" fixture.4th" included
 s" ../fsys/fasm/avr/fasm.4th" included

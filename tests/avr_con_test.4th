@@ -1,6 +1,7 @@
 \ tests/avr_con_test.4th — extra-min UART session under tools/avr-con.
 \ Builds HEX in /tmp. Needs simavr + libsimavr-dev; otherwise skip.
 
+s" long_gate.4th" included
 s" test_common.4th" included
 s" fixture.4th" included
 s" con_session.4th" included

@@ -30,7 +30,10 @@ Blinky (no Forth) lives under `projects/baremetal/`. HDL copies omit `cpu:`. AVR
 
 ```bash
 fmix packages.get
-fmix test                # includes con_core_test (fsys j1a/j1b/avr/bcpu REPL); avr_con_test needs simavr + libsimavr-dev; skips if missing
+fmix test                # full suite, including the long core tests
+# pre-push (tools/pre-push.sh) runs the short files always. The long suites
+# (con_core, common, j1abs, bcpu, avr dict/words/con/pin/blink) run only when
+# the push touches that core. avr_con_test needs simavr + libsimavr-dev.
 # one file: cd tests && FSOC_HOME=$FSOC_HOME gforth con_core_test.4th
 fsoc version             # needs FSOC_HOME + PATH (see feco shell-setup)
 cd projects/baremetal/blinky_emul && fsoc --build
