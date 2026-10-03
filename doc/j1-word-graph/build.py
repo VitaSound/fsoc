@@ -558,6 +558,24 @@ def check_bcpu(data):
         raise SystemExit("0= should come from extra-min")
 
 
+def check_cd16(data):
+    for name in ("words", "quit", ".s", "+", ":", "0="):
+        require(data, name, "fsys-cd16 lost " + name)
+    if data["+"]["file"].find("kernel/cd16") < 0:
+        raise SystemExit("+ should come from the cd16 kernel")
+    if data["0="]["file"].find("extra-min") < 0:
+        raise SystemExit("0= should come from extra-min")
+
+
+def check_msl16(data):
+    for name in ("words", "quit", ".s", "+", ":", "0=", "empty"):
+        require(data, name, "fsys-msl16 lost " + name)
+    if data["+"]["file"].find("kernel/msl16") < 0:
+        raise SystemExit("+ should come from the msl16 kernel")
+    if data["0="]["file"].find("kernel/msl16") < 0:
+        raise SystemExit("0= should come from the msl16 kernel")
+
+
 def check_sf_b(data):
     if "j1a" in data["lshift"]["file"]:
         raise SystemExit("j1b lshift points at j1a")
@@ -593,6 +611,14 @@ DICTS = [
         ("fsys/kernel/bcpu/kernel.4th", "kernel"),
         ("fsys/bcpu/extra-min.4th", "colon"),
     ], check_bcpu),
+    ("fsys-cd16", [
+        ("fsys/kernel/cd16/kernel.4th", "kernel"),
+        ("fsys/cd16/extra-min.4th", "colon"),
+    ], check_cd16),
+    ("fsys-msl16", [
+        ("fsys/kernel/msl16/kernel.4th", "kernel"),
+        ("fsys/msl16/extra-min.4th", "colon"),
+    ], check_msl16),
     ("swapforth-j1a", [
         ("swapforth/j1a/basewords.fs", "primitive"),
         ("swapforth/j1a/nuc.fs", "header"),

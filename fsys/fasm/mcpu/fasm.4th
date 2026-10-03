@@ -3,6 +3,7 @@
 \ Not a Forth image and not used by the soc task.
 
 include ../session.4th
+fasm-plain
 0 fasm-pack? !
 0 fasm-print? !
 64 fasm-max !

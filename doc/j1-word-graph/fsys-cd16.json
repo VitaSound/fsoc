@@ -1,0 +1,1162 @@
+{
+  "dup": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "drop": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "swap": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "over": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "+": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "and": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "or": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "xor": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "invert": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "2*": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "2/": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "=": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "0<": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "u<": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "@": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "!": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "c@": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "c!": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "p@": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "p!": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "here": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "latest": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "phere": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "state": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "base": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  ">in": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "ntib": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "tlen": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "tib": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "allot": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "depth": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "nth": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  ">r": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "r>": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "r@": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "rdrop": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "exit": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "execute": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "emit": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "key": {
+    "file": "fsys/kernel/cd16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "0=": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "="
+    ],
+    "missing": [],
+    "src": ": 0= 0 = ;\n"
+  },
+  "1+": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "+"
+    ],
+    "missing": [],
+    "src": ": 1+ 1 + ;\n"
+  },
+  "negate": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "invert",
+      "1+"
+    ],
+    "missing": [],
+    "src": ": negate invert 1+ ;\n"
+  },
+  "-": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "negate",
+      "+"
+    ],
+    "missing": [],
+    "src": ": - negate + ;\n"
+  },
+  "1-": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "-"
+    ],
+    "missing": [],
+    "src": ": 1- 1 - ;\n"
+  },
+  "2drop": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "drop"
+    ],
+    "missing": [],
+    "src": ": 2drop drop drop ;\n"
+  },
+  "2dup": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "over"
+    ],
+    "missing": [],
+    "src": ": 2dup over over ;\n"
+  },
+  "+!": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "swap",
+      "over",
+      "@",
+      "+",
+      "!"
+    ],
+    "missing": [],
+    "src": ": +! ( n a -- ) swap over @ + swap ! ;\n"
+  },
+  "rot": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "swap",
+      "r>"
+    ],
+    "missing": [],
+    "src": ": rot >r swap r> swap ;\n"
+  },
+  "-rot": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "rot"
+    ],
+    "missing": [],
+    "src": ": -rot rot rot ;\n"
+  },
+  "false": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [],
+    "missing": [],
+    "src": ": false 0 ;\n"
+  },
+  "true": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "0="
+    ],
+    "missing": [],
+    "src": ": true 0 0= ;\n"
+  },
+  "<": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "-",
+      "0<"
+    ],
+    "missing": [],
+    "src": ": < - 0< ;\n"
+  },
+  ">": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "swap",
+      "<"
+    ],
+    "missing": [],
+    "src": ": > swap < ;\n"
+  },
+  "*": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      ">r",
+      "begin",
+      "dup",
+      "and",
+      "if",
+      "over",
+      "r>",
+      "+",
+      "then",
+      "swap",
+      "2*",
+      "2/",
+      "drop"
+    ],
+    "missing": [],
+    "src": ": * ( a b -- p )\n   0 >r\n   begin\n      dup\n   while\n      dup 1 and if\n         over r> + >r\n      then\n      swap 2* swap\n      2/\n   repeat\n   drop drop r> ;\n"
+  },
+  "cell+": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "1+"
+    ],
+    "missing": [],
+    "src": ": cell+ 1+ ;\n"
+  },
+  "cells": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [],
+    "missing": [],
+    "src": ": cells ;\n"
+  },
+  "cr": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "emit"
+    ],
+    "missing": [],
+    "src": ": cr 13 emit 10 emit ;\n"
+  },
+  "space": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "emit"
+    ],
+    "missing": [],
+    "src": ": space 32 emit ;\n"
+  },
+  "type": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      "dup",
+      "over",
+      "c@",
+      "emit",
+      "swap",
+      "1+",
+      "1-",
+      "2drop"
+    ],
+    "missing": [],
+    "src": ": type\n   begin dup while\n      over c@ emit\n      swap 1+ swap 1-\n   repeat 2drop ;\n"
+  },
+  "u/mod": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      ">r",
+      "begin",
+      "2dup",
+      "u<",
+      "0=",
+      "swap",
+      "over",
+      "-",
+      "r>",
+      "1+",
+      "drop"
+    ],
+    "missing": [],
+    "src": ": u/mod ( u n -- rem quot )\n   0 >r\n   begin\n      2dup u< 0=\n   while\n      swap over - swap\n      r> 1+ >r\n   repeat\n   drop\n   r> ;\n"
+  },
+  "udot": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "!",
+      "begin",
+      "dup",
+      ">",
+      "base",
+      "@",
+      "u/mod",
+      "swap",
+      "+",
+      "1+",
+      "emit",
+      "1-"
+    ],
+    "missing": [],
+    "src": ": udot ( u -- )\n   0 7 !\n   begin\n      dup 9 >\n   while\n      base @ u/mod swap\n      8 7 @ + !\n      7 @ 1+ 7 !\n   repeat\n   48 + emit\n   begin\n      7 @\n   while\n      7 @ 1- 7 !\n      8 7 @ + @ 48 + emit\n   repeat ;\n"
+  },
+  "u.": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "udot",
+      "space"
+    ],
+    "missing": [],
+    "src": ": u. udot space ;\n"
+  },
+  ".": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "dup",
+      "0<",
+      "if",
+      "emit",
+      "negate",
+      "then",
+      "udot",
+      "space"
+    ],
+    "missing": [],
+    "src": ": .\n   dup 0< if\n      45 emit negate\n   then\n   udot space ;\n"
+  },
+  ".s": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "emit",
+      "depth",
+      "udot",
+      "space",
+      "begin",
+      "2dup",
+      ">",
+      "dup",
+      "nth",
+      "1+",
+      "2drop"
+    ],
+    "missing": [],
+    "src": ": .s\n   60 emit\n   depth udot\n   62 emit space\n   depth 0\n   begin\n      2dup >\n   while\n      dup nth udot space\n      1+\n   repeat\n   2drop ;\n"
+  },
+  ",": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "here",
+      "!",
+      "allot"
+    ],
+    "missing": [],
+    "src": ": ,\n   here !\n   1 allot ;\n"
+  },
+  "empty": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "begin",
+      "depth",
+      "drop"
+    ],
+    "missing": [],
+    "src": ": empty\n   begin\n      depth\n   while\n      drop\n   repeat ;\n"
+  },
+  "accept": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "ntib",
+      "!",
+      ">in",
+      "begin",
+      "key",
+      "dup",
+      "=",
+      "over",
+      "or",
+      "if",
+      "drop",
+      "exit",
+      "then",
+      "@",
+      "1-",
+      "emit",
+      "else",
+      "u<",
+      "tib",
+      "+",
+      "c!",
+      "1+",
+      "again"
+    ],
+    "missing": [],
+    "src": ": accept\n   0 ntib !\n   0 >in !\n   begin\n      key\n      dup 10 = over 13 = or if\n         drop exit\n      then\n      dup 8 = over 127 = or if\n         drop\n         ntib @ if\n            ntib @ 1- ntib !\n            8 emit 32 emit 8 emit\n         then\n      else\n         ntib @ 80 u< if\n            dup emit\n            tib ntib @ + c!\n            ntib @ 1+ ntib !\n         else\n            drop\n         then\n      then\n   again ;\n"
+  },
+  "parse-name": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      ">in",
+      "@",
+      "ntib",
+      "u<",
+      "0=",
+      "if",
+      "exit",
+      "then",
+      "tib",
+      "+",
+      "c@",
+      "+!",
+      "else",
+      "until",
+      "=",
+      "1+",
+      "again"
+    ],
+    "missing": [],
+    "src": ": parse-name ( -- a u )\n   begin\n      >in @ ntib @ u< 0= if\n         0 0 exit\n      then\n      tib >in @ + c@ 33 u< if\n         1 >in +!\n         0\n      else\n         1\n      then\n   until\n   tib >in @ +\n   0\n   begin\n      >in @ ntib @ u< 0= if\n         exit\n      then\n      tib >in @ + c@ 32 = if\n         exit\n      then\n      1+\n      1 >in +!\n   again ;\n"
+  },
+  "name=": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "!",
+      "@",
+      "1+",
+      "p@",
+      "and",
+      "=",
+      "if",
+      "begin",
+      "<",
+      "+",
+      "c@",
+      "0=",
+      "exit",
+      "then",
+      "else"
+    ],
+    "missing": [],
+    "src": ": name= ( a u h -- flag )\n   10 !\n   9 !\n   8 !\n   10 @ 1+ p@ 255 and 9 @ = if\n      0 11 !\n      begin\n         11 @ 9 @ <\n      while\n         8 @ 11 @ + c@\n         10 @ 2 + 11 @ + p@ 255 and\n         = 0= if\n            0 exit\n         then\n         11 @ 1+ 11 !\n      repeat\n      -1\n   else\n      0\n   then ;\n"
+  },
+  "cfa@": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "dup",
+      "1+",
+      "p@",
+      "and",
+      "+"
+    ],
+    "missing": [],
+    "src": ": cfa@ ( h -- xt )\n   dup 1+ p@ 255 and + 2 + p@ ;\n"
+  },
+  "imm@": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "1+",
+      "p@",
+      "and"
+    ],
+    "missing": [],
+    "src": ": imm@ ( h -- f )\n   1+ p@ 256 and ;\n"
+  },
+  "ntype": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "dup",
+      "1+",
+      "p@",
+      "and",
+      ">r",
+      "+",
+      "begin",
+      "r@",
+      "emit",
+      "r>",
+      "1-",
+      "rdrop",
+      "drop"
+    ],
+    "missing": [],
+    "src": ": ntype ( h -- )\n   dup 1+ p@ 255 and >r\n   2 +\n   begin\n      r@\n   while\n      dup p@ 255 and emit\n      1+\n      r> 1- >r\n   repeat\n   rdrop drop ;\n"
+  },
+  "find": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "latest",
+      "begin",
+      "dup",
+      ">r",
+      "2dup",
+      "r@",
+      "name=",
+      "if",
+      "2drop",
+      "cfa@",
+      "r>",
+      "imm@",
+      "else",
+      "then",
+      "exit",
+      "p@",
+      "drop"
+    ],
+    "missing": [],
+    "src": ": find ( a u -- a u 0 | xt 1 | xt -1 )\n   latest\n   begin\n      dup\n   while\n      >r\n      2dup r@ name= if\n         2drop\n         r@ cfa@\n         r> imm@ if\n            1\n         else\n            -1\n         then\n         exit\n      then\n      r> p@\n   repeat\n   drop 0 ;\n"
+  },
+  "number": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "dup",
+      "0=",
+      "if",
+      "2drop",
+      "false",
+      "exit",
+      "then",
+      ">r",
+      "over",
+      "c@",
+      "=",
+      "1-",
+      "swap",
+      "1+",
+      "r>",
+      "drop",
+      "rdrop",
+      "-rot",
+      "begin",
+      "-",
+      "<",
+      ">",
+      "or",
+      "rot",
+      "base",
+      "@",
+      "*",
+      "+",
+      "0<",
+      "negate",
+      "true"
+    ],
+    "missing": [],
+    "src": ": number ( a u -- n true | false )\n   dup 0= if\n      2drop false exit\n   then\n   0 >r\n   over c@ 45 = if\n      1- swap 1+ swap\n      r> drop -1 >r\n   then\n   dup 0= if\n      2drop rdrop false exit\n   then\n   0 -rot\n   begin\n      dup\n   while\n      over c@ 48 -\n      dup 0 < over 9 > or if\n         drop 2drop drop rdrop false exit\n      then\n      >r rot base @ * r> +\n      -rot\n      swap 1+ swap 1-\n   repeat\n   2drop\n   r> 0< if\n      negate\n   then\n   true ;\n"
+  },
+  "p,": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "phere",
+      "p!",
+      "1+",
+      "!"
+    ],
+    "missing": [],
+    "src": ": p, ( n -- )\n   phere p!\n   phere 1+ 2 ! ;\n"
+  },
+  "clit": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "phere",
+      "1+",
+      "p!",
+      "+",
+      "!"
+    ],
+    "missing": [],
+    "src": ": clit ( n -- )\n   phere 1+ p!\n   $0C06 phere p!\n   phere 2 + 2 ! ;\n"
+  },
+  "compile,": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "2/",
+      "or",
+      "phere",
+      "p!",
+      "1+",
+      "!"
+    ],
+    "missing": [],
+    "src": ": compile, ( xt -- )\n   2/ $8000 or phere p!\n   phere 1+ 2 ! ;\n"
+  },
+  "compile-exit": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "p,"
+    ],
+    "missing": [],
+    "src": ": compile-exit\n   $0409 p, ;\n"
+  },
+  "header": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "phere",
+      "!",
+      "latest",
+      "@",
+      "p!",
+      "1+",
+      "begin",
+      "<",
+      "+",
+      "c@",
+      "dup",
+      "and",
+      "if",
+      "then",
+      "=",
+      "0="
+    ],
+    "missing": [
+      "(",
+      "a",
+      "u",
+      "--",
+      ")"
+    ],
+    "src": ": header ( a u -- )\n   phere 8 !\n   9 !\n   10 !\n   latest 8 @ p!\n   9 @ 8 @ 1+ p!\n   0 11 !\n   begin\n      11 @ 9 @ <\n   while\n      10 @ 11 @ + c@\n      8 @ 2 + 11 @ + p!\n      11 @ 1+ 11 !\n   repeat\n   8 @ 2 + 9 @ + 12 !\n   12 @ 1+\n   dup 1 and if 1+ then\n   13 !\n   13 @ 12 @ p!\n   13 @ 12 @ 1+ = 0= if\n      0 12 @ 1+ p!\n   then\n   8 @ 0 !\n   13 @ 2 ! ;\n"
+  },
+  "interpret": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "find",
+      "dup",
+      "0=",
+      "if",
+      "drop",
+      "number",
+      "state",
+      "@",
+      "clit",
+      "then",
+      "else",
+      "space",
+      "emit",
+      "!",
+      "ntib",
+      "execute",
+      "=",
+      "compile,"
+    ],
+    "missing": [],
+    "src": ": interpret ( a u -- )\n   find\n   dup 0= if\n      drop\n      number if\n         state @ if\n            clit\n         then\n      else\n         space 63 emit\n         0 state !\n         0 ntib !\n      then\n   else\n      state @ 0= if\n         drop execute\n      else\n         1 = if\n            execute\n         else\n            compile,\n         then\n      then\n   then ;\n"
+  },
+  "quit": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "begin",
+      "accept",
+      ">in",
+      "!",
+      "parse-name",
+      "dup",
+      "interpret",
+      "2drop",
+      "state",
+      "@",
+      "0=",
+      "if",
+      "space",
+      "emit",
+      "cr",
+      "then",
+      "again"
+    ],
+    "missing": [],
+    "src": ": quit\n   begin\n      accept\n      0 >in !\n      begin\n         parse-name dup\n      while\n         interpret\n      repeat\n      2drop\n      state @ 0= if\n         space 111 emit 107 emit cr\n      then\n   again ;\n"
+  },
+  "words": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "latest",
+      "begin",
+      "dup",
+      "ntype",
+      "space",
+      "p@",
+      "drop"
+    ],
+    "missing": [],
+    "src": ": words\n   latest\n   begin\n      dup\n   while\n      dup ntype space\n      p@\n   repeat\n   drop ;\n"
+  },
+  ":": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "parse-name",
+      "header",
+      "state",
+      "!"
+    ],
+    "missing": [],
+    "src": ": :\n   parse-name header 1 state ! ;\n"
+  },
+  ";": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "compile-exit",
+      "state",
+      "!"
+    ],
+    "missing": [],
+    "src": ": ;\n   compile-exit 0 state ! ; immediate\n"
+  },
+  "if": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "p,",
+      "phere"
+    ],
+    "missing": [],
+    "src": ": if\n   $4400 p,\n   $0814 p,\n   $0700 p,\n   phere\n   $1000 p, ; immediate\n"
+  },
+  "then": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "phere",
+      "over",
+      "1+",
+      "-",
+      "and",
+      "or",
+      "swap",
+      "p!"
+    ],
+    "missing": [],
+    "src": ": then\n   phere over 1+ - $0FFF and $1000 or swap p! ; immediate\n"
+  },
+  "ahead": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "phere",
+      "p,"
+    ],
+    "missing": [],
+    "src": ": ahead\n   phere $1000 p, ;\n"
+  },
+  "else": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "phere",
+      "p,",
+      "swap",
+      "over",
+      "1+",
+      "-",
+      "and",
+      "or",
+      "p!"
+    ],
+    "missing": [],
+    "src": ": else\n   phere $1000 p,\n   swap\n   phere over 1+ - $0FFF and $1000 or swap p! ; immediate\n"
+  },
+  "begin": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "phere"
+    ],
+    "missing": [],
+    "src": ": begin\n   phere ; immediate\n"
+  },
+  "until": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "p,",
+      "phere",
+      "1+",
+      "-",
+      "and",
+      "or"
+    ],
+    "missing": [],
+    "src": ": until\n   $4400 p,\n   $0814 p,\n   $0700 p,\n   phere 1+ - $0FFF and $1000 or p, ; immediate\n"
+  },
+  "again": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "phere",
+      "1+",
+      "-",
+      "and",
+      "or",
+      "p,"
+    ],
+    "missing": [],
+    "src": ": again\n   phere 1+ - $0FFF and $1000 or p, ; immediate\n"
+  },
+  "literal": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "clit"
+    ],
+    "missing": [],
+    "src": ": literal clit ; immediate\n"
+  },
+  "s\"": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "ans",
+    "needs": [
+      "tib",
+      ">in",
+      "@",
+      "+",
+      "c@",
+      "=",
+      "if",
+      "1+",
+      "!",
+      "then",
+      "here",
+      "begin",
+      "dup",
+      "drop",
+      "state",
+      "swap",
+      "clit",
+      "exit",
+      "c!",
+      "allot",
+      "again"
+    ],
+    "missing": [],
+    "src": ": s\"\n   tib >in @ + c@ 32 = if\n      >in @ 1+ >in !\n   then\n   here 8 !\n   0 9 !\n   begin\n      tib >in @ + c@\n      >in @ 1+ >in !\n      dup 34 = if\n         drop\n         8 @ 9 @\n         state @ if\n            swap clit clit\n         then\n         exit\n      then\n      8 @ 9 @ + c!\n      9 @ 1+ 9 !\n      1 allot\n   again ; immediate\n"
+  },
+  "'BOOT": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "@"
+    ],
+    "missing": [],
+    "src": ": 'BOOT 14 @ ;\n"
+  },
+  "io@": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "@"
+    ],
+    "missing": [],
+    "src": ": io@ @ ;\n"
+  },
+  "io!": {
+    "file": "fsys/cd16/extra-min.4th",
+    "asm": false,
+    "bind": "cpu",
+    "needs": [
+      "!"
+    ],
+    "missing": [],
+    "src": ": io! ! ;\n"
+  }
+}

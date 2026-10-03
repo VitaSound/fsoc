@@ -53,6 +53,21 @@ s" adress" s" top.v" tmp-grep? expect-true
 s" uart.v" tmp-exists? expect-false
 test-teardown
 
+test-setup
+s" standalone_cd16" tmp-use-project
+115 s" cd16.v" sa-shape
+s" pbank" s" top.v" tmp-grep? expect-true
+s" EHXPLLL" s" top.v" tmp-grep? expect-true
+s" uart.v" tmp-exists? expect-false
+test-teardown
+
+test-setup
+s" standalone_msl16" tmp-use-project
+43 s" msl16.v" sa-shape
+s" reset" s" top.v" tmp-grep? expect-true
+s" uart.v" tmp-exists? expect-false
+test-teardown
+
 test-finish
 expect-stack-clean
 cr ." standalone_test ok" cr

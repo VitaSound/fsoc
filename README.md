@@ -289,6 +289,36 @@ cd projects/standalone_mcpu
 fsoc --build
 ```
 
+`projects/standalone_cd16` is the CD16 core from Brad Eckert's VHDL, kept for the ECP5 size. The Forth profile is `cd16`: `s" fsys" sys:` builds the console, and the projects are `baremetal/blinky_cd16`, `soc_cd16`, and `soc_cd16_blink`. Notes: [doc/cd16.md](doc/cd16.md). The host assembler is `fsys/fasm/cd16` (`cd16-wl`, 65536 words). The stack is one `DP16KD` on a 50 MHz clock; program and data buses are pins. One routed nextpnr fit (2026-10-03) met 25.00 MHz on the pin. The core alone, `synth_ecp5` with every port kept, is 736 LUT4, 37 `CCU2C`, and 94 flip-flops.
+
+| Resource | cd16 standalone | On LFE5U-25F |
+|----------|-----------------|----------------|
+| LUT4 | 734 (660 logic, 74 carry) | 24288 |
+| DFF | 95 | 24288 |
+| DP16KD | 1 | 56 |
+| TRELLIS_IO | 115 | 197 |
+| Fmax | 62.13 MHz on `clk50`, 97.30 MHz on `clk25` | 25.00 MHz |
+
+```bash
+cd projects/standalone_cd16
+fsoc --build
+```
+
+`projects/standalone_msl16` is the MSL16 core from Philip Leong's 1998 VHDL. Notes: [doc/msl16.md](doc/msl16.md). The Forth profile is `msl16`: `s" fsys" sys:` builds the console (word hex, 2048 words, `ADDR=11`), and the projects are `baremetal/blinky_msl16`, `soc_msl16`, and `soc_msl16_blink`. The host assembler is `fsys/fasm/msl16` (four slots, `msl16-wl`). The standalone fit still uses the 8-bit bus. The two 16×16 stacks are LUT RAM (`DPR16X4`). One routed nextpnr fit (2026-10-03, `ADDR=8`) met 25.00 MHz.
+
+| Resource | msl16 | On LFE5U-25F |
+|----------|-------|----------------|
+| LUT4 | 558 (470 logic, 40 carry, 32 RAM, 16 RAMW) | 24288 |
+| DFF | 54 | 24288 |
+| DP16KD | 0 | 56 |
+| TRELLIS_IO | 43 | 197 |
+| Fmax | 84.98 MHz | 25.00 MHz |
+
+```bash
+cd projects/standalone_msl16
+fsoc --build
+```
+
 `tools/fterm.4th` and `firmware/midi_foot.4th`: `fterm` talks to a real port when given a path; `midi_foot` is a host mock of FOOTSWITCH-SCAN.
 
 ## Boards

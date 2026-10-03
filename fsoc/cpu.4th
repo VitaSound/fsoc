@@ -215,3 +215,28 @@ s" C" cpu-bm
 16 cpu-width
 s" bcpu" cpu-ref
 s" word hex" cpu-note
+
+\ CD16: Harvard, STC colon (call/ret), host fasm. Empty sys: stops.
+s" cd16" cpu-new
+1 cpu-class
+s" D-S-A-M-3-F" cpu-fmap
+s" D" cpu-mm
+s" S" cpu-exc
+s" F" cpu-cg
+s" C" cpu-bm
+16 cpu-width
+s" cd16" cpu-ref
+s" word hex" cpu-note
+
+\ Packed-nibble stack machine. Soc image is the fsys console.
+\ The 8-bit standalone bus stays the default ADDR. fsys uses 11.
+s" msl16" cpu-new
+0 cpu-class
+s" U-S-A-M-3-F" cpu-fmap
+s" U" cpu-mm
+s" S" cpu-exc
+s" F" cpu-cg
+s" C" cpu-bm
+16 cpu-width
+s" msl16" cpu-ref
+s" word hex" cpu-note

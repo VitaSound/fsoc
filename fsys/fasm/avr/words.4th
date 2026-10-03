@@ -454,6 +454,6 @@ $007F constant rel7-mask
    then
    2drop 1 ;
 
-' avr-span is fasm-span
-
 [THEN]
+
+' avr-span is fasm-span

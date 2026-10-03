@@ -53,6 +53,36 @@ variable sa-port-u
     6 s" adress" sa-bus
     8 s" data" sa-bus ;
 
+\ CD16. Program and data buses are pins. The stack stays inside the core wrap.
+\ clk, reset, hold, int[6:0], pi[15:0], di[15:0],
+\ py[15:0], pa[15:0], pbank[5:0], wp, dy[15:0], da[15:0], wd, rd.
+: sa-ports-cd16 ( -- )
+    0 sa-pad !
+    s" clk25" 0 s" clk" quartus-map
+    s" reset" sa-map1
+    s" hold" sa-map1
+    7 s" int" sa-bus
+    16 s" pi" sa-bus
+    16 s" di" sa-bus
+    16 s" py" sa-bus
+    16 s" pa" sa-bus
+    6 s" pbank" sa-bus
+    s" wp" sa-map1
+    16 s" dy" sa-bus
+    16 s" da" sa-bus
+    s" wd" sa-map1
+    s" rd" sa-map1 ;
+
+\ MSL16. Stacks stay inside. clk, reset, wr, addr[7:0], din[15:0], dout[15:0].
+: sa-ports-msl16 ( -- )
+    0 sa-pad !
+    s" clk25" 0 s" clk" quartus-map
+    s" reset" sa-map1
+    s" wr" sa-map1
+    8 s" addr" sa-bus
+    16 s" din" sa-bus
+    16 s" dout" sa-bus ;
+
 : sa-clock ( -- )
     s" clk"
     plat-clock io.clock-hz@ 1000000000 swap /
@@ -94,15 +124,31 @@ variable sa-port-u
         sa-ports-mcpu
         false EXIT
     THEN
+    2dup s" cd16" compare 0= IF
+        2drop
+        s" cpu/cd16/cd16.v" r@ project-copy-in
+        s" cpu/cd16/standalone.v" s" top.v" r> sa-as
+        sa-ports-cd16
+        false EXIT
+    THEN
+    2dup s" msl16" compare 0= IF
+        2drop
+        s" cpu/msl16/msl16.v" r@ project-copy-in
+        s" cpu/msl16/standalone.v" s" top.v" r> sa-as
+        sa-ports-msl16
+        false EXIT
+    THEN
     rdrop
-    true abort" standalone needs j1a, j1abs, j1b, or mcpu" ;
+    true abort" standalone needs j1a, j1abs, j1b, mcpu, cd16, or msl16" ;
 
 : sa-emit ( project -- )
     quartus-reset
     >r
     s" Start build" fsoc-note
     s" Hardware" fsoc-note
-    r@ project.cpu@ 2dup s" mcpu" compare 0= IF
+    r@ project.cpu@ 2dup s" mcpu" compare 0= >r
+    2dup s" cd16" compare 0= >r
+    2dup s" msl16" compare 0= r> or r> or IF
         r@ sa-one drop
     ELSE
         r@ sa-one sa-ports

@@ -4,11 +4,15 @@
 
 ### Changed
 
-- `pre-push` no longer runs the long core suites on every push. `tools/pre-push.sh` always runs the short tests and flint. `con_core`, `common`, `j1abs`, `bcpu`, and the AVR dictionary, words, console, pin, and blink tests run only when the push touches that core. `fmix test` still runs the full suite.
+- `pre-push` no longer runs the long core suites on every push. `tools/pre-push.sh` always runs the short tests and flint. `con_core`, `common`, `j1abs`, `bcpu`, `cd16`, and the AVR dictionary, words, console, pin, and blink tests run only when the push touches that core. `fmix test` still runs the full suite.
 
 ### Added
 
+- MSL16 core translated from Philip Leong's 1998 VHDL (`cpu.vhd`, `ex.vhd`, `stack.vhd` in the archived `msl16_vhdl.zip`). `projects/standalone_msl16` pins the 8-bit memory bus on `lfe5u25f_cabga256`; the two stacks are LUT RAM. Routed nextpnr, 2026-10-03, constraint 25.00 MHz, `ADDR=8`: 558/24288 LUT4 (470 logic, 40 carry, 32 RAM, 16 RAMW), 54 DFF, 0/56 `DP16KD`, 43/197 `TRELLIS_IO`, 84.98 MHz. Profile `msl16` (class 0, MM=U, EX-C=S, CG=F) builds an fsys console: empty `sys:` stops, `s" fsys" sys:` writes word hex, 2048 words, `ADDR=11`. Projects: `baremetal/blinky_msl16`, `soc_msl16`, `soc_msl16_blink`. The console is a row in `tests/con_core_test.4th`. Notes: `doc/msl16.md`.
+
 - Experimental micro-core [MCPU](https://github.com/cpldcpu/MCPU) (GPL-2). Host fasm is `fsys/fasm/mcpu` (64 bytes, `nor,` `add,` `sta,` `jcc,` `dcb,`). `projects/standalone_mcpu` pins every port on `lfe5u25f_cabga256`. Routed nextpnr, 2026-10-02, constraint 25.00 MHz: 45/24288 LUT4 (29 logic, 16 carry), 24 DFF, 0/56 `DP16KD`, 18/197 `TRELLIS_IO`, 245.22 MHz. Not a Forth profile. Notes: `doc/mcpu.md`.
+
+- CD16 core translated from Brad Eckert's VHDL (`CD16/CD16.VHD` revision 6 in the 2006 archive of cd16v13.zip). `projects/standalone_cd16` pins the program and data buses on `lfe5u25f_cabga256`; the stack is one `DP16KD` clocked at twice the CPU. Routed nextpnr, 2026-10-03, constraint 25.00 MHz: 734/24288 LUT4 (660 logic, 74 carry), 95 DFF, 1/56 `DP16KD`, 115/197 `TRELLIS_IO`. `clk50` 62.13 MHz, `clk25` 97.30 MHz. Host fasm is `fsys/fasm/cd16` (65536 words, `cd16-wl`). Profile `cd16` (class 1, MM=D, EX-C=S, CG=F) builds an fsys console: empty `sys:` stops, `s" fsys" sys:` writes word hex. Projects: `baremetal/blinky_cd16`, `soc_cd16`, `soc_cd16_blink`. The console is a row in `tests/con_core_test.4th`. Notes: `doc/cd16.md`.
 
 - Task `standalone` places the core and its stacks on `lfe5u25f_cabga256` (`j1a`, `j1abs`, `j1b`). Every port of module `j1` is a package ball, so nextpnr keeps one `TRELLIS_IO` per port. Routed fit on `LFE5U-25F`, 2026-10-01, constraint 25.00 MHz: j1a 1484/24288 LUT4 (1436 logic, 48 carry), 578 DFF, 0/56 `DP16KD`, 82/197 `TRELLIS_IO`, 123.24 MHz; j1b 3920/24288 LUT4 (3836 logic, 84 carry), 2164 DFF, 0/56 `DP16KD`, 146/197 `TRELLIS_IO`, 93.71 MHz. j1abs was re-fit on 2026-10-02 after the bit-serial stack and microcode: 277/24288 LUT4 (239 logic, 38 carry), 170 DFF, 3/56 `DP16KD`, 82/197 `TRELLIS_IO`, 84.08 MHz. The three j1abs blocks are the ALU table, the control table, and the stack RAM. A later single 512×16 field (23 clocks) routed to 347 LUT4 and was put back. The numbers are in `README.md`.
 

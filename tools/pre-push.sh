@@ -54,6 +54,8 @@ consider() {
             note tests/common_test.4th
             note tests/j1abs_test.4th
             note tests/bcpu_test.4th
+            note tests/cd16_test.4th
+            note tests/msl16_test.4th
             ;;
         tests/con_core_test.4th)
             note tests/con_core_test.4th
@@ -72,6 +74,24 @@ consider() {
             ;;
         tests/bcpu_test.4th)
             note tests/bcpu_test.4th
+            ;;
+        cpu/cd16/*|fsys/kernel/cd16/*|fsys/cd16/*|\
+        fsys/fasm/cd16/*|fsys/host/cd16-cross.4th|\
+        firmware/cd16_blink.fs|firmware/blink_cd16.4th)
+            note tests/con_core_test.4th
+            note tests/cd16_test.4th
+            ;;
+        tests/cd16_test.4th)
+            note tests/cd16_test.4th
+            ;;
+        cpu/msl16/*|fsys/kernel/msl16/*|fsys/msl16/*|\
+        fsys/fasm/msl16/*|fsys/host/msl16-cross.4th|\
+        firmware/msl16_blink.fs|firmware/blink_msl16.4th)
+            note tests/con_core_test.4th
+            note tests/msl16_test.4th
+            ;;
+        tests/msl16_test.4th)
+            note tests/msl16_test.4th
             ;;
         fsys/kernel/avr/*|fsys/avr/*|fsys/fasm/avr/*|\
         fsys/host/avr-cross.4th|\

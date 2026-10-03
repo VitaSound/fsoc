@@ -21,6 +21,7 @@ int main(int argc, char** argv) {
         return 1;
     }
     const int byte_limit = env_int("FSOC_EMU_UART_BYTES", 0);
+    const int edge_limit = env_int("FSOC_EMU_EDGES", 0);
     const char* in_text = env_str("FSOC_EMU_UART_IN");
     const int pin_view = con_pin_mode();
     const int scripted = in_text != 0;
@@ -36,6 +37,7 @@ int main(int argc, char** argv) {
     rx.gap_clocks = env_int("FSOC_EMU_UART_GAP", 0) * FSOC_UART_BIT;
     TxDec txdec(FSOC_UART_BIT);
     int bytes = 0;
+    int edges = 0;
 
     con_panel_open(!scripted && !capture && !pin_view);
 
@@ -73,8 +75,8 @@ int main(int argc, char** argv) {
                 }
                 rx.advance();
                 sess.tick(rx);
-                if (!con_term())
-                    con_pin("led", clk.t, top->led ? 1 : 0);
+                if (!con_term() && con_pin("led", clk.t, top->led ? 1 : 0))
+                    edges++;
             } else {
                 top->clk = 0;
                 top->eval();
@@ -83,6 +85,7 @@ int main(int argc, char** argv) {
             }
         },
         [&]() {
+            if (edge_limit > 0 && edges >= edge_limit) return 1;
             if (capture && byte_limit > 0 && bytes >= byte_limit) return 1;
             return sess.done();
         });

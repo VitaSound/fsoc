@@ -419,6 +419,75 @@ BCPU_RUN = {
     "drop": ("9 8 drop .", ["9"]),
 }
 
+# Same console shape as bcpu: one cell is one word, no rewind of here.
+CD16_SKIP = {
+    "cfa@": "dictionary helper",
+    "clit": "compiler helper",
+    "empty": "clears the data stack",
+    "execute": "no tick to obtain an xt",
+    "imm@": "dictionary helper",
+    "interpret": "interpreter",
+    "name=": "dictionary helper",
+    "nth": "stack index helper",
+    "ntype": "dictionary helper",
+    "p,": "compiler helper",
+    "p@": "program memory",
+    "p!": "program memory",
+    "phere": "program pointer",
+    "rdrop": "return-stack helper",
+    "udot": "numeric helper",
+}
+
+CD16_RUN = {
+    "drop": ("9 8 drop .", ["9"]),
+}
+
+# Stubs and helpers stay out of the behavior script. drop leaves 9, not 8.
+MSL16_RUN = {
+    "+": ("1 2 + .", ["3"]),
+    "xor": ("3 1 xor .", ["2"]),
+    "dup": ("7 dup . .", ["7"]),
+    "drop": ("9 8 drop .", ["9"]),
+    "swap": ("1 2 swap . .", ["1"]),
+    "2drop": ("1 2 3 2drop .", ["1"]),
+    "0=": ("0 0= .", ["-1"]),
+    ".": ("11 .", ["11"]),
+    ".s": ("1 2 3 .s 2drop drop", ["<3> 1 2 3"]),
+    "emit": ("51 emit", ["3"]),
+    "cr": ("cr", [" ok"]),
+    "space": ("space", [" ok"]),
+    "depth": ("depth .", ["0"]),
+    "words": ("words", ["dup"]),
+}
+
+MSL16_COLON = {
+    ":": (": tplus 1 2 + . ; tplus", ["3"]),
+    ";": (": tsemi 9 . ; tsemi", ["9"]),
+}
+
+# Real stack and print words. The rest of the image is a stub or a helper.
+MSL16_RUN = {
+    "+": ("1 2 + .", ["3"]),
+    "xor": ("3 1 xor .", ["2"]),
+    "dup": ("7 dup . .", ["7"]),
+    "drop": ("9 8 drop .", ["9"]),
+    "swap": ("1 2 swap . .", ["1"]),
+    "2drop": ("1 2 3 2drop .", ["1"]),
+    "0=": ("0 0= .", ["-1"]),
+    ".": ("11 .", ["11"]),
+    ".s": ("1 2 3 .s 2drop drop", ["<3> 1 2 3"]),
+    "emit": ("51 emit", ["3"]),
+    "cr": ("cr", [" ok"]),
+    "space": ("space", [" ok"]),
+    "depth": ("depth .", ["0"]),
+    "words": ("words", ["dup"]),
+}
+
+MSL16_COLON = {
+    ":": (": tplus 1 2 + . ; tplus", ["3"]),
+    ";": (": tsemi 9 . ; tsemi", ["9"]),
+}
+
 CORE_HAS = [
     "3",
     " ok",
@@ -446,6 +515,10 @@ def dict_for(cpu):
         return load_dict("fsys-avr-extra-min.json")
     if cpu == "bcpu":
         return load_dict("fsys-bcpu.json")
+    if cpu == "cd16":
+        return load_dict("fsys-cd16.json")
+    if cpu == "msl16":
+        return load_dict("fsys-msl16.json")
     raise SystemExit("cpu " + cpu)
 
 
@@ -457,6 +530,19 @@ def recipe(name, cpu):
     if cpu == "bcpu" and name in BCPU_RUN:
         line, has = BCPU_RUN[name]
         return ("run", line, has or [])
+    if cpu == "cd16" and name in CD16_SKIP:
+        return ("skip", CD16_SKIP[name], [])
+    if cpu == "cd16" and name in CD16_RUN:
+        line, has = CD16_RUN[name]
+        return ("run", line, has or [])
+    if cpu == "msl16" and name in MSL16_RUN:
+        line, has = MSL16_RUN[name]
+        return ("run", line, has or [])
+    if cpu == "msl16" and name in MSL16_COLON:
+        line, has = MSL16_COLON[name]
+        return ("colon", line, has or [])
+    if cpu == "msl16":
+        return ("skip", "msl16 image", [])
     if cpu == "j1b" and name in J1B_SKIP:
         return ("skip", J1B_SKIP[name], [])
     if name in SKIP:
@@ -479,7 +565,7 @@ def recipe(name, cpu):
             line, has = COLON[name]
             return ("colon", line, has or [])
         return None
-    if cpu == "bcpu":
+    if cpu in ("bcpu", "cd16"):
         if name in COLON and COLON[name][0]:
             line, has = COLON[name]
             return ("colon", line, has or [])
@@ -519,7 +605,7 @@ def write_input(cpu, path):
         b"21 DOUBLE .\n",
         b"words\n",
     ]
-    if cpu not in ("avr", "bcpu"):
+    if cpu not in ("avr", "bcpu", "cd16", "msl16"):
         lines += [
             b"variable mh\n",
             b"variable ml\n",
@@ -537,13 +623,13 @@ def write_input(cpu, path):
             continue
         if cpu == "avr" and rec[0] == "colon" and name not in AVR_COLON:
             continue
-        if cpu not in ("avr", "bcpu"):
+        if cpu not in ("avr", "bcpu", "cd16", "msl16"):
             lines.append((line + " cs").encode("ascii") + b"\n")
             if rec[0] == "colon" or line.lstrip().startswith(":"):
                 lines.append(b"ml @ latest ! mh @ here - allot\n")
         else:
             lines.append(line.encode("ascii") + b"\n")
-            if cpu == "bcpu":
+            if cpu in ("bcpu", "cd16", "msl16"):
                 lines.append(b"empty\n")
     Path(path).write_bytes(b"".join(lines))
 
@@ -611,7 +697,7 @@ def main(argv):
         )
     cmd = argv[1]
     if cmd == "tags":
-        for cpu in argv[2:] or ("j1a", "j1b", "avr", "bcpu"):
+        for cpu in argv[2:] or ("j1a", "j1b", "avr", "bcpu", "cd16", "msl16"):
             check_tags(cpu)
         return
     if cmd == "write":

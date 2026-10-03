@@ -15,6 +15,26 @@ variable fasm-max
 defer fasm-span
 ' fasm-span1 is fasm-span
 
+\ Slot machines update the PC inside the comma word. fasm-emit? is false
+\ on the measuring pass. The three hooks are no-ops for one-cell encodings.
+variable fasm-emit?
+: fasm-begin0 ( -- ) ;
+: fasm-mark0 ( -- ) ;
+: fasm-finish0 ( -- ) ;
+defer fasm-begin
+defer fasm-mark
+defer fasm-finish
+' fasm-begin0 is fasm-begin
+' fasm-mark0 is fasm-mark
+' fasm-finish0 is fasm-finish
+
+: fasm-plain ( -- )
+    0 fasm-emit? !
+    ['] fasm-begin0 is fasm-begin
+    ['] fasm-mark0 is fasm-mark
+    ['] fasm-finish0 is fasm-finish
+    ['] fasm-span1 is fasm-span ;
+
 1024 constant fasm-label-max
 create fasm-label-adr  fasm-label-max cells allot
 create fasm-label-len  fasm-label-max cells allot
@@ -87,9 +107,12 @@ variable fasm-tok-u
 
 : fasm-pass1 ( -- )
     0 fasm-pc !
+    0 fasm-emit? !
+    fasm-begin
     fasm-tok-n @ 0 ?do
         i fasm-tok@
         fasm-colon fasm-ends if
+            fasm-mark
             1-
             fasm-pc @ fasm-label!
         else
@@ -112,16 +135,19 @@ variable fasm-tok-u
     name>interpret execute ;
 
 : fasm-one ( c-addr u -- )
-    2dup fasm-colon fasm-ends if 2drop 2drop exit else 2drop then
+    2dup fasm-colon fasm-ends if fasm-mark 2drop 2drop exit else 2drop then
     2dup fasm-number if >r 2drop r> exit then
     2dup fasm-label@ if >r 2drop r> exit then
     fasm-op ;
 
 : fasm-pass2 ( -- )
     0 fasm-pc !
+    -1 fasm-emit? !
+    fasm-begin
     fasm-tok-n @ 0 ?do
         i fasm-tok@ fasm-one
-    loop ;
+    loop
+    fasm-finish ;
 
 : fasm-skip-line ( -- )
     begin

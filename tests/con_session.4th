@@ -12,6 +12,12 @@
 : bcpu-fsys-manifest ( -- )
    s\" s\" soc\" task:\ns\" emulation\" target:\ns\" bcpu\" cpu:\ns\" fsys\" sys:\n" tmp-manifest ;
 
+: cd16-fsys-manifest ( -- )
+   s\" s\" soc\" task:\ns\" emulation\" target:\ns\" cd16\" cpu:\ns\" fsys\" sys:\n" tmp-manifest ;
+
+: msl16-fsys-manifest ( -- )
+   s\" s\" soc\" task:\ns\" emulation\" target:\ns\" msl16\" cpu:\ns\" fsys\" sys:\n" tmp-manifest ;
+
 : con-py ( args-a args-u -- flag )
    s" python3 " fsoc-root fjson.str-concat s" /tests/con_words.py " fsoc-cat+
    2swap fsoc-cat+
@@ -57,6 +63,16 @@
    s" bcpu" con-write-in
    j1-con-run expect-true
    s" bcpu" s" sim.log" con-check ;
+
+: cd16-con-session ( -- )
+   s" cd16" con-write-in
+   j1-con-run expect-true
+   s" cd16" s" sim.log" con-check ;
+
+: msl16-con-session ( -- )
+   s" msl16" con-write-in
+   j1-con-run expect-true
+   s" msl16" s" sim.log" con-check ;
 
 : avr-con-session ( -- )
    s" avr" con-write-in

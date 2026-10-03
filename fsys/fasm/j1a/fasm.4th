@@ -1,6 +1,7 @@
 \ fsys/fasm/j1a/fasm.4th — one-instruction J1a words, comma at the end.
 
 include ../session.4th
+fasm-plain
 4096 fasm-max !
 0 fasm-pack? !
 include words.4th

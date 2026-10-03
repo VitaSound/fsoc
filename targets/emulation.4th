@@ -33,6 +33,12 @@ variable emu-use-board-clk
     s" CLK_HZ=" emu-clk-hz fjson.u>str 2dup 2>r fjson.str-concat fsoc-emit-free 2r> fjson.str-free
     s" BAUD=115200" fsoc-emit-line
     s\" cflags=\"-I.. -DFSOC_UART_BIT=$((CLK_HZ / BAUD))\"" fsoc-emit-line
+    \ A later make keeps verilated.o when it is newer than the headers.
+    \ Two Verilator installs then link a runtime from the other one.
+    s" ver=$(verilator --version 2>/dev/null || true)" fsoc-emit-line
+    s\" if [ -d obj_dir ] && { [ ! -f obj_dir/verilator.ver ] || [ \"$(cat obj_dir/verilator.ver)\" != \"$ver\" ]; }; then" fsoc-emit-line
+    s"   rm -rf obj_dir obj_dir_feed" fsoc-emit-line
+    s" fi" fsoc-emit-line
     s\" if ls *_main.cpp >/dev/null 2>&1; then" fsoc-emit-line
     emu-view-compile
     s\"   make -C obj_dir -f V${mod}.mk -j >>build.log 2>&1 || { cat build.log >&2; exit 1; }" fsoc-emit-line
@@ -42,6 +48,7 @@ variable emu-use-board-clk
     s\"   make -C obj_dir_feed -f V${mod}.mk -j >>build.log 2>&1 || { cat build.log >&2; exit 1; }" fsoc-emit-line
     s\"   cp obj_dir_feed/V${mod}_feed obj_dir/" fsoc-emit-line
     s" fi" fsoc-emit-line
+    s\" if [ -d obj_dir ]; then echo \"$ver\" > obj_dir/verilator.ver; fi" fsoc-emit-line
     s\" if [ -n \"$FSOC_EMU_COMPILE_ONLY\" ]; then exit 0; fi" fsoc-emit-line
     s\" if [ -z \"$FSOC_EMU_UART_GAP\" ] && [ -f uart.gap ]; then" fsoc-emit-line
     s"   FSOC_EMU_UART_GAP=$(cat uart.gap)" fsoc-emit-line

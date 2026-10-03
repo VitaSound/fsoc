@@ -150,6 +150,8 @@ variable avr-want-repl
    then ;
 
 include cg-bcpu.4th
+include cg-cd16.4th
+include cg-msl16.4th
 
 \ Baremetal blinky: same task name as HDL, fasm is the image tool in the log.
 : avr-blinky { project cpu -- }
@@ -172,7 +174,15 @@ include cg-bcpu.4th
          cpu cpu.id$ @ fsoc-fetch s" bcpu" compare 0= if
             project cpu bcpu-blinky
          else
-            cpu s" blinky: no fasm" cpu-stop
+            cpu cpu.id$ @ fsoc-fetch s" cd16" compare 0= if
+               project cpu cd16-blinky
+            else
+               cpu cpu.id$ @ fsoc-fetch s" msl16" compare 0= if
+                  project cpu msl16-blinky
+               else
+                  cpu s" blinky: no fasm" cpu-stop
+               then
+            then
          then
       then
    else
@@ -187,6 +197,12 @@ include cg-bcpu.4th
    then
    dup cpu.id$ @ fsoc-fetch s" bcpu" compare 0= if
       bcpu-soc exit
+   then
+   dup cpu.id$ @ fsoc-fetch s" cd16" compare 0= if
+      cd16-soc exit
+   then
+   dup cpu.id$ @ fsoc-fetch s" msl16" compare 0= if
+      msl16-soc exit
    then
    cg-halt ;
 

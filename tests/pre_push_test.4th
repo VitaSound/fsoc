@@ -51,6 +51,14 @@ s" cpu/bcpu/bcpu.v" pp-list
 s" tests/bcpu_test.4th" pp-has
 s" tests/con_core_test.4th" pp-has
 
+s" cpu/cd16/cd16.v" pp-list
+s" tests/cd16_test.4th" pp-has
+s" tests/con_core_test.4th" pp-has
+
+s" cpu/msl16/msl16.v" pp-list
+s" tests/msl16_test.4th" pp-has
+s" tests/con_core_test.4th" pp-has
+
 test-teardown
 test-finish
 expect-stack-clean

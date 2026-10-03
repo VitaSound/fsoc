@@ -45,6 +45,24 @@ s" bcpu" cpu-find cpu.bm$ @ fsoc-fetch s" C" expect-str-eq
 s" bcpu" cpu-find cpu.width @ 16 expect=
 s" bcpu" cpu-find cpu.ref$ @ fsoc-fetch s" bcpu" expect-str-eq
 s" bcpu" cpu-find cpu.note$ @ fsoc-fetch s" word hex" expect-str-eq
+s" cd16" cpu-find cpu.class @ 1 expect=
+s" cd16" cpu-find cpu.fmap$ @ fsoc-fetch s" D-S-A-M-3-F" expect-str-eq
+s" cd16" cpu-find cpu.mm$ @ fsoc-fetch s" D" expect-str-eq
+s" cd16" cpu-find cpu.exc$ @ fsoc-fetch s" S" expect-str-eq
+s" cd16" cpu-find cpu.cg$ @ fsoc-fetch s" F" expect-str-eq
+s" cd16" cpu-find cpu.bm$ @ fsoc-fetch s" C" expect-str-eq
+s" cd16" cpu-find cpu.width @ 16 expect=
+s" cd16" cpu-find cpu.ref$ @ fsoc-fetch s" cd16" expect-str-eq
+s" cd16" cpu-find cpu.note$ @ fsoc-fetch s" word hex" expect-str-eq
+s" msl16" cpu-find cpu.class @ 0 expect=
+s" msl16" cpu-find cpu.fmap$ @ fsoc-fetch s" U-S-A-M-3-F" expect-str-eq
+s" msl16" cpu-find cpu.mm$ @ fsoc-fetch s" U" expect-str-eq
+s" msl16" cpu-find cpu.exc$ @ fsoc-fetch s" S" expect-str-eq
+s" msl16" cpu-find cpu.cg$ @ fsoc-fetch s" F" expect-str-eq
+s" msl16" cpu-find cpu.bm$ @ fsoc-fetch s" C" expect-str-eq
+s" msl16" cpu-find cpu.width @ 16 expect=
+s" msl16" cpu-find cpu.ref$ @ fsoc-fetch s" msl16" expect-str-eq
+s" msl16" cpu-find cpu.note$ @ fsoc-fetch s" word hex" expect-str-eq
 s" E" cg-find cg.emit @ s" F" cg-find cg.emit @ = expect-false
 s" F" cg-find 0<> expect-true
 s" I" cg-find cg.emit @ s" E" cg-find cg.emit @ = expect-false
@@ -93,6 +111,10 @@ $? 0= expect-false
 s" grep -q avr fsoc/tasks/soc.4th" system
 $? 0= expect-false
 s" grep -q bcpu fsoc/tasks/soc.4th" system
+$? 0= expect-false
+s" grep -q cd16 fsoc/tasks/soc.4th" system
+$? 0= expect-false
+s" grep -q msl16 fsoc/tasks/soc.4th" system
 $? 0= expect-false
 
 project-new

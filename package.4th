@@ -22,6 +22,14 @@ forth-package
     key-list flint-exclude fsys/kernel/bcpu/
     key-list flint-exclude fsys/host/bcpu-cross.4th
     key-list flint-exclude fsys/host/avr-cross.4th
+    key-list flint-exclude fsys/fasm/cd16/
+    key-list flint-exclude fsys/kernel/cd16/
+    key-list flint-exclude fsys/cd16/
+    key-list flint-exclude fsys/host/cd16-cross.4th
+    key-list flint-exclude fsys/fasm/msl16/
+    key-list flint-exclude fsys/kernel/msl16/
+    key-list flint-exclude fsys/msl16/
+    key-list flint-exclude fsys/host/msl16-cross.4th
     key-list flint-exclude projects/
     key-list tags gforth
     key-list tags soc

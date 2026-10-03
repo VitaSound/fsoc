@@ -3,6 +3,7 @@
 \ two instructions into each output word.
 
 include ../session.4th
+fasm-plain
 16384 fasm-max !
 -1 fasm-pack? !
 include ../j1a/words.4th

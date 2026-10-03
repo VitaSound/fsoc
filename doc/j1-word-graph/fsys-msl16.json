@@ -1,0 +1,275 @@
+{
+  "dup": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "drop": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "swap": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "+": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "xor": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "@": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "!": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "0=": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "2drop": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "emit": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "cr": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "space": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "key": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  ".": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "depth": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  ".s": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "header": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "find": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "number": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  ",": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "literal": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "execute": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "exit": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "accept": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "parse-name": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  ":": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  ";": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "quit": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "here": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "latest": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "state": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "base": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "tib": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "ntib": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  ">in": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "tlen": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "words": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "empty": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "cpu",
+    "needs": [],
+    "missing": []
+  },
+  "=": {
+    "file": "fsys/kernel/msl16/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  }
+}

@@ -106,7 +106,7 @@
 - **THEN** сборка останавливается с текстом, содержащим `no-such-chip` или `no model`, и восьмёрка не подставляется
 
 ### Requirement: Новый fsys-id входит в консольные тесты
-Новый `cpu:` с консольным kernel и `s" fsys" sys:` MUST попасть в `tests/con_core_test.4th` (манифест в `tests/con_session.4th`, эталон JSON через `doc/j1-word-graph/build.py`, теги в `tests/con_words.py`). `accept` MUST стирать байты 8 и 127 той же семантикой, что у `j1a` / `j1b` / `avr`. Другой корпус того же ISA MUST NOT требовать новый ряд `con_core`. Профиль `j1abs` MUST NOT добавлять ряд `con_core`: это тот же ISA, что `j1a`, и образ читается через порт `j1a`. Профиль `bcpu` с kernel fsys MUST входить в этот ряд. Инструкция агента: `.cursor/rules/fsoc-cpu-target.mdc`, навык `add-cpu-target`.
+Новый `cpu:` с консольным kernel и `s" fsys" sys:` MUST попасть в `tests/con_core_test.4th` (манифест в `tests/con_session.4th`, эталон JSON через `doc/j1-word-graph/build.py`, теги в `tests/con_words.py`). `accept` MUST стирать байты 8 и 127 той же семантикой, что у `j1a` / `j1b` / `avr`. Другой корпус того же ISA MUST NOT требовать новый ряд `con_core`. Профиль `j1abs` MUST NOT добавлять ряд `con_core`: это тот же ISA, что `j1a`, и образ читается через порт `j1a`. Профиль `bcpu` с kernel fsys MUST входить в этот ряд. Профиль `msl16` с kernel fsys MUST входить в этот ряд. Инструкция агента: `.cursor/rules/fsoc-cpu-target.mdc`, навык `add-cpu-target`.
 
 #### Scenario: Платформа без ряда con_core не принята
 - **WHEN** добавляют новый id с `fsys` kernel и не трогают `con_core_test`
@@ -151,7 +151,7 @@
 - **THEN** в нём нет литерала `avr`, нет литерала `stm8`, нет литерала `j1abs` и нет литерала `bcpu` как ветвления сборки образа
 
 ### Requirement: MCU без SwapForth требует fsys
-Пустое `sys:` MUST оставаться `swapforth`. Профиль без дерева SwapForth MUST требовать `s" fsys" sys:` и MUST останавливать сборку при пустом `sys:`. Профиль `bcpu` MUST требовать `s" fsys" sys:` и MUST останавливать сборку до образа SwapForth, если `sys:` пуст или равен `swapforth`. CG=E MUST NOT писать hex, пока профиль не сменит CG.
+Пустое `sys:` MUST оставаться `swapforth`. Профиль без дерева SwapForth MUST требовать `s" fsys" sys:` и MUST останавливать сборку при пустом `sys:`. Профиль `bcpu` MUST требовать `s" fsys" sys:` и MUST останавливать сборку до образа SwapForth, если `sys:` пуст или равен `swapforth`. Профиль `msl16` MUST требовать `s" fsys" sys:` так же и MUST писать слово-hex на 2048 слов (`ADDR=11`), а не Intel HEX. CG=E MUST NOT писать hex, пока профиль не сменит CG.
 
 #### Scenario: AVR без fsys останавливается
 - **WHEN** манифест содержит `s" avr" cpu:` без `sys:` и выполняется `fsoc --build`
@@ -160,6 +160,14 @@
 #### Scenario: bcpu без fsys останавливается
 - **WHEN** манифест содержит `s" bcpu" cpu:` без `sys:` и выполняется `fsoc --build`
 - **THEN** сборка останавливается с текстом `needs fsys` и не читает `swapforth/`
+
+#### Scenario: msl16 без fsys останавливается
+- **WHEN** манифест содержит `s" msl16" cpu:` без `sys:` и выполняется `fsoc --build`
+- **THEN** сборка останавливается с текстом `needs fsys` и не читает `swapforth/`
+
+#### Scenario: msl16 пишет слово
+- **WHEN** манифест содержит `s" soc" task:`, `s" emulation" target:`, `s" msl16" cpu:`, `s" fsys" sys:` и выполняется `fsoc --build`
+- **THEN** `firmware.hex` состоит из строк по четыре hex-цифры, в журнале есть `msl16(msl16)`, `image tool: fsys` и `bytes of 4096`, и нет записи `:00000001FF`
 
 ### Requirement: AVR печатает Hardware и Software
 Сборка образа AVR MUST напечатать `Start build`, `Hardware`, строку `<model>(avr)`, `Hardware complete`, `Software`, `image tool: fsys` или `image tool: fasm`, пути собранных исходников, `firmware.hex: <байт> bytes of <ёмкость flash>`, `Software complete`. Ёмкость MUST быть `avr-flash` в байтах (у ATmega8 — 8192). Строка `ATmega8 Intel HEX` MUST NOT печататься.

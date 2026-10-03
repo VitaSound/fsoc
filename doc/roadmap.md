@@ -48,6 +48,8 @@ Quartus `--load` and a live `fterm` line on USB-UART still need a machine with Q
 
 - `projects/standalone_j1a`, `standalone_j1abs`, and `standalone_j1b` on board `lfe5u25f_cabga256`. The image is the core and its stacks; every port of `j1` is a pin. Routed nextpnr, 25 MHz constraint: j1a 1484/24288 LUT4, 578 DFF, 0/56 `DP16KD`, 82 `TRELLIS_IO`, 123.24 MHz (2026-10-01); j1abs 277/24288 LUT4, 170 DFF, 3/56 `DP16KD`, 82 `TRELLIS_IO`, 84.08 MHz (2026-10-02); j1b 3920/24288 LUT4, 2164 DFF, 0/56 `DP16KD`, 146 `TRELLIS_IO`, 93.71 MHz (2026-10-01). Table: [README](../README.md).
 - `projects/standalone_mcpu` is the experimental MCPU micro-core on the same package board: 45/24288 LUT4, 24 DFF, 18 `TRELLIS_IO`, 245.22 MHz (2026-10-02). Not a Forth profile. Notes: [mcpu.md](mcpu.md).
+- `projects/standalone_cd16` is the CD16 size fit on the same package board: 734/24288 LUT4, 95 DFF, 1/56 `DP16KD`, 115 `TRELLIS_IO`, RAM clock 62.13 MHz (2026-10-03). The Forth profile is `cd16`. Notes: [cd16.md](cd16.md).
+- `projects/standalone_msl16` is the MSL16 size fit on the same package board: 558/24288 LUT4, 54 DFF, 0/56 `DP16KD`, 43 `TRELLIS_IO`, 84.98 MHz (2026-10-03). The Forth profile is `msl16`. Notes: [msl16.md](msl16.md).
 
 ## Done — Quartus II 11 console 0.8.0
 
