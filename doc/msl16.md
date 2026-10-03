@@ -1,6 +1,6 @@
 # MSL16 — ядро на Verilog
 
-Профиль `msl16` в `fsoc/cpu.4th`: класс 0, FMAP `U-S-A-M-3-F`, MM=U, EX-C=S, CG=F. Пустой `sys:` останавливается. `s" fsys" sys:` собирает консоль из `fsys/kernel/msl16` и пишет слово-hex (2048 слов, `ADDR=11`). Проекты: `baremetal/blinky_msl16`, `soc_msl16`, `soc_msl16_blink`. Стенд `standalone` по-прежнему выводит 8-битную шину (`ADDR` по умолчанию 8).
+Профиль `msl16` в `fsoc/cpu.4th`: класс 0, FMAP `U-S-A-M-3-F`, MM=U, EX-C=S, CG=F. Пустой `sys:` останавливается. `s" fsys" sys:` собирает консоль из `fsys/kernel/msl16` и пишет слово-hex (2048 слов, `ADDR=11`). Проекты: `baremetal/blinky_msl16`, `soc_msl16`, `soc_msl16_blink`. Цепочки вызовов в консоли — `tests/msl16_words.4th` (вход `tests/msl16_words.in`). Это не `*_test.4th`: `fmix` его не запускает. Стенд `standalone` по-прежнему выводит 8-битную шину (`ADDR` по умолчанию 8).
 
 Исходник — `msl16_vhdl.zip`, файлы января–апреля 1998, Philip Leong. Архив [msl16_vhdl.zip](https://web.archive.org/web/20070205070645/http://www.cse.cuhk.edu.hk/~phwl/mt/public/archives/old/msl16/msl16_vhdl.zip). Статья: [A FPGA based Forth microprocessor](https://cel.eng.sydney.edu.au/wp-content/uploads/2019/01/msl16_fccm98.pdf). В `README` архива: copyright 1998 Philip Leong, некоммерческое научное и учебное использование разрешено, коммерческое — по отдельной лицензии. Эта строка стоит в `cpu/msl16/msl16.v`.
 

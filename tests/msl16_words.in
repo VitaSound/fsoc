@@ -1,0 +1,33 @@
+: double dup + ;
+: quad double double ;
+: add3 + + ;
+: oct quad double ;
+: nest double quad ;
+: five 5 ;
+: abc 65 emit 66 emit 67 emit ;
+: poke here ! ;
+: peek here @ ;
+: flip2 swap swap ;
+: zap 2drop ;
+: see .s ;
+: one dup + ;
+7 double .
+3 quad .
+2 oct .
+10 20 30 add3 .
+9 nest .
+five .
+abc
+1 2 flip2 . .
+1 2 3 zap .
+1 2 3 see empty
+1 2 3 empty .s
+0 0= .
+5 0= .
+7 1 xor .
+base @ .
+state @ .
+1 2 depth . 2drop
+40 poke peek .
+here 99 , @ .
+11 latest @ 5 + @ execute .
