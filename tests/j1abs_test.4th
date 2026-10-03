@@ -36,7 +36,7 @@ s" j1a" cpu-find cpu-image-id s" j1a" expect-str-eq
 s" iverilog -g2012 -I cpu/j1/j1abs -o /tmp/tb_j1_ref rtl/tb_j1_ref.v cpu/j1/j1a/j1.v cpu/j1/j1a/stack2.v && vvp /tmp/tb_j1_ref | grep -E '^(ram|pc|st0|dsp) ' > /tmp/j1ref.txt && iverilog -g2012 -I cpu/j1/j1abs -o /tmp/tb_j1abs rtl/tb_j1abs.v cpu/j1/j1abs/stacks.v cpu/j1/j1abs/j1.v && vvp /tmp/tb_j1abs | grep -E '^(ram|pc|st0|dsp) ' > /tmp/j1abs.txt && diff -q /tmp/j1ref.txt /tmp/j1abs.txt" system
 $? 0= expect-true
 
-s\" PATH=\"$HOME/oss-cad-suite/bin:$PATH\" cd cpu/j1/j1abs && yosys -p 'read_verilog -I. stacks.v j1.v; synth_ecp5 -top j1; stat' > /tmp/j1abs-stat.txt && grep -E '^[[:space:]]*3[[:space:]]+DP16KD' /tmp/j1abs-stat.txt >/dev/null" system
+s\" PATH=\"$HOME/oss-cad-suite/bin:$PATH\"; export PATH; cd cpu/j1/j1abs && yosys -p 'read_verilog -I. stacks.v j1.v; synth_ecp5 -top j1; stat' > /tmp/j1abs-stat.txt && grep -E '^[[:space:]]*3[[:space:]]+DP16KD' /tmp/j1abs-stat.txt >/dev/null" system
 $? 0= expect-true
 
 \ Baremetal blink: pin toggles.
