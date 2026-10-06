@@ -83,6 +83,30 @@ variable sa-port-u
     16 s" din" sa-bus
     16 s" dout" sa-bus ;
 
+\ TV80 synchronous Z80. di and dout stay separate; no package RAM.
+\ clk, reset_n, wait_n, int_n, nmi_n, busrq_n,
+\ m1_n, mreq_n, iorq_n, rd_n, wr_n, rfsh_n, halt_n, busak_n,
+\ A[15:0], di[7:0], dout[7:0].
+: sa-ports-z80 ( -- )
+    0 sa-pad !
+    s" clk25" 0 s" clk" quartus-map
+    s" reset_n" sa-map1
+    s" wait_n" sa-map1
+    s" int_n" sa-map1
+    s" nmi_n" sa-map1
+    s" busrq_n" sa-map1
+    s" m1_n" sa-map1
+    s" mreq_n" sa-map1
+    s" iorq_n" sa-map1
+    s" rd_n" sa-map1
+    s" wr_n" sa-map1
+    s" rfsh_n" sa-map1
+    s" halt_n" sa-map1
+    s" busak_n" sa-map1
+    16 s" A" sa-bus
+    8 s" di" sa-bus
+    8 s" dout" sa-bus ;
+
 : sa-clock ( -- )
     s" clk"
     plat-clock io.clock-hz@ 1000000000 swap /
@@ -138,8 +162,19 @@ variable sa-port-u
         sa-ports-msl16
         false EXIT
     THEN
+    2dup s" z80" compare 0= IF
+        2drop
+        s" cpu/z80/tv80_alu.v" r@ project-copy-in
+        s" cpu/z80/tv80_reg.v" r@ project-copy-in
+        s" cpu/z80/tv80_mcode.v" r@ project-copy-in
+        s" cpu/z80/tv80_core.v" r@ project-copy-in
+        s" cpu/z80/tv80s.v" r@ project-copy-in
+        s" cpu/z80/standalone.v" s" top.v" r> sa-as
+        sa-ports-z80
+        false EXIT
+    THEN
     rdrop
-    true abort" standalone needs j1a, j1abs, j1b, mcpu, cd16, or msl16" ;
+    true abort" standalone needs j1a, j1abs, j1b, mcpu, cd16, msl16, or z80" ;
 
 : sa-emit ( project -- )
     quartus-reset
@@ -148,7 +183,8 @@ variable sa-port-u
     s" Hardware" fsoc-note
     r@ project.cpu@ 2dup s" mcpu" compare 0= >r
     2dup s" cd16" compare 0= >r
-    2dup s" msl16" compare 0= r> or r> or IF
+    2dup s" msl16" compare 0= >r
+    2dup s" z80" compare 0= r> or r> or r> or IF
         r@ sa-one drop
     ELSE
         r@ sa-one sa-ports

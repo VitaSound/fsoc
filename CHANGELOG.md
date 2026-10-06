@@ -8,6 +8,8 @@
 
 ### Added
 
+- Z80 host fasm (`fsys/fasm/z80`), standalone TV80 core, and fsys console. Empty `sys:` stops; `s" fsys" sys:` writes byte hex (16 KB). Vendored [TV80](https://github.com/hutch31/tv80) (`tv80s`, Mode=0, MIT) under `cpu/z80/`. `projects/standalone_z80` pins the bus on `lfe5u25f_cabga256`. Routed nextpnr, 2026-10-05, constraint 25.00 MHz: 2276/24288 LUT4 (2114 logic, 90 carry, 48 RAM, 24 RAMW), 240 DFF, 0/56 `DP16KD`, 46/197 `TRELLIS_IO`, 69.74 MHz. Projects: `baremetal/blinky_z80`, `soc_z80`, `soc_z80_blink`. The console is a row in `tests/con_core_test.4th`. Notes: `doc/z80.md`.
+
 - MSL16 core translated from Philip Leong's 1998 VHDL (`cpu.vhd`, `ex.vhd`, `stack.vhd` in the archived `msl16_vhdl.zip`). `projects/standalone_msl16` pins the 8-bit memory bus on `lfe5u25f_cabga256`; the two stacks are LUT RAM. Routed nextpnr, 2026-10-03, constraint 25.00 MHz, `ADDR=8`: 558/24288 LUT4 (470 logic, 40 carry, 32 RAM, 16 RAMW), 54 DFF, 0/56 `DP16KD`, 43/197 `TRELLIS_IO`, 84.98 MHz. Profile `msl16` (class 0, MM=U, EX-C=S, CG=F) builds an fsys console: empty `sys:` stops, `s" fsys" sys:` writes word hex, 2048 words, `ADDR=11`. Projects: `baremetal/blinky_msl16`, `soc_msl16`, `soc_msl16_blink`. The console is a row in `tests/con_core_test.4th`. Notes: `doc/msl16.md`.
 
 - Experimental micro-core [MCPU](https://github.com/cpldcpu/MCPU) (GPL-2). Host fasm is `fsys/fasm/mcpu` (64 bytes, `nor,` `add,` `sta,` `jcc,` `dcb,`). `projects/standalone_mcpu` pins every port on `lfe5u25f_cabga256`. Routed nextpnr, 2026-10-02, constraint 25.00 MHz: 45/24288 LUT4 (29 logic, 16 carry), 24 DFF, 0/56 `DP16KD`, 18/197 `TRELLIS_IO`, 245.22 MHz. Not a Forth profile. Notes: `doc/mcpu.md`.

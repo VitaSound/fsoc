@@ -18,10 +18,10 @@
 - **THEN** кросс читает `swapforth/j1a/nuc.fs`
 
 ### Requirement: Излучатель выбирается по CG
-Профиль MUST хранить класс, строку FMAP, MM, EX-C, CG и BM. Сборка образа MUST вызывать излучатель, зарегистрированный для CG этого профиля. Профили `j1a` и `j1b` MUST иметь класс 0, MM=V, EX-C=V, CG=I, BM=C. Профиль `j1abs` MUST иметь класс 0, FMAP `V-V-A-0-I`, MM=V, EX-C=V, CG=I, BM=C, клетку 16 бит и порт образа `j1a`. Профиль `stm8` MUST иметь класс 1 и CG=E. Профиль `z80` MUST иметь класс 2 и CG=F. Профиль `avr` MUST иметь класс 1, MM=D, EX-C=S, CG=F и BM=C. Профиль `bcpu` MUST иметь класс 0, FMAP `U-M-B-A-3-F`, MM=U, EX-C=B, CG=F, BM=C, клетку 16 бит и `cpu-ref` `bcpu`. CG=E MUST NOT собирать hex. CG=F MUST писать Intel HEX только для `avr` при `s" fsys" sys:`. Для `bcpu` при `s" fsys" sys:` CG=F MUST писать слова по 16 бит (четыре hex-цифры на строку), а не Intel HEX. Для `z80` сборка MUST останавливаться до hex. Для `avr` без `fsys` сборка MUST останавливаться до hex.
+Профиль MUST хранить класс, строку FMAP, MM, EX-C, CG и BM. Сборка образа MUST вызывать излучатель, зарегистрированный для CG этого профиля. Профили `j1a` и `j1b` MUST иметь класс 0, MM=V, EX-C=V, CG=I, BM=C. Профиль `j1abs` MUST иметь класс 0, FMAP `V-V-A-0-I`, MM=V, EX-C=V, CG=I, BM=C, клетку 16 бит и порт образа `j1a`. Профиль `stm8` MUST иметь класс 1 и CG=E. Профиль `z80` MUST иметь класс 2, CG=F, клетку 16 бит и `cpu-ref` `cerberus-z80`. Профиль `avr` MUST иметь класс 1, MM=D, EX-C=S, CG=F и BM=C. Профиль `bcpu` MUST иметь класс 0, FMAP `U-M-B-A-3-F`, MM=U, EX-C=B, CG=F, BM=C, клетку 16 бит и `cpu-ref` `bcpu`. CG=E MUST NOT собирать hex. CG=F MUST писать Intel HEX только для `avr` при `s" fsys" sys:`. Для `bcpu` при `s" fsys" sys:` CG=F MUST писать слова по 16 бит (четыре hex-цифры на строку), а не Intel HEX. Для `z80` при `s" fsys" sys:` CG=F MUST писать байты (две hex-цифры на строку), а не Intel HEX. Для `avr` без `fsys` сборка MUST останавливаться до hex.
 
 #### Scenario: Каркас без образа
-- **WHEN** манифест содержит `s" stm8" cpu:` или `s" z80" cpu:`
+- **WHEN** манифест содержит `s" stm8" cpu:`
 - **THEN** сборка останавливается до запуска `gforth`, и в дереве нет скопированного `forth.asm`
 
 #### Scenario: ATmega8 пишет Intel HEX
@@ -39,6 +39,10 @@
 #### Scenario: bcpu пишет слово
 - **WHEN** манифест содержит `s" soc" task:`, `s" emulation" target:`, `s" bcpu" cpu:`, `s" fsys" sys:` и выполняется `fsoc --build`
 - **THEN** `firmware.hex` состоит из строк по четыре hex-цифры, в журнале есть `bcpu(bcpu)` и `image tool: fsys`, и нет записи `:00000001FF`
+
+#### Scenario: z80 пишет байт
+- **WHEN** манифест содержит `s" soc" task:`, `s" emulation" target:`, `s" z80" cpu:`, `s" fsys" sys:` и выполняется `fsoc --build`
+- **THEN** `firmware.hex` состоит из строк по две hex-цифры, в журнале есть `cerberus-z80(z80)`, `image tool: fsys` и `bytes of 16384`, и нет записи `:00000001FF`
 
 ### Requirement: J1B не затирает J1a
 Исходники J1B MUST быть взяты из каталога `original/j1b` репозитория wzab/AFCK_J1B_FORTH: `cross.fs`, `basewords.fs`, `nuc.fs`, `swapforth.fs`, `verilog/j1.v`, `verilog/stack.v`, `verilog/common.h`. Файл ядра в fsoc MUST называться `j1b.v` и лежать в комплекте `cpu/j1/j1b/`. Существующий `cpu/j1/j1a/j1.v` MUST остаться с `` `define WIDTH 16 ``. VHDL, I2C и проект Vivado платы AFCK MUST NOT копироваться. Рядом MUST лежать текст лицензии BSD Боумана.
@@ -106,7 +110,7 @@
 - **THEN** сборка останавливается с текстом, содержащим `no-such-chip` или `no model`, и восьмёрка не подставляется
 
 ### Requirement: Новый fsys-id входит в консольные тесты
-Новый `cpu:` с консольным kernel и `s" fsys" sys:` MUST попасть в `tests/con_core_test.4th` (манифест в `tests/con_session.4th`, эталон JSON через `doc/j1-word-graph/build.py`, теги в `tests/con_words.py`). `accept` MUST стирать байты 8 и 127 той же семантикой, что у `j1a` / `j1b` / `avr`. Другой корпус того же ISA MUST NOT требовать новый ряд `con_core`. Профиль `j1abs` MUST NOT добавлять ряд `con_core`: это тот же ISA, что `j1a`, и образ читается через порт `j1a`. Профиль `bcpu` с kernel fsys MUST входить в этот ряд. Профиль `msl16` с kernel fsys MUST входить в этот ряд. Инструкция агента: `.cursor/rules/fsoc-cpu-target.mdc`, навык `add-cpu-target`.
+Новый `cpu:` с консольным kernel и `s" fsys" sys:` MUST попасть в `tests/con_core_test.4th` (манифест в `tests/con_session.4th`, эталон JSON через `doc/j1-word-graph/build.py`, теги в `tests/con_words.py`). `accept` MUST стирать байты 8 и 127 той же семантикой, что у `j1a` / `j1b` / `avr`. Другой корпус того же ISA MUST NOT требовать новый ряд `con_core`. Профиль `j1abs` MUST NOT добавлять ряд `con_core`: это тот же ISA, что `j1a`, и образ читается через порт `j1a`. Профиль `bcpu` с kernel fsys MUST входить в этот ряд. Профиль `msl16` с kernel fsys MUST входить в этот ряд. Профиль `z80` с kernel fsys MUST входить в этот ряд. Инструкция агента: `.cursor/rules/fsoc-cpu-target.mdc`, навык `add-cpu-target`.
 
 #### Scenario: Платформа без ряда con_core не принята
 - **WHEN** добавляют новый id с `fsys` kernel и не трогают `con_core_test`
@@ -119,6 +123,10 @@
 #### Scenario: bcpu в консольных тестах
 - **WHEN** в профилях есть `bcpu` и есть `fsys/kernel/bcpu`
 - **THEN** `tests/con_core_test.4th` гоняет сеанс `bcpu`
+
+#### Scenario: z80 в консольных тестах
+- **WHEN** в профилях есть `z80` и есть `fsys/kernel/z80`
+- **THEN** `tests/con_core_test.4th` гоняет сеанс `z80`
 
 ### Requirement: Перед сдачей нового ядра — три сеанса эмуляции
 Короткий `*_test.4th` (одна сумма, grep журнала сборки, `FSOC_EMU_EDGES=2`) MUST NOT быть сдачей нового `cpu:` и MUST NOT быть сдачей другого корпуса того же ISA. Последний шаг разработки, до передачи на проверку, MUST прогнать три сеанса ниже и оставить журналы. Любой провал MUST останавливать сдачу. Многоминутный прогон словаря MUST NOT называться `*_test.4th` и MUST NOT входить в `fmix`; пропуск этого файла MUST NOT считаться сдачей. Новый id с собственным kernel MUST выполнить для сеанса консоли свой ряд `con_core`, а не только записать его в файл. Другой корпус того же ISA MUST выполнить скрипт словаря порта (как `gforth tests/j1abs_words.4th`): тот же словарь, что у порта, на новом теле. Строка, которую человек набирает и завершает Enter, MUST проверяться как запуск руками: `FSOC_EMU_UART_GAP` в окружении этого прогона MUST NOT быть задана. Панель копит знаки у себя и в UART их не шлёт; по Enter строка уходит целиком (`push_line`), так же как `FSOC_EMU_UART_IN`. Медленный палец MUST NOT считаться медленным проводом. Пауза между этими байтами MUST браться из профиля, если он её задаёт, а не из переменной, которую выставил тест. Прогон, где тест сам экспортирует паузу, MUST NOT считаться этой проверкой.
@@ -151,7 +159,7 @@
 - **THEN** в нём нет литерала `avr`, нет литерала `stm8`, нет литерала `j1abs` и нет литерала `bcpu` как ветвления сборки образа
 
 ### Requirement: MCU без SwapForth требует fsys
-Пустое `sys:` MUST оставаться `swapforth`. Профиль без дерева SwapForth MUST требовать `s" fsys" sys:` и MUST останавливать сборку при пустом `sys:`. Профиль `bcpu` MUST требовать `s" fsys" sys:` и MUST останавливать сборку до образа SwapForth, если `sys:` пуст или равен `swapforth`. Профиль `msl16` MUST требовать `s" fsys" sys:` так же и MUST писать слово-hex на 2048 слов (`ADDR=11`), а не Intel HEX. CG=E MUST NOT писать hex, пока профиль не сменит CG.
+Пустое `sys:` MUST оставаться `swapforth`. Профиль без дерева SwapForth MUST требовать `s" fsys" sys:` и MUST останавливать сборку при пустом `sys:`. Профиль `bcpu` MUST требовать `s" fsys" sys:` и MUST останавливать сборку до образа SwapForth, если `sys:` пуст или равен `swapforth`. Профиль `msl16` MUST требовать `s" fsys" sys:` так же и MUST писать слово-hex на 2048 слов (`ADDR=11`), а не Intel HEX. Профиль `z80` MUST требовать `s" fsys" sys:` и MUST писать byte-hex на 16384 байт, а не Intel HEX. CG=E MUST NOT писать hex, пока профиль не сменит CG.
 
 #### Scenario: AVR без fsys останавливается
 - **WHEN** манифест содержит `s" avr" cpu:` без `sys:` и выполняется `fsoc --build`
@@ -168,6 +176,10 @@
 #### Scenario: msl16 пишет слово
 - **WHEN** манифест содержит `s" soc" task:`, `s" emulation" target:`, `s" msl16" cpu:`, `s" fsys" sys:` и выполняется `fsoc --build`
 - **THEN** `firmware.hex` состоит из строк по четыре hex-цифры, в журнале есть `msl16(msl16)`, `image tool: fsys` и `bytes of 4096`, и нет записи `:00000001FF`
+
+#### Scenario: z80 без fsys останавливается
+- **WHEN** манифест содержит `s" z80" cpu:` без `sys:` и выполняется `fsoc --build`
+- **THEN** сборка останавливается с текстом `needs fsys` и не читает `swapforth/`
 
 ### Requirement: AVR печатает Hardware и Software
 Сборка образа AVR MUST напечатать `Start build`, `Hardware`, строку `<model>(avr)`, `Hardware complete`, `Software`, `image tool: fsys` или `image tool: fasm`, пути собранных исходников, `firmware.hex: <байт> bytes of <ёмкость flash>`, `Software complete`. Ёмкость MUST быть `avr-flash` в байтах (у ATmega8 — 8192). Строка `ATmega8 Intel HEX` MUST NOT печататься.

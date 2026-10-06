@@ -576,6 +576,15 @@ def check_msl16(data):
         raise SystemExit("0= should come from the msl16 kernel")
 
 
+def check_z80(data):
+    for name in ("words", "quit", ".s", "+", ":", "0=", "empty"):
+        require(data, name, "fsys-z80 lost " + name)
+    if data["+"]["file"].find("kernel/z80") < 0:
+        raise SystemExit("+ should come from the z80 kernel")
+    if data["0="]["file"].find("kernel/z80") < 0:
+        raise SystemExit("0= should come from the z80 kernel")
+
+
 def check_sf_b(data):
     if "j1a" in data["lshift"]["file"]:
         raise SystemExit("j1b lshift points at j1a")
@@ -619,6 +628,10 @@ DICTS = [
         ("fsys/kernel/msl16/kernel.4th", "kernel"),
         ("fsys/msl16/extra-min.4th", "colon"),
     ], check_msl16),
+    ("fsys-z80", [
+        ("fsys/kernel/z80/kernel.4th", "kernel"),
+        ("fsys/z80/extra-min.4th", "colon"),
+    ], check_z80),
     ("swapforth-j1a", [
         ("swapforth/j1a/basewords.fs", "primitive"),
         ("swapforth/j1a/nuc.fs", "header"),

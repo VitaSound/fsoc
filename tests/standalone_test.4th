@@ -68,6 +68,14 @@ s" reset" s" top.v" tmp-grep? expect-true
 s" uart.v" tmp-exists? expect-false
 test-teardown
 
+test-setup
+s" standalone_z80" tmp-use-project
+46 s" tv80s.v" sa-shape
+s" reset_n" s" top.v" tmp-grep? expect-true
+s" tv80_core.v" tmp-exists? expect-true
+s" uart.v" tmp-exists? expect-false
+test-teardown
+
 test-finish
 expect-stack-clean
 cr ." standalone_test ok" cr

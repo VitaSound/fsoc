@@ -1,0 +1,8 @@
+TV80 Z80-compatible core. Not a Forth console image.
+
+The five tv80_*.v / tv80s.v files are vendored from
+https://github.com/hutch31/tv80 (Guy Hutchison, MIT). They are a Verilog
+port of Daniel Wallner's T80. standalone.v is the fsoc pin wrapper.
+
+The MIT text from upstream is kept in each core file header. This note
+records provenance for the directory.

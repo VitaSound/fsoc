@@ -18,6 +18,9 @@
 : msl16-fsys-manifest ( -- )
    s\" s\" soc\" task:\ns\" emulation\" target:\ns\" msl16\" cpu:\ns\" fsys\" sys:\n" tmp-manifest ;
 
+: z80-fsys-manifest ( -- )
+   s\" s\" soc\" task:\ns\" emulation\" target:\ns\" z80\" cpu:\ns\" fsys\" sys:\n" tmp-manifest ;
+
 : con-py ( args-a args-u -- flag )
    s" python3 " fsoc-root fjson.str-concat s" /tests/con_words.py " fsoc-cat+
    2swap fsoc-cat+
@@ -73,6 +76,11 @@
    s" msl16" con-write-in
    j1-con-run expect-true
    s" msl16" s" sim.log" con-check ;
+
+: z80-con-session ( -- )
+   s" z80" con-write-in
+   j1-con-run expect-true
+   s" z80" s" sim.log" con-check ;
 
 : avr-con-session ( -- )
    s" avr" con-write-in

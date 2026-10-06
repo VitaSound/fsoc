@@ -190,7 +190,10 @@ s" S" cpu-mm
 s" S" cpu-exc
 s" F" cpu-cg
 s" C" cpu-bm
+16 cpu-width
 s" cerberus-z80" cpu-ref
+s" byte hex" cpu-note
+120 cpu-uart-gap
 
 \ ATmega8: Harvard MCU, STC colon, host fasm.
 s" avr" cpu-new

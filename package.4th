@@ -30,6 +30,10 @@ forth-package
     key-list flint-exclude fsys/kernel/msl16/
     key-list flint-exclude fsys/msl16/
     key-list flint-exclude fsys/host/msl16-cross.4th
+    key-list flint-exclude fsys/fasm/z80/
+    key-list flint-exclude fsys/kernel/z80/
+    key-list flint-exclude fsys/host/z80-cross.4th
+    key-list flint-exclude fsys/z80/
     key-list flint-exclude projects/
     key-list tags gforth
     key-list tags soc

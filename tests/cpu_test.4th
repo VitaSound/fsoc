@@ -27,7 +27,9 @@ s" stm8" cpu-find cpu.cg$ @ fsoc-fetch s" E" expect-str-eq
 s" stm8" cpu-find cpu.ref$ @ fsoc-fetch s" stm8ef" expect-str-eq
 s" z80" cpu-find cpu.class @ 2 expect=
 s" z80" cpu-find cpu.cg$ @ fsoc-fetch s" F" expect-str-eq
+s" z80" cpu-find cpu.width @ 16 expect=
 s" z80" cpu-find cpu.ref$ @ fsoc-fetch s" cerberus-z80" expect-str-eq
+s" z80" cpu-find cpu.note$ @ fsoc-fetch s" byte hex" expect-str-eq
 s" avr" cpu-find cpu.class @ 1 expect=
 s" avr" cpu-find cpu.fmap$ @ fsoc-fetch s" D-S-A-M-3-F" expect-str-eq
 s" avr" cpu-find cpu.mm$ @ fsoc-fetch s" D" expect-str-eq
@@ -145,7 +147,7 @@ test-teardown
 
 s\" s\" soc\" task:\ns\" emulation\" target:\ns\" z80\" cpu:\n" cpu-build
 expect-false
-s" z80" s" sim.log" tmp-grep? expect-true
+s" needs fsys" s" sim.log" tmp-grep? expect-true
 s" gforth cross.fs" s" sim.log" tmp-grep? expect-false
 s" forth.asm" tmp-exists? expect-false
 s" firmware.hex" tmp-exists? expect-false

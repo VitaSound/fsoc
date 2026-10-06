@@ -21,3 +21,4 @@ out.vcd
 trace.vcd
 /tmp/
 firmware/firmware.hex
+.aider*

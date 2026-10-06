@@ -56,6 +56,7 @@ consider() {
             note tests/bcpu_test.4th
             note tests/cd16_test.4th
             note tests/msl16_test.4th
+            note tests/z80_test.4th
             ;;
         tests/con_core_test.4th)
             note tests/con_core_test.4th
@@ -92,6 +93,15 @@ consider() {
             ;;
         tests/msl16_test.4th)
             note tests/msl16_test.4th
+            ;;
+        cpu/z80/*|fsys/kernel/z80/*|fsys/z80/*|\
+        fsys/fasm/z80/*|fsys/host/z80-cross.4th|\
+        firmware/z80_blink.fs|firmware/blink_z80.4th)
+            note tests/con_core_test.4th
+            note tests/z80_test.4th
+            ;;
+        tests/z80_test.4th)
+            note tests/z80_test.4th
             ;;
         fsys/kernel/avr/*|fsys/avr/*|fsys/fasm/avr/*|\
         fsys/host/avr-cross.4th|\

@@ -488,6 +488,28 @@ MSL16_COLON = {
     ";": (": tsemi 9 . ; tsemi", ["9"]),
 }
 
+Z80_RUN = {
+    "+": ("1 2 + .", ["3"]),
+    "xor": ("3 1 xor .", ["2"]),
+    "dup": ("7 dup . .", ["7"]),
+    "drop": ("9 8 drop .", ["9"]),
+    "swap": ("1 2 swap . .", ["1"]),
+    "2drop": ("1 2 3 2drop .", ["1"]),
+    "0=": ("0 0= .", ["-1"]),
+    ".": ("11 .", ["11"]),
+    ".s": ("1 2 3 .s 2drop drop", ["<3> 1 2 3"]),
+    "emit": ("51 emit", ["3"]),
+    "cr": ("cr", [" ok"]),
+    "space": ("space", [" ok"]),
+    "depth": ("depth .", ["0"]),
+    "words": ("words", ["dup"]),
+}
+
+Z80_COLON = {
+    ":": (": tplus 1 2 + . ; tplus", ["3"]),
+    ";": (": tsemi 9 . ; tsemi", ["9"]),
+}
+
 CORE_HAS = [
     "3",
     " ok",
@@ -519,6 +541,8 @@ def dict_for(cpu):
         return load_dict("fsys-cd16.json")
     if cpu == "msl16":
         return load_dict("fsys-msl16.json")
+    if cpu == "z80":
+        return load_dict("fsys-z80.json")
     raise SystemExit("cpu " + cpu)
 
 
@@ -543,6 +567,14 @@ def recipe(name, cpu):
         return ("colon", line, has or [])
     if cpu == "msl16":
         return ("skip", "msl16 image", [])
+    if cpu == "z80" and name in Z80_RUN:
+        line, has = Z80_RUN[name]
+        return ("run", line, has or [])
+    if cpu == "z80" and name in Z80_COLON:
+        line, has = Z80_COLON[name]
+        return ("colon", line, has or [])
+    if cpu == "z80":
+        return ("skip", "z80 image", [])
     if cpu == "j1b" and name in J1B_SKIP:
         return ("skip", J1B_SKIP[name], [])
     if name in SKIP:
@@ -605,7 +637,7 @@ def write_input(cpu, path):
         b"21 DOUBLE .\n",
         b"words\n",
     ]
-    if cpu not in ("avr", "bcpu", "cd16", "msl16"):
+    if cpu not in ("avr", "bcpu", "cd16", "msl16", "z80"):
         lines += [
             b"variable mh\n",
             b"variable ml\n",
@@ -623,13 +655,13 @@ def write_input(cpu, path):
             continue
         if cpu == "avr" and rec[0] == "colon" and name not in AVR_COLON:
             continue
-        if cpu not in ("avr", "bcpu", "cd16", "msl16"):
+        if cpu not in ("avr", "bcpu", "cd16", "msl16", "z80"):
             lines.append((line + " cs").encode("ascii") + b"\n")
             if rec[0] == "colon" or line.lstrip().startswith(":"):
                 lines.append(b"ml @ latest ! mh @ here - allot\n")
         else:
             lines.append(line.encode("ascii") + b"\n")
-            if cpu in ("bcpu", "cd16", "msl16"):
+            if cpu in ("bcpu", "cd16", "msl16", "z80"):
                 lines.append(b"empty\n")
     Path(path).write_bytes(b"".join(lines))
 
@@ -697,7 +729,7 @@ def main(argv):
         )
     cmd = argv[1]
     if cmd == "tags":
-        for cpu in argv[2:] or ("j1a", "j1b", "avr", "bcpu", "cd16", "msl16"):
+        for cpu in argv[2:] or ("j1a", "j1b", "avr", "bcpu", "cd16", "msl16", "z80"):
             check_tags(cpu)
         return
     if cmd == "write":

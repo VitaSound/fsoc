@@ -269,6 +269,7 @@ fsoc --build
 | mcpu | 45 (29 логики, 16 переноса) | 24 | 0 | 18 | 245,22 МГц |
 | cd16 | 734 (660 логики, 74 переноса) | 95 | 1 | 115 | 62,13 МГц на `clk50`, 97,30 МГц на `clk25` |
 | msl16 | 558 (470 логики, 40 переноса, 32 RAM, 16 RAMW) | 54 | 0 | 43 | 84,98 МГц |
+| z80 | 2276 (2114 логики, 90 переноса, 48 RAM, 24 RAMW) | 240 | 0 | 46 | 69,74 МГц |
 | LFE5U-25F | 24288 | 24288 | 56 | 197 | 25,00 МГц |
 
 `projects/standalone_j1a`, `projects/standalone_j1abs` и `projects/standalone_j1b` — ядро и его стеки. Этот файл — карта шаров CABGA256: `clk` на `P6` при 25 МГц, затем обычный PIO, затем шары PCLK. Задача `standalone` привязывает каждый порт модуля `j1` к пину `top`. `j1b` — 32-битное ядро, поэтому `dout`, `io_din` и `mem_din` — 32 бита. Один разведённый fit nextpnr (2026-10-01) уложился в 25,00 МГц. Ту же строку Fmax хранит `doc/j1-word-graph/build.py` для лампы.
@@ -299,6 +300,17 @@ fsoc --build
 ```bash
 cd projects/standalone_msl16
 fsoc --build
+```
+
+`projects/standalone_z80` — ядро [TV80](https://github.com/hutch31/tv80) (MIT), синхронная обёртка `tv80s`, Mode=0. Заметки: [doc/z80.md](doc/z80.md). Профиль `z80`: пустой `sys:` останавливается, `s" fsys" sys:` собирает консоль (byte hex, 16 КБ), проекты — `baremetal/blinky_z80`, `soc_z80` и `soc_z80_blink`. Хостовый ассемблер — `fsys/fasm/z80` (байт на ячейку, `z80-wl`). На пины standalone выведены `clk`, `reset_n`, стробы шины, `A[15:0]`, `di[7:0]` и `dout[7:0]`. Один разведённый fit nextpnr (2026-10-05) уложился в 25,00 МГц.
+
+```bash
+cd projects/standalone_z80
+fsoc --build
+cd projects/baremetal/blinky_z80
+FSOC_EMU_EDGES=4 FSOC_EMU_FAST=1 FSOC_EMU_CON=pin fsoc --build
+cd projects/soc_z80
+FSOC_EMU_CON=term fsoc --build
 ```
 
 `tools/fterm.4th` и `firmware/midi_foot.4th`: `fterm` говорит с настоящим портом, когда ему дан путь; `midi_foot` — хостовый макет FOOTSWITCH-SCAN.

@@ -59,6 +59,10 @@ s" cpu/msl16/msl16.v" pp-list
 s" tests/msl16_test.4th" pp-has
 s" tests/con_core_test.4th" pp-has
 
+s" cpu/z80/tv80s.v" pp-list
+s" tests/z80_test.4th" pp-has
+s" tests/con_core_test.4th" pp-has
+
 test-teardown
 test-finish
 expect-stack-clean
