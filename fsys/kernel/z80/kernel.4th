@@ -294,6 +294,7 @@ k-lab zbranch
    k-call zdrop
    af pop,
    k-jnz-fwd zbrnz
+   de push,
    l c ld,
    h b ld,
    e mhl ld,
@@ -301,6 +302,7 @@ k-lab zbranch
    d mhl ld,
    l e ld,
    h d ld,
+   de pop,
    jphl,
 k-lab zbrnz
    bc inc,
