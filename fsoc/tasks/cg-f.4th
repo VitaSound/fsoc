@@ -169,27 +169,8 @@ include cg-z80.4th
 : blinky-mcu-f ( project -- )
    dup soc-cpu-of { project cpu }
    cpu cpu.cg$ @ fsoc-fetch s" F" compare 0= if
-      cpu cpu.id$ @ fsoc-fetch s" avr" compare 0= if
-         project cpu avr-blinky
-      else
-         cpu cpu.id$ @ fsoc-fetch s" bcpu" compare 0= if
-            project cpu bcpu-blinky
-         else
-            cpu cpu.id$ @ fsoc-fetch s" cd16" compare 0= if
-               project cpu cd16-blinky
-            else
-               cpu cpu.id$ @ fsoc-fetch s" msl16" compare 0= if
-                  project cpu msl16-blinky
-               else
-                  cpu cpu.id$ @ fsoc-fetch s" z80" compare 0= if
-                     project cpu z80-blinky
-                  else
-                     cpu s" blinky: no fasm" cpu-stop
-                  then
-               then
-            then
-         then
-      then
+      cpu cpu-need-cg-blinky
+      cpu.cg-blinky @ >r project cpu r> execute
    else
       cpu s" blinky: not CG=F" cpu-stop
    then ;
@@ -197,21 +178,9 @@ include cg-z80.4th
 ' blinky-mcu-f is blinky-mcu
 
 : cg-f ( project cpu -- )
-   dup cpu.id$ @ fsoc-fetch s" avr" compare 0= if
-      avr-hex exit
-   then
-   dup cpu.id$ @ fsoc-fetch s" bcpu" compare 0= if
-      bcpu-soc exit
-   then
-   dup cpu.id$ @ fsoc-fetch s" cd16" compare 0= if
-      cd16-soc exit
-   then
-   dup cpu.id$ @ fsoc-fetch s" msl16" compare 0= if
-      msl16-soc exit
-   then
-   dup cpu.id$ @ fsoc-fetch s" z80" compare 0= if
-      z80-soc exit
-   then
-   cg-halt ;
+   cpu-need-cg-soc
+   dup cpu.cg-soc @ execute ;
+
+' avr-hex ' avr-blinky s" avr" cpu-bind-cg
 
 s" F" ' cg-f cg-register

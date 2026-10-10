@@ -68,16 +68,13 @@ create cd16-hex 4 allot
 : cd16-map { project btn? -- }
    current-platform @ 0= if exit then
    plat-clock blinky-clk !
-   blinky-clk @ io.name$ @ fsoc-fetch blinky-clk @ io.index @ request
-   s" user_led" 0 request
-   btn? if s" user_btn" 0 request then
    s" cd16" quartus-project
    project project.top-module@ 2dup quartus-top
    s" .v" fsoc-cat+ 2dup quartus-vfile fjson.str-free
    s" clk" blinky-clk @ io.clock-hz@ blinky-period quartus-clock
-   blinky-clk @ io.name$ @ fsoc-fetch blinky-clk @ io.index @ s" clk" quartus-map
-   s" user_led" 0 s" led" quartus-map
-   btn? if s" user_btn" 0 s" btn" quartus-map then ;
+   s" clk" board-map-clock
+   s" led" board-map-led
+   btn? if s" user_btn" 0 s" btn" pin-map then ;
 
 : cd16-blink? ( project -- f )
    s" blink" rot project.opt@ s" 1" compare 0= ;
@@ -163,3 +160,5 @@ variable cd16-project
    s" fsoc/tasks/soc_main.cpp" harness:
    project 0 cd16-map
    s" Software complete" fsoc-note ;
+
+' cd16-soc ' cd16-blinky s" cd16" cpu-bind-cg

@@ -28,14 +28,12 @@ variable blinky-clk
 : blinky-map-board ( project -- )
     current-platform @ 0= IF drop EXIT THEN
     plat-clock blinky-clk !
-    blinky-clk @ io.name$ @ fsoc-fetch blinky-clk @ io.index @ request
-    s" user_led" 0 request
     s" blinky" quartus-project
     project.top-module@ 2dup quartus-top
     s" .v" fsoc-cat+ 2dup quartus-vfile fjson.str-free
     s" clk" blinky-clk @ io.clock-hz@ blinky-period quartus-clock
-    blinky-clk @ io.name$ @ fsoc-fetch blinky-clk @ io.index @ s" clk" quartus-map
-    s" user_led" 0 s" led" quartus-map ;
+    s" clk" board-map-clock
+    s" led" board-map-led ;
 
 : blinky-hdl ( project -- )
     >r

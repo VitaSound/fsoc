@@ -69,16 +69,13 @@ create bcpu-hex 4 allot
 : bcpu-map { project btn? -- }
    current-platform @ 0= if exit then
    plat-clock blinky-clk !
-   blinky-clk @ io.name$ @ fsoc-fetch blinky-clk @ io.index @ request
-   s" user_led" 0 request
-   btn? if s" user_btn" 0 request then
    s" bcpu" quartus-project
    project project.top-module@ 2dup quartus-top
    s" .v" fsoc-cat+ 2dup quartus-vfile fjson.str-free
    s" clk" blinky-clk @ io.clock-hz@ blinky-period quartus-clock
-   blinky-clk @ io.name$ @ fsoc-fetch blinky-clk @ io.index @ s" clk" quartus-map
-   s" user_led" 0 s" led" quartus-map
-   btn? if s" user_btn" 0 s" btn" quartus-map then ;
+   s" clk" board-map-clock
+   s" led" board-map-led
+   btn? if s" user_btn" 0 s" btn" pin-map then ;
 
 : bcpu-yosys? ( project -- f )
    project.target@ s" yosys" compare 0= ;
@@ -168,3 +165,5 @@ variable bcpu-project
       project 0 bcpu-map
    then
    s" Software complete" fsoc-note ;
+
+' bcpu-soc ' bcpu-blinky s" bcpu" cpu-bind-cg

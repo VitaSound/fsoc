@@ -152,11 +152,26 @@
 - **THEN** ядро на проверку не сдаётся: нет повторного мигания и нет ответа `words`
 
 ### Requirement: Сборка MCU ветвится по CG
-Задача `soc` MUST выбирать излучатель по полю CG профиля. `fsoc/tasks/soc.4th` MUST NOT ветвить сборку по литералу id MCU (`avr`, `stm8`, `z80`, `j1abs`, `bcpu` и любому следующему). Ветвление по CG MUST жить в уже зарегистрированном излучателе (`cg-f.4th` для CG=F, путь CG=I для J1). Новый CG=F с `fsys` MUST писать Intel HEX тем же излучателем CG=F. `bcpu` MUST ветвиться внутри `cg-f.4th` и MUST писать слово-образ, а не Intel HEX.
+Задача `soc` MUST выбирать излучатель по полю CG профиля. `fsoc/tasks/soc.4th` MUST NOT ветвить сборку по литералу id MCU (`avr`, `stm8`, `z80`, `j1abs`, `bcpu` и любому следующему). Ветвление по CG MUST жить в уже зарегистрированном излучателе (`cg-f.4th` для CG=F, путь CG=I для J1). Внутри CG=F выбор профиля MUST идти через xt-поля `cpu%` (`cpu.cg-soc` для soc/fsys, `cpu.cg-blinky` для baremetal blinky), установленные при регистрации профиля. `cg-f.4th` и слово `blinky-mcu-f` MUST NOT содержать цепочку `s" <id>" compare` по id MCU. Новый CG=F с `fsys` MUST писать образ тем же излучателем CG=F, вызывая xt профиля. Формат образа (Intel HEX / слово-hex / byte-hex) MUST оставаться как у текущего профиля.
 
 #### Scenario: soc.4th не знает MCU-профили
 - **WHEN** читается `fsoc/tasks/soc.4th`
 - **THEN** в нём нет литерала `avr`, нет литерала `stm8`, нет литерала `j1abs` и нет литерала `bcpu` как ветвления сборки образа
+
+#### Scenario: cg-f без id-compare
+- **WHEN** читаются `fsoc/tasks/cg-f.4th` и определение `blinky-mcu-f`
+- **THEN** в них нет цепочки `s" avr" compare` / `s" bcpu" compare` / `s" cd16" compare` / `s" msl16" compare` / `s" z80" compare` для выбора излучателя
+
+#### Scenario: Новый CG=F регистрирует xt
+- **WHEN** в `cpu.4th` регистрируется профиль с CG=F
+- **THEN** у него ненулевые `cpu.cg-soc` и `cpu.cg-blinky`, и `fsoc --build` для `s" fsys" sys:` вызывает `cpu.cg-soc`
+
+### Requirement: Профиль CG=F без xt останавливается
+Профиль с CG=F MUST иметь установленные `cpu.cg-soc` и `cpu.cg-blinky` до первой сборки. Нулевой xt MUST останавливать сборку с текстом, содержащим id профиля и `no cg-soc` или `no cg-blinky`, и MUST NOT писать `firmware.hex`.
+
+#### Scenario: CG=F без cg-soc
+- **WHEN** профиль с CG=F имеет `cpu.cg-soc` равный 0 и выполняется `fsoc --build` задачи `soc` с `s" fsys" sys:`
+- **THEN** сборка останавливается до записи `firmware.hex` с текстом, содержащим `no cg-soc`
 
 ### Requirement: MCU без SwapForth требует fsys
 Пустое `sys:` MUST оставаться `swapforth`. Профиль без дерева SwapForth MUST требовать `s" fsys" sys:` и MUST останавливать сборку при пустом `sys:`. Профиль `bcpu` MUST требовать `s" fsys" sys:` и MUST останавливать сборку до образа SwapForth, если `sys:` пуст или равен `swapforth`. Профиль `msl16` MUST требовать `s" fsys" sys:` так же и MUST писать слово-hex на 2048 слов (`ADDR=11`), а не Intel HEX. Профиль `z80` MUST требовать `s" fsys" sys:` и MUST писать byte-hex на 16384 байт, а не Intel HEX. CG=E MUST NOT писать hex, пока профиль не сменит CG.

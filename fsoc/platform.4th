@@ -242,3 +242,6 @@ variable plat-clock-io
     depth r> <> IF true abort" board leaves stack" THEN
     fjson.str-free
     plat@ plat.family$ @ 0= IF true abort" board has no family" THEN ;
+
+\ Pin helpers (board-map-*, pin-map) live in platform-pinmap.4th —
+\ loaded after targets/quartus.4th so quartus-map is a compile-time xt.

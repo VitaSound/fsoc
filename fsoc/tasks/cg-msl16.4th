@@ -69,16 +69,13 @@ create msl16-hex 4 allot
 : msl16-map { project btn? -- }
    current-platform @ 0= if exit then
    plat-clock blinky-clk !
-   blinky-clk @ io.name$ @ fsoc-fetch blinky-clk @ io.index @ request
-   s" user_led" 0 request
-   btn? if s" user_btn" 0 request then
    s" msl16" quartus-project
    project project.top-module@ 2dup quartus-top
    s" .v" fsoc-cat+ 2dup quartus-vfile fjson.str-free
    s" clk" blinky-clk @ io.clock-hz@ blinky-period quartus-clock
-   blinky-clk @ io.name$ @ fsoc-fetch blinky-clk @ io.index @ s" clk" quartus-map
-   s" user_led" 0 s" led" quartus-map
-   btn? if s" user_btn" 0 s" btn" quartus-map then ;
+   s" clk" board-map-clock
+   s" led" board-map-led
+   btn? if s" user_btn" 0 s" btn" pin-map then ;
 
 : msl16-blink? ( project -- f )
    s" blink" rot project.opt@ s" 1" compare 0= ;
@@ -159,3 +156,5 @@ variable msl16-project
    s" fsoc/tasks/soc_main.cpp" harness:
    project 0 msl16-map
    s" Software complete" fsoc-note ;
+
+' msl16-soc ' msl16-blinky s" msl16" cpu-bind-cg

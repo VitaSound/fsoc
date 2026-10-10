@@ -22,6 +22,8 @@ begin-structure cpu%
     field: cpu.kit
     field: cpu.port$
     field: cpu.uart-gap
+    field: cpu.cg-soc      \ xt ( project cpu -- ) CG=F soc/fsys
+    field: cpu.cg-blinky   \ xt ( project cpu -- ) CG=F baremetal blinky
 end-structure
 
 begin-structure cg%
@@ -62,6 +64,9 @@ ulist-new fsoc-cgs !
 \ Extra mark bit-times after each host UART byte. 0 leaves bytes back to back.
 : cpu-uart-gap ( n -- ) cpu@ cpu.uart-gap ! ;
 
+: cpu-cg-soc ( xt -- ) cpu@ cpu.cg-soc ! ;
+: cpu-cg-blinky ( xt -- ) cpu@ cpu.cg-blinky ! ;
+
 \ Empty port means the profile id. j1abs names j1a so the image stays there.
 : cpu-image-id ( cpu -- c-addr u )
     dup cpu.port$ @ ?dup IF
@@ -72,6 +77,12 @@ ulist-new fsoc-cgs !
 
 : cpu-find ( c-addr u -- cpu|0 )
     fsoc-cpus @ reg-find ;
+
+\ Bind CG=F entry points on a named profile (after the xts exist).
+: cpu-bind-cg { soc-xt blinky-xt id-a id-u -- }
+    id-a id-u cpu-find dup 0= IF true abort" cpu-bind-cg: unknown" THEN
+    soc-xt over cpu.cg-soc !
+    blinky-xt swap cpu.cg-blinky ! ;
 
 : cg-register ( c-addr u xt -- )
     cg% allocate throw >r
@@ -90,6 +101,12 @@ ulist-new fsoc-cgs !
     s\" \n" stderr write-file throw
     stderr flush-file throw
     true abort" stopped" ;
+
+: cpu-need-cg-soc ( cpu -- cpu )
+    dup cpu.cg-soc @ 0= IF s" no cg-soc" cpu-stop THEN ;
+
+: cpu-need-cg-blinky ( cpu -- cpu )
+    dup cpu.cg-blinky @ 0= IF s" no cg-blinky" cpu-stop THEN ;
 
 \ CG=E does not build a hex image. CG=F is registered once, later.
 : cg-halt ( project cpu -- )

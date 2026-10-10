@@ -68,19 +68,13 @@ variable soc-cpu
     current-platform @ 0= IF drop EXIT THEN
     >r
     plat-clock soc-clk !
-    soc-clk @ io.name$ @ fsoc-fetch soc-clk @ io.index @ request
-    s" user_led" 0 request
-    soc-serial? IF s" serial" 0 request THEN
     s" soc" quartus-project
     r@ project.top-module@ 2dup quartus-top
     s" .v" fsoc-cat+ 2dup quartus-vfile fjson.str-free
     s" clk" soc-clk-hz 1000000000 swap / fjson.u>str quartus-clock
-    soc-clk @ io.name$ @ fsoc-fetch soc-clk @ io.index @ s" clk" quartus-map
-    s" user_led" 0 s" led" quartus-map
-    soc-serial? IF
-        s" serial" 0 s" tx" s" uart_tx" quartus-map-sub
-        s" serial" 0 s" rx" s" uart_rx" quartus-map-sub
-    THEN
+    s" clk" board-map-clock
+    s" led" board-map-led
+    soc-serial? IF s" uart_tx" s" uart_rx" board-map-uart THEN
     rdrop ;
 
 : soc-swap ( rel-a rel-u -- abs-a abs-u )

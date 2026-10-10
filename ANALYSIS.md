@@ -460,3 +460,9 @@ The Phase 1 changes alone would reduce ~2,000 LOC of duplication and eliminate t
 ---
 
 *Analysis generated from codebase review on 2026-10-09. See AGENTS.md for project conventions.*
+
+---
+
+## Follow-up (2026-10-10)
+
+Phase 1–3 OpenSpec из этого ANALYSIS **закрыты без sync** (архив `openspec/changes/archive/2026-10-10-phase*`). Согласованный минимум вынесен в active change [`cgf-dispatch-pinmap`](openspec/changes/cgf-dispatch-pinmap/): xt-dispatch CG=F на `cpu%` + pinmap helpers в `platform.4th`. Остальное (modules, typed-config, build-ctx, HDL DSL, parallel/LSP) — не roadmap.
