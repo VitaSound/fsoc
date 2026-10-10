@@ -49,6 +49,7 @@ s" ../fsys/host/avr-cross.4th" included
 
 : words-one ( c-addr u -- )
    s" ../fsys/fasm/avr/" 2swap fjson.str-concat s" .4th" fjson.str-concat
+   warnings off
    included
    1 avr-want-repl !
    0 avr-want-blink !
@@ -58,6 +59,7 @@ s" ../fsys/host/avr-cross.4th" included
    else
       s" fsys/avr/extra-short.4th" fsoc-path 2dup ax-load fjson.str-free
    then
+   warnings on
    ." words-n " avr-part type space chain-n 0 .r cr
    avr-shelf 2 < if
       s" /tmp/fsoc-probe.fs" ax-load

@@ -17,17 +17,23 @@ s" ../fsys/host/avr-cross.4th" included
 
 : dict-one ( c-addr u -- )
    s" ../fsys/fasm/avr/" 2swap fjson.str-concat s" .4th" fjson.str-concat
+   warnings off
    included
    s" ../fsys/kernel/avr/kernel.4th" included
    avr-shelf 1 = if
       s" fsys/avr/extra-short.4th" fsoc-path 2dup ax-load fjson.str-free
+   then
+   avr-shelf 2 = if
+      s" fsys/avr/extra-min.4th" fsoc-path 2dup ax-load fjson.str-free
+   then
+   warnings on
+   avr-shelf 1 = if
       s" 0=" dict-has
       s" 1+" dict-has
       s" negate" dict-has
       s" quit" dict-hasnt
    then
    avr-shelf 2 = if
-      s" fsys/avr/extra-min.4th" fsoc-path 2dup ax-load fjson.str-free
       s" quit" dict-has
       s" words" dict-has
       s" 0=" dict-has

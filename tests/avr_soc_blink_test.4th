@@ -34,6 +34,7 @@ s" ../fsys/host/avr-cross.4th" included
 
 : soc-one ( c-addr u -- )
    s" ../fsys/fasm/avr/" 2swap fjson.str-concat s" .4th" fjson.str-concat
+   warnings off
    included
    1 avr-want-blink !
    s" ../fsys/kernel/avr/kernel.4th" included
@@ -43,6 +44,7 @@ s" ../fsys/host/avr-cross.4th" included
    else
       s" firmware/blink_soc.fs" fsoc-path 2dup ax-load fjson.str-free
    then
+   warnings on
    soc-boot
    k-here-a k-yp u< expect-true
    fasm-pc @ avr-flash u> 0= expect-true

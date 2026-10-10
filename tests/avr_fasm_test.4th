@@ -78,7 +78,9 @@ pind drop ddrd drop portd drop sreg drop
 s" [asm] here: r16 r16 cpc, r16 r16 cpse, r16 clr, r16 tst, r16 $0f ori, r16 0 sbci, r16 $01 sbr, r16 $fe cbr, r16 ser, r16 r16 mulsu, r16 r16 fmuls, r16 r16 fmulsu, r16 neg, r16 asr, reti, here brlo, here brsh, here brmi, here brpl, here brvs, here brvc, here brlt, here brge, here brhs, here brhc, here brts, here brtc, here brie, here brid, r16 ldxd, r16 ldyd, r16 ldzi, r16 ldzd, r16 stxd, r16 styi, r16 stzi, r16 stzd, r16 0 lddz, r16 ldz, r16 0 stdy, r16 0 stdz, r16 sty, r16 stz, lpm, ucsra udre sbic, r16 0 sbrc, r16 0 bld, r16 0 bst, 0 bset, 0 bclr, sec, sez, sen, sev, ses, seh, set, sei, clc, clz, cln, clv, cls, clh, clt, cli, sleep, wdr, spm, [endasm]" evaluate
 fasm-pc @ 0> expect-true
 
+warnings off
 s" ../fsys/fasm/avr/atmega328p.4th" included
+warnings on
 avr-flash 16384 expect=
 avr-srambase $100 expect=
 avr-ramend $08FF expect=
@@ -95,7 +97,9 @@ fasm-pc @ 3 expect=
 : sbi-uart ( -- ) ucsra udre sbis, ;
 ' sbi-uart catch 0<> expect-true
 
+warnings off
 s" ../fsys/fasm/avr/atmega2560.4th" included
+warnings on
 avr-flash 131072 expect=
 avr-vectors 2 expect=
 avr-srambase $200 expect=
@@ -117,17 +121,23 @@ s" ../firmware/blink_avr.4th" included
 $E602 see-op expect-true
 fasm-pc @ 16 > expect-true
 
+warnings off
 s" ../fsys/kernel/avr/kernel.4th" included
+s" ../fsys/host/avr-cross.4th" included
+: ax-has ( c-addr u -- )
+   2dup ax-find 0= if type cr true abort" avr kernel: missing" then
+   drop drop 2drop ;
+s" fsys/avr/extra-min.4th" fsoc-path 2dup ax-load fjson.str-free
+s" fsys/avr/extra.4th" fsoc-path 2dup ax-load fjson.str-free
+s" tests/avr_cross_smoke.4th" fsoc-path 2dup ax-load fjson.str-free
+s" firmware/blink.fs" fsoc-path 2dup ax-load fjson.str-free
+warnings on
 fasm-pc @ 200 u> expect-true
 0 fasm@ $9AB8 = expect-false
 \ `adiw r30,0` ($9630): zero-test the header pointer without `or r30,r31`
 s" findw" k-pc 10 + fasm@ $9630 expect=
 s" wordsw" k-pc 4 + fasm@ $9630 expect=
 
-s" ../fsys/host/avr-cross.4th" included
-: ax-has ( c-addr u -- )
-   2dup ax-find 0= if type cr true abort" avr kernel: missing" then
-   drop drop 2drop ;
 s" quit" ax-has
 s" words" ax-has
 s" :" ax-has
@@ -136,7 +146,6 @@ s" um+" ax-has
 s" c@i" ax-has
 s" slit" ax-has
 
-s" fsys/avr/extra-min.4th" fsoc-path 2dup ax-load fjson.str-free
 s" 0=" ax-has
 s" type" ax-has
 s" cr" ax-has
@@ -148,7 +157,6 @@ k-latest @ s" seed" k-pc fasm@ <> expect-true
 k-seed!
 k-latest @ s" seed" k-pc fasm@ expect=
 
-s" fsys/avr/extra.4th" fsoc-path 2dup ax-load fjson.str-free
 s" DDRB" ax-has
 s" PORTB" ax-has
 s" itype" ax-has
@@ -156,10 +164,8 @@ s" port@" ax-has
 s" port!" ax-has
 s" pause" ax-has
 
-s" tests/avr_cross_smoke.4th" fsoc-path 2dup ax-load fjson.str-free
 s" smoke" ax-has
 
-s" firmware/blink.fs" fsoc-path 2dup ax-load fjson.str-free
 s" blink" ax-has
 
 s" extra.hex" tmp-file fasm-ihex
@@ -182,9 +188,11 @@ s\" \x08blink o" fasm-contains expect-true
 : c@i ( a -- c ) drop 0 ;
 : io@ ( a -- n ) drop 0 ;
 : io! ( n a -- ) 2drop ;
+warnings off
 s" ../fsys/avr/extra-min.4th" included
 s" ../fsys/avr/extra.4th" included
 s" ../fsys/avr/release.4th" included
+warnings on
 0 0= 0= expect-false
 1 1+ 2 expect=
 2 1- 1 expect=
