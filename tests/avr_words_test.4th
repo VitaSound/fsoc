@@ -6,13 +6,17 @@ s" test_common.4th" included
 s" fixture.4th" included
 s" ../fsys/fasm/avr/fasm.4th" included
 
+s" /tmp/fsoc-probe" s" .fs" tmp-pid-file 2constant words-probe$
+s" /tmp/fsoc-words" s" .hex" tmp-pid-file 2constant words-hex$
+s" /tmp/fsoc-words" s" .log" tmp-pid-file 2constant words-log$
+
 : words-ready? ( -- flag )
    s" test -f /usr/lib/x86_64-linux-gnu/libsimavr.so.2" system
    $? 0= 0= if false exit then
    s" test -d /usr/include/simavr -o -d /tmp/simavr-dev/usr/include/simavr" system
    $? 0= ;
 
-s" /tmp/fsoc-probe.fs" w/o create-file throw >r
+words-probe$ w/o create-file throw >r
 s" : probe 1 + ;" r@ write-file throw
 r> close-file throw
 
@@ -37,14 +41,19 @@ s" ../fsys/host/avr-cross.4th" included
    avr-usart? 0= if
       s"  -b" fjson.str-concat
    then
-   s"  /tmp/fsoc-words.hex words > /tmp/fsoc-words.log 2>&1" fjson.str-concat
+   s"  " fsoc-cat+ words-hex$ fsoc-cat+
+   s"  words > " fsoc-cat+ words-log$ fsoc-cat+
+   s"  2>&1" fsoc-cat+
    2dup system $? 0= expect-true
    fjson.str-free
-   s" grep -q dup /tmp/fsoc-words.log" system $? 0= expect-true
+   s" grep -q dup " words-log$ fjson.str-concat
+   2dup system fjson.str-free $? 0= expect-true
    avr-shelf 2 = if
-      s" grep -q um+ /tmp/fsoc-words.log" system $? 0= expect-true
+      s" grep -q um+ " words-log$ fjson.str-concat
+      2dup system fjson.str-free $? 0= expect-true
    else
-      s" grep -q probe /tmp/fsoc-words.log" system $? 0= expect-true
+      s" grep -q probe " words-log$ fjson.str-concat
+      2dup system fjson.str-free $? 0= expect-true
    then ;
 
 : words-one ( c-addr u -- )
@@ -62,12 +71,12 @@ s" ../fsys/host/avr-cross.4th" included
    warnings on
    ." words-n " avr-part type space chain-n 0 .r cr
    avr-shelf 2 < if
-      s" /tmp/fsoc-probe.fs" ax-load
+      words-probe$ ax-load
    then
    k-seed!
    k-here-a k-yp u< expect-true
    fasm-pc @ avr-flash u> 0= expect-true
-   s" /tmp/fsoc-words.hex" fasm-ihex
+   words-hex$ fasm-ihex
    avr-part words-sim ;
 
 s" atmega8" words-one

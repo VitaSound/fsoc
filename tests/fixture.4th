@@ -11,9 +11,16 @@ s" load.4th" included
 
 : tmp-new ( -- )
     tmp-dir fjson.str-free
-    s" /tmp/fsoc-test-" utime drop fjson.u>str fsoc-+cat
-    tmp-dir$ 2!
-    tmp-dir sh-mkdir ;
+    s" mktemp -d /tmp/fsoc-test-XXXXXX" r/o open-pipe throw { fid }
+    pad 255 fid read-line throw drop { u }
+    pad u fjson.str-dup tmp-dir$ 2!
+    fid close-pipe throw drop ;
+
+\ Prefixed path unique to this process: <pref>-<pid><suf> (allocated).
+: tmp-pid-file { pref-a pref-u suf-a suf-u -- path-a path-u }
+    pref-a pref-u s" -" fjson.str-concat
+    getpid fjson.u>str fsoc-+cat
+    suf-a suf-u fsoc-cat+ ;
 
 : tmp-drop ( -- )
     s" rm -rf " tmp-dir fjson.str-concat s" rm failed" sh-run+

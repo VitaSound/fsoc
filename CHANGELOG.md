@@ -4,6 +4,8 @@
 
 ### Changed
 
+- Gate hooks run short and selected long tests in parallel (`xargs -P`, `FSOC_TEST_JOBS` or `nproc`, cap 8). Shared `/tmp/fsoc-*` paths in tests use pid suffixes; fixture dirs use `mktemp -d`.
+
 - `pre-commit` uses `tools/pre-commit.sh`: short suite (`FSOC_SKIP_LONG=1`) + flint always, long core suites only for staged paths. Selection map shared with pre-push in `tools/long-core-select.sh`. Full suite remains `fmix test`.
 
 - CG=F dispatch uses `cpu.cg-soc` / `cpu.cg-blinky` xt fields on the profile instead of `s" avr" compare` chains in `cg-f` / `blinky-mcu-f`. Board pin mapping goes through `board-map-clock`, `board-map-led`, `board-map-uart`, and `pin-map` in `fsoc/platform-pinmap.4th` (loaded after Quartus).

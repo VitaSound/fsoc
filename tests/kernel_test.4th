@@ -27,9 +27,12 @@ fasm-pc @ 3925 u< expect-true
 
 4088 fasm@ boot-name
 
-s" /tmp/fsoc-kernel-j1a.hex" kernel-save
-s" awk 'END{exit !(NR==4096)}' /tmp/fsoc-kernel-j1a.hex" system
-$? 0= expect-true
+s" /tmp/fsoc-kernel-j1a" s" .hex" tmp-pid-file 2constant k-j1a-hex$
+s" /tmp/fsoc-kernel-j1b" s" .hex" tmp-pid-file 2constant k-j1b-hex$
+
+k-j1a-hex$ kernel-save
+s" awk 'END{exit !(NR==4096)}' " k-j1a-hex$ fjson.str-concat
+2dup system fjson.str-free $? 0= expect-true
 
 test-setup
 s\" s\" soc\" task:\ns\" emulation\" target:\ns\" designs/soc_console.4th\" design:\ns\" j1a\" cpu:\ns\" fsys\" sys:\n" tmp-manifest
@@ -57,11 +60,11 @@ s" quit" fasm-label@ drop
 fasm-pc @ 12288 u< expect-true
 12544 fasm@ boot-name
 
-s" /tmp/fsoc-kernel-j1b.hex" jb-save
-s" awk 'length($1)!=8{bad=1} END{exit bad||NR!=8192}' /tmp/fsoc-kernel-j1b.hex" system
-$? 0= expect-true
-s" cmp -s /tmp/fsoc-kernel-j1a.hex /tmp/fsoc-kernel-j1b.hex" system
-$? 0= expect-false
+k-j1b-hex$ jb-save
+s" awk 'length($1)!=8{bad=1} END{exit bad||NR!=8192}' " k-j1b-hex$ fjson.str-concat
+2dup system fjson.str-free $? 0= expect-true
+s" cmp -s " k-j1a-hex$ fjson.str-concat s"  " fsoc-cat+ k-j1b-hex$ fsoc-cat+
+2dup system fjson.str-free $? 0= expect-false
 
 test-setup
 s\" s\" soc\" task:\ns\" emulation\" target:\ns\" designs/soc_console.4th\" design:\ns\" j1b\" cpu:\ns\" fsys\" sys:\n" tmp-manifest

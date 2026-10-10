@@ -35,10 +35,11 @@ Blinky (no Forth) lives under `projects/baremetal/`. HDL copies omit `cpu:`. AVR
 fmix packages.get
 fmix test                # full suite, including the long core tests
 # pre-commit (tools/pre-commit.sh) and pre-push (tools/pre-push.sh) always run
-# the short files + flint. Long suites (con_core, common, j1abs, bcpu, cd16,
-# msl16, z80, AVR dict/words/con/pin/blink) run only when the staged index
-# (commit) or push range touches that core. Shared map: tools/long-core-select.sh.
-# avr_con_test needs simavr + libsimavr-dev.
+# the short files + flint in parallel (xargs -P; FSOC_TEST_JOBS or nproc, cap 8).
+# Long suites (con_core, common, j1abs, bcpu, cd16, msl16, z80, AVR
+# dict/words/con/pin/blink) run only when the staged index (commit) or push
+# range touches that core, also in parallel. Shared map: tools/long-core-select.sh.
+# Full sequential suite remains `fmix test`. avr_con_test needs simavr + libsimavr-dev.
 # one file: cd tests && FSOC_HOME=$FSOC_HOME gforth con_core_test.4th
 fsoc version             # needs FSOC_HOME + PATH (see feco shell-setup)
 cd projects/baremetal/blinky_emul && fsoc --build

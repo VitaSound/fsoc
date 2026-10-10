@@ -5,6 +5,9 @@ s" test_common.4th" included
 s" fixture.4th" included
 s" ../fsys/fasm/avr/fasm.4th" included
 
+s" /tmp/fsoc-soc-blink" s" .hex" tmp-pid-file 2constant soc-blink-hex$
+s" /tmp/fsoc-soc-blink" s" .log" tmp-pid-file 2constant soc-blink-log$
+
 : avr-blink-ready? ( -- flag )
    s" test -f /usr/lib/x86_64-linux-gnu/libsimavr.so.2" system
    $? 0= 0= if false exit then
@@ -19,12 +22,16 @@ s" ../fsys/host/avr-cross.4th" included
    avr-blink-ready? 0= if 2drop exit then
    fsoc-root s" /tools/avr-pin " fjson.str-concat
    2swap fjson.str-concat
-   s"  /tmp/fsoc-soc-blink.hex > /tmp/fsoc-soc-blink.log 2>&1" fjson.str-concat
+   s"  " fsoc-cat+ soc-blink-hex$ fsoc-cat+
+   s"  > " fsoc-cat+ soc-blink-log$ fsoc-cat+
+   s"  2>&1" fsoc-cat+
    2dup system $? 0= expect-true
    fjson.str-free
-   s" grep -q 'PB0 edges' /tmp/fsoc-soc-blink.log" system $? 0= expect-true
+   s" grep -q 'PB0 edges' " soc-blink-log$ fjson.str-concat
+   2dup system fjson.str-free $? 0= expect-true
    avr-usart? 0= if
-      s" grep -q 'PB1 b' /tmp/fsoc-soc-blink.log" system $? 0= expect-true
+      s" grep -q 'PB1 b' " soc-blink-log$ fjson.str-concat
+      2dup system fjson.str-free $? 0= expect-true
    then ;
 
 : soc-boot ( -- )
@@ -48,7 +55,7 @@ s" ../fsys/host/avr-cross.4th" included
    soc-boot
    k-here-a k-yp u< expect-true
    fasm-pc @ avr-flash u> 0= expect-true
-   s" /tmp/fsoc-soc-blink.hex" fasm-ihex
+   soc-blink-hex$ fasm-ihex
    avr-part avr-soc-sim ;
 
 s" atmega8" soc-one

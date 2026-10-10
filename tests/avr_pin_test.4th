@@ -5,6 +5,8 @@ s" test_common.4th" included
 s" fixture.4th" included
 s" ../fsys/fasm/avr/fasm.4th" included
 
+s" /tmp/fsoc-blink-pin" s" .hex" tmp-pid-file 2constant pin-hex$
+
 : avr-pin-ready? ( -- flag )
    s" test -f /usr/lib/x86_64-linux-gnu/libsimavr.so.2" system
    $? 0= 0= if false exit then
@@ -20,14 +22,14 @@ s" ../fsys/fasm/avr/fasm.4th" included
    s" ../firmware/blink_pin.4th" included
    0 fasm@ ddrb 3 lshift $9A00 or expect=
    1 fasm@ portb 3 lshift $9A00 or expect=
-   s" /tmp/fsoc-blink-pin.hex" fasm-ihex ;
+   pin-hex$ fasm-ihex ;
 
 \ ( c-addr u -- ) Both PB0 edges under simavr. Skip when the library is absent.
 : pin-sim ( c-addr u -- )
    avr-pin-ready? 0= if 2drop exit then
    fsoc-root s" /tools/avr-pin " fjson.str-concat
    2swap fjson.str-concat
-   s"  /tmp/fsoc-blink-pin.hex" fjson.str-concat
+   s"  " fsoc-cat+ pin-hex$ fsoc-cat+
    2dup system $? 0= expect-true
    fjson.str-free ;
 

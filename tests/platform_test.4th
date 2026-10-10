@@ -1,7 +1,7 @@
 \ tests/platform_test.4th — boards load by name and leave the stack clean
 
 s" test_common.4th" included
-s" load.4th" included
+s" fixture.4th" included
 
 s" terasic_de0nano" board-load
 plat.name@ s" terasic_de0nano" expect-str-eq
@@ -76,12 +76,13 @@ s" soc" quartus-project
 s" top" quartus-top
 s" top.v" quartus-vfile
 s" clk" s" 20" quartus-clock
-s" /tmp/fsoc-qsf-test.qsf" quartus-qsf
-s" grep -q 'PIN_B5 -to uart_tx' /tmp/fsoc-qsf-test.qsf" system
-$? 0= expect-true
-s" grep -q 'PIN_B4 -to uart_rx' /tmp/fsoc-qsf-test.qsf" system
-$? 0= expect-true
-s" rm -f /tmp/fsoc-qsf-test.qsf" system
+s" /tmp/fsoc-qsf-test" s" .qsf" tmp-pid-file 2constant qsf-tmp$
+qsf-tmp$ quartus-qsf
+s" grep -q 'PIN_B5 -to uart_tx' " qsf-tmp$ fjson.str-concat
+2dup system fjson.str-free $? 0= expect-true
+s" grep -q 'PIN_B4 -to uart_rx' " qsf-tmp$ fjson.str-concat
+2dup system fjson.str-free $? 0= expect-true
+s" rm -f " qsf-tmp$ fjson.str-concat 2dup system fjson.str-free
 
 s" nosuch" ' board-load catch 0<> expect-true
 2drop

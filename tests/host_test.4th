@@ -6,11 +6,13 @@ s" fixture.4th" included
 s" fsys/kernel/j1b/kernel.4th" fsoc-path 2dup included fjson.str-free
 s" fsys/host/cross.4th" fsoc-path 2dup included fjson.str-free
 
+s" /tmp/fsoc-host" s" .4th" tmp-pid-file 2constant host-tmp$
+
 : host-load ( c-addr u -- )
-    s" /tmp/fsoc-host.4th" w/o create-file throw { fd }
+    host-tmp$ w/o create-file throw { fd }
     fd write-file throw
     fd close-file throw
-    s" /tmp/fsoc-host.4th" xc-load ;
+    host-tmp$ xc-load ;
 
 : cfa-of ( c-addr u -- cfa )
     xc-find 0= abort" host_test: missing"

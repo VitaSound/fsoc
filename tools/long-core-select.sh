@@ -134,12 +134,48 @@ long_core_list_from_stdin() {
     printf '%s\n' "${!want[@]}" | sort
 }
 
+# Jobs for xargs -P: FSOC_TEST_JOBS, else nproc, capped at 8.
+long_core_jobs() {
+    local j=${FSOC_TEST_JOBS:-}
+    if [ -z "$j" ]; then
+        j=$(nproc 2>/dev/null || echo 4)
+    fi
+    if [ "$j" -gt 8 ]; then
+        j=8
+    fi
+    if [ "$j" -lt 1 ]; then
+        j=1
+    fi
+    printf '%s\n' "$j"
+}
+
+# stdin: one test path per line. Buffered logs; non-zero if any fail.
+long_core_run_parallel() {
+    local label=$1
+    local jobs
+    jobs=$(long_core_jobs)
+    echo "* ${label}: parallel jobs=${jobs}"
+    xargs -r -P "$jobs" -I{} bash -c '
+        log=$(mktemp)
+        if fmix test "$1" >"$log" 2>&1; then
+            cat "$log"
+            rm -f "$log"
+            exit 0
+        else
+            cat "$log"
+            rm -f "$log"
+            exit 1
+        fi
+    ' _ {}
+}
+
 # Short suite + flint + selected long files. $1 is a label for log lines.
 long_core_run_gate() {
     local label=$1
 
+    echo "* ${label}: short suite"
     export FSOC_SKIP_LONG=1
-    fmix test
+    printf '%s\n' tests/*_test.4th | sort | long_core_run_parallel "${label}-short"
     unset FSOC_SKIP_LONG
 
     : "${FLINT_HOME:=$HOME/flint}"
@@ -152,7 +188,5 @@ long_core_run_gate() {
 
     echo "* ${label} long tests:"
     printf '  %s\n' $(printf '%s\n' "${!want[@]}" | sort)
-    for test in $(printf '%s\n' "${!want[@]}" | sort); do
-        fmix test "$test"
-    done
+    printf '%s\n' "${!want[@]}" | sort | long_core_run_parallel "${label}-long"
 }
