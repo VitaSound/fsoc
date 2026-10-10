@@ -27,6 +27,13 @@
     "needs": [],
     "missing": []
   },
+  "-": {
+    "file": "fsys/kernel/z80/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
   "xor": {
     "file": "fsys/kernel/z80/kernel.4th",
     "asm": true,

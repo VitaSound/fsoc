@@ -334,6 +334,8 @@ k-lab kswap
    ret,
 s" swap" 0 s" kswap" k-pc k-word
 
+k-lab kminus
+   k-call zneg
 k-lab kplus
    l e ld,
    h d ld,
@@ -346,6 +348,7 @@ k-lab kplus
    k-call ddec
    ret,
 s" +" 0 s" kplus" k-pc k-word
+s" -" 0 s" kminus" k-pc k-word
 
 k-lab kxor
    l e ld,
@@ -1174,7 +1177,6 @@ s" =" 0 s" kexit" k-pc k-word
    0 s" kexit" k-pc k-word ;
 
 s" 'BOOT" k-stub
-s" -" k-stub
 s" 0<" k-stub
 s" 1+" k-stub
 s" 1-" k-stub
