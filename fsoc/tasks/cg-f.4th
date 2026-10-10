@@ -133,10 +133,12 @@ variable avr-want-repl
    s" fsys/kernel/avr/kernel.4th" avr-note-file
    project avr-blink? 0= avr-want-repl !
    project avr-blink? avr-want-blink !
+   warnings off
    s" kernel.4th" avr-image
    avr-cross-load
    project avr-layers
    avr-seed!
+   warnings on
    s" firmware.hex" project project.file
    2dup avr-ihex fjson.str-free
    avr-size-line

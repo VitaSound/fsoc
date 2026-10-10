@@ -97,7 +97,7 @@ module j1(
     3'b1??:   {dstkW, dspI} = {1'b1,      2'b01};
     3'b001:   {dstkW, dspI} = {1'b0,      2'b11};
     3'b011:   {dstkW, dspI} = {func_T_N,  insn[1:0]};
-    default:  {dstkW, dspI} = {1'b0,      2'b00000};
+    default:  {dstkW, dspI} = {1'b0,      2'b00};
     endcase
     dspN = dsp + {dspI[1], dspI[1], dspI[1], dspI};
 
