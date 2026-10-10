@@ -34,9 +34,11 @@ Blinky (no Forth) lives under `projects/baremetal/`. HDL copies omit `cpu:`. AVR
 ```bash
 fmix packages.get
 fmix test                # full suite, including the long core tests
-# pre-push (tools/pre-push.sh) runs the short files always. The long suites
-# (con_core, common, j1abs, bcpu, avr dict/words/con/pin/blink) run only when
-# the push touches that core. avr_con_test needs simavr + libsimavr-dev.
+# pre-commit (tools/pre-commit.sh) and pre-push (tools/pre-push.sh) always run
+# the short files + flint. Long suites (con_core, common, j1abs, bcpu, cd16,
+# msl16, z80, AVR dict/words/con/pin/blink) run only when the staged index
+# (commit) or push range touches that core. Shared map: tools/long-core-select.sh.
+# avr_con_test needs simavr + libsimavr-dev.
 # one file: cd tests && FSOC_HOME=$FSOC_HOME gforth con_core_test.4th
 fsoc version             # needs FSOC_HOME + PATH (see feco shell-setup)
 cd projects/baremetal/blinky_emul && fsoc --build
@@ -52,7 +54,7 @@ Quartus is optional (often missing in WSL). Verilator covers blinky and the Swap
 
 ## Process
 
-Non-trivial changes: OpenSpec in `openspec/`. Before commit: `fmix test`, `flint`, `fcov`.
+Non-trivial changes: OpenSpec in `openspec/`. Before commit the hook runs short tests + flint (+ selective long). Full gate: `fmix test`, `flint`, `fcov`.
 
 A value the build shows or uses comes from the project: a file it copies, generates, cross-compiles, or feeds. If that source is not found, do not hardcode a stand-in list or name. Stop and ask where the data comes from and how to use it.
 

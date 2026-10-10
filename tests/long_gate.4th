@@ -1,4 +1,4 @@
-\ tests/long_gate.4th — pre-push sets FSOC_SKIP_LONG=1.
+\ tests/long_gate.4th — pre-commit / pre-push set FSOC_SKIP_LONG=1.
 \ A normal `fmix test` leaves the variable unset and the file runs.
 
 : long-gate ( -- )

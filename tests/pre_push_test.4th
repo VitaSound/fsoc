@@ -1,14 +1,23 @@
 \ tests/pre_push_test.4th — long core tests are selected from changed paths.
+\ pre-commit and pre-push share tools/long-core-select.sh (--list).
 
 s" test_common.4th" included
 s" fixture.4th" included
 
-: pp-list ( c-addr u -- )
-   s" printf '%s\n' '" 2swap fjson.str-concat
+: pp-list-script { path-a path-u script-a script-u -- }
+   s" printf '%s\n' '" path-a path-u fjson.str-concat
    s" ' | " fjson.str-concat
    fsoc-root fjson.str-concat
-   s" /tools/pre-push.sh --list > pp.out" fjson.str-concat
+   s" /tools/" fjson.str-concat
+   script-a script-u fjson.str-concat
+   s"  --list > pp.out" fjson.str-concat
    in-tmp-sh expect-true ;
+
+: pp-list ( c-addr u -- )
+   s" pre-push.sh" pp-list-script ;
+
+: pc-list ( c-addr u -- )
+   s" pre-commit.sh" pp-list-script ;
 
 : pp-has ( c-addr u -- )
    s" grep -qx '" 2swap fjson.str-concat
@@ -27,11 +36,20 @@ test-setup
 
 s" README.md" pp-list
 pp-empty
+s" README.md" pc-list
+pp-empty
 
 s" cpu/mcpu/MCPU_0.1a.v" pp-list
 pp-empty
 
 s" fsys/kernel/avr/kernel.4th" pp-list
+s" tests/con_core_test.4th" pp-has
+s" tests/avr_dict_test.4th" pp-has
+s" tests/avr_words_test.4th" pp-has
+s" tests/avr_soc_blink_test.4th" pp-has
+s" tests/j1abs_test.4th" pp-lacks
+
+s" fsys/kernel/avr/kernel.4th" pc-list
 s" tests/con_core_test.4th" pp-has
 s" tests/avr_dict_test.4th" pp-has
 s" tests/avr_words_test.4th" pp-has

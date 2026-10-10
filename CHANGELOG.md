@@ -4,6 +4,8 @@
 
 ### Changed
 
+- `pre-commit` uses `tools/pre-commit.sh`: short suite (`FSOC_SKIP_LONG=1`) + flint always, long core suites only for staged paths. Selection map shared with pre-push in `tools/long-core-select.sh`. Full suite remains `fmix test`.
+
 - CG=F dispatch uses `cpu.cg-soc` / `cpu.cg-blinky` xt fields on the profile instead of `s" avr" compare` chains in `cg-f` / `blinky-mcu-f`. Board pin mapping goes through `board-map-clock`, `board-map-led`, `board-map-uart`, and `pin-map` in `fsoc/platform-pinmap.4th` (loaded after Quartus).
 
 - `pre-push` no longer runs the long core suites on every push. `tools/pre-push.sh` always runs the short tests and flint. `con_core`, `common`, `j1abs`, `bcpu`, `cd16`, and the AVR dictionary, words, console, pin, and blink tests run only when the push touches that core. `fmix test` still runs the full suite.
