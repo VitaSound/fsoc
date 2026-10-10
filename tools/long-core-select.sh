@@ -34,8 +34,7 @@ consider() {
         fsys/kernel/j1a/*|fsys/kernel/j1b/*|\
         fsys/j1a/*|fsys/j1b/*|\
         fsys/fasm/j1a/*|fsys/fasm/j1b/*|\
-        fsys/common/*|fsys/host/cross.4th|\
-        swapforth/*)
+        fsys/common/*|fsys/host/cross.4th)
             note tests/con_core_test.4th
             note tests/common_test.4th
             note tests/j1abs_test.4th
@@ -118,6 +117,14 @@ consider() {
             ;;
         tests/avr_soc_blink_test.4th)
             note tests/avr_soc_blink_test.4th
+            ;;
+        cpu/mcpu/dual_pingpong.v|firmware/mcpu_ping.4th|\
+        firmware/mcpu_pong.4th|fsoc/tasks/dual-mcpu.4th|\
+        fsoc/tasks/dual_mcpu_main.cpp|projects/baremetal/dual_mcpu_emul/*)
+            note tests/dual_mcpu_pingpong_test.4th
+            ;;
+        tests/dual_mcpu_pingpong_test.4th)
+            note tests/dual_mcpu_pingpong_test.4th
             ;;
     esac
 }

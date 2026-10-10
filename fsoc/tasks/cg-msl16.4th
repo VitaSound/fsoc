@@ -1,5 +1,5 @@
 \ fsoc/tasks/cg-msl16.4th — CG=F image for msl16. Word hex, not Intel HEX.
-\ Empty sys: stays swapforth at the gate, then this file stops.
+\ Empty sys: stops with needs fsys.
 \ Soc image is the fsys console. Blink is firmware/msl16_blink.fs on that kernel.
 \ The image is 2048 words (ADDR=11). firmware.hex is two bytes per word.
 

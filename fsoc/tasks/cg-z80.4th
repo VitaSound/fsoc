@@ -1,5 +1,5 @@
 \ fsoc/tasks/cg-z80.4th — CG=F image for z80. Byte hex, not Intel HEX.
-\ Empty sys: stays swapforth at the gate, then this file stops.
+\ Empty sys: stops with needs fsys.
 \ Soc image is the fsys console. Blink is firmware/z80_blink.fs on that kernel.
 
 : z80-note ( a u -- )

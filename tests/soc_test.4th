@@ -1,4 +1,4 @@
-\ tests/soc_test.4th — SwapForth J1a image answers a line on the UART
+\ tests/soc_test.4th — fsys J1a image answers a line on the UART
 
 s" test_common.4th" included
 s" fixture.4th" included
@@ -9,10 +9,10 @@ s" grep -q 'rx(1' cpu/j1/j1a/j1_wrap.v" system
 $? 0= expect-false
 s" grep -q uart_rx cpu/j1/j1a/j1_wrap.v" system
 $? 0= expect-true
-s" grep -q 'header quit' swapforth/j1a/nuc.fs" system
+s" test -f fsys/kernel/j1a/kernel.4th" system
 $? 0= expect-true
-s" test -f swapforth/LICENSE" system
-$? 0= expect-true
+s" test -d swapforth" system
+$? 0= expect-false
 
 test-setup
 s" soc_emul" tmp-use-project
@@ -36,14 +36,14 @@ s" soc_main.cpp" tmp-exists? expect-true
 s" fsoc/tasks/soc_main.cpp" s" soc_main.cpp" tmp-same-as-root? expect-true
 s" cpu/j1/j1a/j1.v" s" j1.v" tmp-same-as-root? expect-true
 s" Start build" s" sim.log" tmp-grep? expect-true
-s" image tool: SwapForth" s" sim.log" tmp-grep? expect-true
+s" image tool: fsys" s" sim.log" tmp-grep? expect-true
+s" fsys/kernel/j1a/kernel.4th" s" sim.log" tmp-grep? expect-true
 s" boot" soc-uart? expect-true
 
 s" FSOC_EMU_CON=log FSOC_EMU_UART_BYTES=2" soc-sim
 s" boot" soc-uart? expect-true
 
 s" awk 'NF{n++} END{exit !(n==4096)}' firmware.hex" in-tmp-sh expect-true
-s" swapforth/j1a/build/nuc.hex" s" firmware.hex" tmp-same-as-root? expect-false
 s" uart_rx" s" top.v" tmp-grep? expect-true
 s" CLK_HZ(50000000)" s" top.v" tmp-grep? expect-true
 s" CLK_HZ=50000000" s" sim.sh" tmp-grep? expect-true
@@ -56,13 +56,13 @@ s" uart tx" s" sim.log" tmp-grep? expect-false
 s" 3" s" sim.log" tmp-grep? expect-true
 s"  ok" s" sim.log" tmp-grep? expect-true
 
-s\" FSOC_EMU_UART_IN=\"$(printf '%s\\n' ': DOUBLE DUP + ;' '21 DOUBLE .')\"" soc-sim
+s\" FSOC_EMU_UART_IN=\"$(printf '%s\\n' ': double dup + ;' '21 double .')\"" soc-sim
 s" double" soc-uart? expect-true
 
-s\" FSOC_EMU_UART_IN=\"$(printf '%s\\n' ': P 0 if 1 else 2 then . ;' P)\"" soc-sim
+s\" FSOC_EMU_UART_IN=\"$(printf '%s\\n' ': p 0 if 1 else 2 then . ;' p)\"" soc-sim
 s" iff" soc-uart? expect-true
 
-s\" FSOC_EMU_UART_IN=\"$(printf '%s\\n' NOWORD '1 .')\"" soc-sim
+s\" FSOC_EMU_UART_IN=\"$(printf '%s\\n' noword '1 .')\"" soc-sim
 s" noword" soc-uart? expect-true
 
 s" FSOC_EMU_UART_IN=words" soc-sim

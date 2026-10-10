@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Dictionary dependency database for fsys and SwapForth.
+"""Dictionary dependency database for fsys images.
 
 One JSON file per dictionary. The key is the visible word: a later file
 replaces an earlier definition of the same name. The value is the file,
@@ -529,17 +529,6 @@ def check_extra_min(data):
         raise SystemExit("dump should need .x")
 
 
-def check_sf_a(data):
-    if "nuc.fs" not in data["lshift"]["file"]:
-        raise SystemExit("j1a lshift file " + data["lshift"]["file"])
-    if "2*" not in data["lshift"]["needs"]:
-        raise SystemExit("j1a lshift should name 2*")
-    if "nuc.fs" not in data["2*"]["file"]:
-        raise SystemExit("visible 2* file " + data["2*"]["file"])
-    if ":" not in data["constant"]["needs"]:
-        raise SystemExit("constant should name :")
-
-
 def check_avr(data):
     for name in ("words", "quit", ".s", "+", ":", "0="):
         require(data, name, "fsys-avr-extra-min lost " + name)
@@ -585,15 +574,6 @@ def check_z80(data):
         raise SystemExit("0= should come from the z80 kernel")
 
 
-def check_sf_b(data):
-    if "j1a" in data["lshift"]["file"]:
-        raise SystemExit("j1b lshift points at j1a")
-    if "lshift" not in data["cells"]["needs"]:
-        raise SystemExit("j1b cells should name lshift")
-    if any("j1a" in rec["file"] for rec in data.values()):
-        raise SystemExit("swapforth-j1b names a j1a file")
-
-
 DICTS = [
     ("fsys-j1a", [
         ("fsys/kernel/j1a/kernel.4th", "kernel"),
@@ -632,23 +612,6 @@ DICTS = [
         ("fsys/kernel/z80/kernel.4th", "kernel"),
         ("fsys/z80/extra-min.4th", "colon"),
     ], check_z80),
-    ("swapforth-j1a", [
-        ("swapforth/j1a/basewords.fs", "primitive"),
-        ("swapforth/j1a/nuc.fs", "header"),
-        ("swapforth/common/core.fs", "colon"),
-        ("swapforth/common/core-ext.fs", "colon"),
-        ("swapforth/j1a/swapforth.fs", "colon"),
-    ], check_sf_a),
-    ("swapforth-j1b", [
-        ("swapforth/j1b/basewords.fs", "primitive"),
-        ("swapforth/j1b/nuc.fs", "header"),
-        ("swapforth/common/core0.fs", "colon"),
-        ("swapforth/common/double.fs", "colon"),
-        ("swapforth/common/core.fs", "colon"),
-        ("swapforth/common/core-ext0.fs", "colon"),
-        ("swapforth/common/core-ext.fs", "colon"),
-        ("swapforth/j1b/swapforth.fs", "colon"),
-    ], check_sf_b),
 ]
 
 

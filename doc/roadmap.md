@@ -56,10 +56,16 @@ Quartus `--load` and a live `fterm` line on USB-UART still need a machine with Q
 - Working project `projects/soc_terasic_de0nano`. `USE_REGIO=1`, so `led` is the `IO-LED` register (`$400 io!`). `.qsf` lists `iomap.vh` and `firmware.hex`. A Verilog line longer than the read buffer is written whole.
 - Fit on `EP4CE22F17C6`, Quartus II 11.1, 2026-09-27 02:10:30: 1001/22320 LEs, 625/22320 registers, 65536/608256 memory bits. Notes: [quartus-ii-11.md](quartus-ii-11.md).
 
+## Done — dual MCPU ping-pong (MPSoC demo)
+
+- Task `dual-mcpu`, `projects/baremetal/dual_mcpu_emul`: two MCPU instances, different fasm images, shared mailbox @ 62, Verilator `pin ping` / `pin pong`. Notes: [mcpu-pingpong.md](mcpu-pingpong.md). OpenSpec: `openspec/changes/dual-mcpu-pingpong`.
+- This is the multi-processor example; j1a/j1b in the press release remain two **profiles**, not two cores on one bus. Dual j1a is a later change.
+
 ## Next
 
 1. Program the DE0-Nano and check the console: `fterm` line `1 2 + .` answers `3  ok`; in hex, `1 400 io!` lights `A15` and `0 400 io!` turns it off. OpenSpec: `openspec/changes/xilinx-soc`, section 1.
 2. After that check, add a Xilinx build of the same console (`designs/soc_console.4th`, `USE_REGIO` stays 1). Same change, section 2.
+3. Optional: dual **j1a** (or other soft-CPU pair) after the MCPU ping-pong pattern.
 
 ## Later
 

@@ -1,5 +1,5 @@
 \ fsoc/tasks/cg-bcpu.4th — CG=F image for bcpu. Word hex, not Intel HEX.
-\ Empty sys: stays swapforth at the gate, then this file stops.
+\ Empty sys: stops with needs fsys.
 \ Soc image is the fsys console. Blink is firmware/bcpu_blink.fs on that kernel.
 
 : bcpu-note ( a u -- )

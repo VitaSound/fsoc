@@ -3,6 +3,7 @@
 
 import sys
 
+# Names that must appear in `words` for the fsys j1a console (not the old SwapForth set).
 NEED = """
 ! # #> #s ' ( * */ */mod + +! +loop , - . ." / /mod 0< 0= 1+ 1- 2! 2* 2/
 2@ 2drop 2dup 2over 2swap : ; < <# = > >body >in >number >r ?dup @ abort
@@ -12,9 +13,8 @@ else emit evaluate execute exit fill find fm/mod here hold i if immediate
 invert j key leave literal loop lshift m* max min mod move negate or over
 postpone quit r> r@ recurse repeat rot rshift s" s>d sign sm/rem source space
 spaces state swap then type u< um* um/mod unloop until variable while word xor
-[ ['] [char] ] io@ io! key? words .s .x .x2 nip tuck -rot false true u> within
-erase .( hex marker pad unused see dump ms leds new .xt case of endof endcase
-save-input restore-input convert [compile]
+[ ['] [char] ] io@ io! key? words .s nip tuck -rot false true u> within
+erase .( hex pad unused case of endof endcase save-input restore-input [compile]
 """.split()
 
 
@@ -69,7 +69,16 @@ def main():
             sys.exit("noword failed:\n" + text)
         return
     if mode == "words":
-        toks = text.split()
+        # Prefer the echoed command (first "words"); names may glue: "wordsrestore-input …"
+        idx = text.find("words")
+        if idx < 0:
+            sys.exit("words missing echo")
+        body = text[idx + 5 :].lstrip()
+        if body.endswith(" ok\r\n"):
+            body = body[: -len(" ok\r\n")]
+        elif body.endswith(" ok\n"):
+            body = body[: -len(" ok\n")]
+        toks = body.split()
         missing = [w for w in NEED if w not in toks]
         if missing or "environment?" in toks or not text.endswith(" ok\r\n"):
             sys.exit("words missing " + " ".join(missing))

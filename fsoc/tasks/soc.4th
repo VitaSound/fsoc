@@ -1,6 +1,6 @@
-\ fsoc/tasks/soc.4th — soc task: CSR, top.v, J1 leaves, SwapForth image.
+\ fsoc/tasks/soc.4th — soc task: CSR, top.v, J1 leaves, fsys image.
 \ Paths come from FSOC_HOME; the output directory is the project.
-\ Option lamp=1 appends firmware/lamp.fs to the flattened feed.
+\ Option lamp=1 loads firmware/lamp.fs (flatten expands include csr.fs).
 
 : soc-design ( project -- c-addr u )
     project.design@ dup 0= IF true abort" project design unset" THEN ;
@@ -77,24 +77,9 @@ variable soc-cpu
     soc-serial? IF s" uart_tx" s" uart_rx" board-map-uart THEN
     rdrop ;
 
-: soc-swap ( rel-a rel-u -- abs-a abs-u )
-    s" swapforth/" 2swap fjson.str-concat
-    fsoc-path+ ;
-
-\ <id>/<tail> under swapforth/. Empty cpu-port means the profile id.
+\ Image directory under fsys/kernel/. Empty cpu-port means the profile id.
 : soc-port ( -- c-addr u )
     soc-cpu @ cpu-image-id ;
-
-: soc-swap-rel { tail-a tail-u -- abs-a abs-u }
-    soc-port
-    s" /" fjson.str-concat
-    tail-a tail-u fsoc-cat+
-    2dup 2>r
-    soc-swap
-    2r> fjson.str-free ;
-
-: soc-cross-dir ( -- abs-a abs-u )
-    soc-port soc-swap ;
 
 \ Leaf named by an include line: the kit directory, then cpu/j1/, then rtl/.
 : soc-try-leaf ( name-a name-u rel-a rel-u -- abs-a abs-u flag )
@@ -159,25 +144,6 @@ variable leaf-fd
     THEN
     rdrop ;
 
-: soc-ram-bytes ( -- n )
-    soc-cpu @ cpu.kit @
-    dup kit.ram @ swap kit.width @ 8 / * ;
-
-: soc-cross ( project -- )
-    >r
-    s" nuc.fs" soc-swap-rel 2dup ."     " type cr fjson.str-free
-    s" cd "
-    soc-cross-dir fsoc-+cat
-    s"  && mkdir -p build && gforth cross.fs basewords.fs nuc.fs >build/cross.out" fsoc-cat+
-    s"  || { cat build/cross.out >&2; exit 1; }" fsoc-cat+
-    s\"  && awk '{ for (i = 1; i <= NF; i++) if ($i == \"tdp\") printf \"    SwapForth nucleus: dictionary at $%s bytes of " fsoc-cat+
-    soc-ram-bytes fjson.u>str fsoc-cat++
-    s\" , code pointer %s\\n\", $(i+1), $(i+3) }' build/cross.out" fsoc-cat+
-    s" swapforth cross failed" sh-run+
-    s" build/nuc.hex" soc-swap-rel 2dup
-    s" firmware.hex" r> project-copy-as
-    fjson.str-free ;
-
 : trim-lead ( c-addr u -- c-addr u )
     begin
         dup 0= IF EXIT THEN
@@ -205,10 +171,7 @@ variable flatten-n
     name-a name-u fsoc-cat+
     2dup file-exists? IF EXIT THEN
     fjson.str-free
-    s" common/" name-a name-u fjson.str-concat
-    soc-swap
-    2dup file-exists? IF EXIT THEN
-    true abort" swapforth include not found" ;
+    true abort" include not found" ;
 
 : soc-flatten-file ( src-a src-u -- )
     recursive
@@ -253,67 +216,20 @@ variable flatten-n
     s\"  'function hex(s, i,c,n) { n=0; for (i=1;i<=length(s);i++) { c=index(\"0123456789abcdef\", tolower(substr(s,i,1))); if (c==0) return -1; n=n*16+c-1 } return n } FNR==int(dp/bytes)+1 && dp>0 { printf \"    firmware.hex: %d bytes of %d\\n\", hex($1), cap; ok=1; exit } END { if (!ok) exit 1 }' firmware.hex" fsoc-cat+
     s" firmware size failed" sh-run+ ;
 
-\ SwapForth prints dpaddr in hex after dumpall sets base.
-: soc-dp-addr ( -- n )
-    s\" awk 'function hex(s, i,c,n) { n=0; for (i=1;i<=length(s);i++) { c=index(\"0123456789abcdef\", tolower(substr(s,i,1))); if (c==0) return -1; n=n*16+c-1 } return n } { for (i=1;i<=NF;i++) if ($i==\"dpaddr\") print hex($(i+1)) }' "
-    s" build/cross.out" soc-swap-rel fsoc-+cat
-    s"  > dp.addr" fsoc-cat+
-    s" firmware size failed" sh-run+
-    s" dp.addr" fsoc-read-line1
-    2dup s>number? if
-        drop >r
-        fjson.str-free
-        s" dp.addr" sh-rm
-        r>
-    else
-        2drop
-        fjson.str-free
-        s" dp.addr" sh-rm
-        true abort" firmware size failed"
-    then ;
-
-: soc-fw-size ( -- )
-    soc-dp-addr soc-image-line ;
-
-: soc-feed ( project -- )
-    >r
-    s" FSOC_EMU_COMPILE_ONLY=1 sh sim.sh" s" verilator compile failed" sh-run
-    s" swapforth.fs" soc-swap-rel
-    2dup ."     " type cr
-    s" feed.fs" r@ project.file
-    2over 2over soc-flatten
-    fjson.str-free fjson.str-free
-    s" lamp" r@ project.opt@ s" 1" compare 0= IF
-        s" firmware/lamp.fs" fsoc-path
-        2dup ."     " type cr
-        2dup s" lamp.fs" r@ project-copy-as
-        fjson.str-free
-        s" lamp.fs" r@ project.file
-        s" feed-lamp.fs" r@ project.file
-        2over 2over soc-flatten
-        fjson.str-free fjson.str-free
-        s" cat feed-lamp.fs >> feed.fs" s" lamp feed append failed" sh-run
-    THEN
-    s" env -u FSOC_EMU_UART_IN -u FSOC_EMU_UART_BYTES -u FSOC_EMU_CON -u FSOC_EMU_CYCLES FSOC_EMU_FAST=1 FSOC_EMU_FEED="
-    s" feed.fs" r> project.file fsoc-+cat
-    s"  ./obj_dir/Vtop_feed >feed.log" fsoc-cat+
-    s" swapforth feed failed" sh-run+
-    soc-fw-size ;
-
-\ Empty sys: is swapforth. The task calls that tool's one step.
+\ Empty sys: stops. The only image tool is fsys.
 : soc-sys-id ( project -- c-addr u )
     project.sys@ dup IF EXIT THEN
-    2drop s" swapforth" ;
-
-\ The manifest id is swapforth. The log uses the same name as the nucleus line.
-: soc-tool-label ( c-addr u -- c-addr u )
-    2dup s" swapforth" compare 0= if 2drop s" SwapForth" then ;
+    2drop
+    s" needs fsys" stderr write-file throw
+    s\" \n" stderr write-file throw
+    stderr flush-file throw
+    true abort" needs fsys" ;
 
 : soc-sys-step ( project -- )
     dup >r
     soc-sys-id { id-a id-u }
     id-a id-u sys-find ?dup IF
-        ."     image tool: " id-a id-u soc-tool-label type cr
+        ."     image tool: " id-a id-u type cr
         r> swap sys.step @ execute
     ELSE
         rdrop
@@ -323,12 +239,8 @@ variable flatten-n
         true abort" unknown sys"
     THEN ;
 
-: soc-swapforth ( project -- )
-    dup soc-cross
-    soc-feed ;
-
 \ fsys image: assemble the kernel, then the host compiles fsys/common.
-\ SwapForth's cross is not used. lamp.fs is appended only when the option asks.
+\ lamp.fs is appended only when the option asks.
 \ image=release and an application option: the second pass loads release-image.4th
 \ instead of the common / core / extra layers. The first pass always rewrites
 \ the dictionary JSON from those full layers.
@@ -525,5 +437,4 @@ variable flatten-n
 
 s" I" ' soc-cg-i cg-register
 s" soc" ' soc-emit task-register
-s" swapforth" ' soc-swapforth sys-register
 s" fsys" ' soc-fsys sys-register

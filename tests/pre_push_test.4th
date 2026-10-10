@@ -42,6 +42,10 @@ pp-empty
 s" cpu/mcpu/MCPU_0.1a.v" pp-list
 pp-empty
 
+s" cpu/mcpu/dual_pingpong.v" pp-list
+s" tests/dual_mcpu_pingpong_test.4th" pp-has
+s" tests/standalone_test.4th" pp-lacks
+
 s" fsys/kernel/avr/kernel.4th" pp-list
 s" tests/con_core_test.4th" pp-has
 s" tests/avr_dict_test.4th" pp-has

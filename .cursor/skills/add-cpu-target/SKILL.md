@@ -11,7 +11,7 @@ Follow `.cursor/rules/fsoc-cpu-target.mdc` and the specs `openspec/specs/forth-c
 
 1. **Id vs chip** — new ISA → `cpu-new` in `fsoc/cpu.4th`. Same ISA, other package → `fsys/fasm/<id>/<part>.4th` only.
 2. **CG path** — register or extend the emitter for that CG. Do not add the id as a literal in `fsoc/tasks/soc.4th`.
-3. **sys:** — empty is swapforth. If this id has no SwapForth tree, require `s" fsys" sys:` and abort otherwise.
+3. **sys:** — empty on task `soc` stops (`needs fsys`). Always require `s" fsys" sys:` for a console image.
 4. **Layers** — `fsys/fasm/<id>/` → `fsys/kernel/<id>/kernel.4th` (console) → `fsys/host/<id>-cross.4th` → `fsys/<id>/extra.4th` → optional `firmware/*.fs`.
 5. **Kernel** — UART console, `quit`, `words`, `:`. Application I/O stays in `firmware/` behind an option, like `lamp` / `blink`. Baremetal LED is task `blinky` plus `cpu:`, not a task named `fasm`.
 6. **Tests** — host dictionary names, HEX/EOF or the CG-E stop; `fcov` on each new fsys directory ≥ 90%. `soc.4th` still has no cpu id literals. AVR log has `Hardware` `atmega8(avr)` and `firmware.hex: N bytes of` flash.

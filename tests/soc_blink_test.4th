@@ -14,8 +14,8 @@ s" lamp" s" target.4th" tmp-grep? expect-true
 
 s" env -u FSOC_EMU_UART_IN FSOC_EMU_FAST=1 FSOC_EMU_CON=term FSOC_EMU_CYCLES=800000" s" --build" in-tmp-fsoc expect-true
 s" firmware/lamp.fs" s" sim.log" tmp-grep? expect-true
-s" swapforth/j1a/nuc.fs" s" sim.log" tmp-grep? expect-true
-s" swapforth/j1a/swapforth.fs" s" sim.log" tmp-grep? expect-true
+s" image tool: fsys" s" sim.log" tmp-grep? expect-true
+s" fsys/kernel/j1a/kernel.4th" s" sim.log" tmp-grep? expect-true
 s" fhdlgen: stack2.v" s" sim.log" tmp-grep? expect-true
 s" fhdlgen: j1.v" s" sim.log" tmp-grep? expect-true
 s" fhdlgen: uart.v" s" sim.log" tmp-grep? expect-true

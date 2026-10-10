@@ -10,3 +10,4 @@ s" tasks/soc.4th" included
 s" tasks/cg-f.4th" included
 s" tasks/cg-i-blink.4th" included
 s" tasks/standalone.4th" included
+s" tasks/dual-mcpu.4th" included

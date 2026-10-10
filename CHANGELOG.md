@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Removed
+
+- **BREAKING** SwapForth image tool and the `swapforth/` tree. Task `soc` requires `s" fsys" sys:`; empty `sys:` stops with `needs fsys`. Migrated `soc_emul`, `soc_blink`, `soc_emul_colorlight_5a_75e_v6_0`, and `soc_terasic_de0nano`. Dictionary JSON `swapforth-j1a` / `swapforth-j1b` removed. Temporary `ANALYSIS.md` removed (work landed in OpenSpec archives).
+
 ### Changed
 
 - Gate hooks run short and selected long tests in parallel (`xargs -P`, `FSOC_TEST_JOBS` or `nproc`, cap 8). Shared `/tmp/fsoc-*` paths in tests use pid suffixes; fixture dirs use `mktemp -d`.
@@ -13,6 +17,10 @@
 - `pre-push` no longer runs the long core suites on every push. `tools/pre-push.sh` always runs the short tests and flint. `con_core`, `common`, `j1abs`, `bcpu`, `cd16`, and the AVR dictionary, words, console, pin, and blink tests run only when the push touches that core. `fmix test` still runs the full suite.
 
 ### Added
+
+- Dual MCPU ping-pong (MPSoC demo): task `dual-mcpu`, `projects/baremetal/dual_mcpu_emul`, two fasm images, shared mailbox, Verilator `pin ping` / `pin pong`. Notes: `doc/mcpu-pingpong.md`. OpenSpec: `openspec/changes/dual-mcpu-pingpong`.
+
+- Contributor DX (RU-first): Day 1 fork FPGA / MCU / dual-mcpu in `README.md`, `CONTRIBUTING.md`, `doc/FMAP-INDEX.md`, fixed frules architecture links in `.cursor/rules` (no local `docs/FORTH-*`). Long README text kept as `doc/guide-detail-ru.md` / `guide-detail-eng.md`.
 
 - Z80 host fasm (`fsys/fasm/z80`), standalone TV80 core, and fsys console. Empty `sys:` stops; `s" fsys" sys:` writes byte hex (16 KB). Vendored [TV80](https://github.com/hutch31/tv80) (`tv80s`, Mode=0, MIT) under `cpu/z80/`. `projects/standalone_z80` pins the bus on `lfe5u25f_cabga256`. Routed nextpnr, 2026-10-05, constraint 25.00 MHz: 2276/24288 LUT4 (2114 logic, 90 carry, 48 RAM, 24 RAMW), 240 DFF, 0/56 `DP16KD`, 46/197 `TRELLIS_IO`, 69.74 MHz. Projects: `baremetal/blinky_z80`, `soc_z80`, `soc_z80_blink`. The console is a row in `tests/con_core_test.4th`. Notes: `doc/z80.md`.
 

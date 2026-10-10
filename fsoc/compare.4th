@@ -319,7 +319,8 @@ variable cmp-seen?
     cmp.task 2@ s" task:" cmp-decl
     s" emulation" s" target:" cmp-decl cmp-glue
     cmp.design 2@ s" design:" cmp-decl cmp-glue
-    id-a id-u s" cpu:" cmp-decl cmp-glue { body-a body-u }
+    id-a id-u s" cpu:" cmp-decl cmp-glue
+    s" fsys" s" sys:" cmp-decl cmp-glue { body-a body-u }
     cmp.board 2@ dup 0= IF 2drop body-a body-u EXIT THEN
     s" board:" cmp-decl
     body-a body-u 2swap cmp-glue ;

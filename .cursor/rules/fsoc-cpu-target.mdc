@@ -25,8 +25,8 @@ A new **ISA family** is a new `cpu:` **id** in `fsoc/cpu.4th` (FMAP class, MM, E
 
 - Manifest `cpu:` picks the profile; **CG** picks the emitter (`cg-register`). `target:` is how it runs (emulation, quartus, proteus).
 - Put **no** new cpu id literal in `fsoc/tasks/soc.4th`. Branch inside the CG file already registered (`cg-f.4th` for CG=F, `soc-cg-i` for CG=I).
-- Empty `sys:` is **swapforth**. An MCU with no SwapForth image **must** require `s" fsys" sys:` and stop otherwise (see `avr`). Baremetal blink is task `blinky` plus `cpu:`; it does not read `sys:`. fasm is the assembler in the log, not a task name.
-- **CG=I** (class 0 J1): Verilog kit under `cpu/j1/<id>/`, image via `soc-fsys` / SwapForth.
+- Empty `sys:` on task `soc` **stops** (`needs fsys`). Every console image **must** set `s" fsys" sys:`. Baremetal blink is task `blinky` plus `cpu:`; it does not read `sys:`. fasm is the assembler in the log, not a task name.
+- **CG=I** (class 0 J1): Verilog kit under `cpu/j1/<id>/`, image via `soc-fsys`.
 - **CG=F** (class 1/2 MCU, HEX): host fasm + fsys layers, no `Vtop_feed`. The log matches J1: `Hardware` prints `atmega8(avr)`, `Software` prints `firmware.hex: <used> bytes of <flash>`.
 - **CG=E** (stm8 today): no hex; external kernel (e.g. stm8ef). Do not invent a fasm kernel unless the profile changes.
 

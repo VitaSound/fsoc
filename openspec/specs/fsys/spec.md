@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Второй инструмент образа рядом со SwapForth: ассемблер fasm, ядро kernel и общий словарь common на том же чипе и UART.
+Единственный инструмент образа с консолью: ассемблер fasm, ядро kernel и общий словарь common на том же чипе и UART.
 
 ## Requirements
 
@@ -64,7 +64,7 @@
 - **THEN** передача содержит `13` и ` ok`
 
 ### Requirement: Общий сеанс консоли fsys
-Сеанс `s" fsys" sys:` на `j1a`, `j1b` и `avr` MUST отвечать одинаково на ввод строки, неизвестное слово, помещение и снятие клетки, `+`, `.s`, `: … ;` и на пересечение имён `words`. Ответ строки MUST кончаться на ` ok`. Неизвестное слово MUST напечатать `?`, после чего следующая строка MUST исполняться. SwapForth MUST NOT быть источником этого сеанса.
+Сеанс `s" fsys" sys:` на `j1a`, `j1b` и `avr` MUST отвечать одинаково на ввод строки, неизвестное слово, помещение и снятие клетки, `+`, `.s`, `: … ;` и на пересечение имён `words`. Ответ строки MUST кончаться на ` ok`. Неизвестное слово MUST напечатать `?`, после чего следующая строка MUST исполняться.
 
 #### Scenario: Ядро сеанса на трёх id
 - **WHEN** на каждом id поданы строки `1 2 + .`, `NOWORD`, `1 .`, `.s`, `1 2 3 .s`, `: DOUBLE DUP + ;`, `21 DOUBLE .`, `words`
@@ -82,7 +82,7 @@
 - **THEN** каждое имя `fsys-avr-extra-min.json` есть в передаче
 
 ### Requirement: Консольные тесты fsys сопровождают каждый id
-`tests/con_core_test.4th` MUST гонять один сеанс `s" fsys" sys:` на каждом id с консольным kernel (`j1a`, `j1b`, `avr`, `bcpu` и любой следующий). Прогон MUST входить в `fmix test`. Новый id с `fsys` MUST: добавить манифест в `tests/con_session.4th`; включить его в `tests/con_core_test.4th`; завести эталон `doc/j1-word-graph/fsys-<id>*.json` через `doc/j1-word-graph/build.py`; пометить каждое имя в `tests/con_words.py` (`run` / `colon` / `skip` с причиной); обработать BS/DEL в `accept` этого kernel той же семантикой. Слова, уникальные для id, MUST жить в отдельном тесте (как `tests/avr_con_test.4th`) и MUST NOT дублировать общее ядро. SwapForth MUST NOT быть источником этого сеанса.
+`tests/con_core_test.4th` MUST гонять один сеанс `s" fsys" sys:` на каждом id с консольным kernel (`j1a`, `j1b`, `avr`, `bcpu` и любой следующий). Прогон MUST входить в `fmix test`. Новый id с `fsys` MUST: добавить манифест в `tests/con_session.4th`; включить его в `tests/con_core_test.4th`; завести эталон `doc/j1-word-graph/fsys-<id>*.json` через `doc/j1-word-graph/build.py`; пометить каждое имя в `tests/con_words.py` (`run` / `colon` / `skip` с причиной); обработать BS/DEL в `accept` этого kernel той же семантикой. Слова, уникальные для id, MUST жить в отдельном тесте (как `tests/avr_con_test.4th`) и MUST NOT дублировать общее ядро.
 
 Точечный прогон: из `tests/` при заданном `FSOC_HOME` — `gforth con_core_test.4th`. AVR без `simavr` / `libsimavr-dev` MUST пропускать свой кусок и MUST NOT валить набор.
 
@@ -177,7 +177,7 @@
 - **THEN** в `firmware.hex` нет последовательности байт текста `blink on`
 
 ### Requirement: Покрытие слоя не ниже 90 процентов
-Каждый слой fsys MUST быть закрыт тестами так, что отчёт `fcov` по его файлам не ниже 90%. Порог MUST считаться отдельно для `fsys/fasm/j1a`, `fsys/fasm/j1b`, `fsys/fasm/avr`, `fsys/kernel/j1a`, `fsys/kernel/j1b`, `fsys/kernel/avr`, `fsys/common`, `fsys/avr` и `fsys/host`. Каждый новый каталог fasm, kernel и extra MUST входить в этот порог отдельно. Среднее по слоям MUST NOT засчитываться. Сверка hex и строки `1 2 + .` MUST NOT заменять этот порог. Монолит SwapForth этим порогом MUST NOT измеряться.
+Каждый слой fsys MUST быть закрыт тестами так, что отчёт `fcov` по его файлам не ниже 90%. Порог MUST считаться отдельно для `fsys/fasm/j1a`, `fsys/fasm/j1b`, `fsys/fasm/avr`, `fsys/kernel/j1a`, `fsys/kernel/j1b`, `fsys/kernel/avr`, `fsys/common`, `fsys/avr` и `fsys/host`. Каждый новый каталог fasm, kernel и extra MUST входить в этот порог отдельно. Среднее по слоям MUST NOT засчитываться. Сверка hex и строки `1 2 + .` MUST NOT заменять этот порог.
 
 #### Scenario: Отчёт по каждому слою
 - **WHEN** после тестов слоя выполнен `fcov` по его каталогу

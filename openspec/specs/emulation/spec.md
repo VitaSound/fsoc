@@ -47,15 +47,11 @@
 - **THEN** код выхода 1
 
 ### Requirement: Шаг прошивки отделён от просмотра
-Образ прошивки MUST собирать отдельный исполняемый файл `feed`: вход — плоский Forth-файл без `include`, выход — `firmware.hex` на 4096 слов, записанный самой обёрткой по сигналу `dump`. `main` просмотра MUST NOT читать файлы прошивки и MUST NOT писать `firmware.hex`. Раскрытие `include` MUST делать билдер до запуска `feed`.
+Образ прошивки для J1 MUST писать шаг `s" fsys" sys:` (host `kernel-save` / `jb-save`). `main` просмотра MUST NOT читать файлы прошивки и MUST NOT писать `firmware.hex`. Обёртка MAY сохранять `$writememh` для совместимости feed-пути, но текущая сборка soc MUST NOT требовать `Vtop_feed` для записи образа.
 
-#### Scenario: Снимок из Verilog
+#### Scenario: Hex из fsys
 - **WHEN** в `projects/soc_emul` выполняется `fsoc --build`
-- **THEN** `firmware.hex` содержит 4096 строк, отличается от `nuc.hex`, в `fsoc/tasks/soc_main.cpp` нет `fopen("firmware.hex"`, а в `cpu/j1/j1a/j1_wrap.v` есть `$writememh`
-
-#### Scenario: Плоский файл подачи
-- **WHEN** билдер подготовил файл подачи для `swapforth.fs`
-- **THEN** в этом файле нет строк, начинающихся с `include`, и он содержит текст `core.fs` и `core-ext.fs`
+- **THEN** `firmware.hex` содержит 4096 строк, в журнале есть `image tool: fsys`, и в `fsoc/tasks/soc_main.cpp` нет `fopen("firmware.hex"`
 
 ### Requirement: Частота sim.sh с платы
 Когда таргет оставляет `sim.sh` и плата загружена, `sim.sh` MUST записать `CLK_HZ`, равный частоте тактового ресурса. Без платы `sim.sh` MUST записать `CLK_HZ=50000000`. Делитель бита UART MUST считаться из этой строки и `BAUD`. Промежуточный `sim.sh` шага feed на таргете платы MUST оставаться на 50 МГц, чтобы совпасть с топом feed, и MUST быть удалён до конца этой сборки.

@@ -28,12 +28,11 @@ s" pin led 1" s" sim.log" tmp-grep? expect-true
 s" bytes of 16384" s" sim.log" tmp-grep? expect-true
 test-teardown
 
-\ Empty sys: must not become SwapForth.
+\ Empty sys: stops.
 test-setup
 s\" s\" soc\" task:\ns\" emulation\" target:\ns\" bcpu\" cpu:\n" tmp-manifest
 s" FSOC_EMU_FAST=1" s" --build" in-tmp-fsoc expect-false
 s" needs fsys" s" sim.log" tmp-grep? expect-true
-s" SwapForth" s" sim.log" tmp-grep? expect-false
 test-teardown
 
 \ Console: 1 2 + . answers 3 and ok.

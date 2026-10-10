@@ -1,4 +1,4 @@
-\ projects/soc_emul_colorlight_5a_75e_v6_0/target.4th — SwapForth console at the Colorlight clock
+\ projects/soc_colorlight_5a_75e_v6_0/target.4th — fsys console on Colorlight
 
 s" soc" task:
 s" emulation" target:

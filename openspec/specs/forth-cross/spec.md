@@ -10,12 +10,12 @@
 Манифест MAY содержать `s" <id>" cpu:`. Задача `soc` MUST собирать образ излучателем этого профиля. Имя тулчейна (`quartus`, `yosys`, `emulation`) MUST NOT выбирать профиль. Неизвестный id MUST останавливать сборку и MUST NOT подставлять `j1a`. Пустое поле у существующих проектов MUST означать `j1a`. Id процессора MUST выбирать подкаталог внутри уже выбранного `sys:`, а не каталог под `cpu/j1/`.
 
 #### Scenario: Неизвестный профиль
-- **WHEN** манифест содержит `s" no-such-cpu" cpu:` и выполняется `fsoc --build`
-- **THEN** сборка останавливается с текстом, содержащим `no-such-cpu`, и каталог `swapforth/j1a` не используется
+- **WHEN** манифест содержит `s" no-such-cpu" cpu:`, `s" fsys" sys:` и выполняется `fsoc --build`
+- **THEN** сборка останавливается с текстом, содержащим `no-such-cpu`
 
 #### Scenario: Пустое поле
-- **WHEN** `projects/soc_emul/target.4th` не содержит `cpu:` и выполняется сборка образа
-- **THEN** кросс читает `swapforth/j1a/nuc.fs`
+- **WHEN** `projects/soc_emul/target.4th` не содержит `cpu:` и содержит `s" fsys" sys:` и выполняется сборка образа
+- **THEN** журнал содержит `fsys/kernel/j1a/kernel.4th`
 
 ### Requirement: Излучатель выбирается по CG
 Профиль MUST хранить класс, строку FMAP, MM, EX-C, CG и BM. Сборка образа MUST вызывать излучатель, зарегистрированный для CG этого профиля. Профили `j1a` и `j1b` MUST иметь класс 0, MM=V, EX-C=V, CG=I, BM=C. Профиль `j1abs` MUST иметь класс 0, FMAP `V-V-A-0-I`, MM=V, EX-C=V, CG=I, BM=C, клетку 16 бит и порт образа `j1a`. Профиль `stm8` MUST иметь класс 1 и CG=E. Профиль `z80` MUST иметь класс 2, CG=F, клетку 16 бит и `cpu-ref` `cerberus-z80`. Профиль `avr` MUST иметь класс 1, MM=D, EX-C=S, CG=F и BM=C. Профиль `bcpu` MUST иметь класс 0, FMAP `U-M-B-A-3-F`, MM=U, EX-C=B, CG=F, BM=C, клетку 16 бит и `cpu-ref` `bcpu`. CG=E MUST NOT собирать hex. CG=F MUST писать Intel HEX только для `avr` при `s" fsys" sys:`. Для `bcpu` при `s" fsys" sys:` CG=F MUST писать слова по 16 бит (четыре hex-цифры на строку), а не Intel HEX. Для `z80` при `s" fsys" sys:` CG=F MUST писать байты (две hex-цифры на строку), а не Intel HEX. Для `avr` без `fsys` сборка MUST останавливаться до hex.
@@ -45,7 +45,7 @@
 - **THEN** `firmware.hex` состоит из строк по две hex-цифры, в журнале есть `cerberus-z80(z80)`, `image tool: fsys` и `bytes of 16384`, и нет записи `:00000001FF`
 
 ### Requirement: J1B не затирает J1a
-Исходники J1B MUST быть взяты из каталога `original/j1b` репозитория wzab/AFCK_J1B_FORTH: `cross.fs`, `basewords.fs`, `nuc.fs`, `swapforth.fs`, `verilog/j1.v`, `verilog/stack.v`, `verilog/common.h`. Файл ядра в fsoc MUST называться `j1b.v` и лежать в комплекте `cpu/j1/j1b/`. Существующий `cpu/j1/j1a/j1.v` MUST остаться с `` `define WIDTH 16 ``. VHDL, I2C и проект Vivado платы AFCK MUST NOT копироваться. Рядом MUST лежать текст лицензии BSD Боумана.
+Verilog J1B MUST происходить из каталога `original/j1b` репозитория wzab/AFCK_J1B_FORTH (`verilog/j1.v`, `verilog/stack.v`, `verilog/common.h`). Файл ядра в fsoc MUST называться `j1b.v` и лежать в комплекте `cpu/j1/j1b/`. Существующий `cpu/j1/j1a/j1.v` MUST остаться с `` `define WIDTH 16 ``. VHDL, I2C и проект Vivado платы AFCK MUST NOT копироваться. Рядом MUST лежать текст лицензии BSD Боумана. Образ консоли MUST собираться через `s" fsys" sys:`, а не из удалённого каталога SwapForth.
 
 #### Scenario: Оба ядра на диске
 - **WHEN** профиль `j1b` зарегистрирован
@@ -59,29 +59,33 @@
 - **THEN** `includes.lst` содержит `j1b.v`, `stack.v`, `common.h` и `j1b_wrap.v`, `firmware.hex` содержит 8192 строки по 8 hex-цифр, и этот файл не совпадает с образом j1a
 
 ### Requirement: Инструмент образа называется полем sys
-Манифест MAY содержать `s" <id>" sys:`. Пустое поле MUST означать `swapforth`. `s" swapforth" sys:` MUST собирать монолит из `swapforth/<id>/` тем же `gforth cross.fs basewords.fs nuc.fs` и MUST раскрывать `include` из `swapforth/<id>/` и `swapforth/common/`. `s" fsys" sys:` MUST собирать цепочку fsys и MUST NOT читать каталог `swapforth/` и MUST NOT подставлять hex SwapForth. Неизвестный id MUST останавливать сборку до кросса. `target:` MUST оставаться только способом запуска.
+Манифест MAY содержать `s" <id>" sys:`. Для задачи `soc` пустое поле MUST останавливать сборку с текстом `needs fsys`. Единственный зарегистрированный id образа MUST быть `fsys`: `s" fsys" sys:` MUST собирать цепочку fsys (`fsys/kernel/<порт>`, host cross, common/extra). Каталог `swapforth/` MUST NOT существовать в репозитории и MUST NOT читаться сборкой. `s" swapforth" sys:` MUST останавливать сборку как неизвестный id. Неизвестный id MUST останавливать сборку до кросса. `target:` MUST оставаться только способом запуска.
 
-#### Scenario: Пустое sys оставляет SwapForth
+#### Scenario: Пустое sys останавливается
 - **WHEN** `target.4th` не содержит `sys:` и содержит задачу `soc`
-- **THEN** сборка читает `swapforth/<id профиля>/nuc.fs`
+- **THEN** сборка останавливается с текстом `needs fsys` и не пишет `firmware.hex`
 
-#### Scenario: fsys не берёт файлы SwapForth
+#### Scenario: fsys собирает kernel
 - **WHEN** манифест содержит `s" j1a" cpu:` и `s" fsys" sys:` и выполняется `fsoc --build`
-- **THEN** в команде сборки образа нет `swapforth/`, и `firmware.hex` не совпадает с образом SwapForth того же `cpu:`
+- **THEN** в журнале есть `image tool: fsys` и `fsys/kernel/j1a/kernel.4th`
 
 #### Scenario: Неизвестный инструмент
 - **WHEN** манифест содержит `s" no-such-sys" sys:` и выполняется `fsoc --build`
 - **THEN** сборка останавливается с текстом, содержащим `no-such-sys`, до запуска `gforth`
 
+#### Scenario: Удалённый swapforth
+- **WHEN** манифест содержит `s" swapforth" sys:` и выполняется `fsoc --build`
+- **THEN** сборка останавливается до записи `firmware.hex`, и каталога `swapforth/` в репозитории нет
+
 ### Requirement: Комплект не называет прошивку
 Файлы комплекта процессора MUST NOT хранить путь или имя инструмента образа. Выбор каталога прошивки MUST идти от `sys:` и id профиля.
 
-#### Scenario: В kit нет каталога swapforth
+#### Scenario: В kit нет пути образа
 - **WHEN** читаются `cpu/j1/j1a/kit.4th` и `cpu/j1/j1b/kit.4th`
 - **THEN** в них нет строки `swapforth` и нет слова, которое подставляет путь кросса
 
 ### Requirement: Порт образа
-Профиль MAY задавать `cpu-port`. Пустое поле MUST означать id профиля. `soc-port` MUST возвращать этот порт. Каталог образа SwapForth и kernel fsys MUST строиться от порта, а не от id, когда порт задан.
+Профиль MAY задавать `cpu-port`. Пустое поле MUST означать id профиля. `soc-port` MUST возвращать этот порт. Каталог kernel fsys MUST строиться от порта, а не от id, когда порт задан.
 
 #### Scenario: Пустой порт
 - **WHEN** у профиля `j1a` порт не задан
@@ -173,20 +177,24 @@
 - **WHEN** профиль с CG=F имеет `cpu.cg-soc` равный 0 и выполняется `fsoc --build` задачи `soc` с `s" fsys" sys:`
 - **THEN** сборка останавливается до записи `firmware.hex` с текстом, содержащим `no cg-soc`
 
-### Requirement: MCU без SwapForth требует fsys
-Пустое `sys:` MUST оставаться `swapforth`. Профиль без дерева SwapForth MUST требовать `s" fsys" sys:` и MUST останавливать сборку при пустом `sys:`. Профиль `bcpu` MUST требовать `s" fsys" sys:` и MUST останавливать сборку до образа SwapForth, если `sys:` пуст или равен `swapforth`. Профиль `msl16` MUST требовать `s" fsys" sys:` так же и MUST писать слово-hex на 2048 слов (`ADDR=11`), а не Intel HEX. Профиль `z80` MUST требовать `s" fsys" sys:` и MUST писать byte-hex на 16384 байт, а не Intel HEX. CG=E MUST NOT писать hex, пока профиль не сменит CG.
+### Requirement: Задача soc требует fsys
+Любой профиль на задаче `soc` MUST требовать `s" fsys" sys:`. Пустое `sys:` MUST останавливать сборку с текстом `needs fsys`. Профиль `msl16` MUST писать слово-hex на 2048 слов (`ADDR=11`), а не Intel HEX. Профиль `z80` MUST писать byte-hex на 16384 байт, а не Intel HEX. CG=E MUST NOT писать hex, пока профиль не сменит CG.
 
 #### Scenario: AVR без fsys останавливается
 - **WHEN** манифест содержит `s" avr" cpu:` без `sys:` и выполняется `fsoc --build`
-- **THEN** сборка останавливается до записи hex
+- **THEN** сборка останавливается с текстом `needs fsys` до записи hex
+
+#### Scenario: j1a без fsys останавливается
+- **WHEN** манифест содержит задачу `soc` и `s" j1a" cpu:` без `sys:` и выполняется `fsoc --build`
+- **THEN** сборка останавливается с текстом `needs fsys` и не пишет `firmware.hex`
 
 #### Scenario: bcpu без fsys останавливается
 - **WHEN** манифест содержит `s" bcpu" cpu:` без `sys:` и выполняется `fsoc --build`
-- **THEN** сборка останавливается с текстом `needs fsys` и не читает `swapforth/`
+- **THEN** сборка останавливается с текстом `needs fsys`
 
 #### Scenario: msl16 без fsys останавливается
 - **WHEN** манифест содержит `s" msl16" cpu:` без `sys:` и выполняется `fsoc --build`
-- **THEN** сборка останавливается с текстом `needs fsys` и не читает `swapforth/`
+- **THEN** сборка останавливается с текстом `needs fsys`
 
 #### Scenario: msl16 пишет слово
 - **WHEN** манифест содержит `s" soc" task:`, `s" emulation" target:`, `s" msl16" cpu:`, `s" fsys" sys:` и выполняется `fsoc --build`
@@ -194,7 +202,7 @@
 
 #### Scenario: z80 без fsys останавливается
 - **WHEN** манифест содержит `s" z80" cpu:` без `sys:` и выполняется `fsoc --build`
-- **THEN** сборка останавливается с текстом `needs fsys` и не читает `swapforth/`
+- **THEN** сборка останавливается с текстом `needs fsys`
 
 ### Requirement: AVR печатает Hardware и Software
 Сборка образа AVR MUST напечатать `Start build`, `Hardware`, строку `<model>(avr)`, `Hardware complete`, `Software`, `image tool: fsys` или `image tool: fasm`, пути собранных исходников, `firmware.hex: <байт> bytes of <ёмкость flash>`, `Software complete`. Ёмкость MUST быть `avr-flash` в байтах (у ATmega8 — 8192). Строка `ATmega8 Intel HEX` MUST NOT печататься.
