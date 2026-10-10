@@ -48,6 +48,20 @@
     "needs": [],
     "missing": []
   },
+  "c@": {
+    "file": "fsys/kernel/z80/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "c!": {
+    "file": "fsys/kernel/z80/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
   "0=": {
     "file": "fsys/kernel/z80/kernel.4th",
     "asm": true,

@@ -8,7 +8,10 @@ import sys
 def main():
     path = sys.argv[1]
     need = int(sys.argv[2]) if len(sys.argv) > 2 else 3
-    text = open(path, encoding="utf-8", errors="replace").read()
+    raw = open(path, "rb").read()
+    if re.search(rb"\x00blink ", raw):
+        sys.exit("NUL before blink (cell ! on LED/UART)")
+    text = raw.decode("utf-8", errors="replace")
     seq = re.findall(r"blink (on|off)", text)
     if len(seq) < need * 2:
         sys.exit(f"need {need * 2} edges, got {len(seq)}: {seq[:12]}")

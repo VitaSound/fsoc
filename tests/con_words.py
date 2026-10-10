@@ -503,6 +503,8 @@ Z80_RUN = {
     "space": ("space", [" ok"]),
     "depth": ("depth .", ["0"]),
     "words": ("words", ["dup"]),
+    "c!": ("66 here c! here c@ .", ["66"]),
+    "c@": ("67 here c! here c@ .", ["67"]),
 }
 
 Z80_COLON = {

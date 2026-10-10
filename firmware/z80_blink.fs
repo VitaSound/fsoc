@@ -4,7 +4,7 @@
    0
    begin
       1 xor
-      dup $3FF0 !
+      dup $3FF0 c!
       dup if
          ." blink on"
       else

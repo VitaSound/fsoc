@@ -387,6 +387,27 @@ k-lab kstore
    ret,
 s" !" 0 s" kstore" k-pc k-word
 
+k-lab kcfetch
+   l e ld,
+   h d ld,
+   e mhl ld,
+   d 0 ld#,
+   ret,
+s" c@" 0 s" kcfetch" k-pc k-word
+
+k-lab kcstore
+   l e ld,
+   h d ld,
+   hl push,
+   k-call zpop
+   hl pop,
+   mhl e ld,
+   k-call zpop
+   k-call ddec
+   k-call ddec
+   ret,
+s" c!" 0 s" kcstore" k-pc k-word
+
 k-lab kzeq
    a d ld,
    e or,
@@ -1163,8 +1184,6 @@ s" again" k-stub
 s" allot" k-stub
 s" and" k-stub
 s" begin" k-stub
-s" c!" k-stub
-s" c@" k-stub
 s" cell+" k-stub
 s" cells" k-stub
 s" compile-exit" k-stub
