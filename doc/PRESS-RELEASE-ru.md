@@ -20,7 +20,7 @@
 
 **ATmega8.** Профиль `avr`: Harvard STC, Intel HEX, без `avra`. Три слоя как у J1 — fasm, kernel-консоль, хост-кросс. `soc_atmega8` — extra-min REPL. `soc_atmega8_blink` — release с `firmware/blink.fs`: PB0 и USART `blink on` / `blink off`. Голая мигалка без Форта — та же задача `blinky`, только `cpu: avr`.
 
-**Одна сетка консоли.** j1a, j1b и avr с `sys: fsys` отвечают на один сценарий: ввод, BS/DEL, неизвестное слово, стек, `+`, `.s`, `:`, `words`. Словарь сверяется с JSON. Это не «тесты как получится», а условие на новый `cpu:` id.
+**Одна сетка консоли.** j1a, j1b и avr с `sys: fsys` отвечают на один сценарий: ввод, BS/DEL, неизвестное слово, стек, `+`, `.s`, `:`, `words`. Словарь сверяется с JSON. Это не «тесты как получится», а условие на новый `cpu:` id. (Позже в ту же сетку вошли bcpu, cd16, msl16, z80.)
 
 ## Где было больно
 
@@ -50,7 +50,7 @@
 
 Спеки теперь говорят прямо: следующая приёмка — **железные ПЛИС** из `boards/` (Colorlight 5A-75E, Terasic DE0-Nano и те, что появятся) и **Proteus** для AVR. Зелёный Verilator не заменяет лампу на столе.
 
-Профили `stm8` и `z80` стоят в таблице CPU и пока останавливаются до hex. Это не дыра релиза, это очередь.
+На момент 0.9.0 профили `stm8` и `z80` стояли в таблице и останавливались до hex. Позже `z80`, `cd16` и `msl16` получили консоль fsys; `stm8` (CG=E) по-прежнему без hex в этом репо.
 
 ## Как потрогать
 
@@ -59,9 +59,9 @@ git clone git@github.com:VitaSound/fsoc.git
 cd fsoc && git checkout 0.9.0
 fmix packages.get
 # ПЛИС-консоль в эмуляции
-cd projects/soc_emul && fsoc --build
+cd projects/soc/soc_emul && fsoc --build
 # AVR-лампа: HEX в Proteus или
-cd projects/soc_atmega8_blink && fsoc --build
+cd projects/soc/soc_atmega8_blink && fsoc --build
 ~/fsoc/tools/avr-con ./firmware.hex
 ```
 

@@ -3,11 +3,11 @@
 s" test_common.4th" included
 s" fixture.4th" included
 
-s" git check-ignore -q projects/soc_terasic_de0nano/target.4th" system
+s" git check-ignore -q projects/soc/soc_terasic_de0nano/target.4th" system
 $? 0= expect-false
 
 test-setup
-s" soc_terasic_de0nano" tmp-use-project
+s" soc/soc_terasic_de0nano" tmp-use-project
 s" " s" --build" in-tmp-fsoc expect-true
 s" soc.qsf" tmp-exists? expect-true
 s" soc.qpf" tmp-exists? expect-true
@@ -35,7 +35,7 @@ test-teardown
 
 \ --- yosys: colorlight 5A-75E v6.0 lamp, files only (no synthesis) ---
 test-setup
-s" soc_blink_colorlight_5a_75e_v6_0" tmp-use-project
+s" soc/soc_blink_colorlight_5a_75e_v6_0" tmp-use-project
 s" FSOC_SYNTH_SKIP=1" s" --build" in-tmp-fsoc expect-true
 s" soc.lpf" tmp-exists? expect-true
 s" soc.qsf" tmp-exists? expect-false

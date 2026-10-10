@@ -7,18 +7,17 @@
 
 Сборщик SoC на Форте: **платы**, **тулчейны Quartus/Yosys/Verilator**, **iomap**, **прошивка**. Аналог LiteX `build` + `soc` на Gforth. Модули Verilog — из [fhdlgen](https://github.com/VitaSound/fhdlgen) и [hdl-modules](https://github.com/VitaSound/hdl-modules). Пресс-релиз: [doc/PRESS-RELEASE-ru.md](doc/PRESS-RELEASE-ru.md).
 
-На одном холсте — soft-CPU на ПЛИС и MCU (ATmega8), плюс демо **двух микроядер** с обменом ping/pong. «Два ядра J1» в пресс-релизе — это профили **j1a и j1b**, не dual-core; MPSoC — [doc/mcpu-pingpong.md](doc/mcpu-pingpong.md).
+За первый час соберёте **мигалку** в Verilator (`pin led 0` / `1`) и **консоль Forth**, которая ответит `3` и `ok`. Платы, другие CPU и fit — после Day-1. «Два ядра J1» в пресс-релизе — это профили **j1a и j1b**, не dual-core; два микроядра на шине — [doc/mcpu-pingpong.md](doc/mcpu-pingpong.md).
 
 ## Что нужно в первый час
 
 - Gforth, `fmix packages.get`, `FSOC_HOME` и `PATH` (см. [feco shell-setup](https://github.com/VitaSound/feco/blob/main/docs/shell-setup.md))
-- Для пути ПЛИС: **Verilator**
-- Для пути MCU: сборка HEX всегда; интерактив — **simavr** + `libsimavr-dev` (иначе консоль пропускается)
-- **Не** нужны в первый час: Quartus, Yosys/nextpnr, Proteus, fhdlgen
+- **Verilator** (канон ниже)
+- **Не** нужны в первый час: Quartus, Yosys/nextpnr, Proteus, fhdlgen, simavr
 
-Полный прогон: `fmix test`. Развёрнутый гайд (платы, fit, все CPU): [doc/guide-detail-ru.md](doc/guide-detail-ru.md).
+Полный прогон: `fmix test`. Пять терминов Day-1: [doc/GLOSSARY.md](doc/GLOSSARY.md). После Day-1 (платы, fit, остальные CPU): [doc/guide-detail-ru.md](doc/guide-detail-ru.md) — в первый час не открывайте.
 
-## День 1
+## День 1 — начните здесь (ПЛИС / Verilator)
 
 ```bash
 git clone git@github.com:VitaSound/fsoc.git
@@ -28,18 +27,47 @@ export PATH="$FSOC_HOME/bin:$PATH"
 fsoc version
 ```
 
-Выберите путь:
-
-### ПЛИС / soft-CPU (Verilator)
+### 1. Мигалка (без Forth)
 
 ```bash
 cd projects/baremetal/blinky_emul && fsoc --build
-# t=<ns> pin led 0 / pin led 1
-
-cd ../soc_emul
-FSOC_EMU_FAST=1 FSOC_EMU_UART_IN='1 2 + .' fsoc --build
-# 3 и ok
 ```
+
+В логе периодически:
+
+```text
+t=<ns> pin led 0
+t=<ns> pin led 1
+```
+
+Остановка — Ctrl+C.
+
+### 2. Консоль Forth (`3` и `ok`)
+
+```bash
+cd projects/soc/soc_emul
+FSOC_EMU_FAST=1 FSOC_EMU_UART_IN='1 2 + .' fsoc --build
+```
+
+В логе:
+
+```text
+3  ok
+```
+
+В git в каждом `projects/*` лежит только `target.4th`; `fsoc --build` пишет остальное на месте.
+
+## Три режима
+
+| Режим | В `target.4th` | Что получите | Пример |
+|-------|----------------|--------------|--------|
+| Мигалка | `blinky` | пины LED, **без** консоли Forth | `baremetal/blinky_emul` |
+| Консоль SoC | `soc` + `sys: fsys` | UART / `ok`, слова `+` `.` `:` | `soc/soc_emul` |
+| Два микроядра | `dual-mcpu` | `pin ping` / `pin pong`, **не** fsys | `baremetal/dual_mcpu_emul` |
+
+Позже (не Day-1): `soc/soc_atmega8` (MCU HEX), `soc/soc_blink` (лампа на soft-CPU).
+
+## Ещё пути
 
 ### MCU (ATmega8)
 
@@ -47,10 +75,9 @@ FSOC_EMU_FAST=1 FSOC_EMU_UART_IN='1 2 + .' fsoc --build
 cd projects/baremetal/blinky_atmega && fsoc --build
 # Hardware atmega8(avr), firmware.hex
 
-cd ../../soc_atmega8 && fsoc --build
-# без simavr — только HEX; с пакетами:
-# sudo apt install simavr libsimavr-dev gcc
-~/fsoc/tools/avr-con ./firmware.hex '1 2 + .'
+cd ../../soc/soc_atmega8 && fsoc --build
+# HEX всегда; интерактив — simavr + libsimavr-dev:
+# ~/fsoc/tools/avr-con ./firmware.hex '1 2 + .'
 ```
 
 ### Два микроядра (MPSoC)
@@ -63,8 +90,36 @@ FSOC_EMU_EDGES=4 FSOC_EMU_FAST=1 fsoc --build
 
 Подробности: [doc/mcpu-pingpong.md](doc/mcpu-pingpong.md).
 
-Термины: [doc/GLOSSARY.md](doc/GLOSSARY.md). Слои репозитория: [doc/MAP.md](doc/MAP.md). Профили CPU / FMAP: [doc/FMAP-INDEX.md](doc/FMAP-INDEX.md).  
+Слои репозитория: [doc/MAP.md](doc/MAP.md). Профили CPU: [doc/FMAP-INDEX.md](doc/FMAP-INDEX.md).  
 Человек: [CONTRIBUTING.md](CONTRIBUTING.md). Агент: [AGENTS.md](AGENTS.md) и `.cursor/rules/`.
+
+## Как устроена сборка
+
+Каталог проекта + `target.4th` → `fsoc --build` → артефакты рядом (`sim.sh`, HEX, …). В git остаётся только манифест. Задача и плата — в манифесте, не в CLI.
+
+Мигалка (без `sys:`):
+
+```forth
+s" blinky" task:
+s" emulation" target:
+```
+
+Консоль SoC — обязательно `s" fsys" sys:`, иначе сборка останавливается (`needs fsys`):
+
+```forth
+s" soc" task:
+s" emulation" target:
+s" fsys" sys:
+s" lamp" s" 1" option:   \ опционально: цикл лампы вместо приглашения
+```
+
+| Таргет | `run` |
+|--------|-------|
+| `emulation` | Verilator (`sim.sh`) |
+| `quartus` | файлы проекта; `--load` → `load.sh` |
+| `yosys` | `build.sh` (nextpnr) |
+
+Платы и сценарии fit — в [doc/guide-detail-ru.md](doc/guide-detail-ru.md) (после Day-1).
 
 ## Установка (кратко)
 
@@ -77,37 +132,9 @@ export FSOC_HOME="$HOME/fsoc"
 cd tests && gforth con_core_test.4th
 ```
 
-## Как устроена сборка
-
-В git в каталоге проекта — только `target.4th`. `fsoc --build` пишет остальное на месте. Задача и плата — в манифесте, не в CLI.
-
-```forth
-s" blinky" task:            \ или soc / dual-mcpu / standalone
-s" emulation" target:       \ emulation | quartus | yosys
-s" fsys" sys:               \ для soc обязательно
-s" lamp" s" 1" option:
-```
-
-| Таргет | `run` |
-|--------|-------|
-| `emulation` | Verilator (`sim.sh`) |
-| `quartus` | файлы проекта; `--load` → `load.sh` |
-| `yosys` | `build.sh` (nextpnr) |
-
-Детали мигалки, SoC, Colorlight, DE0-Nano, AVR, bcpu, j1abs, standalone-fit — в [doc/guide-detail-ru.md](doc/guide-detail-ru.md).
-
-## Платы
-
-| Плата | Микросхема | Заметки |
-|-------|------------|---------|
-| `terasic_de0nano` | EP4CE22F17C6 | Quartus, USB-UART |
-| `colorlight_5a_75e_v6_0` | LFE5U-25F | Yosys/nextpnr, 25 МГц |
-| `lfe5u25f_cabga256` | LFE5U-25F | карта шаров для standalone |
-| `ep2c5_mini` | EP2C5T144C8 | Quartus |
-
 ## Новый CPU
 
-Новая **ISA** — новый id `cpu:` и слои fsys (см. [`.cursor/rules/fsoc-cpu-target.mdc`](.cursor/rules/fsoc-cpu-target.mdc)). Новая микросхема той же ISA — файл части под fasm. Консоль fsys должна войти в `tests/con_core_test.4th`. Оси FMAP: [doc/FMAP-INDEX.md](doc/FMAP-INDEX.md).
+Новая **ISA** — новый id `cpu:` и слои fsys. Новая микросхема той же ISA — файл части под fasm. Консоль fsys должна войти в `tests/con_core_test.4th`. Инструкция: [doc/add-cpu.md](doc/add-cpu.md). Оси FMAP: [doc/FMAP-INDEX.md](doc/FMAP-INDEX.md).
 
 ## Связанное
 

@@ -103,14 +103,14 @@
 - **THEN** предупреждений нет, и `rg "pick3|ulist-head|unode-" fsoc/ targets/ designs/` пусто
 
 #### Scenario: Лог сборки одинаков для задач
-- **WHEN** выполняется `fsoc --build` в `projects/baremetal/blinky_emul` и в `projects/soc_emul`
+- **WHEN** выполняется `fsoc --build` в `projects/baremetal/blinky_emul` и в `projects/soc/soc_emul`
 - **THEN** оба лога начинаются со строки `fsoc: <имя каталога> - Start build`
 
 ### Requirement: Тесты не трогают рабочие каталоги
 Тест билдера MUST копировать `target.4th` проекта во временный каталог и запускать `fsoc` там. Тест MUST NOT удалять и MUST NOT перезаписывать файлы в `projects/*`. В конце тестового файла стек данных MUST быть пуст.
 
 #### Scenario: Проект пользователя цел
-- **WHEN** в `projects/soc_emul` лежат `top.v` и `obj_dir/` от ручной сборки и выполняется `fmix test`
+- **WHEN** в `projects/soc/soc_emul` лежат `top.v` и `obj_dir/` от ручной сборки и выполняется `fmix test`
 - **THEN** после теста эти файлы на месте с прежним временем изменения
 
 #### Scenario: Чистый стек
@@ -121,20 +121,28 @@
 Задача `soc` MUST собираться на зарегистрированном таргете без сравнения имени таргета со строками `quartus`, `emulation` или `yosys`. При заданной плате задача MUST загрузить её, запросить единственный тактовый ресурс (`plat-clock`) и `user_led`, и MUST запросить `serial` только когда `s" serial" 0 io-find` его находит. Таргет `quartus` MUST записать `.qsf` из карты пинов. Таргет `emulation` MUST карту пинов игнорировать, MUST оставить `sim.sh` и MUST NOT писать `.qsf` или `.lpf`. Таргет `yosys` MUST записать `.lpf` из той же карты.
 
 #### Scenario: Один и тот же дизайн на двух таргетах
-- **WHEN** `projects/soc_emul` и `projects/soc_terasic_de0nano` называют `designs/soc_console.4th` и выполняется `fsoc --build` в каждом
+- **WHEN** `projects/soc/soc_emul` и `projects/soc/soc_terasic_de0nano` называют `designs/soc_console.4th` и выполняется `fsoc --build` в каждом
 - **THEN** первый каталог содержит `sim.sh` и не содержит `.qsf`, второй содержит `soc.qsf` и не содержит `sim.sh`
 
 #### Scenario: Лампа на Yosys
-- **WHEN** в `projects/soc_blink_colorlight_5a_75e_v6_0` выполняется `fsoc --build` с `FSOC_SYNTH_SKIP=1`
+- **WHEN** в `projects/soc/soc_blink_colorlight_5a_75e_v6_0` выполняется `fsoc --build` с `FSOC_SYNTH_SKIP=1`
 - **THEN** каталог содержит `soc.lpf` и не содержит `sim.sh` и `soc.qsf`
 
 #### Scenario: Консоль на эмуляции с платой
-- **WHEN** в `projects/soc_emul_colorlight_5a_75e_v6_0` выполняется `fsoc --build` с `FSOC_EMU_FAST=1` и `FSOC_EMU_UART_IN`, равным `1 2 + .`
+- **WHEN** в `projects/soc/soc_emul_colorlight_5a_75e_v6_0` выполняется `fsoc --build` с `FSOC_EMU_FAST=1` и `FSOC_EMU_UART_IN`, равным `1 2 + .`
 - **THEN** каталог содержит `sim.sh` и не содержит `soc.qsf` и `soc.lpf`, а `fsoc/tasks/soc.4th` не сравнивает имя таргета со строками `quartus`, `emulation` и `yosys`
 
 ### Requirement: Blinky без Forth лежит в baremetal
-Рабочие копии задачи `blinky` MUST жить в `projects/baremetal/<имя>/`. Git MUST хранить только `target.4th` на втором уровне. `projects/soc_*` MUST оставаться прямо в `projects/`.
+Рабочие копии задачи `blinky` MUST жить в `projects/baremetal/<имя>/`. Рабочие копии задачи `soc` MUST жить в `projects/soc/<имя>/`. Рабочие копии задачи `standalone` MUST жить в `projects/standalone/<имя>/`. Git MUST хранить только `target.4th` на втором уровне внутри каждого из этих каталогов категорий.
 
 #### Scenario: Манифест HDL-blinky не игнорируется
 - **WHEN** выполняется `git check-ignore -q projects/baremetal/blinky_emul/target.4th`
+- **THEN** код возврата не 0
+
+#### Scenario: Манифест soc не игнорируется
+- **WHEN** выполняется `git check-ignore -q projects/soc/soc_emul/target.4th`
+- **THEN** код возврата не 0
+
+#### Scenario: Манифест standalone не игнорируется
+- **WHEN** выполняется `git check-ignore -q projects/standalone/standalone_j1a/target.4th`
 - **THEN** код возврата не 0

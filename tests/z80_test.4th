@@ -29,7 +29,7 @@ test-teardown
 
 \ Console: 1 2 + . answers 3 and ok. A later line must not wipe the stack.
 test-setup
-s" soc_z80" tmp-use-project
+s" soc/soc_z80" tmp-use-project
 s\" FSOC_EMU_FAST=1 FSOC_EMU_CON=term FSOC_EMU_UART_IN=\"$(printf '%s\\n' '1 2 3' '.s' '+ .' '.s' empty '1 2 3 4' '.s')\" " s" --build" in-tmp-fsoc expect-true
 s" image tool: fsys" s" sim.log" tmp-grep? expect-true
 s" fsys/kernel/z80/kernel.4th" s" sim.log" tmp-grep? expect-true
@@ -45,7 +45,7 @@ test-teardown
 
 \ Soc blink: the pin toggles, and the console prints each edge.
 test-setup
-s" soc_z80_blink" tmp-use-project
+s" soc/soc_z80_blink" tmp-use-project
 s" env -u FSOC_EMU_UART_IN -u FSOC_EMU_UART_GAP FSOC_EMU_FAST=1 FSOC_EMU_CON=pin FSOC_EMU_EDGES=4 FSOC_EMU_CYCLES=8000000" s" --build" in-tmp-fsoc expect-true
 s" image tool: fsys" s" sim.log" tmp-grep? expect-true
 s" firmware/z80_blink.fs" s" sim.log" tmp-grep? expect-true
@@ -54,7 +54,7 @@ s" pin led 1" s" sim.log" tmp-grep? expect-true
 test-teardown
 
 test-setup
-s" soc_z80_blink" tmp-use-project
+s" soc/soc_z80_blink" tmp-use-project
 s" env -u FSOC_EMU_UART_IN -u FSOC_EMU_UART_GAP FSOC_EMU_FAST=1 FSOC_EMU_CON=term FSOC_EMU_CYCLES=8000000" s" --build" in-tmp-fsoc expect-true
 s" blink on" s" sim.log" tmp-grep? expect-true
 s" blink off" s" sim.log" tmp-grep? expect-true

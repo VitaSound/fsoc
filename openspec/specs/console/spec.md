@@ -10,18 +10,18 @@
 Канал UART MUST принимать каждый декодированный байт один раз. Вид печати MUST задавать `FSOC_EMU_CON`. Значение `log` MUST печатать строку `t=<ns> uart <имя> <байт>`, как раньше: печатный символ как символ, прочий байт как `0x` и две шестнадцатеричные цифры. Значение `term` MUST записать сам байт в stdout без метки времени и без отдельной строки на байт. Значение `pin` MUST печатать смену уровня `t=<ns> pin <имя> <значение>` и MUST NOT печатать байты UART. Любое другое непустое значение MUST вести себя как `log`.
 
 #### Scenario: Явный журнал
-- **WHEN** в `projects/soc_emul` выполняется `fsoc --build` с `FSOC_EMU_FAST=1`, `FSOC_EMU_UART_BYTES=2` и `FSOC_EMU_CON=log`, а stdout записан в файл
+- **WHEN** в `projects/soc/soc_emul` выполняется `fsoc --build` с `FSOC_EMU_FAST=1`, `FSOC_EMU_UART_BYTES=2` и `FSOC_EMU_CON=log`, а stdout записан в файл
 - **THEN** в файле есть строки `uart tx 0x0d` и `uart tx 0x0a`
 
 #### Scenario: Явный терминал
-- **WHEN** в `projects/soc_emul` выполняется `fsoc --build` с `FSOC_EMU_FAST=1`, `FSOC_EMU_UART_IN`, равным `1 2 + .`, и `FSOC_EMU_CON=term`, а stdout записан в файл
+- **WHEN** в `projects/soc/soc_emul` выполняется `fsoc --build` с `FSOC_EMU_FAST=1`, `FSOC_EMU_UART_IN`, равным `1 2 + .`, и `FSOC_EMU_CON=term`, а stdout записан в файл
 - **THEN** в файле есть символ `3` и текст ` ok`, и нет подстроки `uart tx`
 
 ### Requirement: Без переменной вид следует за stdout
 Если `FSOC_EMU_CON` не задана или пуста, stdout на терминале MUST выбирать вид `term`, а stdout в файл или пайп MUST выбирать вид `log`.
 
 #### Scenario: Файл остаётся журналом
-- **WHEN** в `projects/soc_emul` выполняется `fsoc --build` с `FSOC_EMU_FAST=1` и `FSOC_EMU_UART_BYTES=2`, переменная `FSOC_EMU_CON` не задана, а stdout записан в файл
+- **WHEN** в `projects/soc/soc_emul` выполняется `fsoc --build` с `FSOC_EMU_FAST=1` и `FSOC_EMU_UART_BYTES=2`, переменная `FSOC_EMU_CON` не задана, а stdout записан в файл
 - **THEN** в файле есть строки `uart tx 0x0d` и `uart tx 0x0a`
 
 ### Requirement: Текстовый вид на терминале — экран ncurses
@@ -39,5 +39,5 @@
 `emu/con` MUST печатать байт и смену уровня и MUST NOT искать в потоке UART текст прошивки, MUST NOT считать переключения пина ради завершения и MUST NOT знать имён из иерархии дизайна. Решение о завершении прогона MUST принимать библиотека такта по пределам `FSOC_EMU_*`, а проверка содержимого журнала — тест.
 
 #### Scenario: Журнал лампы без оракула в консоли
-- **WHEN** в `projects/soc_blink` запущен просмотр с `FSOC_EMU_CON=term`, `FSOC_EMU_FAST=1`, `FSOC_EMU_CYCLES=200000`
+- **WHEN** в `projects/soc/soc_blink` запущен просмотр с `FSOC_EMU_CON=term`, `FSOC_EMU_FAST=1`, `FSOC_EMU_CYCLES=200000`
 - **THEN** вывод содержит `lamp on` и `lamp off`, а `rg "lamp" emu/ fsoc/tasks/*.cpp` пусто

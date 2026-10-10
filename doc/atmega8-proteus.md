@@ -5,8 +5,8 @@
 Сборка из каталога проекта:
 
 ```bash
-cd projects/soc_atmega8 && fsoc --build
-cd projects/soc_atmega8_blink && fsoc --build
+cd projects/soc/soc_atmega8 && fsoc --build
+cd projects/soc/soc_atmega8_blink && fsoc --build
 cd projects/baremetal/blinky_atmega && fsoc --build
 ```
 
@@ -23,7 +23,7 @@ cd projects/baremetal/blinky_atmega && fsoc --build
 
 ```bash
 sudo apt install simavr libsimavr-dev   # headers: libsimavr-dev
-cd projects/soc_atmega8 && fsoc --build
+cd projects/soc/soc_atmega8 && fsoc --build
 "$FSOC_HOME/tools/avr-con" ./firmware.hex           # интерактив: строка + Enter
 "$FSOC_HOME/tools/avr-con" ./firmware.hex words 1   # одна или несколько команд
 ```

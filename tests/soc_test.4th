@@ -15,7 +15,7 @@ s" test -d swapforth" system
 $? 0= expect-false
 
 test-setup
-s" soc_emul" tmp-use-project
+s" soc/soc_emul" tmp-use-project
 
 : soc-run ( env-a env-u -- )
     s" env -u FSOC_EMU_CON FSOC_EMU_FAST=1 " 2swap fjson.str-concat
@@ -72,7 +72,7 @@ s" " s" --load" in-tmp-fsoc expect-true
 test-teardown
 
 test-setup
-s" soc_emul_colorlight_5a_75e_v6_0" tmp-use-project
+s" soc/soc_emul_colorlight_5a_75e_v6_0" tmp-use-project
 s" FSOC_EMU_UART_IN='1 2 + .'" soc-run
 s" add" soc-uart? expect-true
 s" CLK_HZ(25000000)" s" top.v" tmp-grep? expect-true

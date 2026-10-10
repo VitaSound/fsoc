@@ -14,7 +14,7 @@
 - **THEN** сборка останавливается с текстом, содержащим `no-such-cpu`
 
 #### Scenario: Пустое поле
-- **WHEN** `projects/soc_emul/target.4th` не содержит `cpu:` и содержит `s" fsys" sys:` и выполняется сборка образа
+- **WHEN** `projects/soc/soc_emul/target.4th` не содержит `cpu:` и содержит `s" fsys" sys:` и выполняется сборка образа
 - **THEN** журнал содержит `fsys/kernel/j1a/kernel.4th`
 
 ### Requirement: Излучатель выбирается по CG

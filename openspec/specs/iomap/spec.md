@@ -17,7 +17,7 @@
 Сборка SoC MUST записать в каталог проекта `csr.fs` со строками вида `$400 constant IO-LED` (имя в верхнем регистре, `_` → `-`), `iomap.vh` со строками вида `localparam IO_LED_BIT = 10;`, и `csr.json` с объектом `{"bus":"j1-io","devices":[…]}`, где у каждого устройства есть `name`, `bit`, `addr`, `width`, `access`. Числа во всех трёх файлах MUST совпадать для каждого устройства.
 
 #### Scenario: Согласованные экспорты
-- **WHEN** в `projects/soc_blink` выполняется `fsoc --build`
+- **WHEN** в `projects/soc/soc_blink` выполняется `fsoc --build`
 - **THEN** `csr.fs` содержит `$400 constant IO-LED` и `$800 constant IO-TIMER`, `iomap.vh` содержит `IO_LED_BIT = 10` и `IO_TIMER_BIT = 11`, `csr.json` содержит устройство `led` с `"addr":1024` и `"bit":10`, и тест сравнения трёх файлов проходит
 
 ### Requirement: Обёртка декодирует по карте
@@ -31,5 +31,5 @@
 Слова `cores-minimal-soc`, `cores-uart`, `cores-gpio`, `cores-timer`, `cores-ctrl` и файл `fsoc/soc/cores.4th` MUST NOT существовать. Файл `csr.4th` MUST NOT записываться в каталог проекта.
 
 #### Scenario: Нет фиктивной карты
-- **WHEN** в `projects/soc_emul` выполняется `fsoc --build`
+- **WHEN** в `projects/soc/soc_emul` выполняется `fsoc --build`
 - **THEN** в каталоге нет `csr.4th`, есть `csr.fs`, `iomap.vh`, `csr.json`, и `rg "cores-|CSR-uart-rxtx" fsoc/ tests/` пусто

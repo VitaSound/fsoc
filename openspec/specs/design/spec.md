@@ -25,7 +25,7 @@
 При сборке генератор MUST напечатать на stdout `fhdlgen: <путь выходного .v>` и `fhdlgen: <имя>` для каждого `hdl-include-v` в порядке объявления, и MUST записать те же имена в `<dir>/includes.lst`, по одному на строку. Билдер MUST брать список листов из этого файла и MUST NOT разбирать `top.v`.
 
 #### Scenario: Листы SoC в логе и в списке
-- **WHEN** в `projects/soc_blink` выполняется `fsoc --build`
+- **WHEN** в `projects/soc/soc_blink` выполняется `fsoc --build`
 - **THEN** лог содержит строки `fhdlgen: stack2.v`, `fhdlgen: j1.v`, `fhdlgen: uart.v`, `fhdlgen: timer.v`, `fhdlgen: regio.v`, `fhdlgen: j1_wrap.v`, `fhdlgen: top.v`, `includes.lst` содержит те же шесть листов, а `awk` по `top.v` в билдере отсутствует
 
 ### Requirement: Один blackbox на обёртку

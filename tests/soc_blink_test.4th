@@ -5,11 +5,11 @@ s" fixture.4th" included
 
 s" grep -q led designs/soc_top.4th" system
 $? 0= expect-true
-s" git check-ignore -q projects/soc_blink/target.4th" system
+s" git check-ignore -q projects/soc/soc_blink/target.4th" system
 $? 0= expect-false
 
 test-setup
-s" soc_blink" tmp-use-project
+s" soc/soc_blink" tmp-use-project
 s" lamp" s" target.4th" tmp-grep? expect-true
 
 s" env -u FSOC_EMU_UART_IN FSOC_EMU_FAST=1 FSOC_EMU_CON=term FSOC_EMU_CYCLES=800000" s" --build" in-tmp-fsoc expect-true

@@ -6,7 +6,9 @@ s" fixture.4th" included
 
 s" git check-ignore -q projects/baremetal/blinky_emul/target.4th" system
 $? 0= expect-false
-s" git check-ignore -q projects/soc_emul/target.4th" system
+s" git check-ignore -q projects/soc/soc_emul/target.4th" system
+$? 0= expect-false
+s" git check-ignore -q projects/standalone/standalone_j1a/target.4th" system
 $? 0= expect-false
 
 \ --- board build writes Quartus files and does not run Quartus ---

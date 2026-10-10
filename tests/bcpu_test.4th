@@ -37,7 +37,7 @@ test-teardown
 
 \ Console: 1 2 + . answers 3 and ok.
 test-setup
-s" soc_bcpu" tmp-use-project
+s" soc/soc_bcpu" tmp-use-project
 s\" FSOC_EMU_FAST=1 FSOC_EMU_CON=term FSOC_EMU_UART_IN='1 2 + .' " s" --build" in-tmp-fsoc expect-true
 s" image tool: fsys" s" sim.log" tmp-grep? expect-true
 s" fsys/kernel/bcpu/kernel.4th" s" sim.log" tmp-grep? expect-true
@@ -49,7 +49,7 @@ test-teardown
 
 \ Soc blink: the pin toggles, and the console prints each edge.
 test-setup
-s" soc_bcpu_blink" tmp-use-project
+s" soc/soc_bcpu_blink" tmp-use-project
 s" env -u FSOC_EMU_UART_IN FSOC_EMU_FAST=1 FSOC_EMU_CON=pin FSOC_EMU_CYCLES=200000" s" --build" in-tmp-fsoc expect-true
 s" image tool: fsys" s" sim.log" tmp-grep? expect-true
 s" firmware/bcpu_blink.fs" s" sim.log" tmp-grep? expect-true
@@ -59,7 +59,7 @@ s" eForth" s" sim.log" tmp-grep? expect-false
 test-teardown
 
 test-setup
-s" soc_bcpu_blink" tmp-use-project
+s" soc/soc_bcpu_blink" tmp-use-project
 s" env -u FSOC_EMU_UART_IN FSOC_EMU_FAST=1 FSOC_EMU_CON=term FSOC_EMU_CYCLES=2000000" s" --build" in-tmp-fsoc expect-true
 s" blink on" s" sim.log" tmp-grep? expect-true
 s" blink off" s" sim.log" tmp-grep? expect-true
@@ -67,7 +67,7 @@ test-teardown
 
 \ Colorlight project files. Synthesis itself is not part of this run.
 test-setup
-s" soc_bcpu_colorlight" tmp-use-project
+s" soc/soc_bcpu_colorlight" tmp-use-project
 s" FSOC_SYNTH_SKIP=1" s" --build" in-tmp-fsoc expect-true
 s" bcpu.lpf" tmp-exists? expect-true
 s\" SITE \"P6\"" s" bcpu.lpf" tmp-grep? expect-true

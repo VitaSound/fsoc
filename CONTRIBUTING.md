@@ -8,7 +8,8 @@
 2. [doc/GLOSSARY.md](doc/GLOSSARY.md) и [doc/MAP.md](doc/MAP.md) — куда класть файлы.
 3. [doc/FMAP-INDEX.md](doc/FMAP-INDEX.md) — профили `cpu:` в этом репо; полный канон FMAP — [frules](https://github.com/VitaSound/frules).
 
-Развёрнутые сценарии плат и fit: [doc/guide-detail-ru.md](doc/guide-detail-ru.md).
+Развёрнутые сценарии плат и fit: [doc/guide-detail-ru.md](doc/guide-detail-ru.md).  
+Планы: [doc/roadmap.md](doc/roadmap.md). Сделанное — [CHANGELOG.md](CHANGELOG.md).
 
 ## Куда класть правки
 
@@ -18,7 +19,7 @@
 | Верх fhdlgen | `designs/` |
 | Плата / пины | `boards/` |
 | Задача сборки | `fsoc/tasks/` |
-| Профиль CPU | `fsoc/cpu.4th` + слои `fsys/` (см. `fsoc-cpu-target`) |
+| Профиль CPU | `fsoc/cpu.4th` + слои `fsys/` — [doc/add-cpu.md](doc/add-cpu.md) |
 | Прошивка / fasm blink | `firmware/` |
 | Рабочий пример | `projects/*/target.4th` только |
 | Тест | `tests/*_test.4th` |

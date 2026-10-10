@@ -19,13 +19,13 @@ Human (RU) entry: [README.md](README.md), [CONTRIBUTING.md](CONTRIBUTING.md), [d
 | `fsys/host/` | Host cross |
 | `fsys/<id>/` | extra / release |
 | `firmware/` | Apps and fasm blinks |
-| `projects/*/` | Working dirs; git keeps only `target.4th` |
+| `projects/{baremetal,soc,standalone}/` | Working dirs; git keeps only `target.4th` |
 | `targets/` | emulation / quartus / yosys emitters |
 | `tests/` | fmix / gforth suites |
 | `doc/` | Human notes (MAP, GLOSSARY, FMAP-INDEX, CPU notes) |
 | `openspec/specs/` | Requirements |
 
-Profile and image-tool detail: `fsoc/cpu.4th`, `fsoc/sys.4th`, per-CPU `doc/<id>.md`, rule `.cursor/rules/fsoc-cpu-target.mdc`. Solved core pitfalls: `j1abs-core.mdc`, `bcpu-console.mdc`.
+Profile and image-tool detail: `fsoc/cpu.4th`, `fsoc/sys.4th`, per-CPU `doc/<id>.md`. Human how-to: `doc/add-cpu.md`. Agent rule: `.cursor/rules/fsoc-cpu-target.mdc`. Solved core pitfalls: `j1abs-core.mdc`, `bcpu-console.mdc`.
 
 **MPSoC demo:** task `dual-mcpu`, `projects/baremetal/dual_mcpu_emul`, [doc/mcpu-pingpong.md](doc/mcpu-pingpong.md). Not an fsys console; two MCPU images + mailbox.
 
@@ -41,7 +41,7 @@ fsoc version
 cd projects/baremetal/blinky_emul && fsoc --build
 cd projects/baremetal/blinky_atmega && fsoc --build
 cd projects/baremetal/dual_mcpu_emul && FSOC_EMU_EDGES=4 FSOC_EMU_FAST=1 fsoc --build
-cd projects/soc_emul && fsoc --build
+cd projects/soc/soc_emul && fsoc --build
 ```
 
 ## Process
@@ -52,8 +52,10 @@ If a build value has no source file, stop and ask — do not hardcode a stand-in
 
 ## New CPU / MCU
 
+Human how-to: [`doc/add-cpu.md`](doc/add-cpu.md) ([eng](doc/add-cpu-eng.md)). Agent rule (same canvas + pitfalls): `.cursor/rules/fsoc-cpu-target.mdc`. Skill: `add-cpu-target`. Specs: `openspec/specs/forth-cross/spec.md`, `openspec/specs/fsys/spec.md`.
+
 New ISA → new `cpu:` id with fsys layers: `fsys/fasm/<id>/` → `fsys/kernel/<id>/` (console, not blink) → `fsys/host/<id>-cross.4th` → `fsys/<id>/extra.4th` → `firmware/*.fs`. New chip of an existing ISA → fasm part file only. Empty `sys:` on `soc` stops. Branch by CG in the emitter, not by a cpu id literal in `soc.4th`.
 
-New **fsys console** id MUST join `tests/con_core_test.4th` (session, JSON, `con_words.py`, BS/DEL). Rule: `.cursor/rules/fsoc-cpu-target.mdc`. Skill: `add-cpu-target`. Specs: `openspec/specs/forth-cross/spec.md`, `openspec/specs/fsys/spec.md`.
+New **fsys console** id MUST join `tests/con_core_test.4th` (session, JSON, `con_words.py`, BS/DEL).
 
 Before review of a new `cpu:` or a new body of the same ISA: three emulation sessions (spec forth-cross). Baremetal blink and soc blink with `FSOC_EMU_CON=pin` `FSOC_EMU_EDGES=4` each show `pin led 0` and `pin led 1` at least twice. Soc `s" fsys" sys:` answers `words` and at least two expressions (`1 2 + .` → `3  ok`, plus `:` or `.s`). Do not export `FSOC_EMU_UART_GAP` for that hand check. A new kernel runs its `con_core` row. A port runs the word script outside `fmix` when required.

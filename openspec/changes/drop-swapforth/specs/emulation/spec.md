@@ -21,7 +21,7 @@
 Приём и передача 8N1 MUST быть словами библиотеки с делителем такта на бит как параметром. Значение делителя MUST приходить из одного места сборки и MUST совпадать с делителем обёртки J1. Литерал `104` MUST NOT стоять в `main` задачи.
 
 #### Scenario: Делитель из сборки
-- **WHEN** в `projects/soc_emul` выполняется `fsoc --build` с `FSOC_EMU_FAST=1` и `FSOC_EMU_UART_IN=1 2 + .`
+- **WHEN** в `projects/soc/soc_emul` выполняется `fsoc --build` с `FSOC_EMU_FAST=1` и `FSOC_EMU_UART_IN=1 2 + .`
 - **THEN** `sim.sh` передаёт делитель компилятору одним флагом, тот же делитель стоит параметром инстанса обёртки в `top.v`, и журнал содержит `3` и ` ok`
 
 ### Requirement: Скрипт сеанса
@@ -36,7 +36,7 @@
 - **THEN** это тот же `push_line`, что Enter на панели, и журнал содержит `3` и ` ok`, если профиль сам даёт нужную паузу
 
 #### Scenario: Предел тактов без скрипта
-- **WHEN** в `projects/soc_blink` запущен `./obj_dir/Vtop` с `FSOC_EMU_FAST=1`, `FSOC_EMU_CON=pin` и `FSOC_EMU_CYCLES=200000`
+- **WHEN** в `projects/soc/soc_blink` запущен `./obj_dir/Vtop` с `FSOC_EMU_FAST=1`, `FSOC_EMU_CON=pin` и `FSOC_EMU_CYCLES=200000`
 - **THEN** процесс завершился с кодом 0, журнал содержит `pin led 1` и `pin led 0`, а в `main` нет поиска текста лампы
 
 ### Requirement: Коды выхода
@@ -50,16 +50,16 @@
 Образ прошивки для J1 MUST писать шаг `s" fsys" sys:` (host `kernel-save` / `jb-save`). `main` просмотра MUST NOT читать файлы прошивки и MUST NOT писать `firmware.hex`. Обёртка MAY сохранять `$writememh` для совместимости feed-пути, но текущая сборка soc MUST NOT требовать `Vtop_feed` для записи образа.
 
 #### Scenario: Hex из fsys
-- **WHEN** в `projects/soc_emul` выполняется `fsoc --build`
+- **WHEN** в `projects/soc/soc_emul` выполняется `fsoc --build`
 - **THEN** `firmware.hex` содержит 4096 строк, в журнале есть `image tool: fsys`, и в `fsoc/tasks/soc_main.cpp` нет `fopen("firmware.hex"`
 
 ### Requirement: Частота sim.sh с платы
 Когда таргет оставляет `sim.sh` и плата загружена, `sim.sh` MUST записать `CLK_HZ`, равный частоте тактового ресурса. Без платы `sim.sh` MUST записать `CLK_HZ=50000000`. Делитель бита UART MUST считаться из этой строки и `BAUD`. Промежуточный `sim.sh` шага feed на таргете платы MUST оставаться на 50 МГц, чтобы совпасть с топом feed, и MUST быть удалён до конца этой сборки.
 
 #### Scenario: Colorlight 25 МГц
-- **WHEN** в `projects/soc_emul_colorlight_5a_75e_v6_0` выполняется `fsoc --build` с `FSOC_EMU_FAST=1` и `FSOC_EMU_UART_IN`, равным `1 2 + .`
+- **WHEN** в `projects/soc/soc_emul_colorlight_5a_75e_v6_0` выполняется `fsoc --build` с `FSOC_EMU_FAST=1` и `FSOC_EMU_UART_IN`, равным `1 2 + .`
 - **THEN** `sim.sh` содержит `CLK_HZ=25000000` и `BAUD=115200`, а журнал содержит `3` и ` ok`
 
 #### Scenario: Эмуляция без платы
-- **WHEN** в `projects/soc_emul` выполняется `fsoc --build`
+- **WHEN** в `projects/soc/soc_emul` выполняется `fsoc --build`
 - **THEN** `sim.sh` содержит `CLK_HZ=50000000`

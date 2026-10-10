@@ -25,21 +25,21 @@ plat.ios-len 146 expect=
     in-tmp-sh expect-true ;
 
 test-setup
-s" standalone_j1a" tmp-use-project
+s" standalone/standalone_j1a" tmp-use-project
 82 s" stack2.v" sa-shape
 s" j1.v" tmp-exists? expect-true
 s" stack2.v" s" top.v" tmp-grep? expect-true
 test-teardown
 
 test-setup
-s" standalone_j1abs" tmp-use-project
+s" standalone/standalone_j1abs" tmp-use-project
 82 s" stacks.v" sa-shape
 s" rom_init.vh" tmp-exists? expect-true
 s" alu_rom" s" j1.v" tmp-grep? expect-true
 test-teardown
 
 test-setup
-s" standalone_j1b" tmp-use-project
+s" standalone/standalone_j1b" tmp-use-project
 146 s" stack.v" sa-shape
 s" j1b.v" tmp-exists? expect-true
 s" common.h" tmp-exists? expect-true
@@ -47,14 +47,14 @@ s" mem_din" s" top.v" tmp-grep? expect-true
 test-teardown
 
 test-setup
-s" standalone_mcpu" tmp-use-project
+s" standalone/standalone_mcpu" tmp-use-project
 18 s" MCPU_0.1a.v" sa-shape
 s" adress" s" top.v" tmp-grep? expect-true
 s" uart.v" tmp-exists? expect-false
 test-teardown
 
 test-setup
-s" standalone_cd16" tmp-use-project
+s" standalone/standalone_cd16" tmp-use-project
 115 s" cd16.v" sa-shape
 s" pbank" s" top.v" tmp-grep? expect-true
 s" EHXPLLL" s" top.v" tmp-grep? expect-true
@@ -62,14 +62,14 @@ s" uart.v" tmp-exists? expect-false
 test-teardown
 
 test-setup
-s" standalone_msl16" tmp-use-project
+s" standalone/standalone_msl16" tmp-use-project
 43 s" msl16.v" sa-shape
 s" reset" s" top.v" tmp-grep? expect-true
 s" uart.v" tmp-exists? expect-false
 test-teardown
 
 test-setup
-s" standalone_z80" tmp-use-project
+s" standalone/standalone_z80" tmp-use-project
 46 s" tv80s.v" sa-shape
 s" reset_n" s" top.v" tmp-grep? expect-true
 s" tv80_core.v" tmp-exists? expect-true

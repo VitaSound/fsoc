@@ -1,79 +1,28 @@
-# fsoc roadmap
+# Дорожная карта fsoc
 
-## Done (0.1.x)
+English: [roadmap-eng.md](roadmap-eng.md).
 
-- Platform DSL and three boards
-- Quartus + Verilator emit; `fsoc --build` / `--load` from the project directory, `target.4th` names task, target, board
-- Blinky vertical slice: `rtl/blinky.v`, `designs/blinky_top.4th`, `projects/baremetal/blinky_emul`, `blinky_terasic_de0nano`
-- SwapForth J1a cross-compiled from source, `projects/soc_emul` answers a line with ` ok`; ncurses terminal, `FSOC_EMU_CON` views
-- `regio` and interval `timer` on the J1 `io` bus (`h# 400`, `h# 800`), `'BOOT` cell, `projects/soc_blink` lamp loop
-- Stubs awaiting hardware: `firmware/midi_foot.4th` (host mock of FOOTSWITCH-SCAN)
-- USB-UART on Terasic DE0-Nano: `projects/soc_terasic_de0nano`, `fterm` device backend
+Сделанное — в [CHANGELOG.md](../CHANGELOG.md). Здесь только планы.
 
-## Blinky architecture (current)
+## Сейчас
 
-- Task: leaf [`rtl/blinky.v`](../rtl/blinky.v) (`clk` / `led`, `LED_BIT` default 25) plus [`designs/blinky_top.4th`](../designs/blinky_top.4th)
-- Working solutions under [`projects/baremetal/`](../projects/baremetal/): `blinky_emul` (Verilator realtime until Ctrl+C; [`emu/con.h`](../emu/con.h) prints `t=<ns> pin led <value>` on change), `blinky_terasic_de0nano`, `blinky_colorlight_5a_75e_v6_0` (Yosys / nextpnr-ecp5), `blinky_atmega` (AVR fasm HEX)
-- Emit: from `projects/baremetal/blinky_emul`, `fsoc --build` (sim.sh from [`targets/emulation.4th`](../targets/emulation.4th), then Verilator until Ctrl+C); from a Quartus board project, `fsoc --build` (`.qsf` from [`targets/quartus.4th`](../targets/quartus.4th)); from the Colorlight project, `fsoc --build` (`.lpf` from [`targets/yosys.4th`](../targets/yosys.4th), then synthesis). The task maps the board clock to `clk` and `user_led` to `led`. Task and board are in `target.4th`
+- Day-1: мигалка в Verilator и консоль Forth (`3` / `ok`) — [README.md](../README.md).
+- SoC на Quartus (DE0-Nano), Colorlight / Yosys, профили CPU — [guide-detail-ru.md](guide-detail-ru.md).
+- Два микроядра MCPU (ping-pong) — [mcpu-pingpong.md](mcpu-pingpong.md).
 
-## Path 1 — later (not a blinky blocker)
+## Далее
 
-Full module bodies on Forth (fhdlgen expr-AST, structural `always`, no string RHS). Blinky logic stays a `.v` file; only `top` is generated.
+1. Прошить DE0-Nano и проверить консоль: строка `fterm` `1 2 + .` отвечает `3  ok`; в hex `1 400 io!` зажигает `A15`, `0 400 io!` гасит. OpenSpec: `openspec/changes/xilinx-soc`, раздел 1.
+2. После этой проверки — сборка той же консоли под Xilinx (`designs/soc_console.4th`, `USE_REGIO` остаётся 1). Тот же change, раздел 2.
+3. По желанию: dual **j1a** (или другая пара soft-CPU) по образцу MCPU ping-pong.
 
-## Done — layer refactor 0.2.0 / SoC on board 0.3.0
+## Позже
 
-Review of 0.1.1 found abstraction leaks. Six OpenSpec changes closed them:
-
-1. `builder-hygiene` — archive finished changes, remove dead code, `fmix hook`, frules
-2. `builder-core` — `project%` manifest (`task:` `target:` `board:` `design:` `option:`), task/target registry with `emit` / `run` / `load` hooks, paths from `FSOC_HOME`, fjson/fenum/ttester-ext instead of local helpers, FPGA family from the board
-3. `design-out-contract` — fhdlgen `--out` / `--param` / `includes.lst`; designs stop reading the environment; one `j1_wrap` blackbox
-4. `emu-lib` — `emu/` as a library (clock, uart, script); thin task `main`s; separate `feed` step writes `firmware.hex` from Verilog
-5. `iomap` — one address map in Forth → `csr.fs`, `iomap.vh`, `csr.json`; `cores.4th` removed
-6. `soc-board` — SoC on a Quartus board over USB-UART, clock from the board, `fterm` device backend. Working project: `projects/soc_terasic_de0nano`
-
-Quartus `--load` and a live `fterm` line on USB-UART still need a machine with Quartus and the board.
-
-## Done — Yosys Colorlight 0.4.0
-
-- Target `yosys`: `--build` writes the LPF and runs `yosys`, `nextpnr-ecp5`, `ecppack`. `~/oss-cad-suite` is used when those tools are not on `PATH`.
-- Boards `colorlight_5a_75e_v6_0`, `v7_1`, `v8_2`. The working blinky project is v6.0 (`clk` `P6`, `led` `T6`).
-- `fsoc --clean` deletes build output and keeps `target.4th`.
-
-## Done — J1 lamp on Colorlight 0.5.0
-
-- `projects/soc_blink_colorlight_5a_75e_v6_0`: lamp image on that board. Clock 25 MHz. No UART pins; the LED is active-low; the timer step is 1 ms (period 500, about 0.5 s). Feed stays at 50 MHz.
-- Routed fit on `LFE5U-25F`: 1135/24288 LUT4, 697/24288 DFF, 4/56 `DP16KD` (8 KB firmware). Fmax 71.55 MHz at a 25 MHz constraint.
-
-## Done — core-only ECP5 fit
-
-- `projects/standalone_j1a`, `standalone_j1abs`, and `standalone_j1b` on board `lfe5u25f_cabga256`. The image is the core and its stacks; every port of `j1` is a pin. Routed nextpnr, 25 MHz constraint: j1a 1484/24288 LUT4, 578 DFF, 0/56 `DP16KD`, 82 `TRELLIS_IO`, 123.24 MHz (2026-10-01); j1abs 277/24288 LUT4, 170 DFF, 3/56 `DP16KD`, 82 `TRELLIS_IO`, 84.08 MHz (2026-10-02); j1b 3920/24288 LUT4, 2164 DFF, 0/56 `DP16KD`, 146 `TRELLIS_IO`, 93.71 MHz (2026-10-01). Table: [README](../README.md).
-- `projects/standalone_mcpu` is the experimental MCPU micro-core on the same package board: 45/24288 LUT4, 24 DFF, 18 `TRELLIS_IO`, 245.22 MHz (2026-10-02). Not a Forth profile. Notes: [mcpu.md](mcpu.md).
-- `projects/standalone_cd16` is the CD16 size fit on the same package board: 734/24288 LUT4, 95 DFF, 1/56 `DP16KD`, 115 `TRELLIS_IO`, RAM clock 62.13 MHz (2026-10-03). The Forth profile is `cd16`. Notes: [cd16.md](cd16.md).
-- `projects/standalone_msl16` is the MSL16 size fit on the same package board: 558/24288 LUT4, 54 DFF, 0/56 `DP16KD`, 43 `TRELLIS_IO`, 84.98 MHz (2026-10-03). The Forth profile is `msl16`. Notes: [msl16.md](msl16.md).
-
-## Done — Quartus II 11 console 0.8.0
-
-- Working project `projects/soc_terasic_de0nano`. `USE_REGIO=1`, so `led` is the `IO-LED` register (`$400 io!`). `.qsf` lists `iomap.vh` and `firmware.hex`. A Verilog line longer than the read buffer is written whole.
-- Fit on `EP4CE22F17C6`, Quartus II 11.1, 2026-09-27 02:10:30: 1001/22320 LEs, 625/22320 registers, 65536/608256 memory bits. Notes: [quartus-ii-11.md](quartus-ii-11.md).
-
-## Done — dual MCPU ping-pong (MPSoC demo)
-
-- Task `dual-mcpu`, `projects/baremetal/dual_mcpu_emul`: two MCPU instances, different fasm images, shared mailbox @ 62, Verilator `pin ping` / `pin pong`. Notes: [mcpu-pingpong.md](mcpu-pingpong.md). OpenSpec: `openspec/changes/dual-mcpu-pingpong`.
-- This is the multi-processor example; j1a/j1b in the press release remain two **profiles**, not two cores on one bus. Dual j1a is a later change.
-
-## Next
-
-1. Program the DE0-Nano and check the console: `fterm` line `1 2 + .` answers `3  ok`; in hex, `1 400 io!` lights `A15` and `0 400 io!` turns it off. OpenSpec: `openspec/changes/xilinx-soc`, section 1.
-2. After that check, add a Xilinx build of the same console (`designs/soc_console.4th`, `USE_REGIO` stays 1). Same change, section 2.
-3. Optional: dual **j1a** (or other soft-CPU pair) after the MCPU ping-pong pattern.
-
-## Later
-
-- Background task, interrupt controller, and its connection to J1 — [stm8ef-hw.md](stm8ef-hw.md)
-- Host CSR bridge (litex_server analogue)
-- Import more boards from litex-boards
-- yosys/nextpnr for iCE40 and Gowin, and Vivado
-- Expression tree + Forth FHDL sim (with fhdlgen) — path 1 for cores that should be Forth-native
-- Own Forth CPU described in fhdlgen DSL
-- Audio cores from hdl-modules behind CSR (Forth synthesizer)
-- DIN MIDI foot controller on the SoC (`midi rx` pin is already on the board)
+- Фоновая задача, контроллер прерываний и связь с J1 — [stm8ef-hw.md](stm8ef-hw.md)
+- Хостовый CSR-мост (аналог litex_server)
+- Больше плат из litex-boards
+- yosys/nextpnr для iCE40 и Gowin, и Vivado
+- Дерево выражений + симуляция Forth FHDL (с fhdlgen) — path 1 для ядер, которые должны быть Forth-native
+- Свой Forth CPU в DSL fhdlgen
+- Аудиоядра из hdl-modules за CSR (синтезатор на Форте)
+- DIN MIDI foot controller на SoC (пин `midi rx` на плате уже есть)

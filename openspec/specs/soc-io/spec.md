@@ -35,10 +35,10 @@
 - **THEN** в его каталоге есть копии `timer.v` и `regio.v`, совпадающие с листами в `rtl/`
 
 ### Requirement: Ячейка 'BOOT
-В образе MUST быть ячейка `'BOOT`. Перед входом в `quit` система MUST один раз вызвать записанный xt. Пустая ячейка MUST оставить прежний вход в `quit`. Сеанс `projects/soc_emul` MUST по-прежнему закончить строку ответом ` ok`. Запись ячейки в RAM MUST жить до пересборки `firmware.hex`.
+В образе MUST быть ячейка `'BOOT`. Перед входом в `quit` система MUST один раз вызвать записанный xt. Пустая ячейка MUST оставить прежний вход в `quit`. Сеанс `projects/soc/soc_emul` MUST по-прежнему закончить строку ответом ` ok`. Запись ячейки в RAM MUST жить до пересборки `firmware.hex`.
 
 #### Scenario: Пустой 'BOOT не меняет soc_emul
-- **WHEN** в `projects/soc_emul` выполняется `fsoc --build` с `FSOC_EMU_FAST=1` и `FSOC_EMU_UART_IN`, равным `1 2 + .`
+- **WHEN** в `projects/soc/soc_emul` выполняется `fsoc --build` с `FSOC_EMU_FAST=1` и `FSOC_EMU_UART_IN`, равным `1 2 + .`
 - **THEN** код возврата 0, а журнал содержит байт `3` и ответ ` ok`
 
 ### Requirement: Программный blink из 'BOOT

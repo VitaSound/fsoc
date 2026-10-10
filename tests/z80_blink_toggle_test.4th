@@ -4,7 +4,7 @@ s" test_common.4th" included
 s" fixture.4th" included
 
 test-setup
-s" soc_z80_blink" tmp-use-project
+s" soc/soc_z80_blink" tmp-use-project
 
 s" env -u FSOC_EMU_UART_IN -u FSOC_EMU_UART_GAP FSOC_EMU_FAST=1 FSOC_EMU_CON=term FSOC_EMU_CYCLES=8000000" s" --build" in-tmp-fsoc expect-true
 

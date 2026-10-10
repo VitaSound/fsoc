@@ -229,7 +229,7 @@
 Три сеанса эмуляции из требования выше MUST быть пройдены до этой приёмки. Автотесты (`fmix test`, Verilator, `avr-con`) MUST подтверждать сборку и консоль и MUST NOT заменять эти три сеанса. Следующая приёмка после них MUST идти на железных FPGA-платах из `boards/` (Colorlight 5A-75E, Terasic DE0-Nano и последующие) и в Proteus для профиля `avr`. Успех Verilator или `avr-con` MUST NOT считаться заменой прогона на живой плате или в Proteus.
 
 #### Scenario: AVR blink в Proteus
-- **WHEN** собран `projects/soc_atmega8_blink` и HEX открыт в Proteus (ATMEGA8, 8 МГц, Virtual Terminal 9600)
+- **WHEN** собран `projects/soc/soc_atmega8_blink` и HEX открыт в Proteus (ATMEGA8, 8 МГц, Virtual Terminal 9600)
 - **THEN** терминал MUST показать строки `blink on` и `blink off`
 
 #### Scenario: FPGA на железе

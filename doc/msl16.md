@@ -1,6 +1,6 @@
 # MSL16 — ядро на Verilog
 
-Профиль `msl16` в `fsoc/cpu.4th`: класс 0, FMAP `U-S-A-M-3-F`, MM=U, EX-C=S, CG=F. Пустой `sys:` останавливается. `s" fsys" sys:` собирает консоль из `fsys/kernel/msl16` и пишет слово-hex (2048 слов, `ADDR=11`). Проекты: `baremetal/blinky_msl16`, `soc_msl16`, `soc_msl16_blink`. Цепочки вызовов в консоли — `tests/msl16_words.4th` (вход `tests/msl16_words.in`). Это не `*_test.4th`: `fmix` его не запускает. Стенд `standalone` по-прежнему выводит 8-битную шину (`ADDR` по умолчанию 8).
+Профиль `msl16` в `fsoc/cpu.4th`: класс 0, FMAP `U-S-A-M-3-F`, MM=U, EX-C=S, CG=F. Пустой `sys:` останавливается (`needs fsys`). `s" fsys" sys:` собирает консоль из `fsys/kernel/msl16` и пишет слово-hex (2048 слов, `ADDR=11`). Проекты: `projects/baremetal/blinky_msl16`, `projects/soc/soc_msl16`, `projects/soc/soc_msl16_blink`. Цепочки вызовов в консоли — `tests/msl16_words.4th` (вход `tests/msl16_words.in`). Это не `*_test.4th`: `fmix` его не запускает. Стенд `standalone` по-прежнему выводит 8-битную шину (`ADDR` по умолчанию 8).
 
 Исходник — `msl16_vhdl.zip`, файлы января–апреля 1998, Philip Leong. Архив [msl16_vhdl.zip](https://web.archive.org/web/20070205070645/http://www.cse.cuhk.edu.hk/~phwl/mt/public/archives/old/msl16/msl16_vhdl.zip). Статья: [A FPGA based Forth microprocessor](https://cel.eng.sydney.edu.au/wp-content/uploads/2019/01/msl16_fccm98.pdf). В `README` архива: copyright 1998 Philip Leong, некоммерческое научное и учебное использование разрешено, коммерческое — по отдельной лицензии. Эта строка стоит в `cpu/msl16/msl16.v`.
 
@@ -18,7 +18,7 @@
 
 ## Стенд на ECP5
 
-`projects/standalone_msl16`, задача `standalone`, таргет `yosys`, плата `lfe5u25f_cabga256`. `clk` на `P6`. На выводы `top` выведены `clk`, `reset`, `wr`, `addr[7:0]`, `din[15:0]`, `dout[15:0]`. Это 43 `TRELLIS_IO`. Памяти, UART и таймера в этой сборке нет.
+`projects/standalone/standalone_msl16`, задача `standalone`, таргет `yosys`, плата `lfe5u25f_cabga256`. `clk` на `P6`. На выводы `top` выведены `clk`, `reset`, `wr`, `addr[7:0]`, `din[15:0]`, `dout[15:0]`. Это 43 `TRELLIS_IO`. Памяти, UART и таймера в этой сборке нет.
 
 Замер 2026-10-03, `synth_ecp5` и nextpnr, ограничение 25.00 МГц, маршрут сошёлся:
 
@@ -47,6 +47,6 @@ s" [asm] 4 lit, hop: hop call, [endasm]" evaluate
 ```
 
 ```bash
-cd projects/standalone_msl16
+cd projects/standalone/standalone_msl16
 fsoc --build
 ```

@@ -14,7 +14,7 @@ The first program stored 1, then 0, then spun. Reset re-executes address 0: `reb
 
 ## A typed line is not the script that exports the gap
 
-The hand launch is `fsoc --build` in `projects/soc_j1abs` with no `FSOC_EMU_UART_GAP`. The panel stores keystrokes on the host. UART does not see them, so a slow finger is not a slow wire. Enter calls `push_line`, the same call as `FSOC_EMU_UART_IN`, and the bytes leave back to back unless `gap_clocks` is set. A script that exports 120 still passes when `uart.gap` is missing, and that is the miss: the agent checked the script, the typed line came out corrupt, Forth answered `?`, and the session was stopped with Ctrl+C (`Emulation stopped`).
+The hand launch is `fsoc --build` in `projects/soc/soc_j1abs` with no `FSOC_EMU_UART_GAP`. The panel stores keystrokes on the host. UART does not see them, so a slow finger is not a slow wire. Enter calls `push_line`, the same call as `FSOC_EMU_UART_IN`, and the bytes leave back to back unless `gap_clocks` is set. A script that exports 120 still passes when `uart.gap` is missing, and that is the miss: the agent checked the script, the typed line came out corrupt, Forth answered `?`, and the session was stopped with Ctrl+C (`Emulation stopped`).
 
 `sim.sh` reads `uart.gap` (120 from the j1abs profile) only when the variable is unset. Setting it, including to 0, wins. The check is `env -u FSOC_EMU_UART_GAP` and `FSOC_EMU_UART_IN='1 2 + .'` → `3  ok`. Do not turn the gap on for j1a or bcpu.
 

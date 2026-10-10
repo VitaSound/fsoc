@@ -8,6 +8,8 @@
 
 ### Changed
 
+- **BREAKING** Nest SoC and standalone working copies: `projects/soc/<name>/` and `projects/standalone/<name>/` (leaf names unchanged, e.g. `soc_emul`). Same gitignore pattern as `baremetal/`. OpenSpec: `openspec/changes/nest-soc-standalone-projects`.
+
 - Gate hooks run short and selected long tests in parallel (`xargs -P`, `FSOC_TEST_JOBS` or `nproc`, cap 8). Shared `/tmp/fsoc-*` paths in tests use pid suffixes; fixture dirs use `mktemp -d`.
 
 - `pre-commit` uses `tools/pre-commit.sh`: short suite (`FSOC_SKIP_LONG=1`) + flint always, long core suites only for staged paths. Selection map shared with pre-push in `tools/long-core-select.sh`. Full suite remains `fmix test`.
@@ -22,21 +24,21 @@
 
 - Contributor DX (RU-first): Day 1 fork FPGA / MCU / dual-mcpu in `README.md`, `CONTRIBUTING.md`, `doc/FMAP-INDEX.md`, fixed frules architecture links in `.cursor/rules` (no local `docs/FORTH-*`). Long README text kept as `doc/guide-detail-ru.md` / `guide-detail-eng.md`.
 
-- Z80 host fasm (`fsys/fasm/z80`), standalone TV80 core, and fsys console. Empty `sys:` stops; `s" fsys" sys:` writes byte hex (16 KB). Vendored [TV80](https://github.com/hutch31/tv80) (`tv80s`, Mode=0, MIT) under `cpu/z80/`. `projects/standalone_z80` pins the bus on `lfe5u25f_cabga256`. Routed nextpnr, 2026-10-05, constraint 25.00 MHz: 2276/24288 LUT4 (2114 logic, 90 carry, 48 RAM, 24 RAMW), 240 DFF, 0/56 `DP16KD`, 46/197 `TRELLIS_IO`, 69.74 MHz. Projects: `baremetal/blinky_z80`, `soc_z80`, `soc_z80_blink`. The console is a row in `tests/con_core_test.4th`. Notes: `doc/z80.md`.
+- Z80 host fasm (`fsys/fasm/z80`), standalone TV80 core, and fsys console. Empty `sys:` stops; `s" fsys" sys:` writes byte hex (16 KB). Vendored [TV80](https://github.com/hutch31/tv80) (`tv80s`, Mode=0, MIT) under `cpu/z80/`. `projects/standalone/standalone_z80` pins the bus on `lfe5u25f_cabga256`. Routed nextpnr, 2026-10-05, constraint 25.00 MHz: 2276/24288 LUT4 (2114 logic, 90 carry, 48 RAM, 24 RAMW), 240 DFF, 0/56 `DP16KD`, 46/197 `TRELLIS_IO`, 69.74 MHz. Projects: `baremetal/blinky_z80`, `soc_z80`, `soc_z80_blink`. The console is a row in `tests/con_core_test.4th`. Notes: `doc/z80.md`.
 
-- MSL16 core translated from Philip Leong's 1998 VHDL (`cpu.vhd`, `ex.vhd`, `stack.vhd` in the archived `msl16_vhdl.zip`). `projects/standalone_msl16` pins the 8-bit memory bus on `lfe5u25f_cabga256`; the two stacks are LUT RAM. Routed nextpnr, 2026-10-03, constraint 25.00 MHz, `ADDR=8`: 558/24288 LUT4 (470 logic, 40 carry, 32 RAM, 16 RAMW), 54 DFF, 0/56 `DP16KD`, 43/197 `TRELLIS_IO`, 84.98 MHz. Profile `msl16` (class 0, MM=U, EX-C=S, CG=F) builds an fsys console: empty `sys:` stops, `s" fsys" sys:` writes word hex, 2048 words, `ADDR=11`. Projects: `baremetal/blinky_msl16`, `soc_msl16`, `soc_msl16_blink`. The console is a row in `tests/con_core_test.4th`. Notes: `doc/msl16.md`.
+- MSL16 core translated from Philip Leong's 1998 VHDL (`cpu.vhd`, `ex.vhd`, `stack.vhd` in the archived `msl16_vhdl.zip`). `projects/standalone/standalone_msl16` pins the 8-bit memory bus on `lfe5u25f_cabga256`; the two stacks are LUT RAM. Routed nextpnr, 2026-10-03, constraint 25.00 MHz, `ADDR=8`: 558/24288 LUT4 (470 logic, 40 carry, 32 RAM, 16 RAMW), 54 DFF, 0/56 `DP16KD`, 43/197 `TRELLIS_IO`, 84.98 MHz. Profile `msl16` (class 0, MM=U, EX-C=S, CG=F) builds an fsys console: empty `sys:` stops, `s" fsys" sys:` writes word hex, 2048 words, `ADDR=11`. Projects: `baremetal/blinky_msl16`, `soc_msl16`, `soc_msl16_blink`. The console is a row in `tests/con_core_test.4th`. Notes: `doc/msl16.md`.
 
-- Experimental micro-core [MCPU](https://github.com/cpldcpu/MCPU) (GPL-2). Host fasm is `fsys/fasm/mcpu` (64 bytes, `nor,` `add,` `sta,` `jcc,` `dcb,`). `projects/standalone_mcpu` pins every port on `lfe5u25f_cabga256`. Routed nextpnr, 2026-10-02, constraint 25.00 MHz: 45/24288 LUT4 (29 logic, 16 carry), 24 DFF, 0/56 `DP16KD`, 18/197 `TRELLIS_IO`, 245.22 MHz. Not a Forth profile. Notes: `doc/mcpu.md`.
+- Experimental micro-core [MCPU](https://github.com/cpldcpu/MCPU) (GPL-2). Host fasm is `fsys/fasm/mcpu` (64 bytes, `nor,` `add,` `sta,` `jcc,` `dcb,`). `projects/standalone/standalone_mcpu` pins every port on `lfe5u25f_cabga256`. Routed nextpnr, 2026-10-02, constraint 25.00 MHz: 45/24288 LUT4 (29 logic, 16 carry), 24 DFF, 0/56 `DP16KD`, 18/197 `TRELLIS_IO`, 245.22 MHz. Not a Forth profile. Notes: `doc/mcpu.md`.
 
-- CD16 core translated from Brad Eckert's VHDL (`CD16/CD16.VHD` revision 6 in the 2006 archive of cd16v13.zip). `projects/standalone_cd16` pins the program and data buses on `lfe5u25f_cabga256`; the stack is one `DP16KD` clocked at twice the CPU. Routed nextpnr, 2026-10-03, constraint 25.00 MHz: 734/24288 LUT4 (660 logic, 74 carry), 95 DFF, 1/56 `DP16KD`, 115/197 `TRELLIS_IO`. `clk50` 62.13 MHz, `clk25` 97.30 MHz. Host fasm is `fsys/fasm/cd16` (65536 words, `cd16-wl`). Profile `cd16` (class 1, MM=D, EX-C=S, CG=F) builds an fsys console: empty `sys:` stops, `s" fsys" sys:` writes word hex. Projects: `baremetal/blinky_cd16`, `soc_cd16`, `soc_cd16_blink`. The console is a row in `tests/con_core_test.4th`. Notes: `doc/cd16.md`.
+- CD16 core translated from Brad Eckert's VHDL (`CD16/CD16.VHD` revision 6 in the 2006 archive of cd16v13.zip). `projects/standalone/standalone_cd16` pins the program and data buses on `lfe5u25f_cabga256`; the stack is one `DP16KD` clocked at twice the CPU. Routed nextpnr, 2026-10-03, constraint 25.00 MHz: 734/24288 LUT4 (660 logic, 74 carry), 95 DFF, 1/56 `DP16KD`, 115/197 `TRELLIS_IO`. `clk50` 62.13 MHz, `clk25` 97.30 MHz. Host fasm is `fsys/fasm/cd16` (65536 words, `cd16-wl`). Profile `cd16` (class 1, MM=D, EX-C=S, CG=F) builds an fsys console: empty `sys:` stops, `s" fsys" sys:` writes word hex. Projects: `baremetal/blinky_cd16`, `soc_cd16`, `soc_cd16_blink`. The console is a row in `tests/con_core_test.4th`. Notes: `doc/cd16.md`.
 
-- Task `standalone` places the core and its stacks on `lfe5u25f_cabga256` (`j1a`, `j1abs`, `j1b`). Every port of module `j1` is a package ball, so nextpnr keeps one `TRELLIS_IO` per port. Routed fit on `LFE5U-25F`, 2026-10-01, constraint 25.00 MHz: j1a 1484/24288 LUT4 (1436 logic, 48 carry), 578 DFF, 0/56 `DP16KD`, 82/197 `TRELLIS_IO`, 123.24 MHz; j1b 3920/24288 LUT4 (3836 logic, 84 carry), 2164 DFF, 0/56 `DP16KD`, 146/197 `TRELLIS_IO`, 93.71 MHz. j1abs was re-fit on 2026-10-02 after the bit-serial stack and microcode: 277/24288 LUT4 (239 logic, 38 carry), 170 DFF, 3/56 `DP16KD`, 82/197 `TRELLIS_IO`, 84.08 MHz. The three j1abs blocks are the ALU table, the control table, and the stack RAM. A later single 512×16 field (23 clocks) routed to 347 LUT4 and was put back. The numbers are in `README.md`.
+- Task `standalone` places the core and its stacks on `lfe5u25f_cabga256` (`j1a`, `j1abs`, `j1b`). Every port of module `j1` is a package ball, so nextpnr keeps one `TRELLIS_IO` per port. Routed fit on `LFE5U-25F`, 2026-10-01, constraint 25.00 MHz: j1a 1484/24288 LUT4 (1436 logic, 48 carry), 578 DFF, 0/56 `DP16KD`, 82/197 `TRELLIS_IO`, 123.24 MHz; j1b 3920/24288 LUT4 (3836 logic, 84 carry), 2164 DFF, 0/56 `DP16KD`, 146/197 `TRELLIS_IO`, 93.71 MHz. j1abs was re-fit on 2026-10-02 after the bit-serial stack and microcode: 277/24288 LUT4 (239 logic, 38 carry), 170 DFF, 3/56 `DP16KD`, 82/197 `TRELLIS_IO`, 84.08 MHz. The three j1abs blocks are the ALU table, the control table, and the stack RAM. A later single 512×16 field (23 clocks) routed to 347 LUT4 and was put back. The numbers are in `doc/guide-detail-ru.md`.
 
 - A new `cpu:` or another body of the same ISA is not ready for review after a short `*_test.4th`. The last step is three emulation sessions: baremetal blink and soc blink each show `pin led 0` and `pin led 1` at least twice (`FSOC_EMU_EDGES=4`), and `s" fsys" sys:` answers `words` plus two expressions. Spec: `openspec/specs/forth-cross/spec.md`.
 
-- Profile `j1abs` (A Bit Serial): same J1a ISA, class 0, FMAP `V-V-A-0-I`, CG=I. `cpu-port` is `j1a`, so the image is `swapforth/j1a` or `fsys/kernel/j1a`. The core in `cpu/j1/j1abs/` keeps only processor state in registers; `alu_rom` and `ctrl_rom` are synchronous tables and the stacks are block RAM. No `con_core` row. `soc.4th` has no `j1abs` literal. Projects: `baremetal/blinky_j1abs`, `soc_j1abs`, `soc_j1abs_blink`, `soc_j1abs_colorlight`.
+- Profile `j1abs` (A Bit Serial): same J1a ISA, class 0, FMAP `V-V-A-0-I`, CG=I. `cpu-port` is `j1a`, so the image is `fsys/kernel/j1a` (`s" fsys" sys:`). The core in `cpu/j1/j1abs/` keeps only processor state in registers; `alu_rom` and `ctrl_rom` are synchronous tables and the stacks are block RAM. No `con_core` row. `soc.4th` has no `j1abs` literal. Projects: `baremetal/blinky_j1abs`, `soc/soc_j1abs`, `soc/soc_j1abs_blink`, `soc/soc_j1abs_colorlight`.
 
-- Profile `bcpu` (class 0, FMAP `U-M-B-A-3-F`, MM=U, EX-C=B, CG=F). Verilog ALU in `cpu/bcpu/bcpu.v` follows the bit-serial instruction set; `bit.vhd` is not vendored. `s" fsys" sys:` assembles the fsys console; empty `sys:` stops. `bit.hex` stays for attribution and is not the soc image. The console is a row in `tests/con_core_test.4th`. Colorlight nextpnr fit: 694/24288 LUT4, 272/24288 DFF, 8/56 `DP16KD`, 54.48 MHz. The numbers are in `README.md`.
+- Profile `bcpu` (class 0, FMAP `U-M-B-A-3-F`, MM=U, EX-C=B, CG=F). Verilog ALU in `cpu/bcpu/bcpu.v` follows the bit-serial instruction set; `bit.vhd` is not vendored. `s" fsys" sys:` assembles the fsys console; empty `sys:` stops. `bit.hex` stays for attribution and is not the soc image. The console is a row in `tests/con_core_test.4th`. Colorlight nextpnr fit: 694/24288 LUT4, 272/24288 DFF, 8/56 `DP16KD`, 54.48 MHz. The numbers are in `doc/guide-detail-ru.md`.
 
 - Manifest `model:` selects the AVR part file `fsys/fasm/avr/<id>.4th`. Working ATmega projects write `s" atmega8" model:`. Empty `model:` still uses `cpu-ref`. Unknown id stops; it does not fall back to ATmega8.
 
@@ -58,7 +60,7 @@
 
 - How to add another CPU/MCU: always-on rule `.cursor/rules/fsoc-cpu-target.mdc`, skill `add-cpu-target`, and OpenSpec requirements in `forth-cross` / `fsys`. A new `cpu:` id is an ISA family (fasm, kernel console, host cross, extra, firmware). A new chip of the same ISA is a part file under `fsys/fasm/<id>/`. `soc.4th` still names no MCU id; the CG emitter branches. A new fsys console id must join `tests/con_core_test.4th` (session, JSON, `con_words.py` tags, BS/DEL). Run: `fmix test` or `cd tests && FSOC_HOME=<root> gforth con_core_test.4th`. README section Adding a CPU.
 
-- ATmega8 profile `avr` (class 1, MM=D, EX-C=S, CG=F, BM=C). Empty `sys:` stops; `s" fsys" sys:` assembles the STC console kernel, host `avr-cross` compiles `fsys/avr/extra-min.4th` (console) or `fsys/avr/extra.4th` (blink), and writes Intel HEX. `s" blink" s" 1" option:` with `s" image" s" release" option:` appends `firmware/blink.fs` (PB0 and USART text), not `fsys/kernel/avr`. `avra` is not called. `z80` still stops before a hex image. Target `proteus` does not launch a simulator. `projects/soc_atmega8` is the extra-min console; `projects/soc_atmega8_blink` is a release blink image. The AVR assembler covers the classic opcode set. `atmega8`, `atmega328p`, and `atmega2560` each carry their own flash, SRAM, EEPROM, vector length, and register addresses. The Proteus schematic is in `doc/atmega8-proteus.md`.
+- ATmega8 profile `avr` (class 1, MM=D, EX-C=S, CG=F, BM=C). Empty `sys:` stops; `s" fsys" sys:` assembles the STC console kernel, host `avr-cross` compiles `fsys/avr/extra-min.4th` (console) or `fsys/avr/extra.4th` (blink), and writes Intel HEX. `s" blink" s" 1" option:` with `s" image" s" release" option:` appends `firmware/blink.fs` (PB0 and USART text), not `fsys/kernel/avr`. `avra` is not called. `z80` still stops before a hex image. Target `proteus` does not launch a simulator. `projects/soc/soc_atmega8` is the extra-min console; `projects/soc/soc_atmega8_blink` is a release blink image. The AVR assembler covers the classic opcode set. `atmega8`, `atmega328p`, and `atmega2560` each carry their own flash, SRAM, EEPROM, vector length, and register addresses. The Proteus schematic is in `doc/atmega8-proteus.md`.
 
 ### Fixed
 
@@ -69,7 +71,7 @@
 
 - Colorlight lamp fit table. `python3 doc/j1-word-graph/build.py fit` runs nextpnr for j1a and j1b, full and release, and rewrites `doc/j1-word-graph/soc-fit.md`. The command is not part of `fsoc --build`.
 
-- fsys release image for a named program. `s" fsys" sys:` and `s" image" s" release" option:` next to an application option such as `lamp` load the program's word closure plus `fsys/<cpu>/release.4th`, not the whole dictionary layers. On `projects/soc_blink`, j1a release is `firmware.hex: 2822 bytes of 8192` and debug is `7752 bytes of 8192`. j1b release is `2956 bytes of 32768` and debug is `9156 bytes of 32768`. The lamp still runs; the console compiler stays in the image.
+- fsys release image for a named program. `s" fsys" sys:` and `s" image" s" release" option:` next to an application option such as `lamp` load the program's word closure plus `fsys/<cpu>/release.4th`, not the whole dictionary layers. On `projects/soc/soc_blink`, j1a release is `firmware.hex: 2822 bytes of 8192` and debug is `7752 bytes of 8192`. j1b release is `2956 bytes of 32768` and debug is `9156 bytes of 32768`. The lamp still runs; the console compiler stays in the image.
 
 - j1b host compiler packs colon bodies two instructions per 32-bit cell. `constant`, `create`, and `variable` keep the literal and `exit` in separate cells and the data at `cfa + 2 cells`, so console `lit!` and `does>` still write a whole cell. `here` at byte 16384 stops the build (`call out of range`). A call of a literal word followed by `@` becomes a literal and `[T]`; `dup @`, `2dup rshift`, and `2dup lshift` fuse on j1b only. `!` stays a call. j1a hex is unchanged (shared 7550, extra-min 8008). j1b shared 8280 of 32768, with extra 8934 (was 11636 and 12692).
 
@@ -133,7 +135,7 @@
 
 ### Added
 
-- Quartus II 11.1 fit of `projects/soc_terasic_de0nano` on `EP4CE22F17C6` (2026-09-27 02:10:30): 1001 / 22320 logic elements (4%), 625 / 22320 registers (3%), 65536 / 608256 memory bits (11%, 4096×16). Setup slack 9.752 ns (slow 85°C). See README.
+- Quartus II 11.1 fit of `projects/soc/soc_terasic_de0nano` on `EP4CE22F17C6` (2026-09-27 02:10:30): 1001 / 22320 logic elements (4%), 625 / 22320 registers (3%), 65536 / 608256 memory bits (11%, 4096×16). Setup slack 9.752 ns (slow 85°C). See README.
 - `doc/quartus-ii-11.md`: what failed in that Quartus II 11 flow and how each failure was closed.
 - OpenSpec change `xilinx-soc`: check the console on the DE0-Nano, then add a Xilinx build.
 
@@ -146,13 +148,13 @@
 
 ### Changed
 
-- Quartus SoC working project is `projects/soc_terasic_de0nano` (task `soc`, target `quartus`, board `terasic_de0nano`, design `designs/soc_console.4th`). Removed projects `soc_vitasound_ep4ce10`, `blinky_vitasound_ep4ce10`, `blinky_rz_easyfpga` and boards `vitasound_ep4ce10`, `rz_easyfpga`.
+- Quartus SoC working project is `projects/soc/soc_terasic_de0nano` (task `soc`, target `quartus`, board `terasic_de0nano`, design `designs/soc_console.4th`). Removed projects `soc_vitasound_ep4ce10`, `blinky_vitasound_ep4ce10`, `blinky_rz_easyfpga` and boards `vitasound_ep4ce10`, `rz_easyfpga`.
 
 ## [0.6.0] - 2026-09-26
 
 ### Added
 
-- `projects/soc_emul_colorlight_5a_75e_v6_0`: the SwapForth console in Verilator at the Colorlight 5A-75E v6.0 clock, 25 MHz. UART, `rst`, and `dump` stay on the simulated top. `sim.sh` takes `CLK_HZ` from that clock, so `1 2 + .` answers `3 ok`.
+- `projects/soc/soc_emul_colorlight_5a_75e_v6_0`: the SwapForth console in Verilator at the Colorlight 5A-75E v6.0 clock, 25 MHz. UART, `rst`, and `dump` stay on the simulated top. `sim.sh` takes `CLK_HZ` from that clock, so `1 2 + .` answers `3 ok`.
 
 ### Changed
 
@@ -162,7 +164,7 @@
 
 ### Added
 
-- `projects/soc_blink_colorlight_5a_75e_v6_0`: the J1 lamp image on Colorlight 5A-75E v6.0 through the Yosys target. The clock is the board's 25 MHz `clk25` (`P6`). The board has no UART pins, so the board top ties `uart_rx` to 1 and does not bring `uart_tx`, `rst`, or `dump` out. `user_led` is active-low (`LED_LOW=1`, pin `T6`).
+- `projects/soc/soc_blink_colorlight_5a_75e_v6_0`: the J1 lamp image on Colorlight 5A-75E v6.0 through the Yosys target. The clock is the board's 25 MHz `clk25` (`P6`). The board has no UART pins, so the board top ties `uart_rx` to 1 and does not bring `uart_tx`, `rst`, or `dump` out. `user_led` is active-low (`LED_LOW=1`, pin `T6`).
 - `active-low` / `io.low@` on a board resource. The three Colorlight `user_led` resources set it.
 - Timer parameter `TIMER_DIV` (default 1). On a board it is `CLK_HZ/1000`, so the lamp's period of 500 is about half a second. With `DIV` greater than 1 the counter holds 0 until the next write.
 
@@ -193,7 +195,7 @@
 
 ### Added
 
-- `projects/soc_vitasound_ep4ce10` writes Quartus files and `firmware.hex`. `--build` does not run Quartus; `--load` runs `load.sh`. `fterm` opens a device path (`gforth tools/fterm.4th /dev/ttyUSB0`); without a path it still answers `ok` from memory.
+- `projects/soc/soc_vitasound_ep4ce10` writes Quartus files and `firmware.hex`. `--build` does not run Quartus; `--load` runs `load.sh`. `fterm` opens a device path (`gforth tools/fterm.4th /dev/ttyUSB0`); without a path it still answers `ok` from memory.
 - Board clock: `io.clock-hz` / `plat-clock-hz` (50 MHz on `clk50`). Quartus maps `serial` subsignals (`quartus-map-sub`: `PIN_114` → `uart_tx`, `PIN_115` → `uart_rx`). Design parameter `BOARD=1` ties `rst` and `dump` to 0.
 
 ### Changed
@@ -219,7 +221,7 @@
 - Tests run every build in a temporary directory (`tests/fixture.4th`: `TS{`/`test-setup`, `tmp-use-project`, `in-tmp-fsoc`) and end with `expect-stack-clean`; `projects/*` are not touched. New `paths_test`, `sh_test`, `project_test`, `registry_test`, `layers_test`.
 - Coverage (`fcov run`): 95% of instrumented definitions (173/182). Uncovered: `fsoc.version`, `fsoc.help`, `fterm`, `fterm-open`, `stty-append`, `fterm-mock`, `sh-rm`, `connector`, `misc`. `fsoc/soc/iomap.4th` is 18/18.
 
-- OpenSpec: `con-term`, `j1-forth`, `soc-emulation`, `soc-io-blink` archived; `soc-build-log` closed, its open tasks moved to `design-out-contract`. Layer changes `builder-hygiene` through `iomap` are implemented (see `doc/roadmap.md`).
+- OpenSpec: `con-term`, `j1-forth`, `soc-emulation`, `soc-io-blink` archived; `soc-build-log` closed, its open tasks moved to `design-out-contract`. Layer changes `builder-hygiene` through `iomap` are implemented. Forward plans: `doc/roadmap.md`.
 - `package.4th`: `fmix ~> 0.8`; dependency `f` and `fcov-exclude tests/golden` dropped. frules installed in `.cursor/rules/`, `fmix hook install --stage all`.
 
 ### Removed
@@ -234,8 +236,8 @@
 ### Added
 
 - SoC `--build` prints `fsoc: <project> - Start build`, then `Hardware` and `Software`. fhdlgen prints each Verilog include from the top fragment as `fhdlgen: <file>`. The log then says `Hardware complete`, lists the firmware sources and size, says `Software complete`, and `Start emulation` before `sim.sh`. Ctrl+C then prints `Emulation stopped`.
-- `projects/soc_blink` starts a Forth loop from `'BOOT` and does not return to the prompt. The loop stores `0` and `1` at `h# 400`, so the `led` port toggles, and waits on the counter at `h# 800`. `FSOC_EMU_CON=term` shows `lamp on` and `lamp off`. `FSOC_EMU_CON=pin` prints only `pin led 0` and `pin led 1`.
-- SoC emulation `projects/soc_emul` boots SwapForth J1a. The dictionary is its ANS CORE set without `environment?`, and a line on the UART is answered with ` ok`.
+- `projects/soc/soc_blink` starts a Forth loop from `'BOOT` and does not return to the prompt. The loop stores `0` and `1` at `h# 400`, so the `led` port toggles, and waits on the counter at `h# 800`. `FSOC_EMU_CON=term` shows `lamp on` and `lamp off`. `FSOC_EMU_CON=pin` prints only `pin led 0` and `pin led 1`.
+- SoC emulation `projects/soc/soc_emul` boots SwapForth J1a. The dictionary is its ANS CORE set without `environment?`, and a line on the UART is answered with ` ok`.
 - UART console: `FSOC_EMU_CON=term` writes the byte stream as text. On a tty ncurses shows that text above a host input row; Enter sends the row. `FSOC_EMU_CON=log` keeps `t=<ns> uart <name> <byte>`. Unset follows stdout: a terminal is text, a file stays the log.
 - Blinky emulation `main` lives in `fsoc/blinky_main.cpp`. `emu/` keeps only the shared `con` console.
 - A project's `target.4th` names its fhdlgen design. That file is the chip composition: `soc_emul` builds `designs/soc_console.4th` (UART, no timer, no `regio`), `soc_blink` builds `designs/soc_top.4th`. Leaf copies follow the design's `` `include `` lines.

@@ -41,7 +41,7 @@ s" [asm] 1 nor, 2 add, 3 sta, spin: spin jcc, 255 dcb, [endasm]" evaluate
 
 ## Стендэлон на ECP5
 
-Проект `projects/standalone_mcpu`. Задача `standalone`, таргет `yosys`, плата `lfe5u25f_cabga256`: `clk` на `P6`, дальше голые шары. На выводы `top` выведены `clk`, `rst`, `oe`, `we`, `adress[5:0]`, `data[7:0]`. Памяти, UART и таймера в этой сборке нет.
+Проект `projects/standalone/standalone_mcpu`. Задача `standalone`, таргет `yosys`, плата `lfe5u25f_cabga256`: `clk` на `P6`, дальше голые шары. На выводы `top` выведены `clk`, `rst`, `oe`, `we`, `adress[5:0]`, `data[7:0]`. Памяти, UART и таймера в этой сборке нет.
 
 Замер 2026-10-02, `synth_ecp5` и nextpnr, ограничение 25.00 МГц, маршрут сошёлся:
 
@@ -56,7 +56,7 @@ s" [asm] 1 nor, 2 add, 3 sta, spin: spin jcc, 255 dcb, [endasm]" evaluate
 24 триггера совпали с регистровым файлом. 45 LUT4 — это ячейки ECP5, не 32 макроячейки CPLD из pdf. Уравнения `oe` и `we` по-прежнему зависят от такта (`assign oe = clk | …`). nextpnr вывел этот вывод на глобальную сеть и сборку закончил. Уравнения не переписывались.
 
 ```bash
-cd projects/standalone_mcpu
+cd projects/standalone/standalone_mcpu
 fsoc --build
 ```
 

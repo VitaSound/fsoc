@@ -5,7 +5,7 @@ description: Adds a new fsoc CPU or MCU platform using the same fsys layers as j
 
 # Add an fsoc CPU / MCU target
 
-Follow `.cursor/rules/fsoc-cpu-target.mdc` and the specs `openspec/specs/forth-cross/spec.md`, `openspec/specs/fsys/spec.md`. Classify with `forth-system-context` (FMAP class, MM, EX-C, CG) before writing files.
+Human how-to: `doc/add-cpu.md` (`doc/add-cpu-eng.md`). Follow `.cursor/rules/fsoc-cpu-target.mdc` and the specs `openspec/specs/forth-cross/spec.md`, `openspec/specs/fsys/spec.md`. Classify with `forth-system-context` (FMAP class, MM, EX-C, CG) before writing files.
 
 ## Checklist
 
