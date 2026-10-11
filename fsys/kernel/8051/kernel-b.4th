@@ -620,16 +620,30 @@ k-lab kinit
    r2 $0A mov-rn#, r3 $00 mov-rn#,
    VBASE >dp   k-call xstore
    s" cell-here" k-pc >dp
-   k-call xfetch
+   k-call cfa
    VHERE >dp
    k-call xstore
    s" cell-latest" k-pc >dp
-   k-call xfetch
+   k-call cfa
    VLATEST >dp
    k-call xstore
    ret,
 
+\ Hard AT89C52: Timer1 mode 2 @ 11.0592 MHz → 9600. Soft ignores TH1 (buart).
+\ Set TI so the first EMIT does not spin forever (reset TI=0 on silicon).
+k-lab uinit
+   TMOD $20 mov-di#,
+   TH1 $FD mov-di#,
+   TL1 $FD mov-di#,
+   TCON_TR1 setb-bit,
+   SCON $50 mov-di#,
+   SCON_TI setb-bit,
+   ret,
+
 k-lab cold
+   k-call uinit
+   \ Marks: * UART  + PSP  I kinit  B boot  (blink CFA must stay < $1000)
+   $2A mov-a#, k-call txa
    DSP0 >dp
    DPL mov-a-di, r2 mov-rn-a,
    DPH mov-a-di, r3 mov-rn-a,
@@ -638,18 +652,21 @@ k-lab cold
    r2 $00 mov-rn#, r3 $00 mov-rn#,
    VDEPTH >dp
    k-call xstore
+   $2B mov-a#, k-call txa
    k-call kinit
-   k-call kcr
+   $49 mov-a#, k-call txa
    s" cell-boot" k-pc >dp
-   k-call xfetch
+   k-call cfa
    r2 mov-a-rn, r3 orl-a-rn,
    k-jz-fwd noboot
+   $42 mov-a#, k-call txa
    k-call runhl
 k-lab noboot
 k-lab qloop
    k-call kaccept
    k-call kinterpret
    k-call kprompt
+   WDTREL $1E mov-di#,
    k-ljmp-fwd qloop
 
 k-lab kquit
@@ -831,87 +848,13 @@ k-lab tl1
    ret,
 s" tlen" 0 s" ktlen" k-pc k-word
 
-k-lab kwords
-   $20 mov-a#, k-call txa
-   VLATEST >dp
-   k-call xfetch
-k-lab wloop
-   r2 mov-a-rn, r3 orl-a-rn,
-   k-jz-fwd wdone
-   VH >dp
-   k-call xstore
-   VH >dp
-   k-call xfetch
-   r2 mov-a-rn, 2 add-a#, DPL mov-di-a,
-   r3 mov-a-rn, 0 addc-a#, DPH mov-di-a,
-   mxa,
-   r0 mov-rn-a,
-   r0 mov-a-rn,
-   k-jz-fwd wsp
-   incdp, incdp,
-k-lab wch
-   mxa, ACC push,
-   incdp,
-   ACC pop, k-call txa
-   r0 s" wch" k-pc djnz-rn,
-k-lab wsp
-   $20 mov-a#, k-call txa
-   VH >dp
-   k-call xfetch
-   r2 mov-a-rn, DPL mov-di-a,
-   r3 mov-a-rn, DPH mov-di-a,
-   mxa, r2 mov-rn-a, incdp,
-   mxa, r3 mov-rn-a,
-   k-ljmp-fwd wloop
-k-lab wdone
-   ret,
-s" words" 0 s" kwords" k-pc k-word
-
-k-lab kempty
-   DSP0 >dp
-   DPL mov-a-di, r2 mov-rn-a,
-   DPH mov-a-di, r3 mov-rn-a,
-   VPSP >dp
-   k-call xstore
-   r2 $00 mov-rn#, r3 $00 mov-rn#,
-   VDEPTH >dp
-   k-call xstore
-   ret,
-s" empty" 0 s" kempty" k-pc k-word
+\ words/empty omitted: ~100B ROM; Proteus 4K needs blink CFA < $1000.
+\ Soft console project can restore them when ROM budget allows.
 
 s" =" 0 s" kexit" k-pc k-word
 
-: k-stub ( a u -- )
-   0 s" kexit" k-pc k-word ;
-
-s" 'BOOT" k-stub
-s" 0<" k-stub
-s" 1+" k-stub
-s" 1-" k-stub
-s" 2*" k-stub
-s" 2/" k-stub
-s" again" k-stub
-s" allot" k-stub
-s" and" k-stub
-s" begin" k-stub
-s" cell+" k-stub
-s" cells" k-stub
-s" compile-exit" k-stub
-s" if" k-stub
-s" invert" k-stub
-s" io!" k-stub
-s" io@" k-stub
-s" negate" k-stub
-s" or" k-stub
-s" over" k-stub
-s" r>" k-stub
-s" r@" k-stub
-s" then" k-stub
-s" type" k-stub
-s" u." k-stub
-s" u/mod" k-stub
-s" u<" k-stub
-s" >r" k-stub
+\ No k-stubs: each name burns ROM; blink/colon use compiled lcall/ljmp.
+\ Keeps the image under 4K for Proteus 80C51 / 4K ROM models.
 
 : mcs-fwd ( -- )
    fwd-n @ 0 ?do

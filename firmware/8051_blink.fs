@@ -1,15 +1,11 @@
-\ UART blink text for 8051 soft/hard soc. LED at XRAM $3FF0 (and P1 soft SFR).
+\ Blink. Proteus: Clock 11.0592 MHz, VT 9600 8N1, EA→VCC, RST→GND.
+\ dly = asm busy-wait (no Forth pause / exit nesting).
 
 : blink
-   0
    begin
-      1 xor
-      dup $3FF0 c!
-      dup if
-         ." blink on"
-      else
-         ." blink off"
-      then
-      cr
+      0 p1! ." +" cr
+      40 dly
+      1 p1! ." -" cr
+      40 dly
    again
 ;

@@ -285,8 +285,8 @@ if ( acall(cmdc) )
 else if ( lcall(cmdc)|ljmp(cmdc) )
     rom_addr = {cmd1,cmd0};	
 else if ( ret(cmdc)|reti(cmdc) )
-    /* fsoc: Intel order — top of stack is PCL (see LCALL push below). */
-    rom_addr = {data0,data1};
+    /* Real MCS-51: top of stack is PCH (data1 after RET pipeline). */
+    rom_addr = {data1,data0};
 else if ( ajmp(cmdb) )
     rom_addr = {pc[15:11],cmd1[7:5],cmd0};	
 else if ( movc_a_dp(cmda)|movc_a_pc(cmda)|(jc(cmdb) & psw_c)|(jnc(cmdb) & ~psw_c)|((jb(cmdc)|jbc(cmdc)) & data0[cmd1[2:0]])|(jnb(cmdc) & ~data0[cmd1[2:0]])|sjmp(cmdb)|jmp(cmda)|(jz(cmdb) & (acc==8'b0))|(jnz(cmdb) & (acc!=8'b0))|(cjne_a_di_rel(cmdc) & (acc!=data0))|(cjne_a_da_rel(cmdc) & (acc!=cmd1))|(cjne_rn_da_rel(cmdc) & (data1!=cmd1))|(cjne_ri_da_rel(cmdc) & (data0!=cmd1))|((djnz_rn_rel(cmdb)||djnz_di_rel(cmdc)) & (data0!=8'h1)) ) 
@@ -465,13 +465,13 @@ else if ( xchd(cmdc) )
     wr_byte = {data0[7:4],acc[3:0]};
 else if ( clr_bit(cmdc)|setb_bit(cmdc)|cpl_bit(cmdc)|mov_bit_c(cmdc)|jbc(cmdc) )
     wr_byte = wr_bit_byte;
-/* fsoc: push PCH then PCL (Intel MCS-51). Upstream R8051 had lo-then-hi. */
+/* Real MCS-51: push PCL then PCH (PCH on top). Matches Proteus AT89C52. */
 else if ( acall(cmdb) )
-    wr_byte = pc[15:8];
-else if ( acall(cmdc)|lcall(cmdc) )
     wr_byte = pc[7:0];
+else if ( acall(cmdc)|lcall(cmdc) )
+    wr_byte = pc[15:8];
 else if ( lcall(cmdb) )
-    wr_byte = pc_add1[15:8];
+    wr_byte = pc_add1[7:0];
 else
     wr_byte = 8'd0;
 

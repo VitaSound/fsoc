@@ -304,7 +304,7 @@ fsoc --build
 
 ## 8051
 
-`8051` is class 1, FMAP `D-S-A-M-3-F`, MM=D, EX-C=S, CG=F (`cpu-ref` `at89c52`). One profile, two bodies: soft [R8051](https://github.com/risclite/R8051) (Apache-2.0) for Verilator/Yosys, hard Intel HEX for Proteus AT89C52. Option `body` overrides the default from `target:` (`emulation`/`yosys` → soft, `proteus` → hard). Options `code` / `iram` / `xram` set memory sizes. Notes: [8051-soft.md](8051-soft.md), [at89c52-proteus.md](at89c52-proteus.md). Soft console is a row in `tests/con_core_test.4th`. Colorlight fit table: `python3 doc/j1-word-graph/build.py fit-8051`.
+`8051` is class 1, FMAP `D-S-A-M-3-F`, MM=D, EX-C=S, CG=F (`cpu-ref` `at89c52`). One profile, two bodies: soft [R8051](https://github.com/risclite/R8051) (Apache-2.0) for Verilator/Yosys, hard Intel HEX for Proteus AT89C52. Option `body` overrides the default from `target:` (`emulation`/`yosys` → soft, `proteus` → hard). Options `code` / `iram` / `xram` set memory sizes. Notes: [8051-soft.md](8051-soft.md), [at89c52-proteus.md](at89c52-proteus.md). Soft console is a row in `tests/con_core_test.4th`. Colorlight fit table: `python3 doc/j1-word-graph/build.py fit-8051`. Hard baremetal `projects/baremetal/blinky_8051` is **tested** in Proteus (LED on `P1.0`). Hard fsys (`soc_at89c52*`) needs `s" xram" s" 8192" option:` and external SRAM from `$2000` in ISIS; see [at89c52-proteus.md](at89c52-proteus.md).
 
 ```bash
 cd projects/standalone/standalone_z80

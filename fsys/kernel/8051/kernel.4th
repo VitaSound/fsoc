@@ -1,5 +1,8 @@
 \ fsys/kernel/8051/kernel.4th — MCS-51 STC Forth console.
-\ Soft R8051 / hard AT89C52. TOS r2:r3. XRAM vars at $2000+.
+\ Soft: XRAM $2000+. Hard (mcs-iram-vm): on-chip IRAM — Proteus without SRAM.
+
+\ Snapshot before fasm: chip/words re-include can shadow mcs-iram-vm with 0.
+mcs-iram-vm constant mcs-want-iram
 
 include ../../fasm/8051/fasm.4th
 mcs-wl >order
@@ -9,6 +12,28 @@ fasm-reset
 fasm-begin
 0 fasm-label-n !
 
+mcs-want-iram [IF]
+\ AT89C52 256B IRAM: vars $30..$4E, hw SP $60 (up), TIB $80,
+\ data stack down from $FE. (Old DSP0=$7E collided with deep STC calls.)
+$30 constant VPSP
+$32 constant VHERE
+$34 constant VLATEST
+$36 constant VSTATE
+$38 constant VBASE
+$3A constant VNTIB
+$3C constant VTOIN
+$3E constant VTLEN
+$40 constant VA
+$42 constant VU
+$44 constant VN
+$46 constant VQ
+$48 constant VI
+$4A constant VH
+$4C constant VF
+$4E constant VDEPTH
+$FE constant DSP0
+$80 constant TIBA
+[ELSE]
 $2000 constant VPSP
 $2004 constant VHERE
 $2006 constant VLATEST
@@ -27,6 +52,7 @@ $201E constant VF
 $2020 constant VDEPTH
 $2080 constant DSP0
 $2180 constant TIBA
+[THEN]
 
 variable k-latest
 0 k-latest !
@@ -43,9 +69,6 @@ create fwd-adr fwd-max cells allot
 
 : k-pc ( a u -- pc )
    fasm-label@ 0= abort" mcs: label" ;
-
-\ Registered MOVX + delayed bank flag: prime then sample.
-: mxa, ( -- ) movxa@dptr, movxa@dptr, ;
 
 : k-lab ( "name" -- )
    parse-name
@@ -127,6 +150,27 @@ k-lab cell-boot
 fasm-pc @ p-boot !
 0 dw,
 
+\ Byte at DPTR: IRAM (DPH=0) / code MOVC / XRAM MOVX.
+k-lab xfb
+   DPH mov-a-di,
+   k-jz-fwd xfbi
+   clr-c,
+   mcs-flash 8 rshift subb-a#,
+   k-jnc-fwd xfbx
+   clra,
+   movc@a+dptr,
+   ret,
+k-lab xfbi
+   DPL mov-a-di, r0 mov-rn-a,
+   mov-a-@r0,
+   ret,
+k-lab xfbx
+   movxa@dptr,
+   movxa@dptr,
+   ret,
+
+: mxa, ( -- ) s" xfb" k-pc lcall, ;
+
 k-lab txwait
 k-lab tw1
    SCON mov-a-di,
@@ -152,18 +196,36 @@ k-lab kw1
    ret,
 
 k-lab xfetch
+   DPH mov-a-di,
+   k-jz-fwd xfi
    mxa, r2 mov-rn-a,
    incdp,
    mxa, r3 mov-rn-a,
    incdp,
    ret,
+k-lab xfi
+   DPL mov-a-di, r0 mov-rn-a,
+   mov-a-@r0, r2 mov-rn-a,
+   r0 inc-rn, incdp,
+   mov-a-@r0, r3 mov-rn-a,
+   incdp,
+   ret,
 
 k-lab xstore
+   DPH mov-a-di,
+   k-jz-fwd xsi
    r2 mov-a-rn,
    movx@dptr-a,
    incdp,
    r3 mov-a-rn,
    movx@dptr-a,
+   incdp,
+   ret,
+k-lab xsi
+   DPL mov-a-di, r0 mov-rn-a,
+   r2 mov-a-rn, mov-@r0-a,
+   r0 inc-rn, incdp,
+   r3 mov-a-rn, mov-@r0-a,
    incdp,
    ret,
 
@@ -269,9 +331,16 @@ k-lab dr0
    ACC pop, r2 mov-rn-a,
    ret,
 
+\ Literal bytes sit in code after LCALL — always MOVC (never XRAM).
+k-lab cfa
+   clra, movc@a+dptr, r2 mov-rn-a, incdp,
+   clra, movc@a+dptr, r3 mov-rn-a, incdp,
+   ret,
+
 k-lab klit
-   ACC pop, DPL mov-di-a,
+   \ Return addr from LCALL: PCH on top.
    ACC pop, DPH mov-di-a,
+   ACC pop, DPL mov-di-a,
    r2 mov-a-rn, ACC push,
    r3 mov-a-rn, ACC push,
    DPL mov-a-di, ACC push,
@@ -296,20 +365,19 @@ k-lab kl1
    ACC pop, r3 mov-rn-a,
    ACC pop, r2 mov-rn-a,
 k-lab kl2
-   mxa, r2 mov-rn-a, incdp,
-   mxa, r3 mov-rn-a, incdp,
+   k-call cfa
    DPL mov-a-di, ACC push,
    DPH mov-a-di, ACC push,
    k-call dinc
    ACC pop, DPH mov-di-a,
    ACC pop, DPL mov-di-a,
-   DPH mov-a-di, ACC push,
    DPL mov-a-di, ACC push,
+   DPH mov-a-di, ACC push,
    ret,
 
 k-lab zbranch
-   ACC pop, DPL mov-di-a,
    ACC pop, DPH mov-di-a,
+   ACC pop, DPL mov-di-a,
    r2 mov-a-rn, r3 orl-a-rn,
    ACC push,
    DPL mov-a-di, ACC push,
@@ -323,13 +391,13 @@ k-lab zbranch
    mxa, r5 mov-rn-a,
    r4 mov-a-rn, DPL mov-di-a,
    r5 mov-a-rn, DPH mov-di-a,
-   DPH mov-a-di, ACC push,
    DPL mov-a-di, ACC push,
+   DPH mov-a-di, ACC push,
    ret,
 k-lab zbn
    incdp, incdp,
-   DPH mov-a-di, ACC push,
    DPL mov-a-di, ACC push,
+   DPH mov-a-di, ACC push,
    ret,
 
 k-lab cmcall
@@ -362,10 +430,10 @@ k-lab cmret
    k-call xstore
    ret,
 
-\ Intel MCS-51: push PCH then PCL; RET pops PCL then PCH.
+\ Real MCS-51 / Proteus: LCALL pushes PCL then PCH (PCH on top). Soft r8051 matches.
 k-lab runhl
-   r3 mov-a-rn, ACC push,
    r2 mov-a-rn, ACC push,
+   r3 mov-a-rn, ACC push,
    ret,
 
 k-lab kdup
@@ -486,6 +554,31 @@ k-lab kcstore
    ret,
 s" c!" 0 s" kcstore" k-pc k-word
 
+\ Direct SFR write — MOVX cannot reach P1 on hard AT89C52.
+k-lab kp1store
+   r2 mov-a-rn,
+   P1 mov-di-a,
+   k-call mpop
+   k-call ddec
+   ret,
+s" p1!" 0 s" kp1store" k-pc k-word
+
+\ Busy-wait: TOS = outer count (uses r6/r7; no Forth nesting).
+k-lab kdly
+   r2 mov-a-rn, r6 mov-rn-a,
+   k-call dropp
+k-lab dlyo
+   r7 $00 mov-rn#,
+k-lab dlyi
+   r7 dec-rn,
+   r7 mov-a-rn,
+   s" dlyi" k-pc jnz,
+   r6 dec-rn,
+   r6 mov-a-rn,
+   s" dlyo" k-pc jnz,
+   ret,
+s" dly" 0 s" kdly" k-pc k-word
+
 k-lab k0eq
    r2 mov-a-rn, r3 orl-a-rn,
    k-jnz-fwd ze1
@@ -511,17 +604,18 @@ k-lab kemit
    ret,
 s" emit" 0 s" kemit" k-pc k-word
 
+\ Char after LCALL kch is in code space — MOVC only.
 k-lab kch
-   ACC pop, DPL mov-di-a,
    ACC pop, DPH mov-di-a,
-   mxa, ACC push,
+   ACC pop, DPL mov-di-a,
+   clra, movc@a+dptr, ACC push,
    incdp,
    DPL mov-a-di, r4 mov-rn-a,
    DPH mov-a-di, r5 mov-rn-a,
    ACC pop,
    k-call txa
-   r5 mov-a-rn, ACC push,
    r4 mov-a-rn, ACC push,
+   r5 mov-a-rn, ACC push,
    ret,
 
 k-lab kcr
@@ -667,7 +761,10 @@ k-lab dsdone
    ret,
 s" .s" 0 s" kdots" k-pc k-word
 
+\ STC: drop return into the colon body, RET to that colon's caller.
 k-lab kexit
+   ACC pop,
+   ACC pop,
    ret,
 s" exit" 0 s" kexit" k-pc k-word
 

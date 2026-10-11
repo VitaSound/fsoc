@@ -2,33 +2,62 @@
 
 Хост пишет **Intel HEX**. Proteus его только открывает. Soft R8051 (Verilator) — [8051-soft.md](8051-soft.md).
 
-Сборка:
+## Два режима hard
+
+| Режим | Проект | Схема |
+|-------|--------|--------|
+| Только лампа | `projects/baremetal/blinky_8051` | AT89C52 + LED на `P1.0` |
+| Forth / blink + UART | `soc_8051_blink` / `soc_at89c52*` (`proteus`) | AT89C52 + LED + Virtual Terminal |
+
+Hard fsys кладёт VM (стек, TIB, переменные) в **on-chip IRAM** — внешняя 6264 для blink/консоли **не нужна**. Код в internal flash (MOVC). Soft по-прежнему использует XRAM `$2000+`.
+
+## Лампа (без XRAM) — протестировано
 
 ```bash
 cd projects/baremetal/blinky_8051 && fsoc --build
-cd projects/soc/soc_at89c52 && fsoc --build
-cd projects/soc/soc_at89c52_blink && fsoc --build
 ```
 
-`target: proteus` и неуказанный `body` → hard. Явно: `s" body" s" hard" option:`. Log: `at89c52(8051)`, `image tool: fsys` или `fasm`, `firmware.hex: N bytes of 8192`, без `Vtop_feed`.
+- AT89C52, Clock **11.0592 МГц**, LED на `P1.0`, свежий Program File.
+- Virtual Terminal не нужен.
 
-## Схема ISIS
-
-- Корпус **AT89C52**. Clock Frequency — 11.0592 МГц (или ваша XTAL).
-- Светодиод с резистором от `P1.0` к земле (активный высокий в blink).
-- Virtual Terminal, 9600 бод. TX терминала на RXD (`P3.0`), RX терминала на TXD (`P3.1`). Enter — CR; консоль принимает CR и LF.
-- Program File — свежий `firmware.hex` после `fsoc --build`.
-
-`soc_at89c52` — Forth-консоль (`sys: fsys`). `soc_at89c52_blink` — `blink` option + `firmware/8051_blink.fs`. `blinky_8051` — baremetal fasm, без kernel.
-
-## Опционально без Proteus: ucsim
-
-На машине с пакетом `sdcc-ucsim` есть `s51` (бинаря `ucsim-51` нет). Обёртка:
+## Консоль / soc blink (IRAM VM)
 
 ```bash
-cd projects/soc/soc_at89c52 && fsoc --build
-"$FSOC_HOME/tools/8051-con" ./firmware.hex
+cd projects/soc/soc_8051_blink && fsoc --build
+# log: vm: iram · open firmware.hex in Proteus
+```
+
+Схема ISIS (внешняя SRAM не обязательна):
+
+| Пин | Куда | Зачем |
+|-----|------|--------|
+| **EA (31)** | **VCC** | Внутренний ROM. **Плавающий EA** → через секунды уход во внешний code bus и «зависание» без `*+IB` |
+| **RST (9)** | GND (или RC на GND) | Иначе ложные сбросы |
+| Clock | **11.0592 МГц** в свойствах MCU | Иначе мусор/тишина на 9600 |
+| P1.0 | LED (+ резистор на GND) | `p1!` |
+| P3.1/TXD | VT **RXD** | Вывод |
+| P3.0/RXD | VT **TXD** (если нужен ввод) | |
+| Program File | свежий Intel HEX | после каждого `fsoc --build` |
+
+- MCU: **AT89C52** / 80C52, ROM **≥ 8K**. На 4K (`80C51`) blink CFA за `$0FFF` → сброс.
+- Внешняя 6264 для hard IRAM VM **не нужна**.
+
+**Работает (2026-10-11):** один раз `*+IB`, затем строки `+` / `-` и мигание LED. Образ IRAM VM, Intel call-stack, STC `exit`.
+
+Если снова «замерло» через несколько секунд — сначала проверь **EA→VCC** на схеме (не только Edit Properties).
+
+Soft-консоль без Proteus:
+
+```bash
+cd projects/soc/soc_8051
+FSOC_EMU_FAST=1 FSOC_EMU_CON=term FSOC_EMU_UART_IN=$'1 2 + .\nwords\n' fsoc --build
+```
+
+## Опционально: ucsim
+
+```bash
+cd projects/soc/soc_8051 && fsoc --build
 "$FSOC_HOME/tools/8051-con" ./firmware.hex '1 2 + .'
 ```
 
-Приёмка консоли soft — Verilator (`con_core`). ucsim не заменяет Proteus для hard pin/UART timing.
+Приёмка soft — Verilator (`con_core`). ucsim не заменяет Proteus для pin/UART timing.

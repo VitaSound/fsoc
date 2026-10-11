@@ -12,7 +12,7 @@
 | `bcpu` | 0 | `U-M-B-A-3-F` | U | B | F | `projects/soc/soc_bcpu` |
 | `msl16` | 0 | `U-S-A-M-3-F` | U | S | F | `projects/soc/soc_msl16` |
 | `avr` | 1 | `D-S-A-M-3-F` | D | S | F | `projects/soc/soc_atmega8` |
-| `8051` | 1 | `D-S-A-M-3-F` | D | S | F | `projects/soc/soc_8051` (soft) / `soc_at89c52` (hard) |
+| `8051` | 1 | `D-S-A-M-3-F` | D | S | F | soft `soc_8051`; hard Proteus `blinky_8051` (tested) / `soc_at89c52` |
 | `cd16` | 1 | `D-S-A-M-3-F` | D | S | F | `projects/soc/soc_cd16` |
 | `stm8` | 1 | `D-S-A-M-4-E` | D | S | E | stub (нет hex) |
 | `z80` | 2 | `S-S-A-M-4-F` | S | S | F | `projects/soc/soc_z80` |

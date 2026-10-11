@@ -575,7 +575,8 @@ def check_z80(data):
 
 
 def check_8051(data):
-    for name in ("words", "quit", ".s", "+", ":", "0=", "empty"):
+    # words/empty omitted so hard blink CFA stays under 4K ROM.
+    for name in ("quit", ".s", "+", ":", "0=", "p1!"):
         require(data, name, "fsys-8051 lost " + name)
     if data["+"]["file"].find("kernel/8051") < 0:
         raise SystemExit("+ should come from the 8051 kernel")

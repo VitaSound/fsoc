@@ -9,3 +9,8 @@
 : mcs-part@ ( -- c-addr u ) mcs-part$ 2@ ;
 s" at89c52" mcs-part!
 [THEN]
+\ Separate from mcs-flash: kernel re-includes fasm; a nested `0 value`
+\ here was wiping the hard-Proteus IRAM flag set by cg-8051.
+[IFUNDEF] mcs-iram-vm
+0 value mcs-iram-vm
+[THEN]

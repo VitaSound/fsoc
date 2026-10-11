@@ -24,15 +24,21 @@ $87 constant PCON
 $88 constant TCON
 $89 constant TMOD
 $8A constant TL0
+$8B constant TL1
 $8C constant TH0
+$8D constant TH1
 $90 constant P1
 $98 constant SCON
 $99 constant SBUF
 $A8 constant IE
 $B0 constant P3
 $D0 constant PSW
+$D8 constant WDTCON
 $E0 constant ACC
 $F0 constant B
+$86 constant WDTREL
+\ Bit addresses.
+$8E constant TCON_TR1
 
 : mcs-u8 ( u -- u )
    dup 0 256 within 0= abort" mcs: byte" ;
@@ -75,6 +81,8 @@ $83 mcs-op1 movc@a+pc,
 $93 mcs-op1 movc@a+dptr,
 $E0 mcs-op1 movxa@dptr,
 $F0 mcs-op1 movx@dptr-a,
+$E6 mcs-op1 mov-a-@r0,
+$F6 mcs-op1 mov-@r0-a,
 
 : ljmp, ( addr -- )
    $02 fasm-emit
@@ -174,6 +182,56 @@ $90 constant P1_0
 $98 constant SCON_RI
 $99 constant SCON_TI
 
+\ Pass1 byte sizes — must match fasm-emit counts (default span is 1).
+: mcs-span ( c-addr u -- n )
+   2dup s" ljmp," compare 0= >r
+   2dup s" lcall," compare 0= r> or >r
+   2dup s" mov-di#," compare 0= r> or >r
+   2dup s" mov-dptr#," compare 0= r> or >r
+   2dup s" mov-di-di," compare 0= r> or >r
+   2dup s" xrl-di#," compare 0= r> or >r
+   2dup s" orl-di#," compare 0= r> or >r
+   2dup s" anl-di#," compare 0= r> or >r
+   2dup s" jnb," compare 0= r> or >r
+   2dup s" jb," compare 0= r> or >r
+   2dup s" cjne-a#," compare 0= r> or
+   if 2drop 3 exit then
+
+   2dup s" sjmp," compare 0= >r
+   2dup s" ajmp," compare 0= r> or >r
+   2dup s" acall," compare 0= r> or >r
+   2dup s" jz," compare 0= r> or >r
+   2dup s" jnz," compare 0= r> or >r
+   2dup s" jc," compare 0= r> or >r
+   2dup s" jnc," compare 0= r> or >r
+   2dup s" djnz-rn," compare 0= r> or >r
+   2dup s" mov-a#," compare 0= r> or >r
+   2dup s" mov-rn#," compare 0= r> or >r
+   2dup s" mov-a-di," compare 0= r> or >r
+   2dup s" mov-di-a," compare 0= r> or >r
+   2dup s" push," compare 0= r> or >r
+   2dup s" pop," compare 0= r> or >r
+   2dup s" add-a#," compare 0= r> or >r
+   2dup s" addc-a#," compare 0= r> or >r
+   2dup s" subb-a#," compare 0= r> or >r
+   2dup s" anl-a#," compare 0= r> or >r
+   2dup s" orl-a#," compare 0= r> or >r
+   2dup s" xrl-a#," compare 0= r> or >r
+   2dup s" clr-bit," compare 0= r> or >r
+   2dup s" setb-bit," compare 0= r> or >r
+   2dup s" cpl-bit," compare 0= r> or >r
+   2dup s" xch-a-di," compare 0= r> or >r
+   2dup s" inc-di," compare 0= r> or >r
+   2dup s" dec-di," compare 0= r> or >r
+   2dup s" dw," compare 0= r> or
+   if 2drop 2 exit then
+
+   2drop 1 ;
+
 set-current
 previous
 [THEN]
+
+mcs-wl >order
+' mcs-span is fasm-span
+previous

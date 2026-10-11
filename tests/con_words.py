@@ -529,7 +529,6 @@ MCS51_RUN = {
     "cr": ("cr", [" ok"]),
     "space": ("space", [" ok"]),
     "depth": ("depth .", ["0"]),
-    "words": ("words", ["dup"]),
     "c!": ("66 here c! here c@ .", ["66"]),
     "c@": ("67 here c! here c@ .", ["67"]),
 }
@@ -537,6 +536,9 @@ MCS51_RUN = {
 MCS51_SKIP = {
     ":": "colon header TBD",
     ";": "colon header TBD",
+    "p1!": "pin side effect",
+    "words": "omitted for 4K blink ROM",
+    "empty": "omitted for 4K blink ROM",
 }
 
 MCS51_CORE_HAS = [

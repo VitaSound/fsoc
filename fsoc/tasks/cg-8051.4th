@@ -1,6 +1,10 @@
 \ fsoc/tasks/cg-8051.4th — CG=F image for 8051. Soft = byte hex + R8051 leaf.
 \ Hard = Intel HEX for Proteus. body option overrides target default.
 
+[IFUNDEF] mcs-iram-vm
+0 value mcs-iram-vm
+[THEN]
+
 : mcs-note ( a u -- )
    ."     " type cr ;
 
@@ -168,6 +172,12 @@ variable mcs-cap
 : mcs-fsys-image ( blink? -- )
    warnings off
    s" fsys/kernel/8051/kernel.4th" 2dup mcs-note mcs-include
+   s" mcs-want-iram" find-name ?dup if
+      name>interpret execute if
+         s" VPSP" find-name name>interpret execute
+         $100 u>= abort" 8051: IRAM map lost (VPSP not IRAM)"
+      then
+   then
    s" fsys/host/8051-cross.4th" mcs-include
    s" fsys/8051/extra-min.4th" 2dup mcs-note mcs-bx
    if
@@ -202,8 +212,12 @@ variable mcs-project
    then
    project mcs-code-sz mcs-cap !
    project cpu mcs-hw
+   \ Hard: Forth VM in on-chip IRAM. Soft keeps XRAM $2000+ unless forced.
+   project mcs-hard? if -1 else 0 then to mcs-iram-vm
+   project s" iram-vm" mcs-opt s" 1" compare 0= if -1 to mcs-iram-vm then
    s" Software" fsoc-note
    ."     image tool: fsys" cr
+   mcs-iram-vm if ."     vm: iram" cr then
    project mcs-project !
    project mcs-blink? mcs-fsys-image
    mcs-project @ mcs-write-hex

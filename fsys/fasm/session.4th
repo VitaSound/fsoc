@@ -136,8 +136,9 @@ variable fasm-tok-u
 
 : fasm-one ( c-addr u -- )
     2dup fasm-colon fasm-ends if fasm-mark 2drop 2drop exit else 2drop then
-    2dup fasm-number if >r 2drop r> exit then
+    \ Labels before numbers so names like d0 are not read as hex.
     2dup fasm-label@ if >r 2drop r> exit then
+    2dup fasm-number if >r 2drop r> exit then
     fasm-op ;
 
 : fasm-pass2 ( -- )
