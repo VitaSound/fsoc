@@ -34,6 +34,10 @@ forth-package
     key-list flint-exclude fsys/kernel/z80/
     key-list flint-exclude fsys/host/z80-cross.4th
     key-list flint-exclude fsys/z80/
+    key-list flint-exclude fsys/fasm/8051/
+    key-list flint-exclude fsys/kernel/8051/
+    key-list flint-exclude fsys/host/8051-cross.4th
+    key-list flint-exclude fsys/8051/
     key-list flint-exclude projects/
     key-list tags gforth
     key-list tags soc

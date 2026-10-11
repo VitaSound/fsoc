@@ -1,0 +1,14 @@
+R8051 MCS-51 soft CPU core.
+
+Vendored from https://github.com/risclite/R8051 (Li Xinbing).
+Files: r8051.v, instruction.v — Apache License 2.0 (see LICENSE).
+
+fsoc wrappers (top_blink.v, top_soc.v, top_fit.v) are project code.
+Provenance note mirrors cpu/z80/LICENSE style.
+
+Local patch in r8051.v: LCALL/ACALL push and RET pop use Intel MCS-51
+order (PCH then PCL on the stack). Upstream used the opposite byte order;
+Intel order matches AT89C52 and the fsoc kernel runhl sequence.
+
+Tops use registered RAM/SFR reads with ram_rd_vld=1. The kernel double-reads
+MOVX (mxa) so the registered data is sampled after one cycle.

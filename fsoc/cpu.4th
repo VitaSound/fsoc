@@ -260,3 +260,15 @@ s" C" cpu-bm
 16 cpu-width
 s" msl16" cpu-ref
 s" word hex" cpu-note
+
+\ MCS-51: hard AT89C52 (Proteus) or soft R8051 (Verilator/Yosys).
+s" 8051" cpu-new
+1 cpu-class
+s" D-S-A-M-3-F" cpu-fmap
+s" D" cpu-mm
+s" S" cpu-exc
+s" F" cpu-cg
+s" C" cpu-bm
+16 cpu-width
+s" at89c52" cpu-ref
+s" intel hex / soft r8051" cpu-note

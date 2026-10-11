@@ -21,6 +21,9 @@
 : z80-fsys-manifest ( -- )
    s\" s\" soc\" task:\ns\" emulation\" target:\ns\" z80\" cpu:\ns\" fsys\" sys:\n" tmp-manifest ;
 
+: mcs8051-fsys-manifest ( -- )
+   s\" s\" soc\" task:\ns\" emulation\" target:\ns\" 8051\" cpu:\ns\" fsys\" sys:\n" tmp-manifest ;
+
 : con-py ( args-a args-u -- flag )
    s" python3 " fsoc-root fjson.str-concat s" /tests/con_words.py " fsoc-cat+
    2swap fsoc-cat+
@@ -81,6 +84,11 @@
    s" z80" con-write-in
    j1-con-run expect-true
    s" z80" s" sim.log" con-check ;
+
+: mcs8051-con-session ( -- )
+   s" 8051" con-write-in
+   j1-con-run expect-true
+   s" 8051" s" sim.log" con-check ;
 
 : avr-con-session ( -- )
    s" avr" con-write-in

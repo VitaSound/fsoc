@@ -34,7 +34,7 @@ The agent skill in this repo is [`.cursor/skills/wavepeek`](../.cursor/skills/wa
 wavepeek skill .cursor/skills/wavepeek
 ```
 
-`fmix test` includes the shared fsys console grid [`tests/con_core_test.4th`](../tests/con_core_test.4th) (j1a, j1b, avr, bcpu, cd16, msl16, z80: input, erase, unknown word, stack, `+`, `.s`, `:`, `words`). Oracle: [`tests/con_words.py`](../tests/con_words.py) against `doc/j1-word-graph/fsys-*.json`. One file:
+`fmix test` includes the shared fsys console grid [`tests/con_core_test.4th`](../tests/con_core_test.4th) (j1a, j1b, avr, bcpu, cd16, msl16, z80, 8051: input, erase, unknown word, stack, `+`, `.s`, `:`, `words`). Oracle: [`tests/con_words.py`](../tests/con_words.py) against `doc/j1-word-graph/fsys-*.json`. One file:
 
 ```bash
 export FSOC_HOME="$HOME/fsoc"
@@ -301,6 +301,10 @@ fsoc --build
 ```
 
 `projects/standalone/standalone_z80` is the [TV80](https://github.com/hutch31/tv80) core (MIT), synchronous `tv80s` wrapper, Mode=0. Notes: [z80.md](z80.md). Profile `z80`: empty `sys:` stops, `s" fsys" sys:` builds the console (byte hex, 16 KB), and the projects are `projects/baremetal/blinky_z80`, `projects/soc/soc_z80`, and `projects/soc/soc_z80_blink`. The host assembler is `fsys/fasm/z80` (one byte per cell, `z80-wl`). Standalone pins expose `clk`, `reset_n`, bus strobes, `A[15:0]`, `di[7:0]`, and `dout[7:0]`. One routed nextpnr fit (2026-10-05) met 25.00 MHz.
+
+## 8051
+
+`8051` is class 1, FMAP `D-S-A-M-3-F`, MM=D, EX-C=S, CG=F (`cpu-ref` `at89c52`). One profile, two bodies: soft [R8051](https://github.com/risclite/R8051) (Apache-2.0) for Verilator/Yosys, hard Intel HEX for Proteus AT89C52. Option `body` overrides the default from `target:` (`emulation`/`yosys` → soft, `proteus` → hard). Options `code` / `iram` / `xram` set memory sizes. Notes: [8051-soft.md](8051-soft.md), [at89c52-proteus.md](at89c52-proteus.md). Soft console is a row in `tests/con_core_test.4th`. Colorlight fit table: `python3 doc/j1-word-graph/build.py fit-8051`.
 
 ```bash
 cd projects/standalone/standalone_z80

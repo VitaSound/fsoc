@@ -1,0 +1,296 @@
+{
+  "dup": {
+    "file": "fsys/kernel/8051/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "drop": {
+    "file": "fsys/kernel/8051/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "swap": {
+    "file": "fsys/kernel/8051/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "+": {
+    "file": "fsys/kernel/8051/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "-": {
+    "file": "fsys/kernel/8051/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "xor": {
+    "file": "fsys/kernel/8051/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "@": {
+    "file": "fsys/kernel/8051/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "!": {
+    "file": "fsys/kernel/8051/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "c@": {
+    "file": "fsys/kernel/8051/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "c!": {
+    "file": "fsys/kernel/8051/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "0=": {
+    "file": "fsys/kernel/8051/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "2drop": {
+    "file": "fsys/kernel/8051/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "emit": {
+    "file": "fsys/kernel/8051/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "cr": {
+    "file": "fsys/kernel/8051/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "space": {
+    "file": "fsys/kernel/8051/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "key": {
+    "file": "fsys/kernel/8051/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  ".": {
+    "file": "fsys/kernel/8051/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "depth": {
+    "file": "fsys/kernel/8051/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  ".s": {
+    "file": "fsys/kernel/8051/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "exit": {
+    "file": "fsys/kernel/8051/kernel.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "header": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "local",
+    "needs": [],
+    "missing": []
+  },
+  "find": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "number": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "local",
+    "needs": [],
+    "missing": []
+  },
+  ",": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "literal": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "execute": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "parse-name": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "accept": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  ":": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  ";": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "quit": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "here": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "latest": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "local",
+    "needs": [],
+    "missing": []
+  },
+  "state": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "base": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "tib": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "local",
+    "needs": [],
+    "missing": []
+  },
+  "ntib": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "local",
+    "needs": [],
+    "missing": []
+  },
+  ">in": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "tlen": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "local",
+    "needs": [],
+    "missing": []
+  },
+  "words": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  },
+  "empty": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "local",
+    "needs": [],
+    "missing": []
+  },
+  "=": {
+    "file": "fsys/kernel/8051/kernel-b.4th",
+    "asm": true,
+    "bind": "ans",
+    "needs": [],
+    "missing": []
+  }
+}

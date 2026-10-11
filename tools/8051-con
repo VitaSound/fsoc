@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# Optional hard-path console via sdcc-ucsim (s51). Soft path uses Verilator.
+# Usage: 8051-con firmware.hex [command ...]
+# With no commands: interactive (-c -). With commands: feed serial and exit.
+set -euo pipefail
+
+if ! command -v s51 >/dev/null 2>&1; then
+  echo "8051-con: s51 not found (apt: sdcc-ucsim)" >&2
+  exit 1
+fi
+
+if [ $# -lt 1 ]; then
+  echo "usage: 8051-con firmware.hex [command ...]" >&2
+  exit 1
+fi
+
+hex=$1
+shift
+if [ ! -f "$hex" ]; then
+  echo "8051-con: missing $hex" >&2
+  exit 1
+fi
+
+# Prefer Intel HEX load; AT89C52-class core.
+cpu_type=${FSOC_8051_CPU:-C52}
+xtal=${FSOC_8051_XTAL:-11059200}
+
+if [ $# -eq 0 ]; then
+  exec s51 -t "$cpu_type" -X "$xtal" -c - "$hex"
+fi
+
+tmpdir=$(mktemp -d)
+trap 'rm -rf "$tmpdir"' EXIT
+sin=$tmpdir/sin
+sout=$tmpdir/sout
+: >"$sin"
+: >"$sout"
+
+{
+  for cmd in "$@"; do
+    printf '%s\r' "$cmd"
+  done
+} >"$sin"
+
+# Drive uart0 from files; quit after a bounded run.
+s51 -t "$cpu_type" -X "$xtal" \
+  -S "in=$sin,out=$sout" \
+  -e "run" \
+  -e "quit" \
+  "$hex" >/dev/null 2>&1 || true
+
+if [ -s "$sout" ]; then
+  cat "$sout"
+else
+  echo "8051-con: no serial output (image may need Proteus; soft uses Verilator)" >&2
+  exit 2
+fi

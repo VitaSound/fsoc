@@ -9,10 +9,15 @@
     s" FSOC_EMU_TRACE" getenv nip 0<> ;
 
 : emu-view-compile ( -- )
+    \ Optional project file verilator.flags (one line of extra args).
     emu-trace? IF
-        s\"   verilator -cc --exe --trace -Mdir obj_dir -CFLAGS \"$cflags -DVM_TRACE=1\" -LDFLAGS \"-lncursesw\" --top-module \"$mod\" \"$mod.v\" *_main.cpp *.cc >build.log 2>&1 || { cat build.log >&2; exit 1; }"
+        s\"   vflags=\"\"; [ -f verilator.flags ] && vflags=$(cat verilator.flags)"
+        fsoc-emit-line
+        s\"   verilator -cc --exe --trace -Mdir obj_dir -CFLAGS \"$cflags -DVM_TRACE=1\" -LDFLAGS \"-lncursesw\" --top-module \"$mod\" $vflags \"$mod.v\" *_main.cpp *.cc >build.log 2>&1 || { cat build.log >&2; exit 1; }"
     ELSE
-        s\"   verilator -cc --exe -Mdir obj_dir -CFLAGS \"$cflags\" -LDFLAGS \"-lncursesw\" --top-module \"$mod\" \"$mod.v\" *_main.cpp *.cc >build.log 2>&1 || { cat build.log >&2; exit 1; }"
+        s\"   vflags=\"\"; [ -f verilator.flags ] && vflags=$(cat verilator.flags)"
+        fsoc-emit-line
+        s\"   verilator -cc --exe -Mdir obj_dir -CFLAGS \"$cflags\" -LDFLAGS \"-lncursesw\" --top-module \"$mod\" $vflags \"$mod.v\" *_main.cpp *.cc >build.log 2>&1 || { cat build.log >&2; exit 1; }"
     THEN
     fsoc-emit-line ;
 
@@ -44,7 +49,8 @@ variable emu-use-board-clk
     s\"   make -C obj_dir -f V${mod}.mk -j >>build.log 2>&1 || { cat build.log >&2; exit 1; }" fsoc-emit-line
     s" fi" fsoc-emit-line
     s\" if ls *_feed.cpp >/dev/null 2>&1; then" fsoc-emit-line
-    s\"   verilator -cc --exe -Mdir obj_dir_feed -CFLAGS \"$cflags\" -LDFLAGS \"-lncursesw\" --top-module \"$mod\" -o V${mod}_feed \"$mod.v\" *_feed.cpp *.cc >>build.log 2>&1 || { cat build.log >&2; exit 1; }" fsoc-emit-line
+    s\"   vflags=\"\"; [ -f verilator.flags ] && vflags=$(cat verilator.flags)" fsoc-emit-line
+    s\"   verilator -cc --exe -Mdir obj_dir_feed -CFLAGS \"$cflags\" -LDFLAGS \"-lncursesw\" --top-module \"$mod\" -o V${mod}_feed $vflags \"$mod.v\" *_feed.cpp *.cc >>build.log 2>&1 || { cat build.log >&2; exit 1; }" fsoc-emit-line
     s\"   make -C obj_dir_feed -f V${mod}.mk -j >>build.log 2>&1 || { cat build.log >&2; exit 1; }" fsoc-emit-line
     s\"   cp obj_dir_feed/V${mod}_feed obj_dir/" fsoc-emit-line
     s" fi" fsoc-emit-line

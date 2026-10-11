@@ -155,6 +155,7 @@ include cg-bcpu.4th
 include cg-cd16.4th
 include cg-msl16.4th
 include cg-z80.4th
+include cg-8051.4th
 
 \ Baremetal blinky: same task name as HDL, fasm is the image tool in the log.
 : avr-blinky { project cpu -- }

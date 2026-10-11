@@ -1,4 +1,4 @@
-\ tests/con_core_test.4th — fsys console core + words + behavior on j1a, j1b, avr, bcpu, cd16, msl16, z80
+\ tests/con_core_test.4th — fsys console core + words + behavior on j1a, j1b, avr, bcpu, cd16, msl16, z80, 8051
 
 s" long_gate.4th" included
 s" test_common.4th" included
@@ -38,6 +38,11 @@ test-teardown
 test-setup
 z80-fsys-manifest
 z80-con-session
+test-teardown
+
+test-setup
+mcs8051-fsys-manifest
+mcs8051-con-session
 test-teardown
 
 avr-con-ready? 0= [IF]

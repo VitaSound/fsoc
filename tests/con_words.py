@@ -513,6 +513,42 @@ Z80_COLON = {
     ";": (": tsemi 9 . ; tsemi", ["9"]),
 }
 
+# Soft R8051 console: arithmetic and stack words; colon header link TBD.
+MCS51_RUN = {
+    "+": ("1 2 + .", ["3"]),
+    "-": ("3 2 - .", ["1"]),
+    "xor": ("3 1 xor .", ["2"]),
+    "dup": ("7 dup . .", ["7"]),
+    "drop": ("9 8 drop .", ["9"]),
+    "swap": ("1 2 swap . .", ["1"]),
+    "2drop": ("1 2 3 2drop .", ["1"]),
+    "0=": ("0 0= .", ["-1"]),
+    ".": ("11 .", ["11"]),
+    ".s": ("1 2 3 .s 2drop drop", ["<3> 1 2 3"]),
+    "emit": ("51 emit", ["3"]),
+    "cr": ("cr", [" ok"]),
+    "space": ("space", [" ok"]),
+    "depth": ("depth .", ["0"]),
+    "words": ("words", ["dup"]),
+    "c!": ("66 here c! here c@ .", ["66"]),
+    "c@": ("67 here c! here c@ .", ["67"]),
+}
+
+MCS51_SKIP = {
+    ":": "colon header TBD",
+    ";": "colon header TBD",
+}
+
+MCS51_CORE_HAS = [
+    "3",
+    " ok",
+    "13",
+    "?",
+    "7",
+    "<0>",
+    "<3> 1 2 3",
+]
+
 CORE_HAS = [
     "3",
     " ok",
@@ -546,6 +582,8 @@ def dict_for(cpu):
         return load_dict("fsys-msl16.json")
     if cpu == "z80":
         return load_dict("fsys-z80.json")
+    if cpu == "8051":
+        return load_dict("fsys-8051.json")
     raise SystemExit("cpu " + cpu)
 
 
@@ -578,6 +616,13 @@ def recipe(name, cpu):
         return ("colon", line, has or [])
     if cpu == "z80":
         return ("skip", "z80 image", [])
+    if cpu == "8051" and name in MCS51_SKIP:
+        return ("skip", MCS51_SKIP[name], [])
+    if cpu == "8051" and name in MCS51_RUN:
+        line, has = MCS51_RUN[name]
+        return ("run", line, has or [])
+    if cpu == "8051":
+        return ("skip", "8051 image", [])
     if cpu == "j1b" and name in J1B_SKIP:
         return ("skip", J1B_SKIP[name], [])
     if name in SKIP:
@@ -636,11 +681,15 @@ def write_input(cpu, path):
         b".s\n",
         b"1 2 3 .s\n",
         b"2drop drop\n",
-        b": DOUBLE dup + ;\n",
-        b"21 DOUBLE .\n",
-        b"words\n",
     ]
-    if cpu not in ("avr", "bcpu", "cd16", "msl16", "z80"):
+    if cpu != "8051":
+        lines += [
+            b": DOUBLE dup + ;\n",
+            b"21 DOUBLE .\n",
+        ]
+    lines.append(b"words\n")
+    limited = ("avr", "bcpu", "cd16", "msl16", "z80", "8051")
+    if cpu not in limited:
         lines += [
             b"variable mh\n",
             b"variable ml\n",
@@ -658,13 +707,13 @@ def write_input(cpu, path):
             continue
         if cpu == "avr" and rec[0] == "colon" and name not in AVR_COLON:
             continue
-        if cpu not in ("avr", "bcpu", "cd16", "msl16", "z80"):
+        if cpu not in limited:
             lines.append((line + " cs").encode("ascii") + b"\n")
             if rec[0] == "colon" or line.lstrip().startswith(":"):
                 lines.append(b"ml @ latest ! mh @ here - allot\n")
         else:
             lines.append(line.encode("ascii") + b"\n")
-            if cpu in ("bcpu", "cd16", "msl16", "z80"):
+            if cpu in ("bcpu", "cd16", "msl16", "z80", "8051"):
                 lines.append(b"empty\n")
     Path(path).write_bytes(b"".join(lines))
 
@@ -674,9 +723,10 @@ def text_of(path):
     return raw.decode("utf-8", errors="replace")
 
 
-def expect_core(path):
+def expect_core(path, cpu=None):
     text = text_of(path)
-    for frag in CORE_HAS:
+    need = MCS51_CORE_HAS if cpu == "8051" else CORE_HAS
+    for frag in need:
         if frag not in text:
             raise SystemExit("core missing " + repr(frag))
     for frag in CORE_LACKS:
@@ -732,7 +782,16 @@ def main(argv):
         )
     cmd = argv[1]
     if cmd == "tags":
-        for cpu in argv[2:] or ("j1a", "j1b", "avr", "bcpu", "cd16", "msl16", "z80"):
+        for cpu in argv[2:] or (
+            "j1a",
+            "j1b",
+            "avr",
+            "bcpu",
+            "cd16",
+            "msl16",
+            "z80",
+            "8051",
+        ):
             check_tags(cpu)
         return
     if cmd == "write":
@@ -752,8 +811,9 @@ def main(argv):
         return
     if cmd == "check":
         cpu, log = argv[2], argv[3]
-        expect_core(log)
-        expect_shared(log)
+        expect_core(log, cpu)
+        if cpu in ("j1a", "j1b", "avr"):
+            expect_shared(log)
         expect_words(cpu, log)
         expect_behavior(cpu, log)
         return

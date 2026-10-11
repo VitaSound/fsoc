@@ -34,7 +34,7 @@ wavepeek --version
 wavepeek skill .cursor/skills/wavepeek
 ```
 
-`fmix test` включает общую сетку консоли fsys [`tests/con_core_test.4th`](../tests/con_core_test.4th) (j1a, j1b, avr, bcpu, cd16, msl16, z80: ввод, стирание, неизвестное слово, стек, `+`, `.s`, `:`, `words`). Оракул: [`tests/con_words.py`](../tests/con_words.py) против `doc/j1-word-graph/fsys-*.json`. Один файл:
+`fmix test` включает общую сетку консоли fsys [`tests/con_core_test.4th`](../tests/con_core_test.4th) (j1a, j1b, avr, bcpu, cd16, msl16, z80, 8051: ввод, стирание, неизвестное слово, стек, `+`, `.s`, `:`, `words`). Оракул: [`tests/con_words.py`](../tests/con_words.py) против `doc/j1-word-graph/fsys-*.json`. Один файл:
 
 ```bash
 export FSOC_HOME="$HOME/fsoc"
@@ -299,6 +299,10 @@ fsoc --build
 cd projects/standalone/standalone_msl16
 fsoc --build
 ```
+
+## 8051
+
+`8051` — класс 1, FMAP `D-S-A-M-3-F`, MM=D, EX-C=S, CG=F (`cpu-ref` `at89c52`). Один профиль, два тела: soft [R8051](https://github.com/risclite/R8051) (Apache-2.0) для Verilator/Yosys, hard Intel HEX для Proteus AT89C52. Option `body` перекрывает default от `target:` (`emulation`/`yosys` → soft, `proteus` → hard). Options `code` / `iram` / `xram` — размеры памяти. Заметки: [8051-soft.md](8051-soft.md), [at89c52-proteus.md](at89c52-proteus.md). Soft-консоль — строка в `tests/con_core_test.4th`. Fit Colorlight: `python3 doc/j1-word-graph/build.py fit-8051`.
 
 `projects/standalone/standalone_z80` — ядро [TV80](https://github.com/hutch31/tv80) (MIT), синхронная обёртка `tv80s`, Mode=0. Заметки: [z80.md](z80.md). Профиль `z80`: пустой `sys:` останавливается, `s" fsys" sys:` собирает консоль (byte hex, 16 КБ), проекты — `projects/baremetal/blinky_z80`, `projects/soc/soc_z80` и `projects/soc/soc_z80_blink`. Хостовый ассемблер — `fsys/fasm/z80` (байт на ячейку, `z80-wl`). На пины standalone выведены `clk`, `reset_n`, стробы шины, `A[15:0]`, `di[7:0]` и `dout[7:0]`. Один разведённый fit nextpnr (2026-10-05) уложился в 25,00 МГц.
 

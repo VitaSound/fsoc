@@ -13,7 +13,7 @@ Human (RU) entry: [README.md](README.md), [CONTRIBUTING.md](CONTRIBUTING.md), [d
 | `designs/` | fhdlgen tops (no board/project path) |
 | `emu/` | Verilator console library (no task names) |
 | `rtl/` | Pure Verilog leaves |
-| `cpu/<family>/` | Soft-CPU kits (`j1`, `bcpu`, `mcpu`, `z80`, …) |
+| `cpu/<family>/` | Soft-CPU kits (`j1`, `bcpu`, `mcpu`, `z80`, `8051`, …) |
 | `fsys/fasm/<id>/` | Host assembler only |
 | `fsys/kernel/<id>/` | Forth console kernel |
 | `fsys/host/` | Host cross |

@@ -574,6 +574,15 @@ def check_z80(data):
         raise SystemExit("0= should come from the z80 kernel")
 
 
+def check_8051(data):
+    for name in ("words", "quit", ".s", "+", ":", "0=", "empty"):
+        require(data, name, "fsys-8051 lost " + name)
+    if data["+"]["file"].find("kernel/8051") < 0:
+        raise SystemExit("+ should come from the 8051 kernel")
+    if data["0="]["file"].find("kernel/8051") < 0:
+        raise SystemExit("0= should come from the 8051 kernel")
+
+
 DICTS = [
     ("fsys-j1a", [
         ("fsys/kernel/j1a/kernel.4th", "kernel"),
@@ -612,6 +621,11 @@ DICTS = [
         ("fsys/kernel/z80/kernel.4th", "kernel"),
         ("fsys/z80/extra-min.4th", "colon"),
     ], check_z80),
+    ("fsys-8051", [
+        ("fsys/kernel/8051/kernel.4th", "kernel"),
+        ("fsys/kernel/8051/kernel-b.4th", "kernel"),
+        ("fsys/8051/extra-min.4th", "colon"),
+    ], check_8051),
 ]
 
 
@@ -955,6 +969,98 @@ def emit_fit():
     (OUT / "soc-fit.md").write_text(render_fit(rows))
 
 
+def render_fit_8051(rows):
+    labels = (
+        ("firmware", "firmware"),
+        ("lut", "LUT4"),
+        ("logic", "logic / carry"),
+        ("ram", "RAM LUT"),
+        ("dff", "DFF"),
+        ("dp", "DP16KD"),
+        ("fmax", "Fmax"),
+    )
+    codes = [row["code"] for row in rows]
+    lines = [
+        "Routed nextpnr fit of soft R8051 on Colorlight 5A-75E v6.0"
+        " (`LFE5U-25F`, `--25k`, 25 MHz)."
+        " Columns vary `code` (CODE_BYTES) with the blink console image."
+        " Regenerate with `python3 doc/j1-word-graph/build.py fit-8051`."
+        " That command is not part of `fsoc --build`.",
+        "",
+        "| | " + " | ".join("code " + c for c in codes) + " |",
+        "|---|" + "|".join("---:" for _ in codes) + "|",
+    ]
+    for key, label in labels:
+        cells = [row[key] for row in rows]
+        lines.append("| " + label + " | " + " | ".join(cells) + " |")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def host_fit_8051(code):
+    tmp = Path(tempfile.mkdtemp(prefix="fsoc-fit-8051-"))
+    try:
+        manifest = [
+            "\\ soft R8051 fit on Colorlight 5A-75E v6.0",
+            "",
+            's" soc" task:',
+            's" yosys" target:',
+            's" colorlight_5a_75e_v6_0" board:',
+            's" 8051" cpu:',
+            's" fsys" sys:',
+            's" blink" s" 1" option:',
+            's" code" s" ' + str(code) + '" option:',
+        ]
+        (tmp / "target.4th").write_text("\n".join(manifest) + "\n")
+        env = os.environ.copy()
+        env["FSOC_HOME"] = str(ROOT)
+        proc = subprocess.run(
+            [str(ROOT / "bin" / "fsoc"), "--build"],
+            cwd=str(tmp),
+            env=env,
+            capture_output=True,
+            text=True,
+        )
+        log = proc.stdout + "\n" + proc.stderr
+        if proc.returncode != 0:
+            why = "build failed"
+            if "image full" in log:
+                why = "image full"
+            elif "Unable to place" in log or "utilisation" in log:
+                why = "not placed"
+            return {
+                "code": str(code),
+                "firmware": why,
+                "lut": "—",
+                "logic": "—",
+                "ram": "—",
+                "dff": "—",
+                "dp": "—",
+                "fmax": why,
+            }
+        row = parse_fit(log)
+        if row is None:
+            return {
+                "code": str(code),
+                "firmware": "no utilisation",
+                "lut": "—",
+                "logic": "—",
+                "ram": "—",
+                "dff": "—",
+                "dp": "—",
+                "fmax": "—",
+            }
+        row["code"] = str(code)
+        return row
+    finally:
+        shutil.rmtree(tmp)
+
+
+def emit_fit_8051():
+    rows = [host_fit_8051(code) for code in (4096, 8192, 16384)]
+    (OUT / "soc-fit-8051.md").write_text(render_fit_8051(rows))
+
+
 def host_fit(cpu, mode):
     tmp = Path(tempfile.mkdtemp(prefix="fsoc-fit-"))
     try:
@@ -1019,6 +1125,9 @@ def main(argv):
         return
     if cmd == "fit":
         emit_fit()
+        return
+    if cmd == "fit-8051":
+        emit_fit_8051()
         return
     raise SystemExit("unknown command " + cmd)
 
