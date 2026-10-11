@@ -1,0 +1,399 @@
+{
+  "arch": "mcs51",
+  "endianness": "little",
+  "registers": [
+    {
+      "name": "r0",
+      "address": 0,
+      "bit_width": 8,
+      "description": "Register 0"
+    },
+    {
+      "name": "r1",
+      "address": 1,
+      "bit_width": 8,
+      "description": "Register 1"
+    },
+    {
+      "name": "r2",
+      "address": 2,
+      "bit_width": 8,
+      "description": "Register 2"
+    },
+    {
+      "name": "r3",
+      "address": 3,
+      "bit_width": 8,
+      "description": "Register 3"
+    },
+    {
+      "name": "r4",
+      "address": 4,
+      "bit_width": 8,
+      "description": "Register 4"
+    },
+    {
+      "name": "r5",
+      "address": 5,
+      "bit_width": 8,
+      "description": "Register 5"
+    },
+    {
+      "name": "r6",
+      "address": 6,
+      "bit_width": 8,
+      "description": "Register 6"
+    },
+    {
+      "name": "r7",
+      "address": 7,
+      "bit_width": 8,
+      "description": "Register 7"
+    },
+    {
+      "name": "P0",
+      "address": 128,
+      "bit_width": 8,
+      "description": "Port 0",
+      "bits": {
+        "0": "P0_0",
+        "1": "P0_1",
+        "2": "P0_2",
+        "3": "P0_3",
+        "4": "P0_4",
+        "5": "P0_5",
+        "6": "P0_6",
+        "7": "P0_7"
+      }
+    },
+    {
+      "name": "SP",
+      "address": 129,
+      "bit_width": 8,
+      "description": "Stack Pointer"
+    },
+    {
+      "name": "DPL",
+      "address": 130,
+      "bit_width": 8,
+      "description": "Data Pointer Low"
+    },
+    {
+      "name": "DPH",
+      "address": 131,
+      "bit_width": 8,
+      "description": "Data Pointer High"
+    },
+    {
+      "name": "PCON",
+      "address": 135,
+      "bit_width": 8,
+      "description": "Power Control"
+    },
+    {
+      "name": "TCON",
+      "address": 136,
+      "bit_width": 8,
+      "description": "Timer Control"
+    },
+    {
+      "name": "TMOD",
+      "address": 137,
+      "bit_width": 8,
+      "description": "Timer Mode"
+    },
+    {
+      "name": "TL0",
+      "address": 138,
+      "bit_width": 8,
+      "description": "Timer 0 Low"
+    },
+    {
+      "name": "TL1",
+      "address": 139,
+      "bit_width": 8,
+      "description": "Timer 1 Low"
+    },
+    {
+      "name": "TH0",
+      "address": 140,
+      "bit_width": 8,
+      "description": "Timer 0 High"
+    },
+    {
+      "name": "TH1",
+      "address": 141,
+      "bit_width": 8,
+      "description": "Timer 1 High"
+    },
+    {
+      "name": "P1",
+      "address": 144,
+      "bit_width": 8,
+      "description": "Port 1"
+    },
+    {
+      "name": "SCON",
+      "address": 152,
+      "bit_width": 8,
+      "description": "Serial Control"
+    },
+    {
+      "name": "SBUF",
+      "address": 153,
+      "bit_width": 8,
+      "description": "Serial Buffer"
+    },
+    {
+      "name": "IE",
+      "address": 168,
+      "bit_width": 8,
+      "description": "Interrupt Enable"
+    },
+    {
+      "name": "P3",
+      "address": 176,
+      "bit_width": 8,
+      "description": "Port 3"
+    },
+    {
+      "name": "PSW",
+      "address": 208,
+      "bit_width": 8,
+      "description": "Program Status Word"
+    },
+    {
+      "name": "WDTCON",
+      "address": 216,
+      "bit_width": 8,
+      "description": "Watchdog Timer Control"
+    },
+    {
+      "name": "ACC",
+      "address": 224,
+      "bit_width": 8,
+      "description": "Accumulator"
+    },
+    {
+      "name": "B",
+      "address": 240,
+      "bit_width": 8,
+      "description": "B Register"
+    },
+    {
+      "name": "WDTREL",
+      "address": 134,
+      "bit_width": 8,
+      "description": "Watchdog Timer Reload"
+    }
+  ],
+  "instructions": [
+    {
+      "mnemonic": "nop",
+      "opcode": 0,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "No operation",
+      "encoding": "00000000",
+      "categories": [
+        "control"
+      ]
+    },
+    {
+      "mnemonic": "mov_a_rn",
+      "opcode": 232,
+      "operands": [
+        "rn"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Move Rn to Accumulator",
+      "encoding": "11101rrr",
+      "categories": [
+        "data_transfer"
+      ]
+    },
+    {
+      "mnemonic": "add_a_rn",
+      "opcode": 40,
+      "operands": [
+        "rn"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "C",
+        "OV",
+        "AC"
+      ],
+      "description": "Add Rn to Accumulator",
+      "encoding": "00101rrr",
+      "categories": [
+        "arithmetic"
+      ]
+    },
+    {
+      "mnemonic": "lcall",
+      "opcode": 18,
+      "operands": [
+        "addr"
+      ],
+      "bytes": 3,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Long call",
+      "encoding": "00010010 aaaaaaaa aaaaaaaa",
+      "categories": [
+        "branch"
+      ]
+    },
+    {
+      "mnemonic": "ret",
+      "opcode": 34,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Return from subroutine",
+      "encoding": "00100010",
+      "categories": [
+        "branch"
+      ]
+    },
+    {
+      "mnemonic": "reti",
+      "opcode": 50,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Return from interrupt",
+      "encoding": "00110010",
+      "categories": [
+        "branch"
+      ]
+    },
+    {
+      "mnemonic": "mov_di",
+      "opcode": 117,
+      "operands": [
+        "di",
+        "num"
+      ],
+      "bytes": 3,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Move immediate to direct address",
+      "encoding": "01110101 aaaaaaaa dddddddd",
+      "categories": [
+        "data_transfer"
+      ]
+    },
+    {
+      "mnemonic": "sjmp",
+      "opcode": 128,
+      "operands": [
+        "dest"
+      ],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Short jump",
+      "encoding": "10000000 rel",
+      "categories": [
+        "branch"
+      ]
+    },
+    {
+      "mnemonic": "xrl_di",
+      "opcode": 99,
+      "operands": [
+        "di",
+        "num"
+      ],
+      "bytes": 3,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Exclusive OR direct byte with immediate",
+      "encoding": "01100011 aaaaaaaa dddddddd",
+      "categories": [
+        "arithmetic"
+      ]
+    },
+    {
+      "mnemonic": "mov_rn",
+      "opcode": 120,
+      "operands": [
+        "rn",
+        "num"
+      ],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Move immediate to register",
+      "encoding": "01111rrr dddddddd",
+      "categories": [
+        "data_transfer"
+      ]
+    },
+    {
+      "mnemonic": "dec_rn",
+      "opcode": 24,
+      "operands": [
+        "rn"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Decrement register",
+      "encoding": "00011rrr",
+      "categories": [
+        "arithmetic"
+      ]
+    },
+    {
+      "mnemonic": "jnz",
+      "opcode": 112,
+      "operands": [
+        "dest"
+      ],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Jump if accumulator not zero",
+      "encoding": "01110000 rel",
+      "categories": [
+        "branch"
+      ]
+    }
+  ],
+  "chip_variants": {
+    "at89c52": {
+      "registers": {
+        "PCON": 135,
+        "TCON": 136,
+        "TMOD": 137,
+        "TL0": 138,
+        "TL1": 139,
+        "TH0": 140,
+        "TH1": 141,
+        "P1": 144,
+        "SCON": 152,
+        "SBUF": 153,
+        "IE": 168,
+        "P3": 176,
+        "PSW": 208,
+        "ACC": 224,
+        "B": 240
+      },
+      "memory": {
+        "flash": 8192,
+        "ram": 256,
+        "xram": 0
+      }
+    }
+  }
+}

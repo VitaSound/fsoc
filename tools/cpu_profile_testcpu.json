@@ -1,0 +1,18 @@
+{
+  "id": "testcpu",
+  "cpu_class": 1,
+  "fmap": "D-S-A-M-1-F",
+  "mm": "D",
+  "exc": "S",
+  "cg": "F",
+  "bm": "C",
+  "width": 16,
+  "ref": "testref",
+  "note": "testnote",
+  "uart_gap": 0,
+  "port": "",
+  "kit_path": "testcpu/testcpu/kit.4th",
+  "cross_path": "fsys/host/testcpu-cross.4th",
+  "cg_soc": "mcs-soc",
+  "cg_blinky": "mcs-blinky"
+}

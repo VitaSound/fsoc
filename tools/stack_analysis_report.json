@@ -1,0 +1,4382 @@
+{
+  "summary": {
+    "targets_analyzed": 8,
+    "total_words": 405
+  },
+  "targets": {
+    "msl16": {
+      "target": "msl16",
+      "kernel_files": [
+        "fsys/kernel/msl16/kernel.4th"
+      ],
+      "words_analyzed": 39,
+      "effects": {
+        "dup": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [
+            "x",
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "drop": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "swap": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x2",
+            "x1"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "+": {
+          "inputs": [
+            "n1",
+            "n2"
+          ],
+          "outputs": [
+            "n3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "xor": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "@": {
+          "inputs": [
+            "a-addr"
+          ],
+          "outputs": [
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "!": {
+          "inputs": [
+            "x",
+            "a-addr"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "0=": {
+          "inputs": [
+            "x1"
+          ],
+          "outputs": [
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "2drop": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "emit": {
+          "inputs": [
+            "c"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "cr": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "space": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "key": {
+          "inputs": [],
+          "outputs": [
+            "c"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ".": {
+          "inputs": [
+            "n"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "depth": {
+          "inputs": [],
+          "outputs": [
+            "u"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ".s": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "header": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from msl16 definition"
+          ]
+        },
+        "find": {
+          "inputs": [
+            "c-addr",
+            "u"
+          ],
+          "outputs": [
+            "xt",
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "number": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from msl16 definition"
+          ]
+        },
+        ",": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "literal": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "execute": {
+          "inputs": [
+            "xt"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "exit": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "accept": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from msl16 definition"
+          ]
+        },
+        "parse-name": {
+          "inputs": [],
+          "outputs": [
+            "c-addr",
+            "u"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ":": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ";": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "quit": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "here": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "latest": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "state": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "base": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "tib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from msl16 definition"
+          ]
+        },
+        "ntib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from msl16 definition"
+          ]
+        },
+        ">in": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from msl16 definition"
+          ]
+        },
+        "tlen": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from msl16 definition"
+          ]
+        },
+        "words": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "empty": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from msl16 definition"
+          ]
+        },
+        "=": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        }
+      }
+    },
+    "cd16": {
+      "target": "cd16",
+      "kernel_files": [
+        "fsys/kernel/cd16/kernel.4th"
+      ],
+      "words_analyzed": 24,
+      "effects": {
+        "dup": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [
+            "x",
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "drop": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "swap": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x2",
+            "x1"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "over": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x1",
+            "x2",
+            "x1"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "and": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "or": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "xor": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "invert": {
+          "inputs": [
+            "n1"
+          ],
+          "outputs": [
+            "n2"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "here": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "latest": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "phere": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from cd16 definition"
+          ]
+        },
+        "state": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "base": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "ntib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from cd16 definition"
+          ]
+        },
+        "tlen": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from cd16 definition"
+          ]
+        },
+        "tib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from cd16 definition"
+          ]
+        },
+        "allot": {
+          "inputs": [
+            "n"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "depth": {
+          "inputs": [],
+          "outputs": [
+            "u"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "nth": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from cd16 definition"
+          ]
+        },
+        "rdrop": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from cd16 definition"
+          ]
+        },
+        "exit": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "execute": {
+          "inputs": [
+            "xt"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "emit": {
+          "inputs": [
+            "c"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "key": {
+          "inputs": [],
+          "outputs": [
+            "c"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        }
+      }
+    },
+    "avr": {
+      "target": "avr",
+      "kernel_files": [
+        "fsys/kernel/avr/kernel.4th"
+      ],
+      "words_analyzed": 64,
+      "effects": {
+        "+": {
+          "inputs": [
+            "n1",
+            "n2"
+          ],
+          "outputs": [
+            "n3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "um+": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "inferred",
+          "confidence": 0.7,
+          "notes": [
+            "AVR: 1 pop, drop"
+          ]
+        },
+        "@": {
+          "inputs": [
+            "a-addr"
+          ],
+          "outputs": [
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "!": {
+          "inputs": [
+            "x",
+            "a-addr"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "c@": {
+          "inputs": [
+            "c-addr"
+          ],
+          "outputs": [
+            "c"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "c!": {
+          "inputs": [
+            "c",
+            "c-addr"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "dup": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [
+            "x",
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "drop": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "swap": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x2",
+            "x1"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "over": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x1",
+            "x2",
+            "x1"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "and": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "or": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "xor": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "invert": {
+          "inputs": [
+            "n1"
+          ],
+          "outputs": [
+            "n2"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ">r": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "r>": {
+          "inputs": [],
+          "outputs": [
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "r@": {
+          "inputs": [],
+          "outputs": [
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "execute": {
+          "inputs": [
+            "xt"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "exit": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "io@": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from avr definition"
+          ]
+        },
+        "io!": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from avr definition"
+          ]
+        },
+        "2/": {
+          "inputs": [
+            "n1"
+          ],
+          "outputs": [
+            "n2"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "2*": {
+          "inputs": [
+            "n1"
+          ],
+          "outputs": [
+            "n2"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "cell+": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from avr definition"
+          ]
+        },
+        "cells": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from avr definition"
+          ]
+        },
+        "u/mod": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from avr definition"
+          ]
+        },
+        "pause": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from avr definition"
+          ]
+        },
+        "sayon": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from avr definition"
+          ]
+        },
+        "sayoff": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from avr definition"
+          ]
+        },
+        "0<": {
+          "inputs": [
+            "n1"
+          ],
+          "outputs": [
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "=": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "u<": {
+          "inputs": [
+            "u1",
+            "u2"
+          ],
+          "outputs": [
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "emit": {
+          "inputs": [
+            "c"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "key": {
+          "inputs": [],
+          "outputs": [
+            "c"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "words": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "quit": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "c@i": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from avr definition"
+          ]
+        },
+        "slit": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from avr definition"
+          ]
+        },
+        "u.": {
+          "inputs": [
+            "u"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ".": {
+          "inputs": [
+            "n"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ".s": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "here": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "depth": {
+          "inputs": [],
+          "outputs": [
+            "u"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "allot": {
+          "inputs": [
+            "n"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ",": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "base": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "state": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "latest": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "'BOOT": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from avr definition"
+          ]
+        },
+        ">in": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from avr definition"
+          ]
+        },
+        "ntib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from avr definition"
+          ]
+        },
+        "tib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from avr definition"
+          ]
+        },
+        "tlen": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from avr definition"
+          ]
+        },
+        "parse-name": {
+          "inputs": [],
+          "outputs": [
+            "c-addr",
+            "u"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "find": {
+          "inputs": [
+            "c-addr",
+            "u"
+          ],
+          "outputs": [
+            "xt",
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "header": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from avr definition"
+          ]
+        },
+        "literal": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "compile-exit": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from avr definition"
+          ]
+        },
+        ":": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ";": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "if": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "then": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "begin": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "again": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        }
+      }
+    },
+    "j1a": {
+      "target": "j1a",
+      "kernel_files": [
+        "fsys/kernel/j1a/kernel.4th"
+      ],
+      "words_analyzed": 76,
+      "effects": {
+        "+": {
+          "inputs": [
+            "n1",
+            "n2"
+          ],
+          "outputs": [
+            "n3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "tlen": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        ":": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ";": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "opti": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "if": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "then": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "begin": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "again": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "words": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "dup": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [
+            "x",
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "drop": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "swap": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x2",
+            "x1"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "over": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x1",
+            "x2",
+            "x1"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "emit": {
+          "inputs": [
+            "c"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "@": {
+          "inputs": [
+            "a-addr"
+          ],
+          "outputs": [
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "!": {
+          "inputs": [
+            "x",
+            "a-addr"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "u<": {
+          "inputs": [
+            "u1",
+            "u2"
+          ],
+          "outputs": [
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "=": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "-": {
+          "inputs": [
+            "n1",
+            "n2"
+          ],
+          "outputs": [
+            "n3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "cell+": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "cells": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "here": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ",": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "allot": {
+          "inputs": [
+            "n"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "header": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "literal": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "compile-exit": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "compile-emit": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "ahead": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "mark-if": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "resolve": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "jump": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "immediate": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "u/mod": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "tibc": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "parse-name": {
+          "inputs": [],
+          "outputs": [
+            "c-addr",
+            "u"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "namec": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "and": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "or": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "xor": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "invert": {
+          "inputs": [
+            "n1"
+          ],
+          "outputs": [
+            "n2"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "nip": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x2"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ">r": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "r>": {
+          "inputs": [],
+          "outputs": [
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "r@": {
+          "inputs": [],
+          "outputs": [
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "i": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "<": {
+          "inputs": [
+            "n1",
+            "n2"
+          ],
+          "outputs": [
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "lshift": {
+          "inputs": [
+            "x1",
+            "u2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "rshift": {
+          "inputs": [
+            "x1",
+            "u2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "byte-off": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "depth": {
+          "inputs": [],
+          "outputs": [
+            "u"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "execute": {
+          "inputs": [
+            "xt"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "key": {
+          "inputs": [],
+          "outputs": [
+            "c"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "io@": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "io!": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "nidx": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "radix": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "tchar": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "nhook": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "base": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "latest": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "state": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "find": {
+          "inputs": [
+            "c-addr",
+            "u"
+          ],
+          "outputs": [
+            "xt",
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "branch0": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        ">in": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "ntib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "tib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "abort": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "accept": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "exit": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "unloop": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "quit": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "src": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "interp": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        },
+        "'BOOT": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from j1a definition"
+          ]
+        }
+      }
+    },
+    "j1b": {
+      "target": "unknown",
+      "kernel_files": [
+        "fsys/kernel/j1b/kernel.4th"
+      ],
+      "words_analyzed": 76,
+      "effects": {
+        "+": {
+          "inputs": [
+            "n1",
+            "n2"
+          ],
+          "outputs": [
+            "n3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "tlen": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        ":": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ";": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "opti": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "if": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "then": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "begin": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "again": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "words": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "dup": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [
+            "x",
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "drop": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "swap": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x2",
+            "x1"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "over": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x1",
+            "x2",
+            "x1"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "emit": {
+          "inputs": [
+            "c"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "@": {
+          "inputs": [
+            "a-addr"
+          ],
+          "outputs": [
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "!": {
+          "inputs": [
+            "x",
+            "a-addr"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "u<": {
+          "inputs": [
+            "u1",
+            "u2"
+          ],
+          "outputs": [
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "=": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "-": {
+          "inputs": [
+            "n1",
+            "n2"
+          ],
+          "outputs": [
+            "n3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "cell+": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "cells": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "here": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ",": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "allot": {
+          "inputs": [
+            "n"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "header": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "literal": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "compile-exit": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "compile-emit": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "ahead": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "mark-if": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "resolve": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "jump": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "immediate": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "u/mod": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "tibc": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "parse-name": {
+          "inputs": [],
+          "outputs": [
+            "c-addr",
+            "u"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "namec": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "and": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "or": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "xor": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "invert": {
+          "inputs": [
+            "n1"
+          ],
+          "outputs": [
+            "n2"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "nip": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x2"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ">r": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "r>": {
+          "inputs": [],
+          "outputs": [
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "r@": {
+          "inputs": [],
+          "outputs": [
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "i": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "<": {
+          "inputs": [
+            "n1",
+            "n2"
+          ],
+          "outputs": [
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "lshift": {
+          "inputs": [
+            "x1",
+            "u2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "rshift": {
+          "inputs": [
+            "x1",
+            "u2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "byte-off": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "depth": {
+          "inputs": [],
+          "outputs": [
+            "u"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "execute": {
+          "inputs": [
+            "xt"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "key": {
+          "inputs": [],
+          "outputs": [
+            "c"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "io@": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "io!": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "nidx": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "radix": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "tchar": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "nhook": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "base": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "latest": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "state": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "find": {
+          "inputs": [
+            "c-addr",
+            "u"
+          ],
+          "outputs": [
+            "xt",
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "branch0": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        ">in": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "ntib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "tib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "abort": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "accept": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "exit": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "unloop": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "quit": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "src": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "interp": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        },
+        "'BOOT": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from unknown definition"
+          ]
+        }
+      }
+    },
+    "8051": {
+      "target": "8051",
+      "kernel_files": [
+        "fsys/kernel/8051/kernel-b.4th",
+        "fsys/kernel/8051/kernel.4th"
+      ],
+      "words_analyzed": 42,
+      "effects": {
+        "header": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from 8051 definition"
+          ]
+        },
+        "find": {
+          "inputs": [
+            "c-addr",
+            "u"
+          ],
+          "outputs": [
+            "xt",
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "number": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from 8051 definition"
+          ]
+        },
+        ",": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "literal": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "execute": {
+          "inputs": [
+            "xt"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "parse-name": {
+          "inputs": [],
+          "outputs": [
+            "c-addr",
+            "u"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "accept": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from 8051 definition"
+          ]
+        },
+        ":": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ";": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "quit": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "here": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "latest": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "state": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "base": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "tib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from 8051 definition"
+          ]
+        },
+        "ntib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from 8051 definition"
+          ]
+        },
+        ">in": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from 8051 definition"
+          ]
+        },
+        "tlen": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from 8051 definition"
+          ]
+        },
+        "=": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "dup": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [
+            "x",
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "drop": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "swap": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x2",
+            "x1"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "+": {
+          "inputs": [
+            "n1",
+            "n2"
+          ],
+          "outputs": [
+            "n3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "-": {
+          "inputs": [
+            "n1",
+            "n2"
+          ],
+          "outputs": [
+            "n3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "xor": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "@": {
+          "inputs": [
+            "a-addr"
+          ],
+          "outputs": [
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "!": {
+          "inputs": [
+            "x",
+            "a-addr"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "c@": {
+          "inputs": [
+            "c-addr"
+          ],
+          "outputs": [
+            "c"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "c!": {
+          "inputs": [
+            "c",
+            "c-addr"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "p1!": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from 8051 definition"
+          ]
+        },
+        "dly": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from 8051 definition"
+          ]
+        },
+        "0=": {
+          "inputs": [
+            "x1"
+          ],
+          "outputs": [
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "2drop": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "emit": {
+          "inputs": [
+            "c"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "cr": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "space": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "key": {
+          "inputs": [],
+          "outputs": [
+            "c"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ".": {
+          "inputs": [
+            "n"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "depth": {
+          "inputs": [],
+          "outputs": [
+            "u"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ".s": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "exit": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        }
+      }
+    },
+    "bcpu": {
+      "target": "bcpu",
+      "kernel_files": [
+        "fsys/kernel/bcpu/kernel.4th"
+      ],
+      "words_analyzed": 42,
+      "effects": {
+        "dup": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [
+            "x",
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "drop": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "swap": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x2",
+            "x1"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "over": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x1",
+            "x2",
+            "x1"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "depth": {
+          "inputs": [],
+          "outputs": [
+            "u"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "and": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "or": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "xor": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "invert": {
+          "inputs": [
+            "n1"
+          ],
+          "outputs": [
+            "n2"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "rdrop": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "exit": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "execute": {
+          "inputs": [
+            "xt"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "emit": {
+          "inputs": [
+            "c"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "key": {
+          "inputs": [],
+          "outputs": [
+            "c"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "udot": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "allot": {
+          "inputs": [
+            "n"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "state": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "base": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "ntib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "tlen": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "tib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "here": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "latest": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "nth": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "litw": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "branch": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "zbranch": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "czbranch": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "cbranch": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "cto": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "czto": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "clit": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "nlen": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "ntype": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "header": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "if": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "then": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "else": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "begin": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "again": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "until": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "literal": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        }
+      }
+    },
+    "z80": {
+      "target": "z80",
+      "kernel_files": [
+        "fsys/kernel/z80/kernel.4th"
+      ],
+      "words_analyzed": 42,
+      "effects": {
+        "dup": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [
+            "x",
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "drop": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "swap": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x2",
+            "x1"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "+": {
+          "inputs": [
+            "n1",
+            "n2"
+          ],
+          "outputs": [
+            "n3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "-": {
+          "inputs": [
+            "n1",
+            "n2"
+          ],
+          "outputs": [
+            "n3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "xor": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "@": {
+          "inputs": [
+            "a-addr"
+          ],
+          "outputs": [
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "!": {
+          "inputs": [
+            "x",
+            "a-addr"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "c@": {
+          "inputs": [
+            "c-addr"
+          ],
+          "outputs": [
+            "c"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "c!": {
+          "inputs": [
+            "c",
+            "c-addr"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "0=": {
+          "inputs": [
+            "x1"
+          ],
+          "outputs": [
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "2drop": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "emit": {
+          "inputs": [
+            "c"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "cr": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "space": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "key": {
+          "inputs": [],
+          "outputs": [
+            "c"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ".": {
+          "inputs": [
+            "n"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "depth": {
+          "inputs": [],
+          "outputs": [
+            "u"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ".s": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "exit": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "header": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from z80 definition"
+          ]
+        },
+        "find": {
+          "inputs": [
+            "c-addr",
+            "u"
+          ],
+          "outputs": [
+            "xt",
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "number": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from z80 definition"
+          ]
+        },
+        ",": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "literal": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "execute": {
+          "inputs": [
+            "xt"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "parse-name": {
+          "inputs": [],
+          "outputs": [
+            "c-addr",
+            "u"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "accept": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from z80 definition"
+          ]
+        },
+        ":": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ";": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "quit": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "here": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "latest": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "state": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "base": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "tib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from z80 definition"
+          ]
+        },
+        "ntib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from z80 definition"
+          ]
+        },
+        ">in": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from z80 definition"
+          ]
+        },
+        "tlen": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from z80 definition"
+          ]
+        },
+        "words": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "empty": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from z80 definition"
+          ]
+        },
+        "=": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        }
+      }
+    }
+  }
+}
