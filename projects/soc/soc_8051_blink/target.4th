@@ -1,5 +1,27 @@
-\ projects/soc/soc_8051_blink/target.4th — Intel HEX blink for Proteus
-\ Hard VM in on-chip IRAM — external 6264 not required for blink/console.
+\ projects/soc/soc_8051_blink/target.4th — Intel HEX blink для Proteus (ТОЛЬКО БЛИНК)
+\
+\ ВАЖНО: В Proteus на 8051 РЕАЛЬНО ТОЛЬКО БЛИНК (без fsys консоли).
+\ Этот проект использует vm: iram (Hard VM в наборе IRAM).
+\
+\ IRAM vs XRAM:
+\ - IRAM (Internal RAM) — встроенная память 256 байт (адреса $00–$FF).
+\   Содержит регистры R0–R7, битовые адреса, стек процессора (SP).
+\   Доступна инструкциями MOV direct/indirect — очень быстро.
+\   В этом проекте: переменные, стек Forth, словарь — всё в IRAM.
+\ - XRAM (External RAM) — внешняя память (до 64 KB, адреса $0000–$FFFF).
+\   Доступна только инструкциями MOVX @DPTR / MOVX @Ri.
+\   В этом проекте XRAM НЕ ИСПОЛЬЗУЕТСЯ (опция xram не задана).
+\
+\ ПОЧЕМУ ТОЛЬКО БЛИНК:
+\ - fsys консоль требует словарь, стек данных, стек возвратов, TIB.
+\ - В IRAM (256 байт) места хватает только на минимальный blink.
+\ - Для полноценного fsys нужна XRAM (переменные, стеки, словарь не влезают в IRAM).
+\
+\ ЧТОБЫ ЗАПУСТИТЬ FSYS В PROTEUS:
+\ 1. Использовать проект soc_at89c52 (а не этот).
+\ 2. Добавить внешний XRAM 62256/6264 (8 KB) на $2000–$3FFF.
+\ 3. В target указать: s" xram" s" 8192" option:
+\ 4. Собрать soc_at89c52 — выдаст firmware.hex для AT89C52 с fsys.
 
 s" soc" task:
 s" proteus" target:
