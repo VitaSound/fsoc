@@ -1702,7 +1702,9 @@
     {
       "mnemonic": "add_a_di",
       "opcode": 37,
-      "operands": [],
+      "operands": [
+        "di"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -1719,7 +1721,9 @@
     {
       "mnemonic": "addc_a_di",
       "opcode": 53,
-      "operands": [],
+      "operands": [
+        "di"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -1736,7 +1740,9 @@
     {
       "mnemonic": "subb_a_di",
       "opcode": 149,
-      "operands": [],
+      "operands": [
+        "di"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -1923,7 +1929,9 @@
     {
       "mnemonic": "anl_a_di",
       "opcode": 85,
-      "operands": [],
+      "operands": [
+        "di"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -1940,7 +1948,9 @@
     {
       "mnemonic": "orl_a_di",
       "opcode": 69,
-      "operands": [],
+      "operands": [
+        "di"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -1957,7 +1967,9 @@
     {
       "mnemonic": "xrl_a_di",
       "opcode": 101,
-      "operands": [],
+      "operands": [
+        "di"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -1974,7 +1986,9 @@
     {
       "mnemonic": "anl_di_a",
       "opcode": 82,
-      "operands": [],
+      "operands": [
+        "di"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -1991,7 +2005,9 @@
     {
       "mnemonic": "orl_di_a",
       "opcode": 66,
-      "operands": [],
+      "operands": [
+        "di"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -2008,7 +2024,9 @@
     {
       "mnemonic": "xrl_di_a",
       "opcode": 98,
-      "operands": [],
+      "operands": [
+        "di"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -2161,7 +2179,10 @@
     {
       "mnemonic": "mov_rn_di",
       "opcode": 168,
-      "operands": [],
+      "operands": [
+        "rn",
+        "di"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -2178,7 +2199,10 @@
     {
       "mnemonic": "mov_di_rn",
       "opcode": 136,
-      "operands": [],
+      "operands": [
+        "di",
+        "rn"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -2195,7 +2219,9 @@
     {
       "mnemonic": "mov_di_r0i",
       "opcode": 134,
-      "operands": [],
+      "operands": [
+        "di"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -2212,7 +2238,9 @@
     {
       "mnemonic": "mov_di_r1i",
       "opcode": 135,
-      "operands": [],
+      "operands": [
+        "di"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -2263,7 +2291,9 @@
     {
       "mnemonic": "mov_r0i_di",
       "opcode": 166,
-      "operands": [],
+      "operands": [
+        "di"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -2280,7 +2310,9 @@
     {
       "mnemonic": "mov_r1i_di",
       "opcode": 167,
-      "operands": [],
+      "operands": [
+        "di"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -2297,7 +2329,9 @@
     {
       "mnemonic": "mov_r0i_num",
       "opcode": 118,
-      "operands": [],
+      "operands": [
+        "num"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -2314,7 +2348,9 @@
     {
       "mnemonic": "mov_r1i_num",
       "opcode": 119,
-      "operands": [],
+      "operands": [
+        "num"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -2484,7 +2520,9 @@
     {
       "mnemonic": "anl_c_bit",
       "opcode": 130,
-      "operands": [],
+      "operands": [
+        "bit"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -2501,7 +2539,9 @@
     {
       "mnemonic": "anl_c_nbit",
       "opcode": 176,
-      "operands": [],
+      "operands": [
+        "bit"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -2518,7 +2558,9 @@
     {
       "mnemonic": "orl_c_bit",
       "opcode": 114,
-      "operands": [],
+      "operands": [
+        "bit"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -2535,7 +2577,9 @@
     {
       "mnemonic": "orl_c_nbit",
       "opcode": 160,
-      "operands": [],
+      "operands": [
+        "bit"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -2552,7 +2596,9 @@
     {
       "mnemonic": "mov_c_bit",
       "opcode": 162,
-      "operands": [],
+      "operands": [
+        "bit"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -2569,7 +2615,9 @@
     {
       "mnemonic": "mov_bit_c",
       "opcode": 146,
-      "operands": [],
+      "operands": [
+        "bit"
+      ],
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
@@ -2586,7 +2634,10 @@
     {
       "mnemonic": "jbc",
       "opcode": 16,
-      "operands": [],
+      "operands": [
+        "bit",
+        "dest"
+      ],
       "bytes": 3,
       "cycles": 2,
       "flags_affected": [],
@@ -2603,7 +2654,10 @@
     {
       "mnemonic": "cjne_a_di",
       "opcode": 181,
-      "operands": [],
+      "operands": [
+        "di",
+        "dest"
+      ],
       "bytes": 3,
       "cycles": 2,
       "flags_affected": [],
@@ -2620,7 +2674,11 @@
     {
       "mnemonic": "cjne_rn_num",
       "opcode": 184,
-      "operands": [],
+      "operands": [
+        "rn",
+        "num",
+        "dest"
+      ],
       "bytes": 3,
       "cycles": 2,
       "flags_affected": [],
@@ -2637,7 +2695,10 @@
     {
       "mnemonic": "cjne_r0i_num",
       "opcode": 182,
-      "operands": [],
+      "operands": [
+        "num",
+        "dest"
+      ],
       "bytes": 3,
       "cycles": 2,
       "flags_affected": [],
@@ -2654,7 +2715,10 @@
     {
       "mnemonic": "cjne_r1i_num",
       "opcode": 183,
-      "operands": [],
+      "operands": [
+        "num",
+        "dest"
+      ],
       "bytes": 3,
       "cycles": 2,
       "flags_affected": [],
@@ -2671,7 +2735,10 @@
     {
       "mnemonic": "djnz_di",
       "opcode": 213,
-      "operands": [],
+      "operands": [
+        "di",
+        "dest"
+      ],
       "bytes": 3,
       "cycles": 2,
       "flags_affected": [],

@@ -267,6 +267,13 @@ $007F constant rel7-mask
 : ret, ( -- ) isa-1200 avr-need $9508 fasm-emit ;
 : reti, ( -- ) isa-1200 avr-need $9518 fasm-emit ;
 
+\ Additional single-byte instructions (D1).
+
+
+
+
+
+
 : brbs, ( dest s -- )
    isa-1200 avr-need
    avr-bit $F000 or avr-br ;
@@ -327,11 +334,14 @@ $007F constant rel7-mask
 : ldxd, ( rd -- ) isa-sram avr-need $900E avr-one ;
 : ldyi, ( rd -- ) isa-sram avr-need $9009 avr-one ;
 : ldyd, ( rd -- ) isa-sram avr-need $900A avr-one ;
+: ldyD, ( rd -- ) isa-sram avr-need $900E avr-one ;
 : ldzi, ( rd -- ) isa-sram avr-need $9001 avr-one ;
 : ldzd, ( rd -- ) isa-sram avr-need $9002 avr-one ;
 
 : stx, ( rr -- ) isa-sram avr-need $920C avr-one ;
 : stxi, ( rr -- ) isa-sram avr-need $920D avr-one ;
+: ldd, ( rd k -- ) isa-sram avr-need $8000 avr-one ;
+: std, ( rr k -- ) isa-sram avr-need $8200 avr-one ;
 : stxd, ( rr -- ) isa-sram avr-need $920E avr-one ;
 : styi, ( rr -- ) isa-sram avr-need $9209 avr-one ;
 : styd, ( rr -- ) isa-sram avr-need $920A avr-one ;
@@ -451,6 +461,10 @@ $007F constant rel7-mask
       avr-chip @ 0= if 2 exit then
       isa-tiny avr-has if 1 else 2 then
       exit
+   then
+   2dup s" ldd," compare 0= >r
+   2dup s" std," compare 0= r> or if
+      2drop 2 exit
    then
    2drop 1 ;
 

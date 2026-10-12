@@ -182,6 +182,64 @@ $90 constant P1_0
 $98 constant SCON_RI
 $99 constant SCON_TI
 
+\ Additional MCS-51 forms — full architectural coverage (D1).
+$E7 mcs-op1 mov-a-@r1,
+$F7 mcs-op1 mov-@r1-a,
+$E2 mcs-op1 movx-a-@r0,
+$E3 mcs-op1 movx-a-@r1,
+$F2 mcs-op1 movx-@r0-a,
+$F3 mcs-op1 movx-@r1-a,
+: add-a-di, ( di -- ) $25 fasm-emit mcs-u8 fasm-emit ;
+$26 mcs-op1 add-a-@r0,
+$27 mcs-op1 add-a-@r1,
+: addc-a-di, ( di -- ) $35 fasm-emit mcs-u8 fasm-emit ;
+$36 mcs-op1 addc-a-@r0,
+$37 mcs-op1 addc-a-@r1,
+: subb-a-di, ( di -- ) $95 fasm-emit mcs-u8 fasm-emit ;
+$96 mcs-op1 subb-a-@r0,
+$97 mcs-op1 subb-a-@r1,
+$06 mcs-op1 inc-@r0,
+$07 mcs-op1 inc-@r1,
+$16 mcs-op1 dec-@r0,
+$17 mcs-op1 dec-@r1,
+: anl-a-di, ( di -- ) $55 fasm-emit mcs-u8 fasm-emit ;
+$56 mcs-op1 anl-a-@r0,
+$57 mcs-op1 anl-a-@r1,
+: anl-di-a, ( di -- ) $52 fasm-emit mcs-u8 fasm-emit ;
+: orl-a-di, ( di -- ) $45 fasm-emit mcs-u8 fasm-emit ;
+$46 mcs-op1 orl-a-@r0,
+$47 mcs-op1 orl-a-@r1,
+: orl-di-a, ( di -- ) $42 fasm-emit mcs-u8 fasm-emit ;
+: xrl-a-di, ( di -- ) $65 fasm-emit mcs-u8 fasm-emit ;
+$66 mcs-op1 xrl-a-@r0,
+$67 mcs-op1 xrl-a-@r1,
+: xrl-di-a, ( di -- ) $62 fasm-emit mcs-u8 fasm-emit ;
+$C6 mcs-op1 xch-a-@r0,
+$C7 mcs-op1 xch-a-@r1,
+$D6 mcs-op1 xchd-a-@r0,
+$D7 mcs-op1 xchd-a-@r1,
+: mov-rn-di, ( rn di -- ) swap mcs-rn $A8 + fasm-emit mcs-u8 fasm-emit ;
+: mov-di-rn, ( rn di -- ) swap mcs-rn $88 + fasm-emit mcs-u8 fasm-emit ;
+: mov-di-@r0, ( di -- ) $86 fasm-emit mcs-u8 fasm-emit ;
+: mov-di-@r1, ( di -- ) $87 fasm-emit mcs-u8 fasm-emit ;
+: mov-@r0-di, ( di -- ) $A6 fasm-emit mcs-u8 fasm-emit ;
+: mov-@r1-di, ( di -- ) $A7 fasm-emit mcs-u8 fasm-emit ;
+: mov-@r0#, ( u -- ) $76 fasm-emit mcs-u8 fasm-emit ;
+: mov-@r1#, ( u -- ) $77 fasm-emit mcs-u8 fasm-emit ;
+$B3 mcs-op1 cpl-c,
+: anl-c-bit, ( bit -- ) $82 fasm-emit mcs-u8 fasm-emit ;
+: anl-c-nbit, ( bit -- ) $B0 fasm-emit mcs-u8 fasm-emit ;
+: orl-c-bit, ( bit -- ) $72 fasm-emit mcs-u8 fasm-emit ;
+: orl-c-nbit, ( bit -- ) $A0 fasm-emit mcs-u8 fasm-emit ;
+: mov-c-bit, ( bit -- ) $A2 fasm-emit mcs-u8 fasm-emit ;
+: mov-bit-c, ( bit -- ) $92 fasm-emit mcs-u8 fasm-emit ;
+: jbc, ( bit dest -- ) swap $10 fasm-emit mcs-u8 fasm-emit mcs-rel fasm-emit ;
+: cjne-a-di, ( di dest -- ) swap $B5 fasm-emit mcs-u8 fasm-emit mcs-rel fasm-emit ;
+: cjne-rn#, ( rn u dest -- ) rot mcs-rn $B8 + fasm-emit mcs-u8 fasm-emit mcs-rel fasm-emit ;
+: cjne-@r0#, ( u dest -- ) swap $B6 fasm-emit mcs-u8 fasm-emit mcs-rel fasm-emit ;
+: cjne-@r1#, ( u dest -- ) swap $B7 fasm-emit mcs-u8 fasm-emit mcs-rel fasm-emit ;
+: djnz-di, ( di dest -- ) swap $D5 fasm-emit mcs-u8 fasm-emit mcs-rel fasm-emit ;
+
 \ Pass1 byte sizes — must match fasm-emit counts (default span is 1).
 : mcs-span ( c-addr u -- n )
    2dup s" ljmp," compare 0= >r
@@ -194,7 +252,13 @@ $99 constant SCON_TI
    2dup s" anl-di#," compare 0= r> or >r
    2dup s" jnb," compare 0= r> or >r
    2dup s" jb," compare 0= r> or >r
-   2dup s" cjne-a#," compare 0= r> or
+   2dup s" cjne-a#," compare 0= r> or >r
+   2dup s" jbc," compare 0= r> or >r
+   2dup s" cjne-a-di," compare 0= r> or >r
+   2dup s" cjne-rn#," compare 0= r> or >r
+   2dup s" cjne-@r0#," compare 0= r> or >r
+   2dup s" cjne-@r1#," compare 0= r> or >r
+   2dup s" djnz-di," compare 0= r> or
    if 2drop 3 exit then
 
    2dup s" sjmp," compare 0= >r
@@ -223,6 +287,29 @@ $99 constant SCON_TI
    2dup s" xch-a-di," compare 0= r> or >r
    2dup s" inc-di," compare 0= r> or >r
    2dup s" dec-di," compare 0= r> or >r
+   2dup s" add-a-di," compare 0= r> or >r
+   2dup s" addc-a-di," compare 0= r> or >r
+   2dup s" subb-a-di," compare 0= r> or >r
+   2dup s" anl-a-di," compare 0= r> or >r
+   2dup s" anl-di-a," compare 0= r> or >r
+   2dup s" orl-a-di," compare 0= r> or >r
+   2dup s" orl-di-a," compare 0= r> or >r
+   2dup s" xrl-a-di," compare 0= r> or >r
+   2dup s" xrl-di-a," compare 0= r> or >r
+   2dup s" mov-rn-di," compare 0= r> or >r
+   2dup s" mov-di-rn," compare 0= r> or >r
+   2dup s" mov-di-@r0," compare 0= r> or >r
+   2dup s" mov-di-@r1," compare 0= r> or >r
+   2dup s" mov-@r0-di," compare 0= r> or >r
+   2dup s" mov-@r1-di," compare 0= r> or >r
+   2dup s" mov-@r0#," compare 0= r> or >r
+   2dup s" mov-@r1#," compare 0= r> or >r
+   2dup s" anl-c-bit," compare 0= r> or >r
+   2dup s" anl-c-nbit," compare 0= r> or >r
+   2dup s" orl-c-bit," compare 0= r> or >r
+   2dup s" orl-c-nbit," compare 0= r> or >r
+   2dup s" mov-c-bit," compare 0= r> or >r
+   2dup s" mov-bit-c," compare 0= r> or >r
    2dup s" dw," compare 0= r> or
    if 2drop 2 exit then
 

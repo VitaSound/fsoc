@@ -572,16 +572,21 @@ def check_fasm(words_path: Path) -> Tuple[Dict[str, int], List[str]]:
     """Extract opcodes from a hand-written fasm words.4th.
 
     Returns (word -> opcode byte, list of unparseable comma-word names).
-    Recognizes the generator's two shapes:
-      $XX mcs-op1 name,            -- one-byte opcode
+    Recognizes:
+      $XX mcs-op1 name,            -- MCS-51 one-byte opcode (2 hex digits)
+      $XXXX avr-op1 name,          -- AVR one-word opcode (4 hex digits)
       : name, ( a -- ) $XX fasm-emit ... ;   -- multi-byte, opcode is the first emit
     """
     content = words_path.read_text()
     opcodes: Dict[str, int] = {}
     unparseable: List[str] = []
 
-    # One-byte opcodes: "$XX mcs-op1 name," (name may contain @ + characters).
-    for m in re.finditer(r"^\$([0-9A-Fa-f]{2})[ \t]+\w*-op1[ \t]+([^,\s]+),", content, re.MULTILINE):
+    # MCS-51: 2 hex digits (mcs-op1)
+    for m in re.finditer(r"^[\$]([0-9A-Fa-f]{2})[ 	]+\w*-op1[ 	]+([^,\s]+),", content, re.MULTILINE):
+        opcodes[m.group(2) + ","] = int(m.group(1), 16)
+
+    # AVR: 4 hex digits (avr-op1)
+    for m in re.finditer(r"^[\$]([0-9A-Fa-f]{4})[ 	]+\w*-op1[ 	]+([^,\s]+),", content, re.MULTILINE):
         opcodes[m.group(2) + ","] = int(m.group(1), 16)
 
     # Colon words: collect each body up to its terminating ';' (one or many lines).
@@ -604,14 +609,14 @@ def check_fasm(words_path: Path) -> Tuple[Dict[str, int], List[str]]:
         # Opcode = the first hex constant the word emits:
         #   $XX fasm-emit ...            (direct)
         #   ... swap $XX + fasm-emit     (base + Rn offset)
-        om = re.search(r"\$([0-9A-Fa-f]{2})(?:\s+fasm-emit|\s+\+[ \t]*fasm-emit)", body)
+        # MCS-51: 2 hex digits; AVR: 4 hex digits
+        om = re.search(r"[\$]([0-9A-Fa-f]{2,4})(?:\s+fasm-emit|\s+\+[ \t]*fasm-emit)", body)
         if om:
             opcodes[name] = int(om.group(1), 16)
         else:
             unparseable.append(name)
         i = j
     return opcodes, unparseable
-
 
 def fasm_name_to_mnemonic(word: str) -> str:
     """Map a fasm comma-word name to the spec mnemonic it assembles."""
@@ -639,17 +644,27 @@ def spec_matches_fasm(spec: ISASpec, opcodes: Dict[str, int]) -> List[str]:
 def spec_missing_in_fasm(spec: ISASpec, opcodes: Dict[str, int]) -> List[str]:
     """Report spec instructions whose base opcode is not emitted by fasm.
 
-    Compares base opcodes directly: an rrr instruction (e.g. MOV A,Rn at
-    $E8) and a single-opcode instruction (e.g. MOV A,@R0 at $E6) both store
-    their base byte, matching the fasm word's extracted base byte.
+    For single-byte spec instructions (bytes == 1):
+      - If opcode <= 0xFF: exact match required
+      - If opcode > 0xFF (AVR branch-like): check if low byte matches
+    Multi-byte spec instructions (bytes > 1) are skipped.
     """
     fasm_ops = set(opcodes.values())
     missing = []
     for instr in spec.instructions:
         if instr.opcode is None:
             continue  # variable encoding (ajmp/acall page masks)
-        if instr.opcode not in fasm_ops:
-            missing.append(f"{instr.mnemonic} (0x{instr.opcode:02X})")
+        if instr.bytes != 1:
+            continue  # multi-byte: only first byte visible in fasm
+        opc = instr.opcode
+        if opc <= 0xFF:
+            present = opc in fasm_ops
+        else:
+            # AVR branch-like: 16-bit opcode with condition in high byte
+            # Check if low byte is present in fasm
+            present = (opc & 0xFF) in fasm_ops
+        if not present:
+            missing.append(f"{instr.mnemonic} (0x{instr.opcode:04X})")
     return missing
 
 
