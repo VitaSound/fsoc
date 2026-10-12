@@ -413,8 +413,9 @@ k-lab pnone
 s" parse-name" 0 s" kparse" k-pc k-word
 
 k-lab kaccept
-   r2 mov-a-rn, r4 mov-rn-a,
-   r3 mov-a-rn, r5 mov-rn-a,
+   \ save TOS to SP (r4:r5 reused in accept loop for VI)
+   r2 mov-a-rn, ACC push,
+   r3 mov-a-rn, ACC push,
    r2 $00 mov-rn#, r3 $00 mov-rn#,
    VI >dp
    k-call xstore
@@ -468,8 +469,9 @@ k-lab accnl
    r2 $00 mov-rn#, r3 $00 mov-rn#,
    VTOIN >dp
    k-call xstore
-   r5 mov-a-rn, r3 mov-rn-a,
-   r4 mov-a-rn, r2 mov-rn-a,
+   \ restore TOS from SP
+   ACC pop, r3 mov-rn-a,
+   ACC pop, r2 mov-rn-a,
    ret,
 s" accept" 0 s" kaccept" k-pc k-word
 
@@ -594,6 +596,8 @@ k-lab intbad
    k-call xstore
    ret,
 k-lab intdone
+   r7 mov-a-rn, r3 mov-rn-a,
+   r6 mov-a-rn, r2 mov-rn-a,
    ret,
 
 k-lab kprompt
