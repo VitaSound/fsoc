@@ -1,0 +1,352 @@
+{
+  "arch": "j1",
+  "endianness": "little",
+  "registers": [
+    {
+      "name": "T",
+      "address": 0,
+      "bit_width": 16,
+      "description": "Top of stack register"
+    },
+    {
+      "name": "N",
+      "address": 1,
+      "bit_width": 16,
+      "description": "Next on stack register"
+    },
+    {
+      "name": "R",
+      "address": 2,
+      "bit_width": 16,
+      "description": "Return stack register"
+    },
+    {
+      "name": "P",
+      "address": 3,
+      "bit_width": 16,
+      "description": "Program counter"
+    }
+  ],
+  "instructions": [
+    {
+      "mnemonic": "noop",
+      "opcode": 24576,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "No operation",
+      "encoding": "0110000000000000",
+      "categories": ["control"]
+    },
+    {
+      "mnemonic": "add",
+      "opcode": 28675,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": ["C"],
+      "description": "Add T and N",
+      "encoding": "0111000000000011",
+      "categories": ["arithmetic"]
+    },
+    {
+      "mnemonic": "xor",
+      "opcode": 28673,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "XOR T and N",
+      "encoding": "0111000000000001",
+      "categories": ["arithmetic"]
+    },
+    {
+      "mnemonic": "and",
+      "opcode": 28674,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "AND T and N",
+      "encoding": "0111000000000010",
+      "categories": ["arithmetic"]
+    },
+    {
+      "mnemonic": "or",
+      "opcode": 28675,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "OR T and N",
+      "encoding": "0111000000000011",
+      "categories": ["arithmetic"]
+    },
+    {
+      "mnemonic": "invert",
+      "opcode": 28671,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Invert T",
+      "encoding": "0110111111111111",
+      "categories": ["arithmetic"]
+    },
+    {
+      "mnemonic": "eq",
+      "opcode": 28676,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "T equals N",
+      "encoding": "0111000000000100",
+      "categories": ["arithmetic"]
+    },
+    {
+      "mnemonic": "lt",
+      "opcode": 28677,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "T less than N (signed)",
+      "encoding": "0111000000000101",
+      "categories": ["arithmetic"]
+    },
+    {
+      "mnemonic": "ult",
+      "opcode": 28678,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "T less than N (unsigned)",
+      "encoding": "0111000000000110",
+      "categories": ["arithmetic"]
+    },
+    {
+      "mnemonic": "swap",
+      "opcode": 28672,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Swap T and N",
+      "encoding": "0111000000000000",
+      "categories": ["stack"]
+    },
+    {
+      "mnemonic": "dup",
+      "opcode": 28679,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Duplicate T",
+      "encoding": "0111000000000111",
+      "categories": ["stack"]
+    },
+    {
+      "mnemonic": "drop",
+      "opcode": 28676,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Drop T",
+      "encoding": "0111000000000100",
+      "categories": ["stack"]
+    },
+    {
+      "mnemonic": "over",
+      "opcode": 28679,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Copy N to T",
+      "encoding": "0111000000000111",
+      "categories": ["stack"]
+    },
+    {
+      "mnemonic": "nip",
+      "opcode": 28675,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Drop N",
+      "encoding": "0111000000000011",
+      "categories": ["stack"]
+    },
+    {
+      "mnemonic": "tor",
+      "opcode": 28684,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Move T to return stack",
+      "encoding": "0111000000001100",
+      "categories": ["stack"]
+    },
+    {
+      "mnemonic": "fromr",
+      "opcode": 28688,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Move from return stack to T",
+      "encoding": "0111000000010000",
+      "categories": ["stack"]
+    },
+    {
+      "mnemonic": "rfetch",
+      "opcode": 28689,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Fetch from return stack to T",
+      "encoding": "0111000000010001",
+      "categories": ["stack"]
+    },
+    {
+      "mnemonic": "exit",
+      "opcode": 28800,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Return from subroutine",
+      "encoding": "0111000001000000",
+      "categories": ["branch"]
+    },
+    {
+      "mnemonic": "alu_exit",
+      "opcode": 32896,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "ALU operation with return",
+      "encoding": "1000000001000000",
+      "categories": ["branch"]
+    },
+    {
+      "mnemonic": "imm",
+      "operands": ["value"],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Push immediate value",
+      "encoding": "1xxxxxxxxxxxxxxx",
+      "categories": ["stack"]
+    },
+    {
+      "mnemonic": "jmp",
+      "operands": ["address"],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Unconditional jump",
+      "encoding": "0xxxxxxxxxxxxxxx",
+      "categories": ["branch"]
+    },
+    {
+      "mnemonic": "call",
+      "operands": ["address"],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Call subroutine",
+      "encoding": "01xxxxxxxxxxxxxx",
+      "categories": ["branch"]
+    },
+    {
+      "mnemonic": "zbranch",
+      "operands": ["address"],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Conditional branch if zero",
+      "encoding": "001xxxxxxxxxxxxxx",
+      "categories": ["branch"]
+    },
+    {
+      "mnemonic": "store",
+      "opcode": 28679,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Store T to address N",
+      "encoding": "0111000000000111",
+      "categories": ["memory"]
+    },
+    {
+      "mnemonic": "fetch",
+      "opcode": 28679,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Fetch from address T",
+      "encoding": "0111000000000111",
+      "categories": ["memory"]
+    },
+    {
+      "mnemonic": "io_fetch",
+      "opcode": 28784,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "I/O fetch",
+      "encoding": "0111000000110000",
+      "categories": ["io"]
+    },
+    {
+      "mnemonic": "io_store",
+      "opcode": 28691,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "I/O store",
+      "encoding": "0111000000001011",
+      "categories": ["io"]
+    },
+    {
+      "mnemonic": "ior",
+      "opcode": 28720,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "I/O read",
+      "encoding": "0111000000100000",
+      "categories": ["io"]
+    }
+  ],
+  "chip_variants": {
+    "j1a": {
+      "registers": {},
+      "memory": {
+        "flash": 8192,
+        "ram": 2048
+      }
+    },
+    "j1b": {
+      "registers": {},
+      "memory": {
+        "flash": 8192,
+        "ram": 2048
+      }
+    }
+  }
+}

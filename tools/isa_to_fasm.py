@@ -22,7 +22,7 @@ from string import Template
 class Instruction:
     """Single ISA instruction specification."""
     mnemonic: str                    # e.g., "mov_a_rn"
-    opcode: int                      # e.g., 0xE8
+    opcode: Optional[int] = None     # e.g., 0xE8; None = variable/complex encoding
     operands: List[str] = field(default_factory=list)  # e.g., ["rn"]
     bytes: int = 1                   # instruction length
     cycles: int = 1                  # execution cycles
@@ -167,6 +167,17 @@ class FASMGenerator:
         prefix = "mcs" if self.arch == "mcs51" else self.arch
 
         # Build the word based on operands
+        if instr.opcode is None:
+            # Variable or complex encoding the generator cannot auto-emit.
+            # Emit a clearly-marked TODO stub so the file stays valid; the
+            # hand-written words.4th remains the source of truth for these.
+            stack_comment = " (" + " ".join(instr.operands) + " -- )" if instr.operands else " ( -- )"
+            return (
+                f"\\ TODO: {mnemonic} has a variable/complex encoding ({instr.bytes}-byte)"
+                f"\n\\         not auto-generated. See fsys/fasm/{self.arch}/words.4th."
+                f"\n: {forth_name}{stack_comment}\n   \\ TODO: implement {instr.mnemonic} ;"
+            )
+
         if not instr.operands:
             # No operands - simple opcode
             return f"${instr.opcode:02X} {prefix}-op1 {forth_name}"

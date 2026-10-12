@@ -1,0 +1,46 @@
+{
+  "arch": "msl16",
+  "endianness": "little",
+  "registers": [
+    {"name": "T", "address": 0, "bit_width": 16, "description": "Top of stack"},
+    {"name": "N", "address": 1, "bit_width": 16, "description": "Next on stack"},
+    {"name": "R", "address": 2, "bit_width": 16, "description": "Return stack top"},
+    {"name": "P", "address": 3, "bit_width": 16, "description": "Program counter (word-aligned)"}
+  ],
+  "description": "Packed-nibble stack machine. Four 4-bit opcodes per 16-bit word. Slot 0 (bits 15:12) cannot hold opcodes 8..15: that bit is CALL. Those ops get a nop pad when they would land in slot 0. lit, call, and dcw, pad the open word and take the next one whole.",
+  "encoding_model": "packed_nibble",
+  "word_size": 16,
+  "slots_per_word": 4,
+  "registers_note": "Opcodes 0..15 are 4-bit. CALL is the bit-15 flag of the first slot, not an opcode.",
+  "instructions": [
+    {"mnemonic": "nop", "opcode": 0, "operands": [], "bytes": 0.25, "cycles": 1, "flags_affected": [], "description": "No operation / pad", "categories": ["control"]},
+    {"mnemonic": "and", "opcode": 1, "operands": [], "bytes": 0.25, "cycles": 1, "flags_affected": [], "description": "AND T and N", "categories": ["arithmetic"]},
+    {"mnemonic": "xor", "opcode": 2, "operands": [], "bytes": 0.25, "cycles": 1, "flags_affected": [], "description": "XOR T and N", "categories": ["arithmetic"]},
+    {"mnemonic": "add", "opcode": 3, "operands": [], "bytes": 0.25, "cycles": 1, "flags_affected": [], "description": "Add T and N", "categories": ["arithmetic"]},
+    {"mnemonic": "zer", "opcode": 4, "operands": [], "bytes": 0.25, "cycles": 1, "flags_affected": [], "description": "T == 0 (0=)", "categories": ["arithmetic"]},
+    {"mnemonic": "halve", "opcode": 6, "operands": [], "bytes": 0.25, "cycles": 1, "flags_affected": [], "description": "T = T / 2 (2/)", "categories": ["arithmetic"]},
+    {"mnemonic": "sub", "opcode": 7, "operands": [], "bytes": 0.25, "cycles": 1, "flags_affected": [], "description": "T = T - N (-)", "categories": ["arithmetic"]},
+    {"mnemonic": "dup", "opcode": 8, "operands": [], "bytes": 0.25, "cycles": 1, "flags_affected": [], "description": "Duplicate T (slot 0 needs nop pad)", "categories": ["stack"]},
+    {"mnemonic": "drop", "opcode": 9, "operands": [], "bytes": 0.25, "cycles": 1, "flags_affected": [], "description": "Drop T (slot 0 needs nop pad)", "categories": ["stack"]},
+    {"mnemonic": "goto", "opcode": 10, "operands": [], "bytes": 0.25, "cycles": 1, "flags_affected": [], "description": "Return from branch (slot 0 needs nop pad)", "categories": ["branch"]},
+    {"mnemonic": "fromr", "opcode": 11, "operands": [], "bytes": 0.25, "cycles": 1, "flags_affected": [], "description": "r> (slot 0 needs nop pad)", "categories": ["stack"]},
+    {"mnemonic": "tor", "opcode": 12, "operands": [], "bytes": 0.25, "cycles": 1, "flags_affected": [], "description": ">r (slot 0 needs nop pad)", "categories": ["stack"]},
+    {"mnemonic": "fetch", "opcode": 13, "operands": [], "bytes": 0.25, "cycles": 1, "flags_affected": [], "description": "@ (slot 0 needs nop pad)", "categories": ["memory"]},
+    {"mnemonic": "store", "opcode": 14, "operands": [], "bytes": 0.25, "cycles": 1, "flags_affected": [], "description": "! (slot 0 needs nop pad)", "categories": ["memory"]},
+    {"mnemonic": "swap", "opcode": 15, "operands": [], "bytes": 0.25, "cycles": 1, "flags_affected": [], "description": "Swap T and N (slot 0 needs nop pad)", "categories": ["stack"]},
+    {"mnemonic": "lit", "operands": ["n"], "bytes": 2, "cycles": 1, "flags_affected": [], "description": "Push 12-bit signed literal. Pads open word, takes next whole word. Bits: 5=nib 5, 11:0=field.", "categories": ["stack"]},
+    {"mnemonic": "call", "operands": ["dest"], "bytes": 2, "cycles": 1, "flags_affected": [], "description": "Bit 15 set, 15-bit word address in 14:0. Pads open word, takes next whole word.", "categories": ["branch"]},
+    {"mnemonic": "dcw", "operands": ["u"], "bytes": 2, "cycles": 1, "flags_affected": [], "description": "Data word, whole 16 bits. Pads open word, takes next whole word.", "categories": ["data"]}
+  ],
+  "chip_variants": {
+    "msl16": {
+      "registers": {},
+      "memory": {"rom": 16384, "ram": 4096}
+    },
+    "msl8": {
+      "registers": {},
+      "memory": {"rom": 8192, "ram": 2048},
+      "note": "8-bit standalone bus uses bits 7:0 of the call/lit fields"
+    }
+  }
+}

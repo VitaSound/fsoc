@@ -1,0 +1,228 @@
+{
+  "arch": "bcpu",
+  "endianness": "little",
+  "registers": [
+    {
+      "name": "ACC",
+      "address": 0,
+      "bit_width": 16,
+      "description": "Accumulator"
+    },
+    {
+      "name": "R",
+      "address": 1,
+      "bit_width": 16,
+      "description": "Return address register"
+    },
+    {
+      "name": "P",
+      "address": 2,
+      "bit_width": 16,
+      "description": "Program counter"
+    },
+    {
+      "name": "SP",
+      "address": 3,
+      "bit_width": 16,
+      "description": "Stack pointer"
+    }
+  ],
+  "instructions": [
+    {
+      "mnemonic": "or",
+      "opcode": 0,
+      "operands": ["addr"],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "OR accumulator with memory",
+      "encoding": "000000000000xxxx",
+      "categories": ["arithmetic"]
+    },
+    {
+      "mnemonic": "and",
+      "opcode": 1,
+      "operands": ["addr"],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "AND accumulator with memory",
+      "encoding": "000000000001xxxx",
+      "categories": ["arithmetic"]
+    },
+    {
+      "mnemonic": "xor",
+      "opcode": 2,
+      "operands": ["addr"],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "XOR accumulator with memory",
+      "encoding": "000000000010xxxx",
+      "categories": ["arithmetic"]
+    },
+    {
+      "mnemonic": "add",
+      "opcode": 3,
+      "operands": ["addr"],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": ["C"],
+      "description": "Add memory to accumulator",
+      "encoding": "000000000011xxxx",
+      "categories": ["arithmetic"]
+    },
+    {
+      "mnemonic": "lsh",
+      "opcode": 4,
+      "operands": ["addr"],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": ["C"],
+      "description": "Logical shift left",
+      "encoding": "000000000100xxxx",
+      "categories": ["arithmetic"]
+    },
+    {
+      "mnemonic": "rsh",
+      "opcode": 5,
+      "operands": ["addr"],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": ["C"],
+      "description": "Logical shift right",
+      "encoding": "000000000101xxxx",
+      "categories": ["arithmetic"]
+    },
+    {
+      "mnemonic": "ldi",
+      "opcode": 6,
+      "operands": ["addr"],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Load immediate indirect",
+      "encoding": "000000000110xxxx",
+      "categories": ["memory"]
+    },
+    {
+      "mnemonic": "sti",
+      "opcode": 7,
+      "operands": ["addr"],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Store immediate indirect",
+      "encoding": "000000000111xxxx",
+      "categories": ["memory"]
+    },
+    {
+      "mnemonic": "ldc",
+      "opcode": 8,
+      "operands": ["addr"],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Load constant",
+      "encoding": "000000001000xxxx",
+      "categories": ["memory"]
+    },
+    {
+      "mnemonic": "stc",
+      "opcode": 9,
+      "operands": ["addr"],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Store constant",
+      "encoding": "000000001001xxxx",
+      "categories": ["memory"]
+    },
+    {
+      "mnemonic": "lit",
+      "opcode": 10,
+      "operands": ["k"],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Load literal to accumulator",
+      "encoding": "000000001010xxxx",
+      "categories": ["stack"]
+    },
+    {
+      "mnemonic": "jmp",
+      "opcode": 12,
+      "operands": ["addr"],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Unconditional jump",
+      "encoding": "000000001100xxxx",
+      "categories": ["branch"]
+    },
+    {
+      "mnemonic": "jpz",
+      "opcode": 13,
+      "operands": ["addr"],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Jump if accumulator zero",
+      "encoding": "000000001101xxxx",
+      "categories": ["branch"]
+    },
+    {
+      "mnemonic": "sfg",
+      "opcode": 57345,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Set flags",
+      "encoding": "1110000000000001",
+      "categories": ["control"]
+    },
+    {
+      "mnemonic": "spc",
+      "opcode": 57344,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Set program counter",
+      "encoding": "1110000000000000",
+      "categories": ["control"]
+    },
+    {
+      "mnemonic": "gfg",
+      "opcode": 61441,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Get flags",
+      "encoding": "1111000000000001",
+      "categories": ["control"]
+    },
+    {
+      "mnemonic": "gpc",
+      "opcode": 61440,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Get program counter",
+      "encoding": "1111000000000000",
+      "categories": ["control"]
+    }
+  ],
+  "chip_variants": {
+    "bcpu": {
+      "registers": {},
+      "memory": {
+        "flash": 4096,
+        "ram": 1024
+      }
+    }
+  }
+}

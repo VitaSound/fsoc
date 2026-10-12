@@ -636,21 +636,30 @@ def analyze_target(target_dir: Path) -> Dict:
 
 
 def main():
-    if len(sys.argv) < 2:
-        print("Usage: stack_analyze.py <target_dir> [target_dir2 ...]")
-        print("       stack_analyze.py --all")
+    args = sys.argv[1:]
+    # Optional "--report <path>" steers the on-disk report (default: the
+    # committed tools/stack_analysis_report.json). Everything else is a target.
+    report_file = Path('tools/stack_analysis_report.json')
+    if '--report' in args:
+        i = args.index('--report')
+        report_file = Path(args[i + 1])
+        del args[i:i + 2]
+
+    if not args:
+        print("Usage: stack_analyze.py <target_dir> [target_dir2 ...] [--report path]")
+        print("       stack_analyze.py --all [--report path]")
         sys.exit(1)
 
     results = {}
 
-    if sys.argv[1] == '--all':
+    if args[0] == '--all':
         kernel_dir = Path('fsys/kernel')
         for target_dir in kernel_dir.iterdir():
             if target_dir.is_dir():
                 print(f"Analyzing {target_dir.name}...")
                 results[target_dir.name] = analyze_target(target_dir)
     else:
-        for arg in sys.argv[1:]:
+        for arg in args:
             path = Path(arg)
             if path.exists() and path.is_dir():
                 target = path.name
@@ -674,9 +683,9 @@ def main():
     print(json.dumps(output, indent=2))
 
     # Also write to file
-    out_file = Path('tools/stack_analysis_report.json')
-    out_file.write_text(json.dumps(output, indent=2))
-    print(f"\nReport written to {out_file}")
+    report_file.parent.mkdir(parents=True, exist_ok=True)
+    report_file.write_text(json.dumps(output, indent=2))
+    print(f"\nReport written to {report_file}")
 
 
 if __name__ == '__main__':

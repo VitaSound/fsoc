@@ -32,3 +32,6 @@ trace.vcd
 /tmp/
 firmware/firmware.hex
 .aider*
+
+# Codewhale runtime state (not repo content).
+.codewhale/
