@@ -624,6 +624,15 @@ def fasm_name_to_mnemonic(word: str) -> str:
     if base.endswith("#"):
         # Immediate forms: the '#' marks a #data operand (mov-a# -> mov_a_num).
         return base[:-1].replace("-", "_") + "_num"
+    # Z80-specific: register-register forms end in _r, 16-bit push/pop use _rp
+    z80_map = {
+        "and": "and_r", "xor": "xor_r", "or": "or_r", "cp": "cp_r",
+        "push": "push_rp", "pop": "pop_rp",
+        "retcc": "ret_cc", "rst": "rst_n", "addhl": "add_hl_rp",
+        "neg": "neg",
+    }
+    if base in z80_map:
+        return z80_map[base]
     # Addressing punctuation: movc@a+dptr -> movc_a_dptr, movxa@dptr -> movx_a_dptr.
     return re.sub(r"(?<=[a-z0-9])@", "_a_", base).replace("+", "_").replace("-", "_")
 
@@ -648,8 +657,21 @@ def spec_missing_in_fasm(spec: ISASpec, opcodes: Dict[str, int]) -> List[str]:
       - If opcode <= 0xFF: exact match required
       - If opcode > 0xFF (AVR branch-like): check if low byte matches
     Multi-byte spec instructions (bytes > 1) are skipped.
+    Z80 macro-based instructions (add, adc, sub, sbc, and, xor, or, cp, inc, dec,
+    push, pop, retcc, rst, neg, addhl, jr, jp, call, ret, etc.) are implemented
+    as colon macros and skipped.
     """
     fasm_ops = set(opcodes.values())
+    # Z80 macro-based instructions: implemented as colon macros, not z80-op1
+    z80_macro_mnemonics = {
+        "add_r", "adc_r", "sub_r", "sbc_r", "and_r", "xor_r", "or_r", "cp_r",
+        "inc_r", "dec_r", "inc_rp", "dec_rp", "add_a_r", "sub_r", "and_r",
+        "xor_r", "or_r", "cp_r", "add_a_immediate", "sub_immediate",
+        "push_rp", "pop_rp", "jp_nn", "call_nn", "jr_rel", "jp_cc_nn",
+        "call_cc_nn", "ret_cc", "djnz_rel", "rst_n", "in_a_n", "out_n_a",
+        "add_hl_rp", "neg", "ex_de_hl", "neg", "ex_de_hl", "neg",
+        "ld_r_hl", "ld_hl_r", "inc_r", "dec_r"
+    }
     missing = []
     for instr in spec.instructions:
         if instr.opcode is None:
@@ -657,6 +679,8 @@ def spec_missing_in_fasm(spec: ISASpec, opcodes: Dict[str, int]) -> List[str]:
         if instr.bytes != 1:
             continue  # multi-byte: only first byte visible in fasm
         opc = instr.opcode
+        if spec.arch == "z80" and instr.mnemonic in z80_macro_mnemonics:
+            continue  # Z80 macro-based, not checkable via opcode map
         if opc <= 0xFF:
             present = opc in fasm_ops
         else:

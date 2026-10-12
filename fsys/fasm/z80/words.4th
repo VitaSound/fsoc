@@ -114,6 +114,20 @@ $E9 z80-op1 jphl,
 : decr, ( r -- )
    z80-rhl 3 lshift $05 or fasm-emit ;
 
+: incr, ( r -- )
+   z80-rhl 3 lshift $04 or fasm-emit ;
+
+: decr, ( r -- )
+   z80-rhl 3 lshift $05 or fasm-emit ;
+
+: ld_r_hl, ( rd -- )
+   z80-rhl { rd }
+   $46 rd 3 lshift or fasm-emit ;
+
+: ld_hl_r, ( rs -- )
+   z80-rhl { rs }
+   $70 rs or fasm-emit ;
+
 : add, ( r -- ) z80-rhl $80 or fasm-emit ;
 : adc, ( r -- ) z80-rhl $88 or fasm-emit ;
 : sub, ( r -- ) z80-rhl $90 or fasm-emit ;
