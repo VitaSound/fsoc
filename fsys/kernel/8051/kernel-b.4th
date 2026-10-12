@@ -413,8 +413,8 @@ k-lab pnone
 s" parse-name" 0 s" kparse" k-pc k-word
 
 k-lab kaccept
-   r2 mov-a-rn, ACC push,
-   r3 mov-a-rn, ACC push,
+   r2 mov-a-rn, r4 mov-rn-a,
+   r3 mov-a-rn, r5 mov-rn-a,
    r2 $00 mov-rn#, r3 $00 mov-rn#,
    VI >dp
    k-call xstore
@@ -468,8 +468,8 @@ k-lab accnl
    r2 $00 mov-rn#, r3 $00 mov-rn#,
    VTOIN >dp
    k-call xstore
-   ACC pop, r3 mov-rn-a,
-   ACC pop, r2 mov-rn-a,
+   r5 mov-a-rn, r3 mov-rn-a,
+   r4 mov-a-rn, r2 mov-rn-a,
    ret,
 s" accept" 0 s" kaccept" k-pc k-word
 
@@ -490,17 +490,11 @@ k-lab ksemi
    ret,
 s" ;" 1 s" ksemi" k-pc k-word
 
-\ Call CFA in r4:r5 with TOS already in r2:r3 (return to caller).
-k-lab doretcall
-   r5 mov-a-rn, ACC push,
-   r4 mov-a-rn, ACC push,
-   ret,
-
-\ Save TOS (r2:r3) across parse/find — they use Rn as scratch.
+\ Save TOS (r2:r3) in r6:r7 across parse/find/xfetch — no SP use.
 k-lab kinterpret
 k-lab intl
-   r2 mov-a-rn, ACC push,
-   r3 mov-a-rn, ACC push,
+   r2 mov-a-rn, r6 mov-rn-a,
+   r3 mov-a-rn, r7 mov-rn-a,
    k-call kparse
    VF >dp
    k-call xfetch
@@ -519,26 +513,24 @@ k-lab intl
    k-call xfetch
    r2 mov-a-rn, r3 orl-a-rn,
    k-jnz-fwd intrun
-   ACC pop, r3 mov-rn-a,
-   ACC pop, r2 mov-rn-a,
    VN >dp
    k-call xfetch
    k-call cmcall
    k-ljmp-fwd intl
 k-lab intrun
-   ACC pop, r5 mov-rn-a,
-   ACC pop, r4 mov-rn-a,
+   \ TOS is in r6:r7, CFA is in VN
    VN >dp
    k-call xfetch
-   r2 mov-a-rn, r6 mov-rn-a,
-   r3 mov-a-rn, r7 mov-rn-a,
-   r4 mov-a-rn, r2 mov-rn-a,
-   r5 mov-a-rn, r3 mov-rn-a,
-   r6 mov-a-rn, r4 mov-rn-a,
-   r7 mov-a-rn, r5 mov-rn-a,
-   k-call doretcall
+   r2 mov-a-rn, r4 mov-rn-a,
+   r3 mov-a-rn, r5 mov-rn-a,
+   r6 mov-a-rn, r2 mov-rn-a,
+   r7 mov-a-rn, r3 mov-rn-a,
+   k-call runhl
    k-ljmp-fwd intl
 k-lab intnum
+   \ Save TOS (r6:r7) for intpush; compile path overwrites anyway
+   r6 mov-a-rn, ACC push,
+   r7 mov-a-rn, ACC push,
    k-call knumber
    VF >dp
    k-call xfetch
@@ -548,6 +540,7 @@ k-lab intnum
    k-call xfetch
    r2 mov-a-rn, r3 orl-a-rn,
    k-jz-fwd intpush
+   \ Compile-time literal (klit + VN): ACC pops are waste, overwritten by DPTR
    ACC pop, r3 mov-rn-a,
    ACC pop, r2 mov-rn-a,
    s" klit" k-pc >dp
@@ -575,6 +568,7 @@ k-lab intnum
    k-call xstore
    k-ljmp-fwd intl
 k-lab intpush
+   \ TOS saved by intnum: hi then lo on SP
    ACC pop, r5 mov-rn-a,
    ACC pop, r4 mov-rn-a,
    VDEPTH >dp
@@ -583,7 +577,7 @@ k-lab intpush
    k-jz-fwd ip1
    r4 mov-a-rn, r2 mov-rn-a,
    r5 mov-a-rn, r3 mov-rn-a,
-   k-call mpush
+   k-call mpush-tos
 k-lab ip1
    VN >dp
    k-call xfetch
@@ -600,8 +594,6 @@ k-lab intbad
    k-call xstore
    ret,
 k-lab intdone
-   ACC pop, r3 mov-rn-a,
-   ACC pop, r2 mov-rn-a,
    ret,
 
 k-lab kprompt
@@ -642,8 +634,6 @@ k-lab uinit
 
 k-lab cold
    k-call uinit
-   \ Marks: * UART  + PSP  I kinit  B boot  (blink CFA must stay < $1000)
-   $2A mov-a#, k-call txa
    DSP0 >dp
    DPL mov-a-di, r2 mov-rn-a,
    DPH mov-a-di, r3 mov-rn-a,
@@ -652,21 +642,22 @@ k-lab cold
    r2 $00 mov-rn#, r3 $00 mov-rn#,
    VDEPTH >dp
    k-call xstore
-   $2B mov-a#, k-call txa
    k-call kinit
-   $49 mov-a#, k-call txa
    s" cell-boot" k-pc >dp
    k-call cfa
    r2 mov-a-rn, r3 orl-a-rn,
    k-jz-fwd noboot
-   $42 mov-a#, k-call txa
+   r2 mov-a-rn, r4 mov-rn-a,
+   r3 mov-a-rn, r5 mov-rn-a,
    k-call runhl
+   \ blink must not return; if it does, restart boot (do not sit in KEY).
+   k-ljmp-fwd cold
 k-lab noboot
+   k-call kcr
 k-lab qloop
    k-call kaccept
    k-call kinterpret
    k-call kprompt
-   WDTREL $1E mov-di#,
    k-ljmp-fwd qloop
 
 k-lab kquit
@@ -682,7 +673,7 @@ k-lab khere
    k-jz-fwd hr0
    ACC pop, r3 mov-rn-a,
    ACC pop, r2 mov-rn-a,
-   k-call mpush
+   k-call mpush-tos
    k-ljmp-fwd hr1
 k-lab hr0
    ACC pop, r3 mov-rn-a,
@@ -703,7 +694,7 @@ k-lab klatest
    k-jz-fwd lr0
    ACC pop, r3 mov-rn-a,
    ACC pop, r2 mov-rn-a,
-   k-call mpush
+   k-call mpush-tos
    k-ljmp-fwd lr1
 k-lab lr0
    ACC pop, r3 mov-rn-a,
@@ -725,7 +716,7 @@ k-lab kstate
    k-jz-fwd sr0
    ACC pop, r3 mov-rn-a,
    ACC pop, r2 mov-rn-a,
-   k-call mpush
+   k-call mpush-tos
    k-ljmp-fwd sr1
 k-lab sr0
    ACC pop, r3 mov-rn-a,
@@ -747,7 +738,7 @@ k-lab kbase
    k-jz-fwd br0
    ACC pop, r3 mov-rn-a,
    ACC pop, r2 mov-rn-a,
-   k-call mpush
+   k-call mpush-tos
    k-ljmp-fwd br1
 k-lab br0
    ACC pop, r3 mov-rn-a,
@@ -769,7 +760,7 @@ k-lab ktib
    k-jz-fwd tr0
    ACC pop, r3 mov-rn-a,
    ACC pop, r2 mov-rn-a,
-   k-call mpush
+   k-call mpush-tos
    k-ljmp-fwd tr1
 k-lab tr0
    ACC pop, r3 mov-rn-a,
@@ -791,7 +782,7 @@ k-lab kntib
    k-jz-fwd nr0
    ACC pop, r3 mov-rn-a,
    ACC pop, r2 mov-rn-a,
-   k-call mpush
+   k-call mpush-tos
    k-ljmp-fwd nr1
 k-lab nr0
    ACC pop, r3 mov-rn-a,
@@ -813,7 +804,7 @@ k-lab ktoin
    k-jz-fwd ir0
    ACC pop, r3 mov-rn-a,
    ACC pop, r2 mov-rn-a,
-   k-call mpush
+   k-call mpush-tos
    k-ljmp-fwd ir1
 k-lab ir0
    ACC pop, r3 mov-rn-a,
@@ -835,7 +826,7 @@ k-lab ktlen
    k-jz-fwd tl0
    ACC pop, r3 mov-rn-a,
    ACC pop, r2 mov-rn-a,
-   k-call mpush
+   k-call mpush-tos
    k-ljmp-fwd tl1
 k-lab tl0
    ACC pop, r3 mov-rn-a,
@@ -848,10 +839,84 @@ k-lab tl1
    ret,
 s" tlen" 0 s" ktlen" k-pc k-word
 
-\ words/empty omitted: ~100B ROM; Proteus 4K needs blink CFA < $1000.
-\ Soft console project can restore them when ROM budget allows.
+\ words/empty omitted — ROM budget for hard blink CFA < $1000.
 
-s" =" 0 s" kexit" k-pc k-word
+k-lab kwords
+   $20 mov-a#, k-call txa      \ leading space (separate from echoed input)
+   VLATEST >dp
+   k-call xfetch              \ r2:r3 = latest
+k-lab wloop
+   r2 mov-a-rn, r3 orl-a-rn,  \ check if NULL
+   k-jz-fwd wdone
+   VH >dp
+   k-call xstore               \ VH = r2:r3 (current entry addr)
+   VH >dp
+   k-call xfetch               \ r2:r3 = VH = entry addr
+   r2 mov-a-rn, 2 add-a#, r2 mov-rn-a,  \ r2 = addr+2 (skip link)
+   r3 mov-a-rn, 0 addc-a#, r3 mov-rn-a,
+   r2 mov-a-rn, DPL mov-di-a,
+   r3 mov-a-rn, DPH mov-di-a,
+   mxa,                        \ read length byte
+   r0 mov-rn-a,                \ r0 = name length
+   r0 mov-a-rn,                \ check if 0
+   k-jz-fwd wsp
+   r2 mov-a-rn, DPL mov-di-a,  \ DPTR back to name field
+   r3 mov-a-rn, DPH mov-di-a,
+   incdp, incdp,                \ skip link(2), now at len(2), then name chars
+k-lab wch
+   mxa,                        \ read char from name
+   r1 mov-rn-a,                \ save char
+   DPL mov-a-di, ACC push,     \ save DPTR
+   DPH mov-a-di, ACC push,
+   r0 mov-a-rn, ACC push,     \ save r0
+   r1 mov-a-rn,                \ A = char
+   k-call txa                  \ emit
+   ACC pop, r0 mov-rn-a,      \ restore r0
+   ACC pop, DPH mov-di-a,     \ restore DPTR
+   ACC pop, DPL mov-di-a,
+   incdp,                      \ DPTR++
+   r0 s" wch" k-pc djnz-rn,    \ r0--, loop for all chars
+k-lab wsp
+   $20 mov-a#, k-call txa      \ space
+   VH >dp
+   k-call xfetch               \ r2:r3 = VH = current entry
+   r2 mov-a-rn, DPL mov-di-a,
+   r3 mov-a-rn, DPH mov-di-a,
+   mxa,                        \ read first byte (link lo)
+   r2 mov-rn-a,                \ r2 = link lo
+   incdp,
+   mxa,                        \ read link hi
+   r3 mov-rn-a,                \ r3 = link hi
+   k-ljmp-fwd wloop
+k-lab wdone
+   ret,
+s" words" 0 s" kwords" k-pc k-word
+
+k-lab kempty
+   DSP0 mov-dptr#,
+   DPL mov-a-di, r2 mov-rn-a,
+   DPH mov-a-di, r3 mov-rn-a,
+   VPSP >dp
+   k-call xstore               \ VPSP = DSP0
+   r2 $00 mov-rn#, r3 $00 mov-rn#,
+   VDEPTH >dp
+   k-call xstore               \ VDEPTH = 0
+   ret,
+s" empty" 0 s" kempty" k-pc k-word
+
+k-lab keq
+   r2 mov-a-rn, r4 mov-rn-a,
+   r3 mov-a-rn, r5 mov-rn-a,
+   k-call mpop
+   r2 mov-a-rn, r4 xrl-a-rn,
+   r3 mov-a-rn, r5 xrl-a-rn,
+   k-jz-fwd eq1
+   r2 $00 mov-rn#, r3 $00 mov-rn#,
+   ret,
+k-lab eq1
+   r2 $FF mov-rn#, r3 $FF mov-rn#,
+   ret,
+s" =" 0 s" keq" k-pc k-word
 
 \ No k-stubs: each name burns ROM; blink/colon use compiled lcall/ljmp.
 \ Keeps the image under 4K for Proteus 80C51 / 4K ROM models.

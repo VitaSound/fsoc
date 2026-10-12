@@ -244,69 +244,76 @@ k-lab dp-vpsp
    ret,
 
 k-lab mpush
-   r2 mov-a-rn, ACC push,
-   r3 mov-a-rn, ACC push,
+   r2 mov-a-rn, r4 mov-rn-a,
+   r3 mov-a-rn, r5 mov-rn-a,
    k-call vpsp-dp
    DPL mov-a-di, clr-c, 2 subb-a#, DPL mov-di-a,
    DPH mov-a-di, 0 subb-a#, DPH mov-di-a,
-   ACC pop, r3 mov-rn-a,
-   ACC pop, r2 mov-rn-a,
-   DPL mov-a-di, ACC push,
-   DPH mov-a-di, ACC push,
+   r5 mov-a-rn, r3 mov-rn-a,
+   r4 mov-a-rn, r2 mov-rn-a,
+   DPL mov-a-di, r6 mov-rn-a,
+   DPH mov-a-di, r7 mov-rn-a,
    k-call xstore
-   ACC pop, DPH mov-di-a,
-   ACC pop, DPL mov-di-a,
-   r2 mov-a-rn, ACC push,
-   r3 mov-a-rn, ACC push,
+   r7 mov-a-rn, DPH mov-di-a,
+   r6 mov-a-rn, DPL mov-di-a,
+   r2 mov-a-rn, r4 mov-rn-a,
+   r3 mov-a-rn, r5 mov-rn-a,
    k-call dp-vpsp
-   ACC pop, r3 mov-rn-a,
-   ACC pop, r2 mov-rn-a,
+   r5 mov-a-rn, r3 mov-rn-a,
+   r4 mov-a-rn, r2 mov-rn-a,
+   ret,
+
+\ Push cell in r6:r7 under TOS (r2:r3 unchanged). kswap passes r6:r7 explicitly.
+k-lab mpush-tos
+   r2 mov-a-rn, r6 mov-rn-a,
+   r3 mov-a-rn, r7 mov-rn-a,
+   k-call mpush
    ret,
 
 k-lab mpop
    k-call vpsp-dp
-   DPL mov-a-di, ACC push,
-   DPH mov-a-di, ACC push,
+   DPL mov-a-di, r4 mov-rn-a,
+   DPH mov-a-di, r5 mov-rn-a,
    k-call xfetch
-   ACC pop, DPH mov-di-a,
-   ACC pop, DPL mov-di-a,
+   r5 mov-a-rn, DPH mov-di-a,
+   r4 mov-a-rn, DPL mov-di-a,
    incdp, incdp,
-   r2 mov-a-rn, ACC push,
-   r3 mov-a-rn, ACC push,
+   r2 mov-a-rn, r6 mov-rn-a,
+   r3 mov-a-rn, r7 mov-rn-a,
    k-call dp-vpsp
-   ACC pop, r3 mov-rn-a,
-   ACC pop, r2 mov-rn-a,
+   r7 mov-a-rn, r3 mov-rn-a,
+   r6 mov-a-rn, r2 mov-rn-a,
    ret,
 
 k-lab dinc
-   r2 mov-a-rn, ACC push,
-   r3 mov-a-rn, ACC push,
+   r2 mov-a-rn, r4 mov-rn-a,
+   r3 mov-a-rn, r5 mov-rn-a,
    VDEPTH >dp
    k-call xfetch
    r2 mov-a-rn, 1 add-a#, r2 mov-rn-a,
    r3 mov-a-rn, 0 addc-a#, r3 mov-rn-a,
    VDEPTH >dp
    k-call xstore
-   ACC pop, r3 mov-rn-a,
-   ACC pop, r2 mov-rn-a,
+   r5 mov-a-rn, r3 mov-rn-a,
+   r4 mov-a-rn, r2 mov-rn-a,
    ret,
 
 k-lab ddec
-   r2 mov-a-rn, ACC push,
-   r3 mov-a-rn, ACC push,
+   r2 mov-a-rn, r4 mov-rn-a,
+   r3 mov-a-rn, r5 mov-rn-a,
    VDEPTH >dp
    k-call xfetch
    r2 mov-a-rn, clr-c, 1 subb-a#, r2 mov-rn-a,
    r3 mov-a-rn, 0 subb-a#, r3 mov-rn-a,
    VDEPTH >dp
    k-call xstore
-   ACC pop, r3 mov-rn-a,
-   ACC pop, r2 mov-rn-a,
+   r5 mov-a-rn, r3 mov-rn-a,
+   r4 mov-a-rn, r2 mov-rn-a,
    ret,
 
 k-lab dropp
-   r2 mov-a-rn, ACC push,
-   r3 mov-a-rn, ACC push,
+   r2 mov-a-rn, r4 mov-rn-a,
+   r3 mov-a-rn, r5 mov-rn-a,
    VDEPTH >dp
    k-call xfetch
    r2 mov-a-rn, r3 orl-a-rn,
@@ -316,19 +323,19 @@ k-lab dropp
    r2 mov-a-rn, clr-c, 1 subb-a#,
    k-jz-fwd dr1
 k-lab drm
-   ACC pop, r3 mov-rn-a,
-   ACC pop, r2 mov-rn-a,
+   r5 mov-a-rn, r3 mov-rn-a,
+   r4 mov-a-rn, r2 mov-rn-a,
    k-call mpop
    k-call ddec
    ret,
 k-lab dr1
-   ACC pop, r3 mov-rn-a,
-   ACC pop, r2 mov-rn-a,
+   r5 mov-a-rn, r3 mov-rn-a,
+   r4 mov-a-rn, r2 mov-rn-a,
    k-call ddec
    ret,
 k-lab dr0
-   ACC pop, r3 mov-rn-a,
-   ACC pop, r2 mov-rn-a,
+   r5 mov-a-rn, r3 mov-rn-a,
+   r4 mov-a-rn, r2 mov-rn-a,
    ret,
 
 \ Literal bytes sit in code after LCALL — always MOVC (never XRAM).
@@ -355,7 +362,7 @@ k-lab klit
    ACC pop, r2 mov-rn-a,
    DPL mov-a-di, ACC push,
    DPH mov-a-di, ACC push,
-   k-call mpush
+   k-call mpush-tos
    ACC pop, DPH mov-di-a,
    ACC pop, DPL mov-di-a,
    k-ljmp-fwd kl2
@@ -430,10 +437,13 @@ k-lab cmret
    k-call xstore
    ret,
 
-\ Real MCS-51 / Proteus: LCALL pushes PCL then PCH (PCH on top). Soft r8051 matches.
+\ Jump to the CFA in r4:r5 (r2:r3 = TOS, kept for the word body). intrun and
+\ kexecute stage the CFA into r4:r5 before k-call runhl; boot (cold) does the
+\ same. PUSH/RET reconstructs PC = {hi,lo} from a low-then-high push pair, so
+\ push r4 (lo) then r5 (hi). Do NOT touch r2:r3 — the word reads them as TOS.
 k-lab runhl
-   r2 mov-a-rn, ACC push,
-   r3 mov-a-rn, ACC push,
+   r4 mov-a-rn, ACC push,
+   r5 mov-a-rn, ACC push,
    ret,
 
 k-lab kdup
@@ -445,7 +455,7 @@ k-lab kdup
    k-jz-fwd dup0
    ACC pop, r3 mov-rn-a,
    ACC pop, r2 mov-rn-a,
-   k-call mpush
+   k-call mpush-tos
    k-call dinc
    ret,
 k-lab dup0
@@ -461,23 +471,23 @@ k-lab kdrop
 s" drop" 0 s" kdrop" k-pc k-word
 
 k-lab kswap
-   r2 mov-a-rn, r6 mov-rn-a,
-   r3 mov-a-rn, r7 mov-rn-a,
-   k-call mpop
    r2 mov-a-rn, ACC push,
    r3 mov-a-rn, ACC push,
-   r6 mov-a-rn, r2 mov-rn-a,
-   r7 mov-a-rn, r3 mov-rn-a,
+   k-call mpop
+   ACC pop, r5 mov-rn-a,
+   ACC pop, r4 mov-rn-a,
+   r4 mov-a-rn, r6 mov-rn-a,
+   r5 mov-a-rn, r7 mov-rn-a,
    k-call mpush
-   ACC pop, r3 mov-rn-a,
-   ACC pop, r2 mov-rn-a,
    ret,
 s" swap" 0 s" kswap" k-pc k-word
 
 k-lab kplus
-   r2 mov-a-rn, r4 mov-rn-a,
-   r3 mov-a-rn, r5 mov-rn-a,
+   r2 mov-a-rn, ACC push,
+   r3 mov-a-rn, ACC push,
    k-call mpop
+   ACC pop, r5 mov-rn-a,
+   ACC pop, r4 mov-rn-a,
    r2 mov-a-rn, r4 add-a-rn, r2 mov-rn-a,
    r3 mov-a-rn, r5 addc-a-rn, r3 mov-rn-a,
    k-call ddec
@@ -498,9 +508,11 @@ k-lab kminus
 s" -" 0 s" kminus" k-pc k-word
 
 k-lab kxor
-   r2 mov-a-rn, r4 mov-rn-a,
-   r3 mov-a-rn, r5 mov-rn-a,
+   r2 mov-a-rn, ACC push,
+   r3 mov-a-rn, ACC push,
    k-call mpop
+   ACC pop, r5 mov-rn-a,
+   ACC pop, r4 mov-rn-a,
    r2 mov-a-rn, r4 xrl-a-rn, r2 mov-rn-a,
    r3 mov-a-rn, r5 xrl-a-rn, r3 mov-rn-a,
    k-call ddec
@@ -518,14 +530,13 @@ k-lab kstore
    r2 mov-a-rn, r4 mov-rn-a,
    r3 mov-a-rn, r5 mov-rn-a,
    k-call mpop
-   r2 mov-a-rn, ACC push,
-   r3 mov-a-rn, ACC push,
+   r2 mov-a-rn, r6 mov-rn-a,
+   r3 mov-a-rn, r7 mov-rn-a,
    r4 mov-a-rn, DPL mov-di-a,
    r5 mov-a-rn, DPH mov-di-a,
-   ACC pop, r3 mov-rn-a,
-   ACC pop, r2 mov-rn-a,
+   r7 mov-a-rn, r3 mov-rn-a,
+   r6 mov-a-rn, r2 mov-rn-a,
    k-call xstore
-   k-call mpop
    k-call ddec
    k-call ddec
    ret,
@@ -544,10 +555,10 @@ k-lab kcstore
    r2 mov-a-rn, r4 mov-rn-a,
    r3 mov-a-rn, r5 mov-rn-a,
    k-call mpop
-   r2 mov-a-rn, ACC push,
+   r2 mov-a-rn, r6 mov-rn-a,
    r4 mov-a-rn, DPL mov-di-a,
    r5 mov-a-rn, DPH mov-di-a,
-   ACC pop, movx@dptr-a,
+   r6 mov-a-rn, movx@dptr-a,
    k-call mpop
    k-call ddec
    k-call ddec
@@ -608,14 +619,16 @@ s" emit" 0 s" kemit" k-pc k-word
 k-lab kch
    ACC pop, DPH mov-di-a,
    ACC pop, DPL mov-di-a,
-   clra, movc@a+dptr, ACC push,
+   clra, movc@a+dptr, r6 mov-rn-a,
    incdp,
-   DPL mov-a-di, r4 mov-rn-a,
-   DPH mov-a-di, r5 mov-rn-a,
-   ACC pop,
+   DPL mov-a-di, ACC push,
+   DPH mov-a-di, ACC push,
+   r6 mov-a-rn,
    k-call txa
-   r4 mov-a-rn, ACC push,
-   r5 mov-a-rn, ACC push,
+   ACC pop, DPH mov-di-a,
+   ACC pop, DPL mov-di-a,
+   DPL mov-a-di, ACC push,
+   DPH mov-a-di, ACC push,
    ret,
 
 k-lab kcr
@@ -630,19 +643,21 @@ k-lab kspace
 s" space" 0 s" kspace" k-pc k-word
 
 k-lab kkey
-   r2 mov-a-rn, ACC push,
-   r3 mov-a-rn, ACC push,
+   r2 mov-a-rn, r4 mov-rn-a,
+   r3 mov-a-rn, r5 mov-rn-a,
    VDEPTH >dp
    k-call xfetch
    r2 mov-a-rn, r3 orl-a-rn,
    k-jz-fwd key0
-   ACC pop, r3 mov-rn-a,
-   ACC pop, r2 mov-rn-a,
+   r5 mov-a-rn, r3 mov-rn-a,
+   r4 mov-a-rn, r2 mov-rn-a,
+   r4 mov-a-rn, r6 mov-rn-a,
+   r5 mov-a-rn, r7 mov-rn-a,
    k-call mpush
    k-ljmp-fwd key1
 k-lab key0
-   ACC pop, r3 mov-rn-a,
-   ACC pop, r2 mov-rn-a,
+   r5 mov-a-rn, r3 mov-rn-a,
+   r4 mov-a-rn, r2 mov-rn-a,
 k-lab key1
    k-call keya
    r2 mov-rn-a,
@@ -703,7 +718,7 @@ k-lab kdepth
    ACC pop, r2 mov-rn-a,
    r4 mov-a-rn, r5 orl-a-rn,
    k-jz-fwd dep1
-   k-call mpush
+   k-call mpush-tos
 k-lab dep1
    r4 mov-a-rn, r2 mov-rn-a,
    r5 mov-a-rn, r3 mov-rn-a,
@@ -711,55 +726,65 @@ k-lab dep1
    ret,
 s" depth" 0 s" kdepth" k-pc k-word
 
-\ .s: depth in r1 (udot/div10 clobbers r0/r6). Stack grows down from DSP0.
 k-lab kdots
-   r2 mov-a-rn, ACC push,
-   r3 mov-a-rn, ACC push,
+   \ save TOS (r2:r3) to r4:r5 before any xfetch
+   r2 mov-a-rn, r4 mov-rn-a,
+   r3 mov-a-rn, r5 mov-rn-a,
+   \ print "<"
    $3C mov-a#, k-call txa
+   \ print VDEPTH using udot
    VDEPTH >dp
    k-call xfetch
-   r2 mov-a-rn, ACC push,
-   r3 mov-a-rn, ACC push,
+   r2 mov-a-rn,
+   r3 mov-a-rn,
    k-call udot
+   \ print "> "
    $3E mov-a#, k-call txa
    $20 mov-a#, k-call txa
-   ACC pop, r3 mov-rn-a,
-   ACC pop, r2 mov-rn-a,
+   \ check if VDEPTH == 0
+   VDEPTH >dp
+   k-call xfetch
    r2 mov-a-rn, r3 orl-a-rn,
-   k-jz-fwd dsdone
+   k-jz-fwd kdots_done
+   \ loop counter r1 = VDEPTH - 1 (print all but TOS)
+   \ Use r1 (udot uses r0/r6; xfb for XRAM doesn't touch r1)
    r2 mov-a-rn, r1 mov-rn-a,
    r1 dec-rn,
    r1 mov-a-rn,
-   k-jz-fwd dstos
-   DSP0 >dp
-k-lab dsloop
+   k-jz-fwd kdots_last
+   \ DPTR = DSP0 (top of stack area, we'll decrement toward lower addr)
+   DSP0 mov-dptr#,
+k-lab kdots_loop
+   \ DPTR -= 2 toward next stack cell (stack grows down)
    DPL mov-a-di, clr-c, 2 subb-a#, DPL mov-di-a,
    DPH mov-a-di, 0 subb-a#, DPH mov-di-a,
+   \ save DPTR + r1 (xfetch advances DPTR by 2)
    DPL mov-a-di, ACC push,
    DPH mov-a-di, ACC push,
    r1 mov-a-rn, ACC push,
+   \ fetch cell at DPTR and print
    k-call xfetch
    k-call udot
    $20 mov-a#, k-call txa
+   \ restore DPTR + r1
    ACC pop, r1 mov-rn-a,
    ACC pop, DPH mov-di-a,
    ACC pop, DPL mov-di-a,
-   r1 s" dsloop" k-pc djnz-rn,
-k-lab dstos
-   ACC pop, r3 mov-rn-a,
-   ACC pop, r2 mov-rn-a,
-   r2 mov-a-rn, ACC push,
-   r3 mov-a-rn, ACC push,
+   r1 s" kdots_loop" k-pc djnz-rn,
+k-lab kdots_last
+   \ print TOS from r4:r5
+   r4 mov-a-rn, r2 mov-rn-a,
+   r5 mov-a-rn, r3 mov-rn-a,
    k-call udot
    $20 mov-a#, k-call txa
-   ACC pop, r3 mov-rn-a,
-   ACC pop, r2 mov-rn-a,
-   ret,
-k-lab dsdone
-   ACC pop, r3 mov-rn-a,
-   ACC pop, r2 mov-rn-a,
+k-lab kdots_done
+   \ restore TOS
+   r5 mov-a-rn, r3 mov-rn-a,
+   r4 mov-a-rn, r2 mov-rn-a,
    ret,
 s" .s" 0 s" kdots" k-pc k-word
+
+\ .s was omitted — ROM budget for hard blink CFA < $1000. Now included for soft console.
 
 \ STC: drop return into the colon body, RET to that colon's caller.
 k-lab kexit

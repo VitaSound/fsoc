@@ -170,6 +170,16 @@ def gen_isa(cpu: str, info: dict, out: dict, dry: bool) -> None:
     if rc != 0:
         out["isa_detail"] = output.strip()[:200]
 
+    # Drift gate: when the CPU has a hand-written fasm words.4th, the spec
+    # must agree with every opcode emitted there (catches spec/fasm drift).
+    words = FASM / cpu / "words.4th"
+    if words.exists():
+        rc, output = run([sys.executable, str(TOOLS / "isa_to_fasm.py"), "--check",
+                          str(ISA / spec), str(words)])
+        out["isa_check"] = "ok" if rc == 0 else "error rc=" + str(rc)
+        if rc != 0:
+            out["isa_check_detail"] = output.strip()[-300:]
+
 
 def main() -> int:
     args = sys.argv[1:]
@@ -218,6 +228,8 @@ def main() -> int:
         for t in ("stack", "cross", "con", "isa"):
             if t in out and out[t].startswith("error"):
                 any_error = True
+        if str(out.get("isa_check", "")).startswith("error"):
+            any_error = True
 
     print()
 

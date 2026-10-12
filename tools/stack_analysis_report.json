@@ -1,16 +1,225 @@
 {
   "summary": {
-    "targets_analyzed": 8,
-    "total_words": 405
+    "total_words": 405,
+    "targets_analyzed": 8
   },
   "targets": {
-    "msl16": {
-      "target": "msl16",
+    "8051": {
+      "target": "8051",
       "kernel_files": [
-        "fsys/kernel/msl16/kernel.4th"
+        "fsys/kernel/8051/kernel-b.4th",
+        "fsys/kernel/8051/kernel.4th"
       ],
-      "words_analyzed": 39,
+      "words_analyzed": 42,
       "effects": {
+        "header": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from 8051 definition"
+          ]
+        },
+        "find": {
+          "inputs": [
+            "c-addr",
+            "u"
+          ],
+          "outputs": [
+            "xt",
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "number": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from 8051 definition"
+          ]
+        },
+        ",": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "literal": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "execute": {
+          "inputs": [
+            "xt"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "parse-name": {
+          "inputs": [],
+          "outputs": [
+            "c-addr",
+            "u"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "accept": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from 8051 definition"
+          ]
+        },
+        ":": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ";": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "quit": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "here": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "latest": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "state": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "base": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "tib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from 8051 definition"
+          ]
+        },
+        "ntib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from 8051 definition"
+          ]
+        },
+        ">in": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from 8051 definition"
+          ]
+        },
+        "tlen": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from 8051 definition"
+          ]
+        },
+        "=": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
         "dup": {
           "inputs": [
             "x"
@@ -57,6 +266,18 @@
           "confidence": 1.0,
           "notes": []
         },
+        "-": {
+          "inputs": [
+            "n1",
+            "n2"
+          ],
+          "outputs": [
+            "n3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
         "xor": {
           "inputs": [
             "x1",
@@ -89,6 +310,53 @@
           "source": "ans",
           "confidence": 1.0,
           "notes": []
+        },
+        "c@": {
+          "inputs": [
+            "c-addr"
+          ],
+          "outputs": [
+            "c"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "c!": {
+          "inputs": [
+            "c",
+            "c-addr"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "p1!": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from 8051 definition"
+          ]
+        },
+        "dly": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from 8051 definition"
+          ]
         },
         "0=": {
           "inputs": [
@@ -168,507 +436,9 @@
           "confidence": 1.0,
           "notes": []
         },
-        "header": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from msl16 definition"
-          ]
-        },
-        "find": {
-          "inputs": [
-            "c-addr",
-            "u"
-          ],
-          "outputs": [
-            "xt",
-            "flag"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "number": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from msl16 definition"
-          ]
-        },
-        ",": {
-          "inputs": [
-            "x"
-          ],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "literal": {
-          "inputs": [],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "execute": {
-          "inputs": [
-            "xt"
-          ],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
         "exit": {
           "inputs": [],
           "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "accept": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from msl16 definition"
-          ]
-        },
-        "parse-name": {
-          "inputs": [],
-          "outputs": [
-            "c-addr",
-            "u"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        ":": {
-          "inputs": [],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        ";": {
-          "inputs": [],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "quit": {
-          "inputs": [],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "here": {
-          "inputs": [],
-          "outputs": [
-            "a-addr"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "latest": {
-          "inputs": [],
-          "outputs": [
-            "a-addr"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "state": {
-          "inputs": [],
-          "outputs": [
-            "a-addr"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "base": {
-          "inputs": [],
-          "outputs": [
-            "a-addr"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "tib": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from msl16 definition"
-          ]
-        },
-        "ntib": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from msl16 definition"
-          ]
-        },
-        ">in": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from msl16 definition"
-          ]
-        },
-        "tlen": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from msl16 definition"
-          ]
-        },
-        "words": {
-          "inputs": [],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "empty": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from msl16 definition"
-          ]
-        },
-        "=": {
-          "inputs": [
-            "x1",
-            "x2"
-          ],
-          "outputs": [
-            "flag"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        }
-      }
-    },
-    "cd16": {
-      "target": "cd16",
-      "kernel_files": [
-        "fsys/kernel/cd16/kernel.4th"
-      ],
-      "words_analyzed": 24,
-      "effects": {
-        "dup": {
-          "inputs": [
-            "x"
-          ],
-          "outputs": [
-            "x",
-            "x"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "drop": {
-          "inputs": [
-            "x"
-          ],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "swap": {
-          "inputs": [
-            "x1",
-            "x2"
-          ],
-          "outputs": [
-            "x2",
-            "x1"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "over": {
-          "inputs": [
-            "x1",
-            "x2"
-          ],
-          "outputs": [
-            "x1",
-            "x2",
-            "x1"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "and": {
-          "inputs": [
-            "x1",
-            "x2"
-          ],
-          "outputs": [
-            "x3"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "or": {
-          "inputs": [
-            "x1",
-            "x2"
-          ],
-          "outputs": [
-            "x3"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "xor": {
-          "inputs": [
-            "x1",
-            "x2"
-          ],
-          "outputs": [
-            "x3"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "invert": {
-          "inputs": [
-            "n1"
-          ],
-          "outputs": [
-            "n2"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "here": {
-          "inputs": [],
-          "outputs": [
-            "a-addr"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "latest": {
-          "inputs": [],
-          "outputs": [
-            "a-addr"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "phere": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from cd16 definition"
-          ]
-        },
-        "state": {
-          "inputs": [],
-          "outputs": [
-            "a-addr"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "base": {
-          "inputs": [],
-          "outputs": [
-            "a-addr"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "ntib": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from cd16 definition"
-          ]
-        },
-        "tlen": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from cd16 definition"
-          ]
-        },
-        "tib": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from cd16 definition"
-          ]
-        },
-        "allot": {
-          "inputs": [
-            "n"
-          ],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "depth": {
-          "inputs": [],
-          "outputs": [
-            "u"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "nth": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from cd16 definition"
-          ]
-        },
-        "rdrop": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from cd16 definition"
-          ]
-        },
-        "exit": {
-          "inputs": [],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "execute": {
-          "inputs": [
-            "xt"
-          ],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "emit": {
-          "inputs": [
-            "c"
-          ],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "key": {
-          "inputs": [],
-          "outputs": [
-            "c"
-          ],
           "source": "ans",
           "confidence": 1.0,
           "notes": []
@@ -1351,6 +1121,738 @@
         "again": {
           "inputs": [],
           "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        }
+      }
+    },
+    "bcpu": {
+      "target": "bcpu",
+      "kernel_files": [
+        "fsys/kernel/bcpu/kernel.4th"
+      ],
+      "words_analyzed": 42,
+      "effects": {
+        "dup": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [
+            "x",
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "drop": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "swap": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x2",
+            "x1"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "over": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x1",
+            "x2",
+            "x1"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "depth": {
+          "inputs": [],
+          "outputs": [
+            "u"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "and": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "or": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "xor": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "invert": {
+          "inputs": [
+            "n1"
+          ],
+          "outputs": [
+            "n2"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "rdrop": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "exit": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "execute": {
+          "inputs": [
+            "xt"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "emit": {
+          "inputs": [
+            "c"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "key": {
+          "inputs": [],
+          "outputs": [
+            "c"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "udot": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "allot": {
+          "inputs": [
+            "n"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "state": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "base": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "ntib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "tlen": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "tib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "here": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "latest": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "nth": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "litw": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "branch": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "zbranch": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "czbranch": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "cbranch": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "cto": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "czto": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "clit": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "nlen": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "ntype": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "header": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from bcpu definition"
+          ]
+        },
+        "if": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "then": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "else": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "begin": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "again": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "until": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "literal": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        }
+      }
+    },
+    "cd16": {
+      "target": "cd16",
+      "kernel_files": [
+        "fsys/kernel/cd16/kernel.4th"
+      ],
+      "words_analyzed": 24,
+      "effects": {
+        "dup": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [
+            "x",
+            "x"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "drop": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "swap": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x2",
+            "x1"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "over": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x1",
+            "x2",
+            "x1"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "and": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "or": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "xor": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "x3"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "invert": {
+          "inputs": [
+            "n1"
+          ],
+          "outputs": [
+            "n2"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "here": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "latest": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "phere": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from cd16 definition"
+          ]
+        },
+        "state": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "base": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "ntib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from cd16 definition"
+          ]
+        },
+        "tlen": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from cd16 definition"
+          ]
+        },
+        "tib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from cd16 definition"
+          ]
+        },
+        "allot": {
+          "inputs": [
+            "n"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "depth": {
+          "inputs": [],
+          "outputs": [
+            "u"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "nth": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from cd16 definition"
+          ]
+        },
+        "rdrop": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from cd16 definition"
+          ]
+        },
+        "exit": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "execute": {
+          "inputs": [
+            "xt"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "emit": {
+          "inputs": [
+            "c"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "key": {
+          "inputs": [],
+          "outputs": [
+            "c"
+          ],
           "source": "ans",
           "confidence": 1.0,
           "notes": []
@@ -3041,222 +3543,13 @@
         }
       }
     },
-    "8051": {
-      "target": "8051",
+    "msl16": {
+      "target": "msl16",
       "kernel_files": [
-        "fsys/kernel/8051/kernel-b.4th",
-        "fsys/kernel/8051/kernel.4th"
+        "fsys/kernel/msl16/kernel.4th"
       ],
-      "words_analyzed": 42,
+      "words_analyzed": 39,
       "effects": {
-        "header": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from 8051 definition"
-          ]
-        },
-        "find": {
-          "inputs": [
-            "c-addr",
-            "u"
-          ],
-          "outputs": [
-            "xt",
-            "flag"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "number": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from 8051 definition"
-          ]
-        },
-        ",": {
-          "inputs": [
-            "x"
-          ],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "literal": {
-          "inputs": [],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "execute": {
-          "inputs": [
-            "xt"
-          ],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "parse-name": {
-          "inputs": [],
-          "outputs": [
-            "c-addr",
-            "u"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "accept": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from 8051 definition"
-          ]
-        },
-        ":": {
-          "inputs": [],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        ";": {
-          "inputs": [],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "quit": {
-          "inputs": [],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "here": {
-          "inputs": [],
-          "outputs": [
-            "a-addr"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "latest": {
-          "inputs": [],
-          "outputs": [
-            "a-addr"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "state": {
-          "inputs": [],
-          "outputs": [
-            "a-addr"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "base": {
-          "inputs": [],
-          "outputs": [
-            "a-addr"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "tib": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from 8051 definition"
-          ]
-        },
-        "ntib": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from 8051 definition"
-          ]
-        },
-        ">in": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from 8051 definition"
-          ]
-        },
-        "tlen": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from 8051 definition"
-          ]
-        },
-        "=": {
-          "inputs": [
-            "x1",
-            "x2"
-          ],
-          "outputs": [
-            "flag"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
         "dup": {
           "inputs": [
             "x"
@@ -3303,18 +3596,6 @@
           "confidence": 1.0,
           "notes": []
         },
-        "-": {
-          "inputs": [
-            "n1",
-            "n2"
-          ],
-          "outputs": [
-            "n3"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
         "xor": {
           "inputs": [
             "x1",
@@ -3347,53 +3628,6 @@
           "source": "ans",
           "confidence": 1.0,
           "notes": []
-        },
-        "c@": {
-          "inputs": [
-            "c-addr"
-          ],
-          "outputs": [
-            "c"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "c!": {
-          "inputs": [
-            "c",
-            "c-addr"
-          ],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "p1!": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from 8051 definition"
-          ]
-        },
-        "dly": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from 8051 definition"
-          ]
         },
         "0=": {
           "inputs": [
@@ -3473,127 +3707,7 @@
           "confidence": 1.0,
           "notes": []
         },
-        "exit": {
-          "inputs": [],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        }
-      }
-    },
-    "bcpu": {
-      "target": "bcpu",
-      "kernel_files": [
-        "fsys/kernel/bcpu/kernel.4th"
-      ],
-      "words_analyzed": 42,
-      "effects": {
-        "dup": {
-          "inputs": [
-            "x"
-          ],
-          "outputs": [
-            "x",
-            "x"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "drop": {
-          "inputs": [
-            "x"
-          ],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "swap": {
-          "inputs": [
-            "x1",
-            "x2"
-          ],
-          "outputs": [
-            "x2",
-            "x1"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "over": {
-          "inputs": [
-            "x1",
-            "x2"
-          ],
-          "outputs": [
-            "x1",
-            "x2",
-            "x1"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "depth": {
-          "inputs": [],
-          "outputs": [
-            "u"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "and": {
-          "inputs": [
-            "x1",
-            "x2"
-          ],
-          "outputs": [
-            "x3"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "or": {
-          "inputs": [
-            "x1",
-            "x2"
-          ],
-          "outputs": [
-            "x3"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "xor": {
-          "inputs": [
-            "x1",
-            "x2"
-          ],
-          "outputs": [
-            "x3"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "invert": {
-          "inputs": [
-            "n1"
-          ],
-          "outputs": [
-            "n2"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "rdrop": {
+        "header": {
           "inputs": [
             "?"
           ],
@@ -3603,10 +3717,45 @@
           "source": "unknown",
           "confidence": 0.0,
           "notes": [
-            "No ANS contract, could not infer from bcpu definition"
+            "No ANS contract, could not infer from msl16 definition"
           ]
         },
-        "exit": {
+        "find": {
+          "inputs": [
+            "c-addr",
+            "u"
+          ],
+          "outputs": [
+            "xt",
+            "flag"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "number": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from msl16 definition"
+          ]
+        },
+        ",": {
+          "inputs": [
+            "x"
+          ],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "literal": {
           "inputs": [],
           "outputs": [],
           "source": "ans",
@@ -3622,25 +3771,14 @@
           "confidence": 1.0,
           "notes": []
         },
-        "emit": {
-          "inputs": [
-            "c"
-          ],
+        "exit": {
+          "inputs": [],
           "outputs": [],
           "source": "ans",
           "confidence": 1.0,
           "notes": []
         },
-        "key": {
-          "inputs": [],
-          "outputs": [
-            "c"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "udot": {
+        "accept": {
           "inputs": [
             "?"
           ],
@@ -3650,14 +3788,54 @@
           "source": "unknown",
           "confidence": 0.0,
           "notes": [
-            "No ANS contract, could not infer from bcpu definition"
+            "No ANS contract, could not infer from msl16 definition"
           ]
         },
-        "allot": {
-          "inputs": [
-            "n"
+        "parse-name": {
+          "inputs": [],
+          "outputs": [
+            "c-addr",
+            "u"
           ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ":": {
+          "inputs": [],
           "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        ";": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "quit": {
+          "inputs": [],
+          "outputs": [],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "here": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
+          "source": "ans",
+          "confidence": 1.0,
+          "notes": []
+        },
+        "latest": {
+          "inputs": [],
+          "outputs": [
+            "a-addr"
+          ],
           "source": "ans",
           "confidence": 1.0,
           "notes": []
@@ -3680,6 +3858,19 @@
           "confidence": 1.0,
           "notes": []
         },
+        "tib": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from msl16 definition"
+          ]
+        },
         "ntib": {
           "inputs": [
             "?"
@@ -3690,7 +3881,20 @@
           "source": "unknown",
           "confidence": 0.0,
           "notes": [
-            "No ANS contract, could not infer from bcpu definition"
+            "No ANS contract, could not infer from msl16 definition"
+          ]
+        },
+        ">in": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from msl16 definition"
           ]
         },
         "tlen": {
@@ -3703,241 +3907,37 @@
           "source": "unknown",
           "confidence": 0.0,
           "notes": [
-            "No ANS contract, could not infer from bcpu definition"
+            "No ANS contract, could not infer from msl16 definition"
           ]
         },
-        "tib": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from bcpu definition"
-          ]
-        },
-        "here": {
-          "inputs": [],
-          "outputs": [
-            "a-addr"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "latest": {
-          "inputs": [],
-          "outputs": [
-            "a-addr"
-          ],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "nth": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from bcpu definition"
-          ]
-        },
-        "litw": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from bcpu definition"
-          ]
-        },
-        "branch": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from bcpu definition"
-          ]
-        },
-        "zbranch": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from bcpu definition"
-          ]
-        },
-        "czbranch": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from bcpu definition"
-          ]
-        },
-        "cbranch": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from bcpu definition"
-          ]
-        },
-        "cto": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from bcpu definition"
-          ]
-        },
-        "czto": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from bcpu definition"
-          ]
-        },
-        "clit": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from bcpu definition"
-          ]
-        },
-        "nlen": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from bcpu definition"
-          ]
-        },
-        "ntype": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from bcpu definition"
-          ]
-        },
-        "header": {
-          "inputs": [
-            "?"
-          ],
-          "outputs": [
-            "?"
-          ],
-          "source": "unknown",
-          "confidence": 0.0,
-          "notes": [
-            "No ANS contract, could not infer from bcpu definition"
-          ]
-        },
-        "if": {
+        "words": {
           "inputs": [],
           "outputs": [],
           "source": "ans",
           "confidence": 1.0,
           "notes": []
         },
-        "then": {
-          "inputs": [],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
+        "empty": {
+          "inputs": [
+            "?"
+          ],
+          "outputs": [
+            "?"
+          ],
+          "source": "unknown",
+          "confidence": 0.0,
+          "notes": [
+            "No ANS contract, could not infer from msl16 definition"
+          ]
         },
-        "else": {
-          "inputs": [],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "begin": {
-          "inputs": [],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "again": {
-          "inputs": [],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "until": {
-          "inputs": [],
-          "outputs": [],
-          "source": "ans",
-          "confidence": 1.0,
-          "notes": []
-        },
-        "literal": {
-          "inputs": [],
-          "outputs": [],
+        "=": {
+          "inputs": [
+            "x1",
+            "x2"
+          ],
+          "outputs": [
+            "flag"
+          ],
           "source": "ans",
           "confidence": 1.0,
           "notes": []

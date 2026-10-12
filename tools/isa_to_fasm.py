@@ -10,6 +10,7 @@ Validates round-trip: fasm assembled bytes → Verilog instruction.v decoder mat
 """
 
 import json
+import re
 import yaml
 import sys
 from pathlib import Path
@@ -40,6 +41,7 @@ class Register:
     bit_width: int = 8
     description: str = ""
     bits: Dict[int, str] = field(default_factory=dict)  # bit position -> name
+    bit_addresses: Dict[str, int] = field(default_factory=dict)  # bit name -> absolute bit address
 
 
 @dataclass
@@ -428,11 +430,96 @@ def load_spec(spec_path: Path) -> ISASpec:
     )
 
 
+def check_fasm(words_path: Path) -> Tuple[Dict[str, int], List[str]]:
+    """Extract opcodes from a hand-written fasm words.4th.
+
+    Returns (word -> opcode byte, list of unparseable comma-word names).
+    Recognizes the generator's two shapes:
+      $XX mcs-op1 name,            -- one-byte opcode
+      : name, ( a -- ) $XX fasm-emit ... ;   -- multi-byte, opcode is the first emit
+    """
+    content = words_path.read_text()
+    opcodes: Dict[str, int] = {}
+    unparseable: List[str] = []
+
+    # One-byte opcodes: "$XX mcs-op1 name," (name may contain @ + characters).
+    for m in re.finditer(r"^\$([0-9A-Fa-f]{2})[ \t]+\w*-op1[ \t]+([^,\s]+),", content, re.MULTILINE):
+        opcodes[m.group(2) + ","] = int(m.group(1), 16)
+
+    # Colon words: collect each body up to its terminating ';' (one or many lines).
+    lines = content.splitlines()
+    i = 0
+    while i < len(lines):
+        m = re.match(r"^:\s*(\w+,)\s*\(", lines[i])
+        if not m:
+            i += 1
+            continue
+        name = m.group(1)
+        body = lines[i][m.end():]
+        j = i + 1
+        while ";" not in body:
+            body += " " + lines[j].strip()
+            j += 1
+        if name in ("db,", "dw,") or name in opcodes:
+            i = j
+            continue
+        # Opcode = the first hex constant the word emits:
+        #   $XX fasm-emit ...            (direct)
+        #   ... swap $XX + fasm-emit     (base + Rn offset)
+        om = re.search(r"\$([0-9A-Fa-f]{2})(?:\s+fasm-emit|\s+\+[ \t]*fasm-emit)", body)
+        if om:
+            opcodes[name] = int(om.group(1), 16)
+        else:
+            unparseable.append(name)
+        i = j
+    return opcodes, unparseable
+
+
+def fasm_name_to_mnemonic(word: str) -> str:
+    """Map a fasm comma-word name to the spec mnemonic it assembles."""
+    base = word.rstrip(",")
+    if base.endswith("#"):
+        # Immediate forms: the '#' marks a #data operand (mov-a# -> mov_a_num).
+        return base[:-1].replace("-", "_") + "_num"
+    # Addressing punctuation: movc@a+dptr -> movc_a_dptr, movxa@dptr -> movx_a_dptr.
+    return re.sub(r"(?<=[a-z0-9])@", "_a_", base).replace("+", "_").replace("-", "_")
+
+
+def spec_matches_fasm(spec: ISASpec, opcodes: Dict[str, int]) -> List[str]:
+    """Report drift between the ISA spec and the hand-written fasm opcodes."""
+    by_mnemonic = {i.mnemonic: i for i in spec.instructions}
+    errors = []
+    for word, opcode in sorted(opcodes.items()):
+        instr = by_mnemonic.get(fasm_name_to_mnemonic(word))
+        if instr is None or instr.opcode is None:
+            continue  # no spec entry or variable encoding (ajmp/acall page masks)
+        if instr.opcode != opcode:
+            errors.append(f"{word}: fasm=0x{opcode:02X} spec=0x{instr.opcode:02X} ({instr.mnemonic})")
+    return errors
+
+
 def main():
     if len(sys.argv) < 3:
         print("Usage: isa_to_fasm.py <spec.json|spec.yaml> <output_dir> [--validate verilog_file]")
+        print("       isa_to_fasm.py --check <spec.json> <fasm/words.4th>")
         print("       isa_to_fasm.py --create-template <arch> <output_dir>")
         sys.exit(1)
+
+    if sys.argv[1] == '--check':
+        spec = load_spec(Path(sys.argv[2]))
+        words_path = Path(sys.argv[3])
+        opcodes, unparseable = check_fasm(words_path)
+        errors = spec_matches_fasm(spec, opcodes)
+        print(f"{words_path.name}: {len(opcodes)} comma words parsed, {len(unparseable)} without a leading opcode")
+        for u in unparseable:
+            print(f"  (no-opcode) {u}")
+        if errors:
+            print("\nSPEC/FASM DRIFT:")
+            for e in errors:
+                print(f"  - {e}")
+            sys.exit(1)
+        print("spec matches fasm opcodes")
+        return
 
     if sys.argv[1] == '--create-template':
         arch = sys.argv[2]

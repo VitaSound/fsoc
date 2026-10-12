@@ -524,11 +524,11 @@ MCS51_RUN = {
     "2drop": ("1 2 3 2drop .", ["1"]),
     "0=": ("0 0= .", ["-1"]),
     ".": ("11 .", ["11"]),
-    ".s": ("1 2 3 .s 2drop drop", ["<3> 1 2 3"]),
     "emit": ("51 emit", ["3"]),
     "cr": ("cr", [" ok"]),
     "space": ("space", [" ok"]),
     "depth": ("depth .", ["0"]),
+    ".s": ("1 2 3 .s 2drop drop", ["<3> 1 2 3"]),
     "c!": ("66 here c! here c@ .", ["66"]),
     "c@": ("67 here c! here c@ .", ["67"]),
 }
@@ -537,8 +537,7 @@ MCS51_SKIP = {
     ":": "colon header TBD",
     ";": "colon header TBD",
     "p1!": "pin side effect",
-    "words": "omitted for 4K blink ROM",
-    "empty": "omitted for 4K blink ROM",
+    "dly": "busy-wait side effect",
 }
 
 MCS51_CORE_HAS = [
@@ -548,7 +547,6 @@ MCS51_CORE_HAS = [
     "?",
     "7",
     "<0>",
-    "<3> 1 2 3",
 ]
 
 CORE_HAS = [

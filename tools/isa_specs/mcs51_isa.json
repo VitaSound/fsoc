@@ -85,6 +85,12 @@
       "description": "Data Pointer High"
     },
     {
+      "name": "WDTREL",
+      "address": 134,
+      "bit_width": 8,
+      "description": "Watchdog Timer Reload (STC/Keil extension)"
+    },
+    {
       "name": "PCON",
       "address": 135,
       "bit_width": 8,
@@ -94,7 +100,13 @@
       "name": "TCON",
       "address": 136,
       "bit_width": 8,
-      "description": "Timer Control"
+      "description": "Timer Control",
+      "bits": {
+        "0": "TCON_TR1"
+      },
+      "bit_addresses": {
+        "TCON_TR1": 142
+      }
     },
     {
       "name": "TMOD",
@@ -130,13 +142,27 @@
       "name": "P1",
       "address": 144,
       "bit_width": 8,
-      "description": "Port 1"
+      "description": "Port 1",
+      "bits": {
+        "0": "P1_0"
+      },
+      "bit_addresses": {
+        "P1_0": 144
+      }
     },
     {
       "name": "SCON",
       "address": 152,
       "bit_width": 8,
-      "description": "Serial Control"
+      "description": "Serial Control",
+      "bits": {
+        "0": "SCON_RI",
+        "1": "SCON_TI"
+      },
+      "bit_addresses": {
+        "SCON_RI": 152,
+        "SCON_TI": 153
+      }
     },
     {
       "name": "SBUF",
@@ -166,7 +192,7 @@
       "name": "WDTCON",
       "address": 216,
       "bit_width": 8,
-      "description": "Watchdog Timer Control"
+      "description": "Watchdog Timer Control (STC/Keil extension)"
     },
     {
       "name": "ACC",
@@ -179,12 +205,6 @@
       "address": 240,
       "bit_width": 8,
       "description": "B Register"
-    },
-    {
-      "name": "WDTREL",
-      "address": 134,
-      "bit_width": 8,
-      "description": "Watchdog Timer Reload"
     }
   ],
   "instructions": [
@@ -199,55 +219,6 @@
       "encoding": "00000000",
       "categories": [
         "control"
-      ]
-    },
-    {
-      "mnemonic": "mov_a_rn",
-      "opcode": 232,
-      "operands": [
-        "rn"
-      ],
-      "bytes": 1,
-      "cycles": 1,
-      "flags_affected": [],
-      "description": "Move Rn to Accumulator",
-      "encoding": "11101rrr",
-      "categories": [
-        "data_transfer"
-      ]
-    },
-    {
-      "mnemonic": "add_a_rn",
-      "opcode": 40,
-      "operands": [
-        "rn"
-      ],
-      "bytes": 1,
-      "cycles": 1,
-      "flags_affected": [
-        "C",
-        "OV",
-        "AC"
-      ],
-      "description": "Add Rn to Accumulator",
-      "encoding": "00101rrr",
-      "categories": [
-        "arithmetic"
-      ]
-    },
-    {
-      "mnemonic": "lcall",
-      "opcode": 18,
-      "operands": [
-        "addr"
-      ],
-      "bytes": 3,
-      "cycles": 2,
-      "flags_affected": [],
-      "description": "Long call",
-      "encoding": "00010010 aaaaaaaa aaaaaaaa",
-      "categories": [
-        "branch"
       ]
     },
     {
@@ -268,7 +239,7 @@
       "opcode": 50,
       "operands": [],
       "bytes": 1,
-      "cycles": 2,
+      "cycles": 3,
       "flags_affected": [],
       "description": "Return from interrupt",
       "encoding": "00110010",
@@ -277,7 +248,684 @@
       ]
     },
     {
-      "mnemonic": "mov_di",
+      "mnemonic": "incdp",
+      "opcode": 163,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Increment DPTR",
+      "encoding": "10100011",
+      "categories": [
+        "arithmetic"
+      ]
+    },
+    {
+      "mnemonic": "clra",
+      "opcode": 228,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Clear accumulator",
+      "encoding": "11100100",
+      "categories": [
+        "data_transfer"
+      ]
+    },
+    {
+      "mnemonic": "cpla",
+      "opcode": 244,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Complement accumulator",
+      "encoding": "11110100",
+      "categories": [
+        "logic"
+      ]
+    },
+    {
+      "mnemonic": "rlc_a",
+      "opcode": 51,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "C"
+      ],
+      "description": "Rotate left ACC through carry",
+      "encoding": "00110011",
+      "categories": [
+        "logic"
+      ]
+    },
+    {
+      "mnemonic": "rl_a",
+      "opcode": 35,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Rotate left ACC",
+      "encoding": "00100011",
+      "categories": [
+        "logic"
+      ]
+    },
+    {
+      "mnemonic": "rr_a",
+      "opcode": 3,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Rotate right ACC",
+      "encoding": "00000011",
+      "categories": [
+        "logic"
+      ]
+    },
+    {
+      "mnemonic": "rrc_a",
+      "opcode": 19,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "C"
+      ],
+      "description": "Rotate right ACC through carry",
+      "encoding": "00010011",
+      "categories": [
+        "logic"
+      ]
+    },
+    {
+      "mnemonic": "inca",
+      "opcode": 4,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "CY",
+        "AC",
+        "P"
+      ],
+      "description": "Increment accumulator",
+      "encoding": "00000100",
+      "categories": [
+        "arithmetic"
+      ]
+    },
+    {
+      "mnemonic": "deca",
+      "opcode": 20,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "CY",
+        "AC",
+        "P"
+      ],
+      "description": "Decrement accumulator",
+      "encoding": "00010100",
+      "categories": [
+        "arithmetic"
+      ]
+    },
+    {
+      "mnemonic": "divab",
+      "opcode": 132,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 12,
+      "flags_affected": [
+        "CY",
+        "OV"
+      ],
+      "description": "DIV B: ACC/B, B=ACC*B",
+      "encoding": "10000100",
+      "categories": [
+        "arithmetic"
+      ]
+    },
+    {
+      "mnemonic": "mulab",
+      "opcode": 164,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 4,
+      "flags_affected": [
+        "CY",
+        "OV"
+      ],
+      "description": "MUL AB: B=ACC*B",
+      "encoding": "10100100",
+      "categories": [
+        "arithmetic"
+      ]
+    },
+    {
+      "mnemonic": "swapa",
+      "opcode": 196,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "P"
+      ],
+      "description": "Swap ACC nibbles",
+      "encoding": "11000100",
+      "categories": [
+        "logic"
+      ]
+    },
+    {
+      "mnemonic": "daa",
+      "opcode": 212,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "CY",
+        "AC",
+        "OV"
+      ],
+      "description": "Decimal adjust accumulator",
+      "encoding": "11010100",
+      "categories": [
+        "arithmetic"
+      ]
+    },
+    {
+      "mnemonic": "jmp_a_dptr",
+      "opcode": 115,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 4,
+      "flags_affected": [],
+      "description": "Jump to ACC+DPTR",
+      "encoding": "01110011",
+      "categories": [
+        "branch"
+      ]
+    },
+    {
+      "mnemonic": "movc_a_pc",
+      "opcode": 131,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "MOV A,@A+PC",
+      "encoding": "10000011",
+      "categories": [
+        "data_transfer"
+      ]
+    },
+    {
+      "mnemonic": "movc_a_dptr",
+      "opcode": 147,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "MOV A,@A+DPTR",
+      "encoding": "10010011",
+      "categories": [
+        "data_transfer"
+      ]
+    },
+    {
+      "mnemonic": "movx_a_dptr",
+      "opcode": 224,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "MOVX A,@DPTR (external read)",
+      "encoding": "11100000",
+      "categories": [
+        "data_transfer"
+      ]
+    },
+    {
+      "mnemonic": "movx_dptr_a",
+      "opcode": 240,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "MOVX @DPTR,A (external write)",
+      "encoding": "11110000",
+      "categories": [
+        "data_transfer"
+      ]
+    },
+    {
+      "mnemonic": "mov_a_r0",
+      "opcode": 230,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "MOV A,@R0",
+      "encoding": "11100110",
+      "categories": [
+        "data_transfer"
+      ]
+    },
+    {
+      "mnemonic": "mov_r0_a",
+      "opcode": 246,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "MOV @R0,A",
+      "encoding": "11110110",
+      "categories": [
+        "data_transfer"
+      ]
+    },
+    {
+      "mnemonic": "clr_c",
+      "opcode": 195,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "CY"
+      ],
+      "description": "Clear carry flag",
+      "encoding": "11000011",
+      "categories": [
+        "logic"
+      ]
+    },
+    {
+      "mnemonic": "setb_c",
+      "opcode": 211,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "CY"
+      ],
+      "description": "Set carry flag",
+      "encoding": "11010011",
+      "categories": [
+        "logic"
+      ]
+    },
+    {
+      "mnemonic": "mov_a_rn",
+      "opcode": 232,
+      "operands": [
+        "rn"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "MOV A,Rn",
+      "encoding": "11101rrr",
+      "categories": [
+        "data_transfer"
+      ]
+    },
+    {
+      "mnemonic": "mov_rn_a",
+      "opcode": 248,
+      "operands": [
+        "rn"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "MOV Rn,A",
+      "encoding": "11111rrr",
+      "categories": [
+        "data_transfer"
+      ]
+    },
+    {
+      "mnemonic": "add_a_rn",
+      "opcode": 40,
+      "operands": [
+        "rn"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "CY",
+        "AC",
+        "OV"
+      ],
+      "description": "ADD A,Rn",
+      "encoding": "00101rrr",
+      "categories": [
+        "arithmetic"
+      ]
+    },
+    {
+      "mnemonic": "addc_a_rn",
+      "opcode": 56,
+      "operands": [
+        "rn"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "CY",
+        "AC",
+        "OV"
+      ],
+      "description": "ADDC A,Rn",
+      "encoding": "00111rrr",
+      "categories": [
+        "arithmetic"
+      ]
+    },
+    {
+      "mnemonic": "subb_a_rn",
+      "opcode": 152,
+      "operands": [
+        "rn"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "CY",
+        "AC",
+        "OV"
+      ],
+      "description": "SUBB A,Rn",
+      "encoding": "10011rrr",
+      "categories": [
+        "arithmetic"
+      ]
+    },
+    {
+      "mnemonic": "anl_a_rn",
+      "opcode": 88,
+      "operands": [
+        "rn"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "P"
+      ],
+      "description": "ANL A,Rn",
+      "encoding": "01011rrr",
+      "categories": [
+        "logic"
+      ]
+    },
+    {
+      "mnemonic": "orl_a_rn",
+      "opcode": 72,
+      "operands": [
+        "rn"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "P"
+      ],
+      "description": "ORL A,Rn",
+      "encoding": "01001rrr",
+      "categories": [
+        "logic"
+      ]
+    },
+    {
+      "mnemonic": "xrl_a_rn",
+      "opcode": 104,
+      "operands": [
+        "rn"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "P"
+      ],
+      "description": "XRL A,Rn",
+      "encoding": "01101rrr",
+      "categories": [
+        "logic"
+      ]
+    },
+    {
+      "mnemonic": "xch_a_rn",
+      "opcode": 200,
+      "operands": [
+        "rn"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "P"
+      ],
+      "description": "XCH A,Rn",
+      "encoding": "11001rrr",
+      "categories": [
+        "data_transfer"
+      ]
+    },
+    {
+      "mnemonic": "inc_rn",
+      "opcode": 8,
+      "operands": [
+        "rn"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "CY",
+        "AC",
+        "P"
+      ],
+      "description": "INC Rn",
+      "encoding": "00001rrr",
+      "categories": [
+        "arithmetic"
+      ]
+    },
+    {
+      "mnemonic": "dec_rn",
+      "opcode": 24,
+      "operands": [
+        "rn"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "CY",
+        "AC",
+        "P"
+      ],
+      "description": "DEC Rn",
+      "encoding": "00011rrr",
+      "categories": [
+        "arithmetic"
+      ]
+    },
+    {
+      "mnemonic": "djnz_rn",
+      "opcode": 216,
+      "operands": [
+        "rn",
+        "dest"
+      ],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "DJNZ Rn,rel",
+      "encoding": "11011rrr rel",
+      "categories": [
+        "branch"
+      ]
+    },
+    {
+      "mnemonic": "mov_a_di",
+      "opcode": 229,
+      "operands": [
+        "di"
+      ],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "MOV A,direct",
+      "encoding": "11100101 dddddddd",
+      "categories": [
+        "data_transfer"
+      ]
+    },
+    {
+      "mnemonic": "mov_di_a",
+      "opcode": 245,
+      "operands": [
+        "di"
+      ],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [
+        "P"
+      ],
+      "description": "MOV direct,A",
+      "encoding": "11110101 dddddddd",
+      "categories": [
+        "data_transfer"
+      ]
+    },
+    {
+      "mnemonic": "xch_a_di",
+      "opcode": 197,
+      "operands": [
+        "di"
+      ],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [
+        "P"
+      ],
+      "description": "XCH A,direct",
+      "encoding": "11000101 dddddddd",
+      "categories": [
+        "data_transfer"
+      ]
+    },
+    {
+      "mnemonic": "inc_di",
+      "opcode": 5,
+      "operands": [
+        "di"
+      ],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [
+        "CY",
+        "AC",
+        "P"
+      ],
+      "description": "INC direct",
+      "encoding": "00000101 dddddddd",
+      "categories": [
+        "arithmetic"
+      ]
+    },
+    {
+      "mnemonic": "dec_di",
+      "opcode": 21,
+      "operands": [
+        "di"
+      ],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [
+        "CY",
+        "AC",
+        "P"
+      ],
+      "description": "DEC direct",
+      "encoding": "00010101 dddddddd",
+      "categories": [
+        "arithmetic"
+      ]
+    },
+    {
+      "mnemonic": "push",
+      "opcode": 192,
+      "operands": [
+        "di"
+      ],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "PUSH direct (direct onto internal stack)",
+      "encoding": "11000000 dddddddd",
+      "categories": [
+        "stack"
+      ]
+    },
+    {
+      "mnemonic": "pop",
+      "opcode": 208,
+      "operands": [
+        "di"
+      ],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [
+        "P"
+      ],
+      "description": "POP direct",
+      "encoding": "11010000 dddddddd",
+      "categories": [
+        "stack"
+      ]
+    },
+    {
+      "mnemonic": "mov_a_num",
+      "opcode": 116,
+      "operands": [
+        "num"
+      ],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [
+        "P"
+      ],
+      "description": "MOV A,#data",
+      "encoding": "01110100 dddddddd",
+      "categories": [
+        "data_transfer"
+      ]
+    },
+    {
+      "mnemonic": "mov_rn_num",
+      "opcode": 120,
+      "operands": [
+        "rn",
+        "num"
+      ],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [
+        "P"
+      ],
+      "description": "MOV Rn,#data",
+      "encoding": "01111rrr dddddddd",
+      "categories": [
+        "data_transfer"
+      ]
+    },
+    {
+      "mnemonic": "mov_di_num",
       "opcode": 117,
       "operands": [
         "di",
@@ -285,11 +933,288 @@
       ],
       "bytes": 3,
       "cycles": 2,
-      "flags_affected": [],
-      "description": "Move immediate to direct address",
-      "encoding": "01110101 aaaaaaaa dddddddd",
+      "flags_affected": [
+        "P"
+      ],
+      "description": "MOV direct,#data",
+      "encoding": "01110101 dddddddd dddddddd",
       "categories": [
         "data_transfer"
+      ]
+    },
+    {
+      "mnemonic": "mov_di_di",
+      "opcode": 133,
+      "operands": [
+        "dsrc",
+        "ddst"
+      ],
+      "bytes": 3,
+      "cycles": 2,
+      "flags_affected": [
+        "P"
+      ],
+      "description": "MOV direct,src",
+      "encoding": "10000101 dddddddd dddddddd",
+      "categories": [
+        "data_transfer"
+      ]
+    },
+    {
+      "mnemonic": "add_a_num",
+      "opcode": 36,
+      "operands": [
+        "num"
+      ],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [
+        "CY",
+        "AC",
+        "OV"
+      ],
+      "description": "ADD A,#data",
+      "encoding": "00100100 dddddddd",
+      "categories": [
+        "arithmetic"
+      ]
+    },
+    {
+      "mnemonic": "addc_a_num",
+      "opcode": 52,
+      "operands": [
+        "num"
+      ],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [
+        "CY",
+        "AC",
+        "OV"
+      ],
+      "description": "ADDC A,#data",
+      "encoding": "00110100 dddddddd",
+      "categories": [
+        "arithmetic"
+      ]
+    },
+    {
+      "mnemonic": "subb_a_num",
+      "opcode": 148,
+      "operands": [
+        "num"
+      ],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [
+        "CY",
+        "AC",
+        "OV"
+      ],
+      "description": "SUBB A,#data",
+      "encoding": "10010100 dddddddd",
+      "categories": [
+        "arithmetic"
+      ]
+    },
+    {
+      "mnemonic": "anl_a_num",
+      "opcode": 84,
+      "operands": [
+        "num"
+      ],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [
+        "P"
+      ],
+      "description": "ANL A,#data",
+      "encoding": "01010100 dddddddd",
+      "categories": [
+        "logic"
+      ]
+    },
+    {
+      "mnemonic": "orl_a_num",
+      "opcode": 68,
+      "operands": [
+        "num"
+      ],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [
+        "P"
+      ],
+      "description": "ORL A,#data",
+      "encoding": "01000100 dddddddd",
+      "categories": [
+        "logic"
+      ]
+    },
+    {
+      "mnemonic": "xrl_a_num",
+      "opcode": 100,
+      "operands": [
+        "num"
+      ],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [
+        "P"
+      ],
+      "description": "XRL A,#data",
+      "encoding": "01100100 dddddddd",
+      "categories": [
+        "logic"
+      ]
+    },
+    {
+      "mnemonic": "anl_di_num",
+      "opcode": 83,
+      "operands": [
+        "di",
+        "num"
+      ],
+      "bytes": 3,
+      "cycles": 2,
+      "flags_affected": [
+        "P"
+      ],
+      "description": "ANL direct,#data",
+      "encoding": "01010011 dddddddd dddddddd",
+      "categories": [
+        "logic"
+      ]
+    },
+    {
+      "mnemonic": "orl_di_num",
+      "opcode": 67,
+      "operands": [
+        "di",
+        "num"
+      ],
+      "bytes": 3,
+      "cycles": 2,
+      "flags_affected": [
+        "P"
+      ],
+      "description": "ORL direct,#data",
+      "encoding": "01000011 dddddddd dddddddd",
+      "categories": [
+        "logic"
+      ]
+    },
+    {
+      "mnemonic": "xrl_di_num",
+      "opcode": 99,
+      "operands": [
+        "di",
+        "num"
+      ],
+      "bytes": 3,
+      "cycles": 2,
+      "flags_affected": [
+        "P"
+      ],
+      "description": "XRL direct,#data",
+      "encoding": "01100011 dddddddd dddddddd",
+      "categories": [
+        "logic"
+      ]
+    },
+    {
+      "mnemonic": "cjne_a_num",
+      "opcode": 180,
+      "operands": [
+        "num",
+        "dest"
+      ],
+      "bytes": 3,
+      "cycles": 2,
+      "flags_affected": [
+        "CY"
+      ],
+      "description": "CJNE A,#data,rel",
+      "encoding": "10110100 dddddddd rel",
+      "categories": [
+        "branch"
+      ]
+    },
+    {
+      "mnemonic": "clr_bit",
+      "opcode": 194,
+      "operands": [
+        "bit"
+      ],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "CLR bit",
+      "encoding": "11000010 bbbbbbbb",
+      "categories": [
+        "bit"
+      ]
+    },
+    {
+      "mnemonic": "setb_bit",
+      "opcode": 210,
+      "operands": [
+        "bit"
+      ],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "SETB bit",
+      "encoding": "11010010 bbbbbbbb",
+      "categories": [
+        "bit"
+      ]
+    },
+    {
+      "mnemonic": "cpl_bit",
+      "opcode": 178,
+      "operands": [
+        "bit"
+      ],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "CPL bit",
+      "encoding": "10110010 bbbbbbbb",
+      "categories": [
+        "bit"
+      ]
+    },
+    {
+      "mnemonic": "jnb_bit",
+      "opcode": 48,
+      "operands": [
+        "bit",
+        "dest"
+      ],
+      "bytes": 3,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "JNB bit,rel",
+      "encoding": "00110000 bbbbbbbb rel",
+      "categories": [
+        "bit"
+      ]
+    },
+    {
+      "mnemonic": "jb_bit",
+      "opcode": 32,
+      "operands": [
+        "bit",
+        "dest"
+      ],
+      "bytes": 3,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "JB bit,rel",
+      "encoding": "00100000 bbbbbbbb rel",
+      "categories": [
+        "bit"
       ]
     },
     {
@@ -301,57 +1226,25 @@
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
-      "description": "Short jump",
+      "description": "SJMP rel",
       "encoding": "10000000 rel",
       "categories": [
         "branch"
       ]
     },
     {
-      "mnemonic": "xrl_di",
-      "opcode": 99,
+      "mnemonic": "jz",
+      "opcode": 96,
       "operands": [
-        "di",
-        "num"
-      ],
-      "bytes": 3,
-      "cycles": 2,
-      "flags_affected": [],
-      "description": "Exclusive OR direct byte with immediate",
-      "encoding": "01100011 aaaaaaaa dddddddd",
-      "categories": [
-        "arithmetic"
-      ]
-    },
-    {
-      "mnemonic": "mov_rn",
-      "opcode": 120,
-      "operands": [
-        "rn",
-        "num"
+        "dest"
       ],
       "bytes": 2,
-      "cycles": 1,
+      "cycles": 2,
       "flags_affected": [],
-      "description": "Move immediate to register",
-      "encoding": "01111rrr dddddddd",
+      "description": "JZ rel (ACC==0)",
+      "encoding": "01100000 rel",
       "categories": [
-        "data_transfer"
-      ]
-    },
-    {
-      "mnemonic": "dec_rn",
-      "opcode": 24,
-      "operands": [
-        "rn"
-      ],
-      "bytes": 1,
-      "cycles": 1,
-      "flags_affected": [],
-      "description": "Decrement register",
-      "encoding": "00011rrr",
-      "categories": [
-        "arithmetic"
+        "branch"
       ]
     },
     {
@@ -363,10 +1256,147 @@
       "bytes": 2,
       "cycles": 2,
       "flags_affected": [],
-      "description": "Jump if accumulator not zero",
+      "description": "JNZ rel (ACC!=0)",
       "encoding": "01110000 rel",
       "categories": [
         "branch"
+      ]
+    },
+    {
+      "mnemonic": "jc",
+      "opcode": 64,
+      "operands": [
+        "dest"
+      ],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "JC rel (CY set)",
+      "encoding": "01000000 rel",
+      "categories": [
+        "branch"
+      ]
+    },
+    {
+      "mnemonic": "jnc",
+      "opcode": 80,
+      "operands": [
+        "dest"
+      ],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "JNC rel (CY clear)",
+      "encoding": "01010000 rel",
+      "categories": [
+        "branch"
+      ]
+    },
+    {
+      "mnemonic": "ajmp",
+      "opcode": 1,
+      "operands": [
+        "addr"
+      ],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "AJMP addr (page-relative)",
+      "encoding": "00000 aaaaaaa aaaaaaaa",
+      "categories": [
+        "branch"
+      ]
+    },
+    {
+      "mnemonic": "acall",
+      "opcode": 17,
+      "operands": [
+        "addr"
+      ],
+      "bytes": 2,
+      "cycles": 4,
+      "flags_affected": [],
+      "description": "ACALL addr (page-relative)",
+      "encoding": "00001 aaaaaaa aaaaaaaa",
+      "categories": [
+        "branch"
+      ]
+    },
+    {
+      "mnemonic": "ljmp",
+      "opcode": 2,
+      "operands": [
+        "addr"
+      ],
+      "bytes": 3,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "LJMP addr",
+      "encoding": "00000010 aaaaaaaa aaaaaaaa",
+      "categories": [
+        "branch"
+      ]
+    },
+    {
+      "mnemonic": "lcall",
+      "opcode": 18,
+      "operands": [
+        "addr"
+      ],
+      "bytes": 3,
+      "cycles": 4,
+      "flags_affected": [],
+      "description": "LCALL addr",
+      "encoding": "00010010 aaaaaaaa aaaaaaaa",
+      "categories": [
+        "branch"
+      ]
+    },
+    {
+      "mnemonic": "mov_dptr_num",
+      "opcode": 144,
+      "operands": [
+        "addr"
+      ],
+      "bytes": 3,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "MOV DPTR,#data16",
+      "encoding": "10010000 aaaaaaaa aaaaaaaa",
+      "categories": [
+        "data_transfer"
+      ]
+    },
+    {
+      "mnemonic": "jb",
+      "opcode": 32,
+      "operands": [
+        "bit",
+        "dest"
+      ],
+      "bytes": 3,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "JB bit,rel",
+      "encoding": "00100000 bbbbbbbb rel",
+      "categories": [
+        "bit"
+      ]
+    },
+    {
+      "mnemonic": "jnb",
+      "opcode": 48,
+      "operands": [
+        "bit",
+        "dest"
+      ],
+      "bytes": 3,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "JNB bit,rel",
+      "encoding": "00110000 bbbbbbbb rel",
+      "categories": [
+        "bit"
       ]
     }
   ],

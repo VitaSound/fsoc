@@ -11,3 +11,10 @@ s" fixture.4th" included
 \ committed tools/stack_analysis_report.json.
 s" python3 " fsoc-root fjson.str-concat s" /tools/run_all_tools.py" fsoc-cat+
 2dup system fjson.str-free $? 0= expect-true
+
+\ mcs51 spec <-> fasm opcode drift gate (isa_to_fasm.py --check): the committed
+\ mcs51_isa.json must agree with every opcode emitted by fsys/fasm/8051/words.4th.
+s" python3 " fsoc-root fjson.str-concat s" /tools/isa_to_fasm.py --check" fsoc-cat+
+s"  " fsoc-cat+ fsoc-root fjson.str-concat s" /tools/isa_specs/mcs51_isa.json" fsoc-cat+
+s"  " fsoc-cat+ fsoc-root fjson.str-concat s" /fsys/fasm/8051/words.4th" fsoc-cat+
+2dup system fjson.str-free $? 0= expect-true

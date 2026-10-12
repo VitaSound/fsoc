@@ -69,7 +69,25 @@ class CrossLinter:
             r'(bx-call|bx-lit|bx-ret|bx-find|bx-execute|bx-comma|bx-allot)\b',
             re.MULTILINE
         )
-        
+
+        # Immediacy in these cross-compilers is declared by registering a
+        # Forth word with `bx-hi:` (e.g. `' bx-if bx-hi: if`), NOT by a
+        # `; immediate` suffix. Collect the Forth names registered immediate.
+        self.immediates: Set[str] = set()
+        for m in re.finditer(r'[ab]x-hi:\s*([A-Za-z0-9"\'\[\]<>/!@=\-\.]+)', content):
+            self.immediates.add(m.group(1).strip('"'))
+        # The `immediate`/`compile-only`/`postpone` directives themselves are
+        # not immediate — registering them so they don't get flagged.
+        self.immediates |= {'immediate', 'compile-only', 'postpone', '[compile]'}
+
+        # Machine-emitting compiler: colon bodies are raw bytes (dw,/db,/
+        # m-cell!/fasm-emit), so there are no Forth-level `,`/`allot`/`call`/
+        # `literal`/`find` words to look for. These sanity checks only apply to
+        # Forth-level (STC) cross-compilers.
+        self.emits_machine = bool(
+            re.search(r'\b(?:dw,|db,|\w*-cell!|\w*-addr!|fasm-emit|mov-dptr#|dptr#,)', content)
+        )
+
         current_word = None
         current_body = []
         
@@ -80,8 +98,9 @@ class CrossLinter:
             if stripped.startswith('\\'):
                 continue
             
-            # Check for word definition
-            match = re.match(r'^:?\s*([ab]x-\w+)\s', stripped)
+            # Check for word definition. The name may contain hyphens
+            # (bx-from-image), so match a full hyphen-separated identifier.
+            match = re.match(r'^:?\s*([ab]x-[a-z0-9-]+)\s', stripped)
             if match:
                 if current_word:
                     self.cross_words[current_word] = CrossWord(
@@ -166,7 +185,10 @@ class CrossLinter:
         if 'lcall' not in bx_call_def and 'call' not in bx_call_def.lower() and 'rcall' not in bx_call_def.lower():
             self.warnings.append(f"{bx_call} may not use call instruction: {bx_call_def[:80]}")
         
-        # Check for corresponding k-call in kernel
+        # A Forth-level (STC) kernel needs a call primitive; a machine-emitting
+        # kernel has none by design (bx-call emits the call instruction directly).
+        if self.emits_machine:
+            return
         has_call = any('call' in p.ans_name.lower() or 'call' in p.k_name.lower() 
                        for p in self.kernel_primitives.values())
         if not has_call:
@@ -183,7 +205,10 @@ class CrossLinter:
         if 'klit' not in bx_lit_def and 'lit' not in bx_lit_def.lower():
             self.warnings.append(f"{bx_lit} may not reference klit: {bx_lit_def[:80]}")
         
-        # Check for corresponding k-lit in kernel
+        # A machine-emitting kernel bakes the literal value into code (dw,); a
+        # Forth-level kernel needs a literal primitive.
+        if self.emits_machine:
+            return
         has_klit = any('lit' in p.ans_name.lower() or 'lit' in p.k_name.lower() 
                        for p in self.kernel_primitives.values())
         if not has_klit:
@@ -200,7 +225,9 @@ class CrossLinter:
         if 'ret' not in bx_ret_def.lower():
             self.warnings.append(f"{bx_ret} may not use ret: {bx_ret_def[:80]}")
         
-        # Check for corresponding exit/ret in kernel
+        # Machine-emitting kernels end colon bodies with a raw ret; no exit word.
+        if self.emits_machine:
+            return
         has_exit = any('exit' in p.ans_name.lower() or 'exit' in p.k_name.lower() 
                        for p in self.kernel_primitives.values())
         if not has_exit:
@@ -213,13 +240,19 @@ class CrossLinter:
             self.warnings.append("bx-find/ax-find not defined in cross-compiler")
             return
         
-        # Check for find in kernel
+        # Machine-emitting kernels resolve names by scanning the raw header chain
+        # (bx-find) and have no Forth-level find primitive.
+        if self.emits_machine:
+            return
         has_find = any('find' in p.ans_name.lower() for p in self.kernel_primitives.values())
         if not has_find:
             self.warnings.append("No find primitive in kernel")
 
     def check_bx_comma_alignment(self):
         """Check bx-comma/ax-comma (,) aligns with k-comma."""
+        # Machine-emitting compilers store cells as raw bytes, not via a `,` word.
+        if self.emits_machine:
+            return
         bx_comma = self._find_bx_word('comma') or self._find_bx_word(',')
         if not bx_comma:
             self.warnings.append("No bx-comma/ax-comma word found")
@@ -231,6 +264,9 @@ class CrossLinter:
 
     def check_bx_allot_alignment(self):
         """Check bx-allot/ax-allot aligns with k-allot."""
+        # Machine-emitting compilers advance HERE by writing raw bytes, not via `allot`.
+        if self.emits_machine:
+            return
         bx_allot = self._find_bx_word('allot')
         if not bx_allot:
             self.warnings.append("No bx-allot/ax-allot word found")
@@ -293,6 +329,10 @@ class CrossLinter:
         for base_name, required in required_primitives.items():
             bx_word = self._find_bx_word(base_name)
             if bx_word:
+                # Machine-emitting compilers reference the kernel by label/PC, not
+                # through a same-named Forth primitive, so skip the primitive match.
+                if self.emits_machine:
+                    continue
                 # Check if any required primitive exists in kernel
                 found = any(req.lower() in kernel_names for req in required)
                 if not found:
@@ -318,8 +358,11 @@ class CrossLinter:
             # Handle special cases
             if forth_name == 'bracket-tick-bracket':
                 forth_name = "[']"
+            # Immediacy is declared by a `bx-hi:` registration (e.g. `' bx-if bx-hi: if`),
+            # which is authoritative even when the `; immediate` suffix isn't parsed.
+            is_immediate = cw.type == 'immediate' or forth_name in self.immediates
             if forth_name in should_be_immediate:
-                if cw.type != 'immediate':
+                if not is_immediate:
                     self.warnings.append(
                         f"{word} should be immediate (implements {forth_name})"
                     )
@@ -327,7 +370,7 @@ class CrossLinter:
             # Words that should be compile-only
             should_be_compile_only = {'literal', 'sliteral', 'postpone', '[compile]', 'bracket-tick-bracket', 'char', '[char]'}
             if forth_name in should_be_compile_only:
-                if cw.type != 'compile-only':
+                if cw.type != 'compile-only' and forth_name not in self.immediates:
                     self.warnings.append(
                         f"{word} should be compile-only (implements {forth_name})"
                     )
