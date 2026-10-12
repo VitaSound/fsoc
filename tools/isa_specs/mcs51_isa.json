@@ -219,6 +219,10 @@
       "encoding": "00000000",
       "categories": [
         "control"
+      ],
+      "disasm": "NOP",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -232,6 +236,10 @@
       "encoding": "00100010",
       "categories": [
         "branch"
+      ],
+      "disasm": "RET",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -245,6 +253,10 @@
       "encoding": "00110010",
       "categories": [
         "branch"
+      ],
+      "disasm": "RETI",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -258,6 +270,10 @@
       "encoding": "10100011",
       "categories": [
         "arithmetic"
+      ],
+      "disasm": "INC DPTR",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -271,6 +287,10 @@
       "encoding": "11100100",
       "categories": [
         "data_transfer"
+      ],
+      "disasm": "CLR A",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -284,6 +304,10 @@
       "encoding": "11110100",
       "categories": [
         "logic"
+      ],
+      "disasm": "CPL A",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -299,6 +323,10 @@
       "encoding": "00110011",
       "categories": [
         "logic"
+      ],
+      "disasm": "RLC A",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -312,6 +340,10 @@
       "encoding": "00100011",
       "categories": [
         "logic"
+      ],
+      "disasm": "RL A",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -325,6 +357,10 @@
       "encoding": "00000011",
       "categories": [
         "logic"
+      ],
+      "disasm": "RR A",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -340,6 +376,10 @@
       "encoding": "00010011",
       "categories": [
         "logic"
+      ],
+      "disasm": "RRC A",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -357,6 +397,10 @@
       "encoding": "00000100",
       "categories": [
         "arithmetic"
+      ],
+      "disasm": "INC A",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -374,6 +418,10 @@
       "encoding": "00010100",
       "categories": [
         "arithmetic"
+      ],
+      "disasm": "DEC A",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -390,6 +438,10 @@
       "encoding": "10000100",
       "categories": [
         "arithmetic"
+      ],
+      "disasm": "DIV AB",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -406,6 +458,10 @@
       "encoding": "10100100",
       "categories": [
         "arithmetic"
+      ],
+      "disasm": "MUL AB",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -421,6 +477,10 @@
       "encoding": "11000100",
       "categories": [
         "logic"
+      ],
+      "disasm": "SWAP A",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -438,6 +498,10 @@
       "encoding": "11010100",
       "categories": [
         "arithmetic"
+      ],
+      "disasm": "DA A",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -451,6 +515,10 @@
       "encoding": "01110011",
       "categories": [
         "branch"
+      ],
+      "disasm": "JMP @A+DPTR",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -464,6 +532,10 @@
       "encoding": "10000011",
       "categories": [
         "data_transfer"
+      ],
+      "disasm": "MOVC A,@A+PC",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -477,6 +549,10 @@
       "encoding": "10010011",
       "categories": [
         "data_transfer"
+      ],
+      "disasm": "MOVC A,@A+DPTR",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -490,6 +566,10 @@
       "encoding": "11100000",
       "categories": [
         "data_transfer"
+      ],
+      "disasm": "MOVX A,@DPTR",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -503,6 +583,10 @@
       "encoding": "11110000",
       "categories": [
         "data_transfer"
+      ],
+      "disasm": "MOVX @DPTR,A",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -516,6 +600,10 @@
       "encoding": "11100110",
       "categories": [
         "data_transfer"
+      ],
+      "disasm": "MOV A,@R0",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -529,6 +617,10 @@
       "encoding": "11110110",
       "categories": [
         "data_transfer"
+      ],
+      "disasm": "MOV @R0,A",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -544,6 +636,10 @@
       "encoding": "11000011",
       "categories": [
         "logic"
+      ],
+      "disasm": "CLR C",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -559,6 +655,10 @@
       "encoding": "11010011",
       "categories": [
         "logic"
+      ],
+      "disasm": "SETB C",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -574,6 +674,10 @@
       "encoding": "11101rrr",
       "categories": [
         "data_transfer"
+      ],
+      "disasm": "MOV A,R{n}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -589,6 +693,10 @@
       "encoding": "11111rrr",
       "categories": [
         "data_transfer"
+      ],
+      "disasm": "MOV R{n},A",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -608,6 +716,10 @@
       "encoding": "00101rrr",
       "categories": [
         "arithmetic"
+      ],
+      "disasm": "ADD A,R{n}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -627,6 +739,10 @@
       "encoding": "00111rrr",
       "categories": [
         "arithmetic"
+      ],
+      "disasm": "ADDC A,R{n}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -646,6 +762,10 @@
       "encoding": "10011rrr",
       "categories": [
         "arithmetic"
+      ],
+      "disasm": "SUBB A,R{n}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -663,6 +783,10 @@
       "encoding": "01011rrr",
       "categories": [
         "logic"
+      ],
+      "disasm": "ANL A,R{n}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -680,6 +804,10 @@
       "encoding": "01001rrr",
       "categories": [
         "logic"
+      ],
+      "disasm": "ORL A,R{n}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -697,6 +825,10 @@
       "encoding": "01101rrr",
       "categories": [
         "logic"
+      ],
+      "disasm": "XRL A,R{n}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -714,6 +846,10 @@
       "encoding": "11001rrr",
       "categories": [
         "data_transfer"
+      ],
+      "disasm": "XCH A,R{n}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -733,6 +869,10 @@
       "encoding": "00001rrr",
       "categories": [
         "arithmetic"
+      ],
+      "disasm": "INC R{n}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -752,6 +892,10 @@
       "encoding": "00011rrr",
       "categories": [
         "arithmetic"
+      ],
+      "disasm": "DEC R{n}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -768,6 +912,10 @@
       "encoding": "11011rrr rel",
       "categories": [
         "branch"
+      ],
+      "disasm": "DJNZ R{n},{rel}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -783,6 +931,10 @@
       "encoding": "11100101 dddddddd",
       "categories": [
         "data_transfer"
+      ],
+      "disasm": "MOV A,{direct}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -800,6 +952,10 @@
       "encoding": "11110101 dddddddd",
       "categories": [
         "data_transfer"
+      ],
+      "disasm": "MOV {direct},A",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -817,6 +973,10 @@
       "encoding": "11000101 dddddddd",
       "categories": [
         "data_transfer"
+      ],
+      "disasm": "XCH A,{direct}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -836,6 +996,10 @@
       "encoding": "00000101 dddddddd",
       "categories": [
         "arithmetic"
+      ],
+      "disasm": "INC {direct}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -855,6 +1019,10 @@
       "encoding": "00010101 dddddddd",
       "categories": [
         "arithmetic"
+      ],
+      "disasm": "DEC {direct}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -870,6 +1038,10 @@
       "encoding": "11000000 dddddddd",
       "categories": [
         "stack"
+      ],
+      "disasm": "PUSH {direct}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -887,6 +1059,10 @@
       "encoding": "11010000 dddddddd",
       "categories": [
         "stack"
+      ],
+      "disasm": "POP {direct}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -904,6 +1080,10 @@
       "encoding": "01110100 dddddddd",
       "categories": [
         "data_transfer"
+      ],
+      "disasm": "MOV A,#{data}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -922,6 +1102,10 @@
       "encoding": "01111rrr dddddddd",
       "categories": [
         "data_transfer"
+      ],
+      "disasm": "MOV R{n},#{data}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -940,6 +1124,10 @@
       "encoding": "01110101 dddddddd dddddddd",
       "categories": [
         "data_transfer"
+      ],
+      "disasm": "MOV {direct},#{data}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -958,6 +1146,10 @@
       "encoding": "10000101 dddddddd dddddddd",
       "categories": [
         "data_transfer"
+      ],
+      "disasm": "MOV {direct},{direct}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -977,6 +1169,10 @@
       "encoding": "00100100 dddddddd",
       "categories": [
         "arithmetic"
+      ],
+      "disasm": "ADD A,#{data}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -996,6 +1192,10 @@
       "encoding": "00110100 dddddddd",
       "categories": [
         "arithmetic"
+      ],
+      "disasm": "ADDC A,#{data}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1015,6 +1215,10 @@
       "encoding": "10010100 dddddddd",
       "categories": [
         "arithmetic"
+      ],
+      "disasm": "SUBB A,#{data}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1032,6 +1236,10 @@
       "encoding": "01010100 dddddddd",
       "categories": [
         "logic"
+      ],
+      "disasm": "ANL A,#{data}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1049,6 +1257,10 @@
       "encoding": "01000100 dddddddd",
       "categories": [
         "logic"
+      ],
+      "disasm": "ORL A,#{data}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1066,6 +1278,10 @@
       "encoding": "01100100 dddddddd",
       "categories": [
         "logic"
+      ],
+      "disasm": "XRL A,#{data}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1084,6 +1300,10 @@
       "encoding": "01010011 dddddddd dddddddd",
       "categories": [
         "logic"
+      ],
+      "disasm": "ANL {direct},#{data}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1102,6 +1322,10 @@
       "encoding": "01000011 dddddddd dddddddd",
       "categories": [
         "logic"
+      ],
+      "disasm": "ORL {direct},#{data}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1120,6 +1344,10 @@
       "encoding": "01100011 dddddddd dddddddd",
       "categories": [
         "logic"
+      ],
+      "disasm": "XRL {direct},#{data}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1138,6 +1366,10 @@
       "encoding": "10110100 dddddddd rel",
       "categories": [
         "branch"
+      ],
+      "disasm": "CJNE A,#{data},{rel}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1153,6 +1385,10 @@
       "encoding": "11000010 bbbbbbbb",
       "categories": [
         "bit"
+      ],
+      "disasm": "CLR {bit}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1168,6 +1404,10 @@
       "encoding": "11010010 bbbbbbbb",
       "categories": [
         "bit"
+      ],
+      "disasm": "SETB {bit}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1183,6 +1423,10 @@
       "encoding": "10110010 bbbbbbbb",
       "categories": [
         "bit"
+      ],
+      "disasm": "CPL {bit}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1199,6 +1443,10 @@
       "encoding": "00110000 bbbbbbbb rel",
       "categories": [
         "bit"
+      ],
+      "disasm": "JNB {bit},{rel}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1215,6 +1463,10 @@
       "encoding": "00100000 bbbbbbbb rel",
       "categories": [
         "bit"
+      ],
+      "disasm": "JB {bit},{rel}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1230,6 +1482,10 @@
       "encoding": "10000000 rel",
       "categories": [
         "branch"
+      ],
+      "disasm": "SJMP {rel}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1245,6 +1501,10 @@
       "encoding": "01100000 rel",
       "categories": [
         "branch"
+      ],
+      "disasm": "JZ {rel}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1260,6 +1520,10 @@
       "encoding": "01110000 rel",
       "categories": [
         "branch"
+      ],
+      "disasm": "JNZ {rel}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1275,6 +1539,10 @@
       "encoding": "01000000 rel",
       "categories": [
         "branch"
+      ],
+      "disasm": "JC {rel}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1290,6 +1558,10 @@
       "encoding": "01010000 rel",
       "categories": [
         "branch"
+      ],
+      "disasm": "JNC {rel}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1305,6 +1577,10 @@
       "encoding": "00000 aaaaaaa aaaaaaaa",
       "categories": [
         "branch"
+      ],
+      "disasm": "AJMP {addr}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1320,6 +1596,10 @@
       "encoding": "00001 aaaaaaa aaaaaaaa",
       "categories": [
         "branch"
+      ],
+      "disasm": "ACALL {addr}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1335,6 +1615,10 @@
       "encoding": "00000010 aaaaaaaa aaaaaaaa",
       "categories": [
         "branch"
+      ],
+      "disasm": "LJMP {addr}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1350,6 +1634,10 @@
       "encoding": "00010010 aaaaaaaa aaaaaaaa",
       "categories": [
         "branch"
+      ],
+      "disasm": "LCALL {addr}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1365,6 +1653,10 @@
       "encoding": "10010000 aaaaaaaa aaaaaaaa",
       "categories": [
         "data_transfer"
+      ],
+      "disasm": "MOV DPTR,#{addr}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1381,6 +1673,10 @@
       "encoding": "00100000 bbbbbbbb rel",
       "categories": [
         "bit"
+      ],
+      "disasm": "JB {bit},{rel}",
+      "requires": [
+        "mcs51_core"
       ]
     },
     {
@@ -1397,6 +1693,996 @@
       "encoding": "00110000 bbbbbbbb rel",
       "categories": [
         "bit"
+      ],
+      "disasm": "JNB {bit},{rel}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "add_a_di",
+      "opcode": 37,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "ADD A,direct",
+      "encoding": "00100101 aaaaaaaa",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "ADD A,{direct}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "addc_a_di",
+      "opcode": 53,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "ADDC A,direct",
+      "encoding": "00110101 aaaaaaaa",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "ADDC A,{direct}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "subb_a_di",
+      "opcode": 149,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "SUBB A,direct",
+      "encoding": "10010101 aaaaaaaa",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "SUBB A,{direct}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "add_a_r0i",
+      "opcode": 38,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "ADD A,@R0",
+      "encoding": "00100110",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "ADD A,@R0",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "add_a_r1i",
+      "opcode": 39,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "ADD A,@R1",
+      "encoding": "00100111",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "ADD A,@R1",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "addc_a_r0i",
+      "opcode": 54,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "ADDC A,@R0",
+      "encoding": "00110110",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "ADDC A,@R0",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "addc_a_r1i",
+      "opcode": 55,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "ADDC A,@R1",
+      "encoding": "00110111",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "ADDC A,@R1",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "subb_a_r0i",
+      "opcode": 150,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "SUBB A,@R0",
+      "encoding": "10010110",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "SUBB A,@R0",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "subb_a_r1i",
+      "opcode": 151,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "SUBB A,@R1",
+      "encoding": "10010111",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "SUBB A,@R1",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "inc_r0i",
+      "opcode": 6,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "INC @R0",
+      "encoding": "00000110",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "INC @R0",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "inc_r1i",
+      "opcode": 7,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "INC @R1",
+      "encoding": "00000111",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "INC @R1",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "dec_r0i",
+      "opcode": 22,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "DEC @R0",
+      "encoding": "00010110",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "DEC @R0",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "dec_r1i",
+      "opcode": 23,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "DEC @R1",
+      "encoding": "00010111",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "DEC @R1",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "anl_a_di",
+      "opcode": 85,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "ANL A,direct",
+      "encoding": "01010101 aaaaaaaa",
+      "categories": [
+        "logical"
+      ],
+      "disasm": "ANL A,{direct}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "orl_a_di",
+      "opcode": 69,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "ORL A,direct",
+      "encoding": "01000101 aaaaaaaa",
+      "categories": [
+        "logical"
+      ],
+      "disasm": "ORL A,{direct}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "xrl_a_di",
+      "opcode": 101,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "XRL A,direct",
+      "encoding": "01100101 aaaaaaaa",
+      "categories": [
+        "logical"
+      ],
+      "disasm": "XRL A,{direct}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "anl_di_a",
+      "opcode": 82,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "ANL direct,A",
+      "encoding": "01010010 aaaaaaaa",
+      "categories": [
+        "logical"
+      ],
+      "disasm": "ANL {direct},A",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "orl_di_a",
+      "opcode": 66,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "ORL direct,A",
+      "encoding": "01000010 aaaaaaaa",
+      "categories": [
+        "logical"
+      ],
+      "disasm": "ORL {direct},A",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "xrl_di_a",
+      "opcode": 98,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "XRL direct,A",
+      "encoding": "01100010 aaaaaaaa",
+      "categories": [
+        "logical"
+      ],
+      "disasm": "XRL {direct},A",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "anl_a_r0i",
+      "opcode": 86,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "ANL A,@R0",
+      "encoding": "01010110",
+      "categories": [
+        "logical"
+      ],
+      "disasm": "ANL A,@R0",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "anl_a_r1i",
+      "opcode": 87,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "ANL A,@R1",
+      "encoding": "01010111",
+      "categories": [
+        "logical"
+      ],
+      "disasm": "ANL A,@R1",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "orl_a_r0i",
+      "opcode": 70,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "ORL A,@R0",
+      "encoding": "01000110",
+      "categories": [
+        "logical"
+      ],
+      "disasm": "ORL A,@R0",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "orl_a_r1i",
+      "opcode": 71,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "ORL A,@R1",
+      "encoding": "01000111",
+      "categories": [
+        "logical"
+      ],
+      "disasm": "ORL A,@R1",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "xrl_a_r0i",
+      "opcode": 102,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "XRL A,@R0",
+      "encoding": "01100110",
+      "categories": [
+        "logical"
+      ],
+      "disasm": "XRL A,@R0",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "xrl_a_r1i",
+      "opcode": 103,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "XRL A,@R1",
+      "encoding": "01100111",
+      "categories": [
+        "logical"
+      ],
+      "disasm": "XRL A,@R1",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "mov_a_r0i",
+      "opcode": 230,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "MOV A,@R0",
+      "encoding": "11100110",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "MOV A,@R0",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "mov_a_r1i",
+      "opcode": 231,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "MOV A,@R1",
+      "encoding": "11100111",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "MOV A,@R1",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "mov_rn_di",
+      "opcode": 168,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "MOV Rn,direct",
+      "encoding": "10101rrr aaaaaaaa",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "MOV R{n},{direct}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "mov_di_rn",
+      "opcode": 136,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "MOV direct,Rn",
+      "encoding": "10001rrr aaaaaaaa",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "MOV {direct},R{n}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "mov_di_r0i",
+      "opcode": 134,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "MOV direct,@R0",
+      "encoding": "10000110 aaaaaaaa",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "MOV {direct},@R0",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "mov_di_r1i",
+      "opcode": 135,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "MOV direct,@R1",
+      "encoding": "10000111 aaaaaaaa",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "MOV {direct},@R1",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "mov_r0i_a",
+      "opcode": 246,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "MOV @R0,A",
+      "encoding": "11110110",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "MOV @R0,A",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "mov_r1i_a",
+      "opcode": 247,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "MOV @R1,A",
+      "encoding": "11110111",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "MOV @R1,A",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "mov_r0i_di",
+      "opcode": 166,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "MOV @R0,direct",
+      "encoding": "10100110 aaaaaaaa",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "MOV @R0,{direct}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "mov_r1i_di",
+      "opcode": 167,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "MOV @R1,direct",
+      "encoding": "10100111 aaaaaaaa",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "MOV @R1,{direct}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "mov_r0i_num",
+      "opcode": 118,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "MOV @R0,#data",
+      "encoding": "01110110 dddddddd",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "MOV @R0,#{data}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "mov_r1i_num",
+      "opcode": 119,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "MOV @R1,#data",
+      "encoding": "01110111 dddddddd",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "MOV @R1,#{data}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "movx_a_r0i",
+      "opcode": 226,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "MOVX A,@R0",
+      "encoding": "11100010",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "MOVX A,@R0",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "movx_a_r1i",
+      "opcode": 227,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "MOVX A,@R1",
+      "encoding": "11100011",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "MOVX A,@R1",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "movx_r0i_a",
+      "opcode": 242,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "MOVX @R0,A",
+      "encoding": "11110010",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "MOVX @R0,A",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "movx_r1i_a",
+      "opcode": 243,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "MOVX @R1,A",
+      "encoding": "11110011",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "MOVX @R1,A",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "xch_a_r0i",
+      "opcode": 198,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "XCH A,@R0",
+      "encoding": "11000110",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "XCH A,@R0",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "xch_a_r1i",
+      "opcode": 199,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "XCH A,@R1",
+      "encoding": "11000111",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "XCH A,@R1",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "xchd_a_r0i",
+      "opcode": 214,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "XCHD A,@R0",
+      "encoding": "11010110",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "XCHD A,@R0",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "xchd_a_r1i",
+      "opcode": 215,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "XCHD A,@R1",
+      "encoding": "11010111",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "XCHD A,@R1",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "cpl_c",
+      "opcode": 179,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "CPL C",
+      "encoding": "10110011",
+      "categories": [
+        "bit"
+      ],
+      "disasm": "CPL C",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "anl_c_bit",
+      "opcode": 130,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "ANL C,bit",
+      "encoding": "10000010 bbbbbbbb",
+      "categories": [
+        "bit"
+      ],
+      "disasm": "ANL C,{bit}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "anl_c_nbit",
+      "opcode": 176,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "ANL C,/bit",
+      "encoding": "10110000 bbbbbbbb",
+      "categories": [
+        "bit"
+      ],
+      "disasm": "ANL C,/{bit}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "orl_c_bit",
+      "opcode": 114,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "ORL C,bit",
+      "encoding": "01110010 bbbbbbbb",
+      "categories": [
+        "bit"
+      ],
+      "disasm": "ORL C,{bit}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "orl_c_nbit",
+      "opcode": 160,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "ORL C,/bit",
+      "encoding": "10100000 bbbbbbbb",
+      "categories": [
+        "bit"
+      ],
+      "disasm": "ORL C,/{bit}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "mov_c_bit",
+      "opcode": 162,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "MOV C,bit",
+      "encoding": "10100010 bbbbbbbb",
+      "categories": [
+        "bit"
+      ],
+      "disasm": "MOV C,{bit}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "mov_bit_c",
+      "opcode": 146,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "MOV bit,C",
+      "encoding": "10010010 bbbbbbbb",
+      "categories": [
+        "bit"
+      ],
+      "disasm": "MOV {bit},C",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "jbc",
+      "opcode": 16,
+      "operands": [],
+      "bytes": 3,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "JBC bit,rel",
+      "encoding": "00010000 bbbbbbbb rel",
+      "categories": [
+        "bit"
+      ],
+      "disasm": "JBC {bit},{rel}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "cjne_a_di",
+      "opcode": 181,
+      "operands": [],
+      "bytes": 3,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "CJNE A,direct,rel",
+      "encoding": "10110101 aaaaaaaa rel",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "CJNE A,{direct},{rel}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "cjne_rn_num",
+      "opcode": 184,
+      "operands": [],
+      "bytes": 3,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "CJNE Rn,#data,rel",
+      "encoding": "10111rrr dddddddd rel",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "CJNE R{n},#{data},{rel}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "cjne_r0i_num",
+      "opcode": 182,
+      "operands": [],
+      "bytes": 3,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "CJNE @R0,#data,rel",
+      "encoding": "10110110 dddddddd rel",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "CJNE @R0,#{data},{rel}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "cjne_r1i_num",
+      "opcode": 183,
+      "operands": [],
+      "bytes": 3,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "CJNE @R1,#data,rel",
+      "encoding": "10110111 dddddddd rel",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "CJNE @R1,#{data},{rel}",
+      "requires": [
+        "mcs51_core"
+      ]
+    },
+    {
+      "mnemonic": "djnz_di",
+      "opcode": 213,
+      "operands": [],
+      "bytes": 3,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "DJNZ direct,rel",
+      "encoding": "11010101 aaaaaaaa rel",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "DJNZ {direct},{rel}",
+      "requires": [
+        "mcs51_core"
       ]
     }
   ],
@@ -1425,5 +2711,9 @@
         "xram": 0
       }
     }
+  },
+  "feature_levels": {
+    "mcs51_core": "Base MCS-51 (all chips)",
+    "mcs52": "8052 extensions (MUL, DIV, additional SFRs)"
   }
 }

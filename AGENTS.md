@@ -50,6 +50,14 @@ Non-trivial changes: OpenSpec in `openspec/`. Before commit: short tests + flint
 
 If a build value has no source file, stop and ask — do not hardcode a stand-in list.
 
+## ISA / fasm coverage rules
+
+**D1 — полнота по уровню ISA.** Слой `fsys/fasm/<id>/words.4th` обязан покрывать все инструкции архитектуры. Инструкция, намеренно исключённая, помечается как `intentional-absent` с обоснованием (например, «только XMEGA», «нет на AT89C52»). «Экономия ROM» или «и так работает» не принимаются как причина обрезки spec.
+
+**D2 — подмножества через feature-gates, не урезанием words.4th.** Синтезируемые ядра-подмножества (AT1200-lite, j1abs без mul/div) описываются chip-profile + `isa-feat.4th`-гейтами (`feat-define`, `have`, `need`). Файл `words.4th` *никогда* не обрезается под конкретный чип — гейты накладываются сверху на полный spec.
+
+**Golden-датасеты — offline only.** `tools/gen_golden.py` использует внешние ассемблеры (avr-gcc, z80asm, sdas) для генерации эталонных образов. В CI/`fmix test` используется статический `tests/golden/` (закоммичен). Зависимости от внешних toolchain'ов в рантайме тестов — ноль. Поле `generator` в golden-файле фиксирует версию toolchain'а.
+
 ## New CPU / MCU
 
 Human how-to: [`doc/add-cpu.md`](doc/add-cpu.md) ([eng](doc/add-cpu-eng.md)). Agent rule (same canvas + pitfalls): `.cursor/rules/fsoc-cpu-target.mdc`. Skill: `add-cpu-target`. Specs: `openspec/specs/forth-cross/spec.md`, `openspec/specs/fsys/spec.md`.

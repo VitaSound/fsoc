@@ -31,6 +31,9 @@ class Instruction:
     description: str = ""
     encoding: str = ""               # bit pattern template, e.g., "11101rrr"
     categories: List[str] = field(default_factory=list)  # e.g., ["data_transfer", "arithmetic"]
+    disasm: str = ""                 # disassembly template, e.g., "MOV A,R{n}"
+    requires: List[str] = field(default_factory=list)   # feature gates, e.g., ["mcs51_core"]
+    depends_on: List[str] = field(default_factory=list) # other instructions this depends on
 
 
 @dataclass
@@ -52,6 +55,7 @@ class ISASpec:
     registers: List[Register] = field(default_factory=list)
     instructions: List[Instruction] = field(default_factory=list)
     chip_variants: Dict[str, Dict] = field(default_factory=dict)  # variant -> overrides
+    feature_levels: Dict[str, str] = field(default_factory=dict)  # feature name -> description
 
 
 class FASMGenerator:
@@ -426,7 +430,8 @@ def load_spec(spec_path: Path) -> ISASpec:
         endianness=data.get('endianness', 'little'),
         registers=registers,
         instructions=instructions,
-        chip_variants=chip_variants
+        chip_variants=chip_variants,
+        feature_levels=data.get('feature_levels', {}),
     )
 
 

@@ -2,122 +2,1641 @@
   "arch": "avr",
   "endianness": "little",
   "registers": [
-    {"name": "R0", "address": 0, "bit_width": 8, "description": "General purpose register 0"},
-    {"name": "R1", "address": 1, "bit_width": 8, "description": "General purpose register 1"},
-    {"name": "R2", "address": 2, "bit_width": 8, "description": "General purpose register 2"},
-    {"name": "R3", "address": 3, "bit_width": 8, "description": "General purpose register 3"},
-    {"name": "R4", "address": 4, "bit_width": 8, "description": "General purpose register 4"},
-    {"name": "R5", "address": 5, "bit_width": 8, "description": "General purpose register 5"},
-    {"name": "R6", "address": 6, "bit_width": 8, "description": "General purpose register 6"},
-    {"name": "R7", "address": 7, "bit_width": 8, "description": "General purpose register 7"},
-    {"name": "R8", "address": 8, "bit_width": 8, "description": "R8/XH"},
-    {"name": "R9", "address": 9, "bit_width": 8, "description": "R9/XL"},
-    {"name": "R10", "address": 10, "bit_width": 8, "description": "R10/YH"},
-    {"name": "R11", "address": 11, "bit_width": 8, "description": "R11/YL"},
-    {"name": "R12", "address": 12, "bit_width": 8, "description": "R12/ZH"},
-    {"name": "R13", "address": 13, "bit_width": 8, "description": "R13/ZL"},
-    {"name": "R14", "address": 14, "bit_width": 8, "description": "General purpose register 14"},
-    {"name": "R15", "address": 15, "bit_width": 8, "description": "General purpose register 15"},
-    {"name": "R16", "address": 16, "bit_width": 8, "description": "General purpose register 16"},
-    {"name": "R17", "address": 17, "bit_width": 8, "description": "General purpose register 17"},
-    {"name": "R18", "address": 18, "bit_width": 8, "description": "General purpose register 18"},
-    {"name": "R19", "address": 19, "bit_width": 8, "description": "General purpose register 19"},
-    {"name": "R20", "address": 20, "bit_width": 8, "description": "General purpose register 20"},
-    {"name": "R21", "address": 21, "bit_width": 8, "description": "General purpose register 21"},
-    {"name": "R22", "address": 22, "bit_width": 8, "description": "General purpose register 22"},
-    {"name": "R23", "address": 23, "bit_width": 8, "description": "General purpose register 23"},
-    {"name": "R24", "address": 24, "bit_width": 8, "description": "R24/EIND"},
-    {"name": "R25", "address": 25, "bit_width": 8, "description": "R25/SPH"},
-    {"name": "R26", "address": 26, "bit_width": 8, "description": "R26/XH (X pair high)"},
-    {"name": "R27", "address": 27, "bit_width": 8, "description": "R27/XL (X pair low)"},
-    {"name": "R28", "address": 28, "bit_width": 8, "description": "R28/YH (Y pair high)"},
-    {"name": "R29", "address": 29, "bit_width": 8, "description": "R29/YL (Y pair low)"},
-    {"name": "R30", "address": 30, "bit_width": 8, "description": "R30/ZH (Z pair high)"},
-    {"name": "R31", "address": 31, "bit_width": 8, "description": "R31/ZL (Z pair low)"},
-    {"name": "SREG", "address": 63, "bit_width": 8, "description": "Status register", "bits": {"0": "I", "1": "T", "2": "H", "3": "S", "4": "V", "5": "N", "6": "Z", "7": "C"}}
+    {
+      "name": "R0",
+      "address": 0,
+      "bit_width": 8,
+      "description": "General purpose register 0"
+    },
+    {
+      "name": "R1",
+      "address": 1,
+      "bit_width": 8,
+      "description": "General purpose register 1"
+    },
+    {
+      "name": "R2",
+      "address": 2,
+      "bit_width": 8,
+      "description": "General purpose register 2"
+    },
+    {
+      "name": "R3",
+      "address": 3,
+      "bit_width": 8,
+      "description": "General purpose register 3"
+    },
+    {
+      "name": "R4",
+      "address": 4,
+      "bit_width": 8,
+      "description": "General purpose register 4"
+    },
+    {
+      "name": "R5",
+      "address": 5,
+      "bit_width": 8,
+      "description": "General purpose register 5"
+    },
+    {
+      "name": "R6",
+      "address": 6,
+      "bit_width": 8,
+      "description": "General purpose register 6"
+    },
+    {
+      "name": "R7",
+      "address": 7,
+      "bit_width": 8,
+      "description": "General purpose register 7"
+    },
+    {
+      "name": "R8",
+      "address": 8,
+      "bit_width": 8,
+      "description": "R8/XH"
+    },
+    {
+      "name": "R9",
+      "address": 9,
+      "bit_width": 8,
+      "description": "R9/XL"
+    },
+    {
+      "name": "R10",
+      "address": 10,
+      "bit_width": 8,
+      "description": "R10/YH"
+    },
+    {
+      "name": "R11",
+      "address": 11,
+      "bit_width": 8,
+      "description": "R11/YL"
+    },
+    {
+      "name": "R12",
+      "address": 12,
+      "bit_width": 8,
+      "description": "R12/ZH"
+    },
+    {
+      "name": "R13",
+      "address": 13,
+      "bit_width": 8,
+      "description": "R13/ZL"
+    },
+    {
+      "name": "R14",
+      "address": 14,
+      "bit_width": 8,
+      "description": "General purpose register 14"
+    },
+    {
+      "name": "R15",
+      "address": 15,
+      "bit_width": 8,
+      "description": "General purpose register 15"
+    },
+    {
+      "name": "R16",
+      "address": 16,
+      "bit_width": 8,
+      "description": "General purpose register 16"
+    },
+    {
+      "name": "R17",
+      "address": 17,
+      "bit_width": 8,
+      "description": "General purpose register 17"
+    },
+    {
+      "name": "R18",
+      "address": 18,
+      "bit_width": 8,
+      "description": "General purpose register 18"
+    },
+    {
+      "name": "R19",
+      "address": 19,
+      "bit_width": 8,
+      "description": "General purpose register 19"
+    },
+    {
+      "name": "R20",
+      "address": 20,
+      "bit_width": 8,
+      "description": "General purpose register 20"
+    },
+    {
+      "name": "R21",
+      "address": 21,
+      "bit_width": 8,
+      "description": "General purpose register 21"
+    },
+    {
+      "name": "R22",
+      "address": 22,
+      "bit_width": 8,
+      "description": "General purpose register 22"
+    },
+    {
+      "name": "R23",
+      "address": 23,
+      "bit_width": 8,
+      "description": "General purpose register 23"
+    },
+    {
+      "name": "R24",
+      "address": 24,
+      "bit_width": 8,
+      "description": "R24/EIND"
+    },
+    {
+      "name": "R25",
+      "address": 25,
+      "bit_width": 8,
+      "description": "R25/SPH"
+    },
+    {
+      "name": "R26",
+      "address": 26,
+      "bit_width": 8,
+      "description": "R26/XH (X pair high)"
+    },
+    {
+      "name": "R27",
+      "address": 27,
+      "bit_width": 8,
+      "description": "R27/XL (X pair low)"
+    },
+    {
+      "name": "R28",
+      "address": 28,
+      "bit_width": 8,
+      "description": "R28/YH (Y pair high)"
+    },
+    {
+      "name": "R29",
+      "address": 29,
+      "bit_width": 8,
+      "description": "R29/YL (Y pair low)"
+    },
+    {
+      "name": "R30",
+      "address": 30,
+      "bit_width": 8,
+      "description": "R30/ZH (Z pair high)"
+    },
+    {
+      "name": "R31",
+      "address": 31,
+      "bit_width": 8,
+      "description": "R31/ZL (Z pair low)"
+    },
+    {
+      "name": "SREG",
+      "address": 63,
+      "bit_width": 8,
+      "description": "Status register",
+      "bits": {
+        "0": "I",
+        "1": "T",
+        "2": "H",
+        "3": "S",
+        "4": "V",
+        "5": "N",
+        "6": "Z",
+        "7": "C"
+      }
+    }
   ],
   "instructions": [
-    {"mnemonic": "nop", "opcode": 0, "operands": [], "bytes": 1, "cycles": 1, "flags_affected": [], "description": "No operation", "categories": ["control"]},
-    {"mnemonic": "ret", "opcode": 38184, "operands": [], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Return from subroutine", "categories": ["branch"]},
-    {"mnemonic": "reti", "opcode": 38168, "operands": [], "bytes": 1, "cycles": 2, "flags_affected": ["I"], "description": "Return from interrupt", "categories": ["branch"]},
-    {"mnemonic": "rjmp", "opcode": 49152, "operands": ["k12"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Relative jump", "categories": ["branch"]},
-    {"mnemonic": "rcall", "opcode": 53248, "operands": ["k12"], "bytes": 1, "cycles": 3, "flags_affected": [], "description": "Relative call", "categories": ["branch"]},
-    {"mnemonic": "jmp", "operands": ["k16"], "bytes": 2, "cycles": 3, "flags_affected": [], "description": "Long jump", "categories": ["branch"]},
-    {"mnemonic": "call", "operands": ["k16"], "bytes": 2, "cycles": 4, "flags_affected": [], "description": "Long call", "categories": ["branch"]},
-    {"mnemonic": "add", "opcode": 3072, "operands": ["rd", "rr"], "bytes": 1, "cycles": 1, "flags_affected": ["C", "Z", "N", "V"], "description": "Add", "categories": ["arithmetic"]},
-    {"mnemonic": "adc", "opcode": 7168, "operands": ["rd", "rr"], "bytes": 1, "cycles": 1, "flags_affected": ["C", "Z", "N", "V"], "description": "Add with carry", "categories": ["arithmetic"]},
-    {"mnemonic": "sub", "opcode": 6144, "operands": ["rd", "rr"], "bytes": 1, "cycles": 1, "flags_affected": ["C", "Z", "N", "V"], "description": "Subtract", "categories": ["arithmetic"]},
-    {"mnemonic": "sbc", "opcode": 2048, "operands": ["rd", "rr"], "bytes": 1, "cycles": 1, "flags_affected": ["C", "Z", "N", "V"], "description": "Subtract with carry", "categories": ["arithmetic"]},
-    {"mnemonic": "and", "opcode": 8192, "operands": ["rd", "rr"], "bytes": 1, "cycles": 1, "flags_affected": ["Z", "N"], "description": "Logical AND", "categories": ["arithmetic"]},
-    {"mnemonic": "or", "opcode": 10240, "operands": ["rd", "rr"], "bytes": 1, "cycles": 1, "flags_affected": ["Z", "N"], "description": "Logical OR", "categories": ["arithmetic"]},
-    {"mnemonic": "eor", "opcode": 9216, "operands": ["rd", "rr"], "bytes": 1, "cycles": 1, "flags_affected": ["Z", "N"], "description": "Exclusive OR", "categories": ["arithmetic"]},
-    {"mnemonic": "mov", "opcode": 11264, "operands": ["rd", "rr"], "bytes": 1, "cycles": 1, "flags_affected": [], "description": "Move register", "categories": ["data_transfer"]},
-    {"mnemonic": "cp", "opcode": 5120, "operands": ["rd", "rr"], "bytes": 1, "cycles": 1, "flags_affected": ["C", "Z", "N", "V"], "description": "Compare", "categories": ["arithmetic"]},
-    {"mnemonic": "mul", "opcode": 39936, "operands": ["rd", "rr"], "bytes": 1, "cycles": 2, "flags_affected": ["C", "Z", "N", "V"], "description": "Multiply", "categories": ["arithmetic"]},
-    {"mnemonic": "ldi", "opcode": 57344, "operands": ["rd", "k"], "bytes": 1, "cycles": 1, "flags_affected": [], "description": "Load immediate", "categories": ["data_transfer"]},
-    {"mnemonic": "cpi", "opcode": 12288, "operands": ["rd", "k"], "bytes": 1, "cycles": 1, "flags_affected": ["C", "Z", "N", "V"], "description": "Compare immediate", "categories": ["arithmetic"]},
-    {"mnemonic": "adiw", "opcode": 38400, "operands": ["rd", "k"], "bytes": 1, "cycles": 1, "flags_affected": ["C", "Z", "N"], "description": "Add immediate to word", "categories": ["arithmetic"]},
-    {"mnemonic": "sbiw", "opcode": 38656, "operands": ["rd", "k"], "bytes": 1, "cycles": 1, "flags_affected": ["C", "Z", "N"], "description": "Subtract immediate from word", "categories": ["arithmetic"]},
-    {"mnemonic": "lds", "opcode": 36864, "operands": ["rd", "a"], "bytes": 2, "cycles": 2, "flags_affected": [], "description": "Load direct", "categories": ["memory"]},
-    {"mnemonic": "sts", "opcode": 37376, "operands": ["a", "rr"], "bytes": 2, "cycles": 2, "flags_affected": [], "description": "Store direct", "categories": ["memory"]},
-    {"mnemonic": "ldd", "opcode": 32768, "operands": ["rd", "q", "y"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Load Y/Z indirect with displacement", "categories": ["memory"]},
-    {"mnemonic": "std", "opcode": 33280, "operands": ["q", "y", "rr"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Store Y/Z indirect with displacement", "categories": ["memory"]},
-    {"mnemonic": "ldy", "opcode": 36876, "operands": ["rd"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Load Y indirect", "categories": ["memory"]},
-    {"mnemonic": "ldyi", "opcode": 36877, "operands": ["rd"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Load Y indirect pre-decrement", "categories": ["memory"]},
-    {"mnemonic": "ldyD", "opcode": 36878, "operands": ["rd"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Load Y indirect post-increment", "categories": ["memory"]},
-    {"mnemonic": "ldz", "opcode": 36865, "operands": ["rd"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Load Z indirect", "categories": ["memory"]},
-    {"mnemonic": "ldzi", "opcode": 36869, "operands": ["rd"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Load Z indirect post-increment", "categories": ["memory"]},
-    {"mnemonic": "ldzd", "opcode": 36870, "operands": ["rd"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Load Z indirect pre-decrement", "categories": ["memory"]},
-    {"mnemonic": "stz", "opcode": 37377, "operands": ["rr"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Store Z indirect", "categories": ["memory"]},
-    {"mnemonic": "stzi", "opcode": 37381, "operands": ["rr"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Store Z indirect post-increment", "categories": ["memory"]},
-    {"mnemonic": "stzd", "opcode": 37382, "operands": ["rr"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Store Z indirect pre-decrement", "categories": ["memory"]},
-    {"mnemonic": "inc", "opcode": 37887, "operands": ["rd"], "bytes": 1, "cycles": 1, "flags_affected": ["Z", "N"], "description": "Increment", "categories": ["arithmetic"]},
-    {"mnemonic": "dec", "opcode": 38143, "operands": ["rd"], "bytes": 1, "cycles": 1, "flags_affected": ["Z", "N"], "description": "Decrement", "categories": ["arithmetic"]},
-    {"mnemonic": "lsl", "opcode": 37888, "operands": ["rd"], "bytes": 1, "cycles": 1, "flags_affected": ["C", "Z", "N"], "description": "Logical shift left", "categories": ["arithmetic"]},
-    {"mnemonic": "lsr", "opcode": 38400, "operands": ["rd"], "bytes": 1, "cycles": 1, "flags_affected": ["C", "Z", "N"], "description": "Logical shift right", "categories": ["arithmetic"]},
-    {"mnemonic": "asr", "opcode": 38145, "operands": ["rd"], "bytes": 1, "cycles": 1, "flags_affected": ["C", "Z", "N", "V"], "description": "Arithmetic shift right", "categories": ["arithmetic"]},
-    {"mnemonic": "rol", "opcode": 37891, "operands": ["rd"], "bytes": 1, "cycles": 1, "flags_affected": ["C", "Z", "N", "V"], "description": "Rotate left through carry", "categories": ["arithmetic"]},
-    {"mnemonic": "ror", "opcode": 38403, "operands": ["rd"], "bytes": 1, "cycles": 1, "flags_affected": ["C", "Z", "N", "V"], "description": "Rotate right through carry", "categories": ["arithmetic"]},
-    {"mnemonic": "com", "opcode": 37888, "operands": ["rd"], "bytes": 1, "cycles": 1, "flags_affected": ["Z", "N"], "description": "Logical complement", "categories": ["arithmetic"]},
-    {"mnemonic": "neg", "opcode": 37889, "operands": ["rd"], "bytes": 1, "cycles": 1, "flags_affected": ["C", "Z", "N", "V", "H"], "description": "Arithmetic negative", "categories": ["arithmetic"]},
-    {"mnemonic": "tst", "opcode": 8192, "operands": ["rd"], "bytes": 1, "cycles": 1, "flags_affected": ["Z", "N"], "description": "Test against zero (AND with self)", "categories": ["arithmetic"]},
-    {"mnemonic": "push", "opcode": 37375, "operands": ["r"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Push to stack", "categories": ["stack"]},
-    {"mnemonic": "pop", "opcode": 36863, "operands": ["r"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Pop from stack", "categories": ["stack"]},
-    {"mnemonic": "in", "opcode": 45056, "operands": ["r", "a"], "bytes": 1, "cycles": 1, "flags_affected": ["Z", "N", "C"], "description": "Parallel port input", "categories": ["io"]},
-    {"mnemonic": "out", "opcode": 47104, "operands": ["a", "r"], "bytes": 1, "cycles": 1, "flags_affected": [], "description": "Parallel port output", "categories": ["io"]},
-    {"mnemonic": "sbi", "opcode": 39424, "operands": ["a", "b"], "bytes": 1, "cycles": 1, "flags_affected": [], "description": "Set bit in I/O", "categories": ["io"]},
-    {"mnemonic": "cbi", "opcode": 38912, "operands": ["a", "b"], "bytes": 1, "cycles": 1, "flags_affected": [], "description": "Clear bit in I/O", "categories": ["io"]},
-    {"mnemonic": "sbic", "opcode": 39168, "operands": ["a", "b"], "bytes": 1, "cycles": 1, "flags_affected": [], "description": "Skip bit in I/O if clear", "categories": ["io"]},
-    {"mnemonic": "sbis", "opcode": 39680, "operands": ["a", "b"], "bytes": 1, "cycles": 1, "flags_affected": [], "description": "Skip bit in I/O if set", "categories": ["io"]},
-    {"mnemonic": "brbc", "opcode": 62464, "operands": ["s", "k7"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Branch if bit clear", "categories": ["branch"]},
-    {"mnemonic": "brbs", "opcode": 61440, "operands": ["s", "k7"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Branch if bit set", "categories": ["branch"]},
-    {"mnemonic": "breq", "opcode": 61696, "operands": ["k7"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Branch if equal", "categories": ["branch"]},
-    {"mnemonic": "brne", "opcode": 62720, "operands": ["k7"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Branch if not equal", "categories": ["branch"]},
-    {"mnemonic": "brcs", "opcode": 61440, "operands": ["k7"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Branch if carry set", "categories": ["branch"]},
-    {"mnemonic": "brcc", "opcode": 62464, "operands": ["k7"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Branch if carry clear", "categories": ["branch"]},
-    {"mnemonic": "brmi", "opcode": 61568, "operands": ["k7"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Branch if minus", "categories": ["branch"]},
-    {"mnemonic": "brpl", "opcode": 62592, "operands": ["k7"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Branch if plus", "categories": ["branch"]},
-    {"mnemonic": "brlt", "opcode": 61760, "operands": ["k7"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Branch if less than", "categories": ["branch"]},
-    {"mnemonic": "brge", "opcode": 62784, "operands": ["k7"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Branch if greater or equal", "categories": ["branch"]},
-    {"mnemonic": "brlo", "opcode": 61472, "operands": ["k7"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Branch if less than (unsigned)", "categories": ["branch"]},
-    {"mnemonic": "brsh", "opcode": 62496, "operands": ["k7"], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Branch if greater or equal (unsigned)", "categories": ["branch"]},
-    {"mnemonic": "sei", "opcode": 38151, "operands": [], "bytes": 1, "cycles": 1, "flags_affected": ["I"], "description": "Set global interrupt", "categories": ["control"]},
-    {"mnemonic": "cli", "opcode": 38407, "operands": [], "bytes": 1, "cycles": 1, "flags_affected": ["I"], "description": "Clear global interrupt", "categories": ["control"]},
-    {"mnemonic": "sleep", "opcode": 38280, "operands": [], "bytes": 1, "cycles": 1, "flags_affected": [], "description": "Go into idle mode", "categories": ["control"]},
-    {"mnemonic": "wdr", "opcode": 38312, "operands": [], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Watchdog reset", "categories": ["control"]},
-    {"mnemonic": "lpm", "opcode": 38344, "operands": [], "bytes": 1, "cycles": 2, "flags_affected": [], "description": "Load program memory", "categories": ["memory"]},
-    {"mnemonic": "cpse", "opcode": 4096, "operands": ["rd", "rr"], "bytes": 1, "cycles": 1, "flags_affected": [], "description": "Compare and skip if equal", "categories": ["branch"]},
-    {"mnemonic": "movw", "opcode": 256, "operands": ["rd", "rr"], "bytes": 1, "cycles": 1, "flags_affected": [], "description": "Move word", "categories": ["data_transfer"]}
+    {
+      "mnemonic": "nop",
+      "opcode": 0,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "No operation",
+      "categories": [
+        "control"
+      ],
+      "disasm": "NOP",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "ret",
+      "opcode": 38184,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Return from subroutine",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "RET",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "reti",
+      "opcode": 38168,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [
+        "I"
+      ],
+      "description": "Return from interrupt",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "RETI",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "rjmp",
+      "opcode": 49152,
+      "operands": [
+        "k12"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Relative jump",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "RJMP {rel}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "rcall",
+      "opcode": 53248,
+      "operands": [
+        "k12"
+      ],
+      "bytes": 1,
+      "cycles": 3,
+      "flags_affected": [],
+      "description": "Relative call",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "RCALL {rel}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "jmp",
+      "operands": [
+        "k16"
+      ],
+      "bytes": 2,
+      "cycles": 3,
+      "flags_affected": [],
+      "description": "Long jump",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "JMP {addr}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "call",
+      "operands": [
+        "k16"
+      ],
+      "bytes": 2,
+      "cycles": 4,
+      "flags_affected": [],
+      "description": "Long call",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "CALL {addr}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "add",
+      "opcode": 3072,
+      "operands": [
+        "rd",
+        "rr"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "C",
+        "Z",
+        "N",
+        "V"
+      ],
+      "description": "Add",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "ADD R{d},{r}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "adc",
+      "opcode": 7168,
+      "operands": [
+        "rd",
+        "rr"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "C",
+        "Z",
+        "N",
+        "V"
+      ],
+      "description": "Add with carry",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "ADC R{d},{r}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "sub",
+      "opcode": 6144,
+      "operands": [
+        "rd",
+        "rr"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "C",
+        "Z",
+        "N",
+        "V"
+      ],
+      "description": "Subtract",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "SUB R{d},{r}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "sbc",
+      "opcode": 2048,
+      "operands": [
+        "rd",
+        "rr"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "C",
+        "Z",
+        "N",
+        "V"
+      ],
+      "description": "Subtract with carry",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "SBC R{d},{r}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "and",
+      "opcode": 8192,
+      "operands": [
+        "rd",
+        "rr"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "Z",
+        "N"
+      ],
+      "description": "Logical AND",
+      "categories": [
+        "arithmetic"
+      ],
+      "requires": [
+        "avr_core"
+      ],
+      "disasm": "AND R{d},{r}"
+    },
+    {
+      "mnemonic": "or",
+      "opcode": 10240,
+      "operands": [
+        "rd",
+        "rr"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "Z",
+        "N"
+      ],
+      "description": "Logical OR",
+      "categories": [
+        "arithmetic"
+      ],
+      "requires": [
+        "avr_core"
+      ],
+      "disasm": "OR R{d},{r}"
+    },
+    {
+      "mnemonic": "eor",
+      "opcode": 9216,
+      "operands": [
+        "rd",
+        "rr"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "Z",
+        "N"
+      ],
+      "description": "Exclusive OR",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "EOR R{d},{r}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "mov",
+      "opcode": 11264,
+      "operands": [
+        "rd",
+        "rr"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Move register",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "MOV R{d},{r}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "cp",
+      "opcode": 5120,
+      "operands": [
+        "rd",
+        "rr"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "C",
+        "Z",
+        "N",
+        "V"
+      ],
+      "description": "Compare",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "CP R{d},{r}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "mul",
+      "opcode": 39936,
+      "operands": [
+        "rd",
+        "rr"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [
+        "C",
+        "Z",
+        "N",
+        "V"
+      ],
+      "description": "Multiply",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "MUL R{d},{r}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "ldi",
+      "opcode": 57344,
+      "operands": [
+        "rd",
+        "k"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Load immediate",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LDI R{d},{imm}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "cpi",
+      "opcode": 12288,
+      "operands": [
+        "rd",
+        "k"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "C",
+        "Z",
+        "N",
+        "V"
+      ],
+      "description": "Compare immediate",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "CPI R{d},{imm}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "adiw",
+      "opcode": 38400,
+      "operands": [
+        "rd",
+        "k"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "C",
+        "Z",
+        "N"
+      ],
+      "description": "Add immediate to word",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "ADIW R{d},{imm}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "sbiw",
+      "opcode": 38656,
+      "operands": [
+        "rd",
+        "k"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "C",
+        "Z",
+        "N"
+      ],
+      "description": "Subtract immediate from word",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "SBIW R{d},{imm}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "lds",
+      "opcode": 36864,
+      "operands": [
+        "rd",
+        "a"
+      ],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Load direct",
+      "categories": [
+        "memory"
+      ],
+      "requires": [
+        "avr_core"
+      ],
+      "disasm": "LDS R{d},{addr}"
+    },
+    {
+      "mnemonic": "sts",
+      "opcode": 37376,
+      "operands": [
+        "a",
+        "rr"
+      ],
+      "bytes": 2,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Store direct",
+      "categories": [
+        "memory"
+      ],
+      "requires": [
+        "avr_core"
+      ],
+      "disasm": "STS {addr},R{r}"
+    },
+    {
+      "mnemonic": "ldd",
+      "opcode": 32768,
+      "operands": [
+        "rd",
+        "q",
+        "y"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Load Y/Z indirect with displacement",
+      "categories": [
+        "memory"
+      ],
+      "disasm": "LDD R{d},Y+{q}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "std",
+      "opcode": 33280,
+      "operands": [
+        "q",
+        "y",
+        "rr"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Store Y/Z indirect with displacement",
+      "categories": [
+        "memory"
+      ],
+      "disasm": "STD Y+{q},R{r}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "ldy",
+      "opcode": 36876,
+      "operands": [
+        "rd"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Load Y indirect",
+      "categories": [
+        "memory"
+      ],
+      "requires": [
+        "avr_core"
+      ],
+      "disasm": "LD R{d},Y"
+    },
+    {
+      "mnemonic": "ldyi",
+      "opcode": 36877,
+      "operands": [
+        "rd"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Load Y indirect pre-decrement",
+      "categories": [
+        "memory"
+      ],
+      "requires": [
+        "avr_core"
+      ],
+      "disasm": "LD R{d},Y+"
+    },
+    {
+      "mnemonic": "ldyD",
+      "opcode": 36878,
+      "operands": [
+        "rd"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Load Y indirect post-increment",
+      "categories": [
+        "memory"
+      ],
+      "requires": [
+        "avr_core"
+      ],
+      "disasm": "LD R{d},-Y"
+    },
+    {
+      "mnemonic": "ldz",
+      "opcode": 36865,
+      "operands": [
+        "rd"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Load Z indirect",
+      "categories": [
+        "memory"
+      ],
+      "requires": [
+        "avr_core"
+      ],
+      "disasm": "LD R{d},Z"
+    },
+    {
+      "mnemonic": "ldzi",
+      "opcode": 36869,
+      "operands": [
+        "rd"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Load Z indirect post-increment",
+      "categories": [
+        "memory"
+      ],
+      "requires": [
+        "avr_core"
+      ],
+      "disasm": "LD R{d},Z+"
+    },
+    {
+      "mnemonic": "ldzd",
+      "opcode": 36870,
+      "operands": [
+        "rd"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Load Z indirect pre-decrement",
+      "categories": [
+        "memory"
+      ],
+      "requires": [
+        "avr_core"
+      ],
+      "disasm": "LD R{d},-Z"
+    },
+    {
+      "mnemonic": "stz",
+      "opcode": 37377,
+      "operands": [
+        "rr"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Store Z indirect",
+      "categories": [
+        "memory"
+      ],
+      "requires": [
+        "avr_core"
+      ],
+      "disasm": "ST Z,R{r}"
+    },
+    {
+      "mnemonic": "stzi",
+      "opcode": 37381,
+      "operands": [
+        "rr"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Store Z indirect post-increment",
+      "categories": [
+        "memory"
+      ],
+      "requires": [
+        "avr_core"
+      ],
+      "disasm": "ST Z+,R{r}"
+    },
+    {
+      "mnemonic": "stzd",
+      "opcode": 37382,
+      "operands": [
+        "rr"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Store Z indirect pre-decrement",
+      "categories": [
+        "memory"
+      ],
+      "requires": [
+        "avr_core"
+      ],
+      "disasm": "ST -Z,R{r}"
+    },
+    {
+      "mnemonic": "inc",
+      "opcode": 37887,
+      "operands": [
+        "rd"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "Z",
+        "N"
+      ],
+      "description": "Increment",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "INC R{d}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "dec",
+      "opcode": 38143,
+      "operands": [
+        "rd"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "Z",
+        "N"
+      ],
+      "description": "Decrement",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "DEC R{d}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "lsl",
+      "opcode": 37888,
+      "operands": [
+        "rd"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "C",
+        "Z",
+        "N"
+      ],
+      "description": "Logical shift left",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "LSL R{d}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "lsr",
+      "opcode": 38400,
+      "operands": [
+        "rd"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "C",
+        "Z",
+        "N"
+      ],
+      "description": "Logical shift right",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "LSR R{d}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "asr",
+      "opcode": 38145,
+      "operands": [
+        "rd"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "C",
+        "Z",
+        "N",
+        "V"
+      ],
+      "description": "Arithmetic shift right",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "ASR R{d}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "rol",
+      "opcode": 37891,
+      "operands": [
+        "rd"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "C",
+        "Z",
+        "N",
+        "V"
+      ],
+      "description": "Rotate left through carry",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "ROL R{d}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "ror",
+      "opcode": 38403,
+      "operands": [
+        "rd"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "C",
+        "Z",
+        "N",
+        "V"
+      ],
+      "description": "Rotate right through carry",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "ROR R{d}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "com",
+      "opcode": 37888,
+      "operands": [
+        "rd"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "Z",
+        "N"
+      ],
+      "description": "Logical complement",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "COM R{d}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "neg",
+      "opcode": 37889,
+      "operands": [
+        "rd"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "C",
+        "Z",
+        "N",
+        "V",
+        "H"
+      ],
+      "description": "Arithmetic negative",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "NEG R{d}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "tst",
+      "opcode": 8192,
+      "operands": [
+        "rd"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "Z",
+        "N"
+      ],
+      "description": "Test against zero (AND with self)",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "TST R{d}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "push",
+      "opcode": 37375,
+      "operands": [
+        "r"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Push to stack",
+      "categories": [
+        "stack"
+      ],
+      "disasm": "PUSH R{r}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "pop",
+      "opcode": 36863,
+      "operands": [
+        "r"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Pop from stack",
+      "categories": [
+        "stack"
+      ],
+      "disasm": "POP R{d}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "in",
+      "opcode": 45056,
+      "operands": [
+        "r",
+        "a"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "Z",
+        "N",
+        "C"
+      ],
+      "description": "Parallel port input",
+      "categories": [
+        "io"
+      ],
+      "requires": [
+        "avr_core"
+      ],
+      "disasm": "IN R{d},{port}"
+    },
+    {
+      "mnemonic": "out",
+      "opcode": 47104,
+      "operands": [
+        "a",
+        "r"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Parallel port output",
+      "categories": [
+        "io"
+      ],
+      "disasm": "OUT {port},R{r}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "sbi",
+      "opcode": 39424,
+      "operands": [
+        "a",
+        "b"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Set bit in I/O",
+      "categories": [
+        "io"
+      ],
+      "disasm": "SBI {port},{b}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "cbi",
+      "opcode": 38912,
+      "operands": [
+        "a",
+        "b"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Clear bit in I/O",
+      "categories": [
+        "io"
+      ],
+      "disasm": "CBI {port},{b}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "sbic",
+      "opcode": 39168,
+      "operands": [
+        "a",
+        "b"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Skip bit in I/O if clear",
+      "categories": [
+        "io"
+      ],
+      "disasm": "SBIC {port},{b}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "sbis",
+      "opcode": 39680,
+      "operands": [
+        "a",
+        "b"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Skip bit in I/O if set",
+      "categories": [
+        "io"
+      ],
+      "disasm": "SBIS {port},{b}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "brbc",
+      "opcode": 62464,
+      "operands": [
+        "s",
+        "k7"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Branch if bit clear",
+      "categories": [
+        "branch"
+      ],
+      "requires": [
+        "avr_core"
+      ],
+      "disasm": "BRBC {b},{rel}"
+    },
+    {
+      "mnemonic": "brbs",
+      "opcode": 61440,
+      "operands": [
+        "s",
+        "k7"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Branch if bit set",
+      "categories": [
+        "branch"
+      ],
+      "requires": [
+        "avr_core"
+      ],
+      "disasm": "BRBS {b},{rel}"
+    },
+    {
+      "mnemonic": "breq",
+      "opcode": 61696,
+      "operands": [
+        "k7"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Branch if equal",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "BREQ {rel}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "brne",
+      "opcode": 62720,
+      "operands": [
+        "k7"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Branch if not equal",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "BRNE {rel}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "brcs",
+      "opcode": 61440,
+      "operands": [
+        "k7"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Branch if carry set",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "BRCS {rel}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "brcc",
+      "opcode": 62464,
+      "operands": [
+        "k7"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Branch if carry clear",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "BRCC {rel}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "brmi",
+      "opcode": 61568,
+      "operands": [
+        "k7"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Branch if minus",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "BRMI {rel}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "brpl",
+      "opcode": 62592,
+      "operands": [
+        "k7"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Branch if plus",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "BRPL {rel}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "brlt",
+      "opcode": 61760,
+      "operands": [
+        "k7"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Branch if less than",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "BRLT {rel}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "brge",
+      "opcode": 62784,
+      "operands": [
+        "k7"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Branch if greater or equal",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "BRGE {rel}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "brlo",
+      "opcode": 61472,
+      "operands": [
+        "k7"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Branch if less than (unsigned)",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "BRLO {rel}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "brsh",
+      "opcode": 62496,
+      "operands": [
+        "k7"
+      ],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Branch if greater or equal (unsigned)",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "BRSH {rel}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "sei",
+      "opcode": 38151,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "I"
+      ],
+      "description": "Set global interrupt",
+      "categories": [
+        "control"
+      ],
+      "disasm": "SEI",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "cli",
+      "opcode": 38407,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [
+        "I"
+      ],
+      "description": "Clear global interrupt",
+      "categories": [
+        "control"
+      ],
+      "disasm": "CLI",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "sleep",
+      "opcode": 38280,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Go into idle mode",
+      "categories": [
+        "control"
+      ],
+      "disasm": "SLEEP",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "wdr",
+      "opcode": 38312,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Watchdog reset",
+      "categories": [
+        "control"
+      ],
+      "disasm": "WDR",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "lpm",
+      "opcode": 38344,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 2,
+      "flags_affected": [],
+      "description": "Load program memory",
+      "categories": [
+        "memory"
+      ],
+      "disasm": "LPM R{d},Z",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "cpse",
+      "opcode": 4096,
+      "operands": [
+        "rd",
+        "rr"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Compare and skip if equal",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "CPSE R{d},{r}",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "movw",
+      "opcode": 256,
+      "operands": [
+        "rd",
+        "rr"
+      ],
+      "bytes": 1,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "Move word",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "MOVW R{d},{r}",
+      "requires": [
+        "avr_core"
+      ]
+    }
   ],
   "chip_variants": {
     "atmega8": {
-      "registers": {"SREG": 63},
-      "memory": {"flash": 8192, "ram": 1024, "fuses": true},
-      "io": {"portA": 0, "portB": 3, "portC": 6}
+      "registers": {
+        "SREG": 63
+      },
+      "memory": {
+        "flash": 8192,
+        "ram": 1024,
+        "fuses": true
+      },
+      "io": {
+        "portA": 0,
+        "portB": 3,
+        "portC": 6
+      }
     },
     "atmega328p": {
-      "registers": {"SREG": 63},
-      "memory": {"flash": 32768, "ram": 2048}
+      "registers": {
+        "SREG": 63
+      },
+      "memory": {
+        "flash": 32768,
+        "ram": 2048
+      }
     }
+  },
+  "feature_levels": {
+    "avr_core": "Base AVR (ATmega8)",
+    "avr_mul": "MUL instructions (ATmega168+)",
+    "avr_movw": "MOVW (ATmega168+)",
+    "avr_lpm_ext": "Extended LPM (ATmega168+)",
+    "avr_xmega": "AVR XMEGA"
   }
 }
