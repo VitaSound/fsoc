@@ -412,6 +412,139 @@ class FASMGenerator:
         return errors
 
 
+class DisasmGenerator:
+    """Generates a target fsys/fasm/<arch>/disasm.4th from the ISA spec.
+
+    The generated file defines `fasm-dis-one ( pc -- pc' )`, decoding one
+    instruction at pc (reading fasm-buf) and printing `MNEMONIC operands`,
+    leaving the next pc on the stack. It is driven by the `disasm` template
+    and `operands` of each instruction.
+    """
+
+    # operand type -> (template placeholder, width in following bytes,
+    #                    register-in-opcode flag)
+    def __init__(self, spec: ISASpec):
+        self.spec = spec
+
+    def _expand_opcodes(self, inst: Instruction):
+        """Return list of concrete opcode byte values for an instruction.
+
+        'rrr' in the encoding expands to 8 opcodes (base..base+7); otherwise
+        a single opcode. Encoding variables other than rrr are operand bytes.
+        """
+        enc = inst.encoding or ""
+        if inst.opcode is None:
+            return []
+        if 'r' in enc and 'rrr' in enc:
+            return list(range(inst.opcode, inst.opcode + 8))
+        return [inst.opcode]
+
+    def _operand_width(self, op: str) -> int:
+        """Width in following bytes for an operand type."""
+        if op == 'addr':
+            return 2
+        return 1
+
+    def _in_opcode(self, op: str) -> bool:
+        """True if the operand is a register number encoded in the opcode."""
+        return op in ('rn',)
+
+    def _body_for(self, inst: Instruction, opcode: int) -> str:
+        """Generate the case arm body for one concrete opcode.
+
+        Prints a byte dump (opcode + operand bytes) then the disasm text
+        (template with placeholders filled from operands). Leaves the
+        instruction byte count on the stack. Uses the `pc` local.
+        """
+        import re as _re
+        ops = list(inst.operands or [])
+        nbytes = inst.bytes
+        lines = []
+
+        # Byte dump: opcode, then each operand byte.
+        lines.append(f'            ." {opcode:02X}" ."  "')
+        off = 1
+        for op in ops:
+            if self._in_opcode(op):
+                continue  # register number, not a following byte
+            w = self._operand_width(op)
+            for _ in range(w):
+                lines.append(f'            pc {off} + fasm@ fasm-h2 space')
+                off += 1
+
+        # Disasm text: split template on {placeholder} and interleave.
+        tmpl = inst.disasm or inst.mnemonic
+        pieces = _re.split(r'(\{[^}]*\})', tmpl)
+        text_run = []
+        op_idx = 0
+        op_off = 1  # byte offset of the next following-byte operand
+        out = []
+
+        def flush():
+            if text_run:
+                out.append(f'            ." {"".join(text_run)}"')
+                text_run.clear()
+
+        def operand_code(op: str) -> str:
+            """Forth code emitting the operand value, advancing op_off."""
+            nonlocal op_off
+            if self._in_opcode(op):
+                return 'pc fasm@ 7 and [char] 0 + emit'
+            w = self._operand_width(op)
+            if w == 2:
+                code = f'pc {op_off} + fasm@ 8 lshift pc {op_off + 1} + fasm@ or fasm-h4'
+            else:
+                code = f'pc {op_off} + fasm@ fasm-h2'
+            op_off += w
+            return code
+
+        for piece in pieces:
+            if not piece:
+                continue
+            if piece.startswith('{') and piece.endswith('}'):
+                flush()
+                op = ops[op_idx] if op_idx < len(ops) else None
+                op_idx += 1
+                if op is not None:
+                    out.append(f'            {operand_code(op)}')
+                else:
+                    out.append(f'            ." {piece}"')
+            else:
+                text_run.append(piece)
+        flush()
+        if not out:
+            out.append(f'            ." {tmpl}"')
+        lines.extend(out)
+
+        lines.append(f'            {nbytes}')
+        return '\n'.join(lines)
+
+    def generate_disasm_4th(self) -> str:
+        """Generate the full disasm.4th content."""
+        arch = self.spec.arch
+        lines = [
+            f"\\ fsys/fasm/{arch}/disasm.4th — auto-generated from ISA spec.",
+            "\\ Defines fasm-dis-one for the common disasm engine.",
+            "",
+            "include ../common/fasm-dis.4th",
+            "",
+            ":noname ( pc -- pc' )",
+            "    { pc } pc fasm@ ( opcode )",
+            "    case",
+        ]
+        for inst in self.spec.instructions:
+            for opcode in self._expand_opcodes(inst):
+                body = self._body_for(inst, opcode)
+                lines.append(f'        ${opcode:02X} of')
+                lines.append(body)
+                lines.append('        endof')
+        lines.append('        ( default ) pc fasm@ fasm-h2 1')
+        lines.append('    endcase')
+        lines.append('    pc swap + ( pc\' )')
+        lines.append('; is fasm-dis-one')
+        return '\n'.join(lines) + '\n'
+
+
 def load_spec(spec_path: Path) -> ISASpec:
     """Load ISA specification from JSON or YAML."""
     if spec_path.suffix == '.json':
@@ -507,6 +640,7 @@ def main():
     if len(sys.argv) < 3:
         print("Usage: isa_to_fasm.py <spec.json|spec.yaml> <output_dir> [--validate verilog_file]")
         print("       isa_to_fasm.py --check <spec.json> <fasm/words.4th>")
+        print("       isa_to_fasm.py --disasm <spec.json> <output_dir>")
         print("       isa_to_fasm.py --create-template <arch> <output_dir>")
         sys.exit(1)
 
@@ -524,6 +658,15 @@ def main():
                 print(f"  - {e}")
             sys.exit(1)
         print("spec matches fasm opcodes")
+        return
+
+    if sys.argv[1] == '--disasm':
+        spec = load_spec(Path(sys.argv[2]))
+        output_dir = Path(sys.argv[3])
+        output_dir.mkdir(parents=True, exist_ok=True)
+        disasm = DisasmGenerator(spec).generate_disasm_4th()
+        (output_dir / "disasm.4th").write_text(disasm)
+        print(f"Generated {output_dir}/disasm.4th")
         return
 
     if sys.argv[1] == '--create-template':
