@@ -1,0 +1,26 @@
+{
+  "arch": "mcs51",
+  "generator": "bootstrap: fsoc fasm (gforth) \u2014 seed before external run",
+  "images": [
+    {
+      "name": "add",
+      "bytes": "2A2407"
+    },
+    {
+      "name": "bit",
+      "bytes": "C290D291B292"
+    },
+    {
+      "name": "branch",
+      "bytes": "1980FD"
+    },
+    {
+      "name": "call",
+      "bytes": "121234025678"
+    },
+    {
+      "name": "mov",
+      "bytes": "E520F530854050901234"
+    }
+  ]
+}
