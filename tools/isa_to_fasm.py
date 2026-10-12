@@ -588,11 +588,11 @@ def check_fasm(words_path: Path) -> Tuple[Dict[str, int], List[str]]:
     lines = content.splitlines()
     i = 0
     while i < len(lines):
-        m = re.match(r"^:\s*(\w+,)\s*\(", lines[i])
+        m = re.match(r"^:\s*([^,\s]+),\s*\(", lines[i])
         if not m:
             i += 1
             continue
-        name = m.group(1)
+        name = m.group(1) + ","
         body = lines[i][m.end():]
         j = i + 1
         while ";" not in body:
@@ -636,6 +636,23 @@ def spec_matches_fasm(spec: ISASpec, opcodes: Dict[str, int]) -> List[str]:
     return errors
 
 
+def spec_missing_in_fasm(spec: ISASpec, opcodes: Dict[str, int]) -> List[str]:
+    """Report spec instructions whose base opcode is not emitted by fasm.
+
+    Compares base opcodes directly: an rrr instruction (e.g. MOV A,Rn at
+    $E8) and a single-opcode instruction (e.g. MOV A,@R0 at $E6) both store
+    their base byte, matching the fasm word's extracted base byte.
+    """
+    fasm_ops = set(opcodes.values())
+    missing = []
+    for instr in spec.instructions:
+        if instr.opcode is None:
+            continue  # variable encoding (ajmp/acall page masks)
+        if instr.opcode not in fasm_ops:
+            missing.append(f"{instr.mnemonic} (0x{instr.opcode:02X})")
+    return missing
+
+
 def main():
     if len(sys.argv) < 3:
         print("Usage: isa_to_fasm.py <spec.json|spec.yaml> <output_dir> [--validate verilog_file]")
@@ -649,6 +666,7 @@ def main():
         words_path = Path(sys.argv[3])
         opcodes, unparseable = check_fasm(words_path)
         errors = spec_matches_fasm(spec, opcodes)
+        missing = spec_missing_in_fasm(spec, opcodes)
         print(f"{words_path.name}: {len(opcodes)} comma words parsed, {len(unparseable)} without a leading opcode")
         for u in unparseable:
             print(f"  (no-opcode) {u}")
@@ -657,7 +675,12 @@ def main():
             for e in errors:
                 print(f"  - {e}")
             sys.exit(1)
-        print("spec matches fasm opcodes")
+        if missing:
+            print(f"\nSPEC COVERAGE GAP ({len(missing)} unimplemented):")
+            for e in missing:
+                print(f"  - {e}")
+            sys.exit(1)
+        print("spec matches fasm opcodes (full coverage)")
         return
 
     if sys.argv[1] == '--disasm':
