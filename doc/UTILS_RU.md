@@ -45,7 +45,7 @@
 | **cross_lint.4th** | `tools/cross_lint.py` | 🔄 Планируется | — |
 | **con_words_gen.4th** | `tools/con_words_gen.py` | 🔄 Планируется | — |
 | **stack_analyze.4th** | `tools/stack_analyze.py` | 🔄 Планируется | — |
-| **uart_check.4th** | `tests/soc_uart.py`, `tests/z80_blink_uart.py` | 🔄 Планируется | — |
+| **uart_check.4th** | `tests/z80_blink_uart.py` | ✅ Реализован | `uart-blink-check` (file), `uc-check-buffer`, `uc-blink-states` (fenum `uc-marker%`), `uc-nul-blink?` |
 
 ### Подключение
 
