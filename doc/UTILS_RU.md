@@ -40,7 +40,7 @@
 |--------|----------------|--------|----------------|
 | **hex_patch.4th** | `fix_branches.py`, `patch_firmware.py` | ✅ Реализован | `parse-hex-byte`, `hex-find-pattern`, `hex-patch-zbranch`, `hex-parse-buffer` |
 | **patch_firmware.4th** | `patch_firmware.py` | ✅ Реализован | `pf-patch`, `pf-find-candidates` (fenum ulist), `pf-find-else`, `pf-patch-call-target` |
-| **iomap_check.4th** | `tests/iomap_check.py` | 🔄 Планируется | — |
+| **iomap_check.4th** | `tests/iomap_check.py` | ✅ Реализован | `imap-check` (dir → status), собственный JSON-парсер (begin/while), сверка `csr.json`/`iomap.vh`/`csr.fs` (fenum `imap-devrec%`) |
 | **region_check.4th** | `tests/region_check.py` | 🔄 Планируется | — |
 | **cross_lint.4th** | `tools/cross_lint.py` | 🔄 Планируется | — |
 | **con_words_gen.4th** | `tools/con_words_gen.py` | 🔄 Планируется | — |
