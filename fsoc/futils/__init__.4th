@@ -9,6 +9,7 @@
         s" fsoc/futils/patch_firmware.4th" included
         s" fsoc/futils/uart_check.4th" included
         s" fsoc/futils/iomap_check.4th" included
+        s" fsoc/futils/region_check.4th" included
         \ Будущие модули (раскомментировать по мере готовности):
         \ s" fsoc/futils/region_check.4th" included
         \ s" fsoc/futils/cross_lint.4th" included
