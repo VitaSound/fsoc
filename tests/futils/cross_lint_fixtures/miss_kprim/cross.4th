@@ -1,3 +1,3 @@
-: bx-call-nokprim ... ; immediate
-: bx-lit-nokprim ... ;
-: bx-ret-nokprim ... ;
+: bx-call ... ; immediate
+: bx-lit ... ;
+: bx-ret ... ;

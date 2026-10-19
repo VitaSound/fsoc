@@ -1,4 +1,4 @@
 dw,
-: bx-call-emit ... ; immediate
-: bx-lit-emit ... ;
-: bx-ret-emit ... ;
+: bx-call ... ; immediate
+: bx-lit ... ;
+: bx-ret ... ;

@@ -1,11 +1,11 @@
 \ good fixture
-: bx-call-good ... ; immediate
-: bx-lit-good ... ;
-: bx-ret-good ... ;
-: bx-one-good ... ;
-: bx-find-good ... ;
-: bx-comma-good ... ;
-: bx-allot-good ... ;
-: bx-from-image-good ... ;
-: bx-load-good ... ;
-: bx-execute-good ... ;
+: bx-call ... ; immediate
+: bx-lit ... ;
+: bx-ret ... ;
+: bx-one ... ;
+: bx-find ... ;
+: bx-comma ... ;
+: bx-allot ... ;
+: bx-from-image ... ;
+: bx-load ... ;
+: bx-execute ... ;

@@ -28,6 +28,8 @@ forth-package
     key-list flint-exclude fsys/host/cd16-cross.4th
     key-list flint-exclude fsys/fasm/msl16/
     key-list flint-exclude fsys/kernel/msl16/
+    key-list flint-exclude tests/futils/cross_lint_fixtures/
+    key-list flint-exclude tests/futils/con_words_gen_fixtures/
     key-list flint-exclude fsys/msl16/
     key-list flint-exclude fsys/host/msl16-cross.4th
     key-list flint-exclude fsys/fasm/z80/

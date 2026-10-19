@@ -1,2 +1,2 @@
-: bx-lit-misscall ... ;
-: bx-ret-misscall ... ;
+: bx-lit ... ;
+: bx-ret ... ;

@@ -1,2 +1,2 @@
-: bx-call-misslit ... ; immediate
-: bx-ret-misslit ... ;
+: bx-call ... ; immediate
+: bx-ret ... ;
