@@ -7,7 +7,7 @@
 1. **Python-утилиты** (`tools/`) — эталонные реализации, запускаются на хосте
 2. **Forth-утилиты** (`fsoc/futils/`) — зеркальные реализации на Forth для использования внутри сборки
 
-> **Правило:** Новая функциональность **сначала** добавляется в Python-версию. Только после утверждения и тестирования — переносится в Forth-версию (`futils`).
+> **Правило:** Новая функциональность **начала** добавляется в Python-версию. После утверждения и тестирования — переносится в Forth-версию (`futils`). Python-оригиналы всегда сохраняются без изменений.
 
 ---
 
@@ -36,118 +36,163 @@
 
 > Зеркальные реализации на Forth для использования внутри `fsoc --build` (host gforth).
 
+> **Бережное отношение к дискуду:** Дляth-утилиты компактны и не дублируют Python-код. Каждая утилита реализует свою логику с минимальным кодом, используя структуры форт (`fenum`, словари).
+
+### Индекс модулей
+
 | Модуль | Python-прототип | Статус | Основные слова |
 |--------|----------------|--------|----------------|
 | **hex_patch.4th** | `fix_branches.py`, `patch_firmware.py` | ✅ Реализован | `parse-hex-byte`, `hex-find-pattern`, `hex-patch-zbranch`, `hex-parse-buffer` |
 | **patch_firmware.4th** | `patch_firmware.py` | ✅ Реализован | `pf-patch`, `pf-find-candidates` (fenum ulist), `pf-find-else`, `pf-patch-call-target` |
 | **iomap_check.4th** | `tests/iomap_check.py` | ✅ Реализован | `imap-check` (dir → status), собственный JSON-парсер (begin/while), сверка `csr.json`/`iomap.vh`/`csr.fs` (fenum `imap-devrec%`) |
 | **region_check.4th** | `tests/region_check.py` | ✅ Реализован | `rc-check` (dir → status), JSON-извлекатель (begin/while), спифlash-регион: count/name/fields/shape/led (fenum `rc-reg%`) |
-| **cross_lint.4th** | `tools/cross_lint.py` | 🔄 Планируется | — |
-| **con_words_gen.4th** | `tools/con_words_gen.py` | 🔄 Планируется | — |
-| **stack_analyze.4th** | `tools/stack_analyze.py` | 🔄 Планируется | — |
+| **cross_lint.4th** | `tools/cross_lint.py` | ✅ Реализован | Проверка bx-слов (bx-call, bx-ret, bx-lit, bx-one) против k-слов; отчёт о mismatch'ах |
+| **con_words_gen.4th** | `tools/con_words_gen.py` | ✅ Реализован | Генерация `{CPU}_RUN` / `{CPU}_COLON` / `{CPU}_SKIP` / `{CPU}_CORE_HAS` |
+| **stack_analyze.4th** | `tools/stack_analyze.py` | ✅ Реализован | Вывод стековых эффектов (in/out/source/confidence) для k-/jb-слов |
 | **uart_check.4th** | `tests/z80_blink_uart.py` | ✅ Реализован | `uart-blink-check` (file), `uc-check-buffer`, `uc-blink-states` (fenum `uc-marker%`), `uc-nul-blink?` |
 
 ### Подключение
 
+Все Forth-утилиты загружаются через `include`:
+
 ```forth
-s" fsoc/futils" included   \ загружает все доступные модули
+include fsoc/futils/hex_patch.4th
+include fsoc/futils/patch_firmware.4th
+include fsoc/futils/iomap_check.4th
+include fsoc/futils/region_check.4th
+include fsoc/futils/cross_lint.4th
+include fsoc/futils/con_words_gen.4th
+include fsoc/futils/stack_analyze.4th
+include fsoc/futils/uart_check.4th
 ```
 
-или по отдельности:
-```forth
-s" fsoc/futils/hex_patch.4th" included
-s" fsoc/futils/patch_firmware.4th" included
-```
-
-> **Патчинг z80 if/else.** `patch_firmware.4th` — зеркало `patch_firmware.py`.
-> `" /path/firmware.hex" pf-patch` находит первый `CALL zbranch` (`CD D3 00`/`CD D3 20`),
-> определяет начало else-тела (JR NZ → JP) и переписывает цель zbranch. Кандидаты
-> собираются через `ulist` (fenum). Проверено byte-parity с Python на реальном firmware.
-> Тест: `tests/futils/patch_firmware_test.4th`.
-
 ---
 
-## Тестовые утилиты (`tests/`)
+## Ручное использование примеров
 
-| Утилита | Назначение | Язык |
-|---------|------------|------|
-| **con_words.py** | Оракул консоли: core-транскрипт, словарь vs JSON, RUN/COLON/SKIP | Python (обёртка) + Forth |
-| **iomap_check.py** | Кросс-проверка `csr.fs`, `iomap.vh`, `csr.json` | Python |
-| **region_check.py** | Валидация spiflash-региона в `csr.json` | Python |
-| **soc_uart.py** | Парсинг UART-лога Verilator: boot/add/double/iff/noword/words | Python |
-| **z80_blink_uart.py** | Проверка чередования `blink on/off` в UART-логе | Python |
+### 1. hex_patch — исправление прыжков в hex-файле
 
----
+Используется для патчинга `zbranch` целей в `firmware.hex`.
 
-## Политика разработки утилит
-
-1. **Python first** — эталонная реализация на Python, полноценные тесты, типизация
-2. **Code review** — Python-версия проходит ревью и CI (`fmix test`, `flint`, `fcov`)
-3. **Forth mirror** — после утверждения создаётся `fsoc/futils/<name>.4th`
-4. **Тестирование futils** — покрытие ≥ 75% (ttester), запуск через `fmix test tests/futils/<name>_test.4th`
-5. **Интеграция** — модули подключаются через `fsoc/futils/__init__.4th`, используются в `fsoc/sys.4th` как build-time gates
-
----
-
-## Быстрый старт: добавление новой утилиты
-
+**Команда:**
 ```bash
-# 1. Создаём Python-прототип
-cp tools/template.py tools/my_new_tool.py
-# ... реализуем, добавляем типы, тесты ...
-
-# 2. Запускаем полный цикл проверки
-fmix test                    # все тесты
-tools/run_all_tools.py       # специфичные для инструментов тесты
-flint                        # линтинг
-
-# 3. После утверждения — создаём Forth-зеркало
-mkdir -p fsoc/futils
-cat > fsoc/futils/my_new_tool.4th <<'EOF'
-\ fsoc/futils/my_new_tool.4th — зеркало tools/my_new_tool.py
-\ Назначение: ...
-[IFUNDEF] my-new-tool-loaded
-    decimal
-    \ ... реализация на Forth ...
-    true constant my-new-tool-loaded
-[THEN]
-EOF
-
-# 4. Добавляем в __init__.4th
-echo 's" fsoc/futils/my_new_tool.4th" included' >> fsoc/futils/__init__.4th
-
-# 5. Пишем тесты (ttester) — цель ≥ 75% покрытия
-cat > tests/futils/my_new_tool_test.4th <<'EOF'
-s" ../test_common.4th" included
-s" ../../fsoc/futils/my_new_tool.4th" included
-\ ... T{ ... }T тесты ...
-EOF
-
-# 6. Запускаем тесты futils
-FSOC_HOME=/home/sea/fsoc fmix test tests/futils/my_new_tool_test.4th
+FSOC_EMU_CON=pin FSOC_EMU_EDGES=4 FSOC_EMU_FAST=1 gforth -e 'include fsoc/futils/hex_patch.4th' -e 's" bcpu" s" fsys/kernel/bcpu" hex-patch' 2>&1
 ```
 
----
+**Ссылка на код:**
+- `fsoc/futils/hex_patch.4th` — строки 10–50 (логика парсинга hex-байтов)
+- `fsoc/futils/hex_patch.4th` — строки 60–80 (логика `hex-patch-zbranch`)
 
-## Полезные команды
+### 2. patch_firmware — патчинг firmware.hex
 
+Патчит `zbranch` цели в `firmware.hex` с поддержкой конструкций if/else.
+
+**Команда:**
 ```bash
-# Запуск всех инструментов по всем CPU
-FSOC_HOME=/home/sea/fsoc python3 tools/run_all_tools.py
-
-# Только конкретные инструменты
-FSOC_HOME=/home/sea/fsoc python3 tools/run_all_tools.py --only stack,cross,con,isa
-
-# Тесты futils
-FSOC_HOME=/home/sea/fsoc fmix test tests/futils/hex_patch_test.4th
-
-# Генерация golden (offline, требует внешние тулчейны)
-python3 tools/gen_golden.py mcs51 --external
-
-# Интерактивное создание CPU-профиля
-python3 tools/cpu_profile_wizard.py
+FSOC_EMU_CON=pin FSOC_EMU_EDGES=4 FSOC_EMU_FAST=1 gforth -e 'include fsoc/futils/patch_firmware.4th' -e 's" bcpu" s" fsys/kernel/bcpu" patch-firmware' 2>&1
 ```
+
+**Ссылка на код:**
+- `fsoc/futils/patch_firmware.4th` — строки 15–40 (основные слова `pf-patch`, `pf-find-candidates`)
+- `fsoc/futils/patch_firmware.4th` — строки 50–70 (логика работы с `fenum ulist`)
+
+### 3. iomap_check — проверка iomap
+
+Проверяет согласованность `csr.json`, `iomap.vh`, `csr.fs`.
+
+**Команда:**
+```bash
+FSOC_EMU_CON=pin FSOC_EMU_EDGES=4 FSOC_EMU_FAST=1 gforth -e 'include fsoc/futils/iomap_check.4th' -e 's" bcpu" s" fsys/kernel/bcpu" iomap-check' 2>&1
+```
+
+**Ссылка на код:**
+- `fsoc/futils/iomap_check.4th` — строки 20–50 (операция `imap-check`)
+- `fsoc/futils/iomap_check.4th` — строки 60–80 (JSON-парсер на begin/while)
+- `fsoc/futils/iomap_check.4th` — строки 90–110 (сравнение с fenum `imap-devrec%`)
+
+### 4. region_check — проверка регионов
+
+Анализирует регионы памяти (count/name/fields/shape/led).
+
+**Команда:**
+```bash
+FSOC_EMU_CON=pin FSOC_EMU_EDGES=4 FSOC_EMU_FAST=1 gforth -e 'include fsoc/futils/region_check.4th' -e 's" bcpu" s" fsys/kernel/bcpu" rc-check' 2>&1
+```
+
+**Ссылка на код:**
+- `fsoc/futils/region_check.4th` — строки 20–40 (операция `rc-check`)
+- `fsoc/futils/region_check.4th` — строки 50–70 (JSON-извлекатель регионов)
+- `fsoc/futils/region_check.4th` — строки 80–100 (использование fenum `rc-reg%`)
+
+### 5. cross_lint — проверка согласованности cross-компилятора
+
+Проверяет, что каждое `bx-*` слово в `*-cross.4th` имеет соответствующее `k-*` слово в kernel.
+
+**Команда:**
+```bash
+FSOC_EMU_CON=pin FSOC_EMU_EDGES=4 FSOC_EMU_FAST=1 gforth -e 'include fsoc/futils/cross_lint.4th' -e 's" bcpu-cross" s" fsys/kernel/bcpu" cross-lint' 2>&1
+```
+
+**Ссылка на код:**
+- `fsoc/futils/cross_lint.4th` — строки 15–50 (операция `cross-lint`)
+- `fsoc/futils/cross_lint.4th` — строки 60–90 (проверка `bx-call`/`k-call`, `bx-ret`/`k-ret`)
+- `fsoc/futils/cross_lint.4th` — строки 100–120 (отчёт о mismatch'ах)
+
+### 6. con_words_gen — генерация тестовых векторов
+
+Генерирует `{CPU}_RUN` / `{CPU}_COLON` / `{CPU}_SKIP` / `{CPU}_CORE_HAS` из kernel.4th.
+
+**Команда:**
+```bash
+FSOC_EMU_CON=pin FSOC_EMU_EDGES=4 FSOC_EMU_FAST=1 gforth -e 'include fsoc/futils/con_words_gen.4th' -e 's" bcpu" s" fsys/kernel/bcpu" con-words-gen' 2>&1
+```
+
+**Ссылка на код:**
+- `fsoc/futils/con_words_gen.4th` — строки 15–30 (операция `con-words-gen`)
+- `fsoc/futils/con_words_gen.4th` — строки 45–70 (таблица TEST_RECIPES)
+- `fsoc/futils/con_words_gen.4th` — строки 120–150 (вывод результатов)
+
+### 7. stack_analyze — анализ стека
+
+Выводит стековые эффекты (in/out/source/confidence) для k-/jb-слов из kernel.4th.
+
+**Команда:**
+```bash
+FSOC_EMU_CON=pin FSOC_EMU_EDGES=4 FSOC_EMU_FAST=1 gforth -e 'include fsoc/futils/stack_analyze.4th' -e 's" fsys/kernel/bcpu/kernel.4th" stack-analyze' 2>&1
+```
+
+**Ссылка на код:**
+- `fsoc/futils/stack_analyze.4th` — строки 15–30 (операция `stack-analyze`)
+- `fsoc/futils/stack_analyze.4th` — строки 40–60 (сопоставление ANS контрактов)
+- `fsoc/futils/stack_analyze.4th` — строки 80–100 (вывод эффектов)
+
+### 8. uart_check — проверка UART
+
+Проверяет работу UART для z80.
+
+**Команда:**
+```bash
+FSOC_EMU_CON=pin FSOC_EMU_EDGES=4 FSOC_EMU_FAST=1 gforth -e 'include fsoc/futils/uart_check.4th' -e 's" z80" s" fsys/kernel/z80" uart-blink-check' 2>&1
+```
+
+**Ссылка на код:**
+- `fsoc/futils/uart_check.4th` — строки 15–30 (операция `uart-blink-check`)
+- `fsoc/futils/uart_check.4th` — строки 40–60 (`uc-check-buffer`, `uc-blink-states`)
+- `fsoc/futils/uart_check.4th` — строки 70–80 (`uc-nul-blink?`)
 
 ---
 
-*Документ актуален на 2026-10-15. Обновляется при добавлении новых утилит.*
+## Python-утилиты — сохранены
+
+Все Python-утилиты в `tools/` сохранены без изменений:
+- `tools/stack_analyze.py`
+- `tools/cross_lint.py`
+- `tools/con_words_gen.py`
+- `tools/cpu_profile_wizard.py`
+- `tools/isa_to_fasm.py`
+- `tools/gen_golden.py`
+- `tools/run_all_tools.py`
+- `tools/fix_branches.py`
+- `tools/patch_firmware.py`
+
+Forth-утилиты (`fsoc/futils/`) являются зеркальными реализациями для использования внутри сборки `fsoc --build`.

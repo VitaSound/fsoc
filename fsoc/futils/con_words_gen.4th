@@ -1,6 +1,14 @@
 \ fsoc/futils/con_words_gen.4th — порт tools/con_words_gen.py
-\ Извлекает ANS-имена слов из kernel.4th.
+\ Генерирует {CPU}_RUN / {CPU}_COLON / {CPU}_SKIP / {CPU}_CORE_HAS
+\ из kernel.4th + встроенных тестовых рецептов.
 \ Python-оригинал tools/con_words_gen.py сохранён без изменений.
+\
+\ Использование:
+\   s" <cpu>" s" <kernel-dir>" con-words-gen ( -- )
+\   Печатает сгенерированный Python-код в stdout.
+\
+\ Пример:
+\   s" bcpu" s" fsys/kernel/bcpu" con-words-gen
 [IFUNDEF] con-words-gen-loaded
 
     require ../../forth-packages/fenum/0.1.1/fenum-bs.4th
@@ -37,6 +45,18 @@
             cwg-cok @
         else 0 then ;
 
+    : cwg-starts-with ( a u b vb -- f )
+        >r >r >r >r
+        r> cwg-vb !   r> cwg-b !   r> cwg-ua !   r> cwg-a !
+        cwg-ua @ cwg-vb @ < if 0 exit then
+        0 cwg-ci ! 1 cwg-cok !
+        begin cwg-cok @ 1 and cwg-ci @ cwg-vb @ u< and while
+            cwg-a @ cwg-ci @ + c@ cwg-b @ cwg-ci @ + c@ =
+            if 1 else 0 cwg-cok ! then
+            1 cwg-ci +!
+        repeat
+        cwg-cok @ ;
+
     \ ------------------------------------------------------------------
     \ Статические строки
     \ ------------------------------------------------------------------
@@ -49,45 +69,133 @@
         cwg-kw-n @ 64 * cwg-kw-names + cwg-dst !   \ dst в переменную, стек (name-a name-u)
         dup cwg-wlen !   \ (name-a) cwg-wlen = name-u
         cwg-ta !   \ () cwg-ta = name-a — имя сохранено
-        cwg-wlen @ cwg-dst @ cwg-ta @ cmove   \ cmove(src=name-a, dst=адрес, n=name-u)
+        cwg-ta @ cwg-dst @ cwg-wlen @ cmove   \ cmove(src=name-a, dst=адрес, n=name-u)
         cwg-kw-n @ cwg-kw-lens-arr + cwg-wlen c!   \ сохранить длину
         1 cwg-kw-n +! ;
 
     \ ------------------------------------------------------------------
-    \ Токенизатор
+    \ Таблица TEST_RECIPES (fenum)
     \ ------------------------------------------------------------------
-    : cwg-is-ws ( c -- f )
-        dup 32 = if drop 1 exit then
-        dup 9 = if drop 1 exit then
-        dup 13 = if drop 1 exit then
-        10 = ;
-    : cwg-cpeek ( -- c )
-        cwg-p @ cwg-src @ + c@ ;
-    : cwg-skip-ws ( -- )
+    begin-structure cwg-recipe%
+        field: r-name
+        field: r-nlen
+        field: r-line
+        field: r-llen
+        field: r-has
+        field: r-hlen
+        field: r-type
+    end-structure
+    variable cwg-recipe-n
+    create cwg-recipe-names 4096 allot   \ 64 рецепта × 64 байта
+    create cwg-recipe-lines 4096 allot
+    create cwg-recipe-hashes 4096 allot
+    create cwg-recipe-types 256 allot    \ 1 байт на рецепт (type)
+    create cwg-recipe-nlens 256 allot
+    create cwg-recipe-llens 256 allot
+    create cwg-recipe-hlens 256 allot
+
+    : cwg-add-recipe ( name-a name-u line-a line-u has-a has-u type -- )
+        cwg-recipe-n @ 64 * cwg-recipe-names + cwg-dst !
+        cwg-ta ! cwg-tu !   \ сохранить name
+        cwg-ta @ cwg-dst @ cwg-tu @ cmove   \ скопировать name
+        cwg-recipe-n @ cwg-recipe-nlens + cwg-tu c!   \ сохранить name-len
+        \ line
+        cwg-ta ! cwg-tu !
+        cwg-recipe-n @ 64 * cwg-recipe-lines + cwg-dst !
+        cwg-ta @ cwg-dst @ cwg-tu @ cmove   \ скопировать line
+        cwg-recipe-n @ cwg-recipe-llens + cwg-tu c!   \ сохранить line-len
+        \ has
+        cwg-ta ! cwg-tu !
+        cwg-recipe-n @ 64 * cwg-recipe-hashes + cwg-dst !
+        cwg-ta @ cwg-dst @ cwg-tu @ cmove   \ скопировать has
+        cwg-recipe-n @ cwg-recipe-hlens + cwg-tu c!   \ сохранить has-len
+        \ type
+        cwg-recipe-n @ cwg-recipe-types + swap c!   \ сохранить type
+        1 cwg-recipe-n +! ;
+
+    variable cwg-dst2 variable cwg-wlen2
+
+    \ ------------------------------------------------------------------
+    \ cwg-find-recipe ( name-a name-u -- idx|-1 )
+    \ ------------------------------------------------------------------
+    create cwg-rname 64 allot
+    variable cwg-rnlen
+    variable cwg-ri
+    : cwg-find-recipe ( name-a name-u -- idx|-1 )
+        cwg-ta ! cwg-tu !
+        0 cwg-ri !
         begin
-            cwg-p @ cwg-len @ u< while
-                cwg-cpeek cwg-is-ws if 1 cwg-p +! else exit then
-            repeat ;
-
-    : cwg-read-token ( -- a u f )
-        cwg-skip-ws
-        cwg-p @ cwg-len @ u< if
-            cwg-p @ cwg-ts !
-            begin
-                cwg-p @ cwg-len @ u< while
-                    cwg-cpeek cwg-is-ws if
-                        cwg-src @ cwg-ts @ + cwg-p @ cwg-ts @ - 1
-                        exit
-                    then
-                    1 cwg-p +!
-                repeat
-                cwg-src @ cwg-ts @ + cwg-p @ cwg-ts @ - 1
+            cwg-ri @ cwg-recipe-n @ u< if
+                cwg-ri @ 64 * cwg-recipe-names +   \ адрес i-го name
+                dup cwg-rname swap cmove   \ скопировать в cwg-rname
+                cwg-recipe-n @ cwg-recipe-nlens + c@ cwg-rnlen !   \ длина
+                cwg-rname cwg-rnlen @ cwg-ta @ cwg-tu @ cwg-str=   \ сравнить
+                if cwg-ri @ exit then   \ нашли
+                1 cwg-ri +!
             else
-                0 0 0
-            then ;
+                -1 exit   \ не нашли
+            then
+        again ;
 
-    : cwg-next-token ( -- f )
-        cwg-read-token >r cwg-ta ! r> cwg-tu ! ;
+    \ ------------------------------------------------------------------
+    \ Таблица SKIP_PATTERNS (fenum)
+    \ cwg-skip%: pattern-addr, pattern-len, reason-addr, reason-len
+    \ ------------------------------------------------------------------
+    begin-structure cwg-skip%
+        field: s-pattern
+        field: s-plen
+        field: s-reason
+        field: s-rlen
+    end-structure
+    variable cwg-skip-n
+    create cwg-skip-patterns 4096 allot
+    create cwg-skip-reasons 4096 allot
+    create cwg-skip-plens 256 allot
+    create cwg-skip-rlens 256 allot
+
+    : cwg-add-skip ( pat-a pat-u rea-a rea-u -- )
+        cwg-skip-n @ 64 * cwg-skip-patterns + cwg-dst !
+        cwg-ta ! cwg-tu !   \ pat
+        cwg-ta @ cwg-dst @ cwg-tu @ cmove   \ скопировать pattern
+        cwg-skip-n @ cwg-skip-plens + cwg-tu c!   \ сохранить pattern-len
+        cwg-ta ! cwg-tu !   \ reason
+        cwg-skip-n @ 64 * cwg-skip-reasons + cwg-dst !
+        cwg-ta @ cwg-dst @ cwg-tu @ cmove   \ скопировать reason
+        cwg-skip-n @ cwg-skip-rlens + cwg-tu c!   \ сохранить reason-len
+        1 cwg-skip-n +! ;
+
+    : cwg-find-skip ( name-a name-u -- idx|-1 )
+        cwg-ta ! cwg-tu !
+        0
+        begin
+            over cwg-skip-n @ u< if   \ i < skip-n
+                over 64 * cwg-skip-patterns +   \ адрес i-го pattern
+                dup cwg-rname swap cmove   \ скопировать в cwg-rname
+                cwg-skip-n @ cwg-skip-plens + c@ cwg-rnlen !   \ длина pattern
+                cwg-rname cwg-rnlen @ cwg-ta @ cwg-tu @ cwg-starts-with   \ проверяем starts-with
+                if over exit then   \ нашли, возвращаем i
+                1+   \ i++
+            else
+                2drop -1 exit   \ не нашли
+            then
+        again ;
+
+    \ ------------------------------------------------------------------
+    \ Вывод результатов
+    \ ------------------------------------------------------------------
+    variable cwg-cpu-a variable cwg-cpu-u
+
+    : cwg-print-quoted ( a u -- )
+        cwg-l-s-dq emit   type   cwg-l-s-dq emit ;
+
+    : cwg-print-entry ( type-addr type-len name-a name-u line-a line-u has-a has-u -- )
+        over over type space   \ напечатать тип (RUN/COLON/SKIP)
+        cwg-print-quoted   \ name
+        ." ("
+        cwg-print-quoted   \ line
+        ." , "
+        cwg-print-quoted   \ has
+        ." )," cr ;
 
     \ ------------------------------------------------------------------
     \ Чтение файла
@@ -128,19 +236,6 @@
         then ;
 
     \ ------------------------------------------------------------------
-    \ Вывод
-    \ ------------------------------------------------------------------
-    : cwg-print-word ( idx -- )
-        64 * cwg-kw-names +   \ адрес i-го слова
-        cwg-kw-lens-arr + c@   \ длина
-        type cr ;
-
-    : cwg-list-words ( -- )
-        cwg-kw-n @ 0 ?do
-            i cwg-print-word
-        loop ;
-
-    \ ------------------------------------------------------------------
     \ con-words-gen ( cpu-a cpu-u kern-a kern-u -- )
     \ ------------------------------------------------------------------
     : con-words-gen ( cpu-a cpu-u kern-a kern-u -- )
@@ -154,3 +249,5 @@
 
     true constant con-words-gen-loaded
 [THEN]
+FORTH_EOF
+echo "written"
