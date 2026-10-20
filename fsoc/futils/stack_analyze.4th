@@ -5,17 +5,16 @@
 \ Python-оригинал tools/stack_analyze.py сохранён без изменений.
 \
 \ Использование:
-\   s" <kernel-dir>" stack-analyze ( -- )
+\   s" <kernel-file>" stack-analyze ( -- )
 \   Печатает отчёт в stdout.
 \
 \ Пример:
-\   s" fsys/kernel/bcpu" stack-analyze
-[IFUNDEF] stack-analyze-loaded
+\   s" fsys/kernel/bcpu/kernel.4th" stack-analyze
 
     require ../../forth-packages/fenum/0.1.1/fenum-bs.4th
 
     \ ------------------------------------------------------------------
-    \ Переменные модуля (все на одном уровне)
+    \ Все переменные модуля (все в начале файла)
     \ ------------------------------------------------------------------
     variable sa-ta variable sa-tu        \ текущий токен (addr len)
     variable sa-ts                       \ начало токена в буфере
@@ -23,18 +22,18 @@
     variable sa-a variable sa-ua variable sa-b variable sa-vb
 
     variable sa-src variable sa-p variable sa-len
-    variable sa-tok-f variable sa-tok-a variable sa-tok-u
 
     variable sa-kw-n                     \ количество найденных k-слов
     variable sa-dst variable sa-wlen     \ для sa-store-kw
     create sa-kw-names 16384 allot       \ 256 слов по 64 байта
     create sa-kw-lens 256 allot          \ длины имён
 
-    variable sa-file-buf 65536 allot     \ буфер содержимого файла
+    create sa-file-buf 65536 allot       \ буфер содержимого файла
     variable sa-file-l                   \ длина содержимого
-    create sa-path-buf 1024 allot        \ статический буфер пути к файлу
     variable sa-fd                       \ файловый дескриптор
-    variable sa-last-s-a variable sa-last-s-u   \ последнее s" имя
+    create sa-path-buf 1024 allot        \ статический буфер пути к файлу
+    variable sa-kern-a variable sa-kern-u   \ сохранённые аргументы пути
+    variable sa-last-s-a variable sa-last-s-u   \ последнее s" имя (ANS-имя)
 
     \ ------------------------------------------------------------------
     \ Сравнение строк
@@ -43,7 +42,7 @@
     \ ------------------------------------------------------------------
     : sa-str= ( a u b vb -- f )
         >r >r >r >r
-        r> sa-vb !   r> sa-b !   r> sa-ua !   r> sa-a !
+        r> sa-a !   r> sa-ua !   r> sa-b !   r> sa-vb !
         sa-ua @ sa-vb @ = if
             0 sa-ci ! 1 sa-cok !
             begin sa-cok @ 1 and sa-ci @ sa-ua @ u< and while
@@ -56,7 +55,7 @@
 
     : sa-starts-with ( a u b vb -- f )
         >r >r >r >r
-        r> sa-vb !   r> sa-b !   r> sa-ua !   r> sa-a !
+        r> sa-a !   r> sa-ua !   r> sa-b !   r> sa-vb !
         sa-ua @ sa-vb @ < if 0 exit then
         0 sa-ci ! 1 sa-cok !
         begin sa-cok @ 1 and sa-ci @ sa-vb @ u< and while
@@ -71,7 +70,7 @@
     \ ------------------------------------------------------------------
     create sa-s-kword 6 allot   s" k-word"   sa-s-kword swap cmove   6 constant sa-l-s-kword
     create sa-s-jbword 6 allot  s" jb-word"  sa-s-jbword swap cmove  6 constant sa-l-s-jbword
-    create sa-s-dq    1 allot   s" "        sa-s-dq    swap cmove      1 constant sa-l-s-dq
+    create sa-s-dq    1 allot   34 sa-s-dq c!      1 constant sa-l-s-dq
 
     create sa-s-dup    3 allot   s" dup"   sa-s-dup   swap cmove    3 constant sa-l-s-dup
     create sa-s-drop   4 allot   s" drop"  sa-s-drop  swap cmove    4 constant sa-l-s-drop
@@ -94,11 +93,15 @@
     \ cmove: (src dst n)
     \ ------------------------------------------------------------------
     : sa-store-kw ( name-a name-u -- )
-        sa-ta !   \ (name-u) sa-ta = name-a
-        sa-tu !   \ () sa-tu = name-u
-        sa-kw-n @ 64 * sa-kw-names + sa-dst !   \ () sa-dst = адрес записи
-        sa-ta @ sa-dst @ sa-tu @ cmove   \ cmove(src=sa-ta, dst=sa-dst, n=sa-tu)
-        sa-kw-n @ sa-kw-lens + sa-tu @ c!   \ сохранить длину
+        sa-tu !   \ sa-tu = name-u (TOS = len)
+        sa-ta !   \ sa-ta = name-a (теперь TOS = addr)
+        \ убрать закрывающий " если есть (токен вида dup")
+        sa-tu @ 1- sa-ta @ + c@ 34 = if
+            sa-tu @ 1- sa-tu !
+        then
+        sa-kw-n @ 64 * sa-kw-names + sa-dst !   \ sa-dst = адрес записи
+        sa-ta @ sa-dst @ sa-tu @ cmove   \ cmove(src=addr, dst=sa-dst, n=len)
+        sa-kw-n @ sa-kw-lens + sa-tu @ swap c!   \ сохранить длину
         1 sa-kw-n +! ;
 
     \ ------------------------------------------------------------------
@@ -108,14 +111,37 @@
         dup 32 = if drop 1 exit then
         dup 9 = if drop 1 exit then
         dup 13 = if drop 1 exit then
-        10 = ;
+        dup 10 = if drop 1 exit then
+        drop 0 ;
+
     : sa-cpeek ( -- c )
         sa-p @ sa-src @ + c@ ;
-    : sa-skip-ws ( -- )
+
+    : sa-skip-comment ( -- )
         begin
             sa-p @ sa-len @ u< while
-                sa-cpeek sa-is-ws if 1 sa-p +! else exit then
-            repeat ;
+                sa-cpeek 10 = if exit then
+                1 sa-p +!
+        repeat ;
+
+    : sa-skip-ws ( -- )
+        begin
+            sa-p @ sa-len @ u< 0= if exit then   \ конец буфера
+            sa-cpeek   \ ( c )
+            dup 32 = if   \ ( c flag ) — consume flag → ( c )
+                drop   \ () — whitespace
+                1 sa-p +!
+            else   \ ( c ) — not whitespace
+                dup 92 =   \ ( c flag ) — consume flag → ( c )
+                if   \ ( c ) — комментарий (\)
+                    drop   \ ()
+                    sa-skip-comment   \ ()
+                else   \ ( c ) — токен найден
+                    drop   \ ()
+                    exit   \ выйти из sa-skip-ws
+                then   \ close dup 92 = if
+            then   \ close dup 32 = if
+        again ;
 
     : sa-read-token ( -- a u f )
         sa-skip-ws
@@ -123,79 +149,90 @@
             sa-p @ sa-ts !
             begin
                 sa-p @ sa-len @ u< while
-                    sa-cpeek sa-is-ws if
-                        sa-src @ sa-ts @ + sa-p @ sa-ts @ - 1
+                    sa-cpeek   \ ( c )
+                    dup sa-is-ws   \ ( c f )
+                    if   \ ( c f ) → consume flag → ( c )
+                        drop   \ () — whitespace, end of token
+                        sa-file-buf sa-ts @ +   \ адрес начала токена
+                        sa-p @ sa-ts @ -        \ длина токена
+                        1                       \ флаг успеха
                         exit
-                    then
+                    then   \ ( c ) — not whitespace
+                    drop   \ ()
                     1 sa-p +!
                 repeat
-                sa-src @ sa-ts @ + sa-p @ sa-ts @ - 1
+                sa-file-buf sa-ts @ +   \ адрес конца токена (до конца буфера)
+                sa-p @ sa-ts @ -        \ оставшаяся длина
+                1
             else
                 0 0 0
             then ;
 
     : sa-next-token ( -- f )
-        sa-read-token >r sa-ta ! r> sa-tu ! ;
+        sa-read-token   \ (a u f)
+        >r              \ (a u) R:(f)
+        sa-tu !         \ (a)   sa-tu = u
+        sa-ta !         \ ()    sa-ta = a
+        r>              \ (f)   вернуть f
+    ;
 
     \ ------------------------------------------------------------------
     \ Чтение файла
     \ sa-read-file ( path-a path-u -- count ) — читает файл в sa-file-buf
     \ ------------------------------------------------------------------
     : sa-read-file ( path-a path-u -- count )
-        r/o open-file throw   \ (fileid ior)
-        swap >r drop          \ () убрать ior, r: fileid
-        r> sa-fd !            \ () sa-fd = fileid
-        sa-file-buf 65536 sa-fd @ read-file   \ (ior) — читаем в sa-file-buf
-        drop                  \ убрать ior
-        \ определить длину по первому NUL байту
-        0
-        begin
-            dup 65536 u< if
-                sa-file-buf swap + c@
-                if 1+ else exit then
-            else exit then
-        again
-        dup sa-file-l !       \ sa-file-l = count, count остаётся на стеке
+        r/o open-file throw   \ (fileid)
+        sa-fd !               \ sa-fd = fileid, стек пуст
+        sa-file-buf 65536 sa-fd @ read-file   \ (count ior)
+        drop                  \ убрать ior, стек: (count)
+        dup sa-file-l !       \ sa-file-l = count, count remains on stack
         sa-fd @ close-file throw   \ () закрываем fileid, стек (count)
         ;
 
     \ ------------------------------------------------------------------
     \ Сканирование kernel.4th — извлекает имена k-/jb-слов
     \ Паттерн: s" name" N s" impl" k-pc k-word  (или jb-pc jb-word)
+    \ Сохраняем ANS-имя (первое s"), а не имя реализации (второе s").
     \ ------------------------------------------------------------------
     : sa-scan-kernel-file ( path-a path-u -- )
-        sa-ta !   \ (path-u) sa-ta = path-а
-        sa-tu !   \ () sa-tu = path-у
-        sa-tu @ 65536 u< if   \ проверяем path-у < 65536
-            sa-ta @ sa-path-buf sa-tu @ cmove   \ cmove(src=path-а, dst=sa-path-buf, n=path-у)
-            sa-path-buf sa-tu @ sa-read-file drop   \ читаем файл по статическому пути
-            sa-file-buf sa-src ! sa-file-l @ sa-len ! 0 sa-p !
-            0 sa-kw-n !
-            0 sa-last-s-a !   0 sa-last-s-u !
-            begin
-                sa-next-token sa-tok-f @ 0= if exit then
-                sa-ta @ sa-tu @ sa-s-dq sa-l-s-dq sa-str= if
-                    sa-next-token sa-tok-f @ 0= if exit then
-                    sa-ta sa-last-s-a !   sa-tu sa-last-s-u !
-                else
-                    sa-ta @ sa-tu @ sa-s-kword sa-l-s-kword sa-str= if
-                        sa-last-s-a @ sa-last-s-u @ sa-store-kw
-                    then
-                    sa-ta @ sa-tu @ sa-s-jbword sa-l-s-jbword sa-str= if
-                        sa-last-s-a @ sa-last-s-u @ sa-store-kw
+        swap sa-kern-a !   \ sa-kern-a = addr
+        sa-kern-u !   \ sa-kern-u = len
+        sa-kern-a @ sa-path-buf sa-kern-u @ cmove   \ скопировать путь
+        sa-path-buf sa-kern-u @ sa-read-file drop   \ читаем файл по статическому пути
+        sa-file-buf sa-src ! sa-file-l @ sa-len ! 0 sa-p !
+        0 sa-kw-n !
+        0 sa-last-s-a !   0 sa-last-s-u !
+        begin
+            sa-next-token 0= if exit then
+            sa-ta @ sa-tu @ sa-s-dq sa-l-s-dq sa-str= if
+                sa-next-token 0= if exit then
+                \ Сохраняем ANS-имя только если ещё не сохранено
+                sa-last-s-u @ 0= if
+                    sa-ta @ sa-last-s-a !   sa-tu @ sa-last-s-u !
+                    \ убрать закрывающий " если есть (токен вида dup")
+                    sa-last-s-u @ 1- sa-last-s-a @ + c@ 34 = if
+                        sa-last-s-u @ 1- sa-last-s-u !
                     then
                 then
-            again
-        else
-            2drop
-        then ;
+            else
+                sa-ta @ sa-tu @ sa-s-kword sa-l-s-kword sa-str= if
+                    sa-last-s-a @ sa-last-s-u @ sa-store-kw
+                    0 sa-last-s-a !   0 sa-last-s-u !   \ сбросили после сохранения
+                then
+                sa-ta @ sa-tu @ sa-s-jbword sa-l-s-jbword sa-str= if
+                    sa-last-s-a @ sa-last-s-u @ sa-store-kw
+                    0 sa-last-s-a !   0 sa-last-s-u !   \ сбросили после сохранения
+                then
+            then
+        again ;
 
     \ ------------------------------------------------------------------
     \ sa-contract-by-name ( name-a name-u -- in-count out-count | -1 )
     \ Жёсткие ANS контракты (как в Python from_ans_contract)
     \ ------------------------------------------------------------------
     : sa-contract-by-name ( name-a name-u -- in-count out-count | -1 )
-        sa-ta ! sa-tu !
+        sa-tu !   \ sa-tu = name-u (TOS = len)
+        sa-ta !   \ sa-ta = name-a (теперь TOS = addr)
         sa-ta @ sa-tu @ sa-s-dup sa-l-s-dup sa-str= if 1 2 exit then
         sa-ta @ sa-tu @ sa-s-drop sa-l-s-drop sa-str= if 1 0 exit then
         sa-ta @ sa-tu @ sa-s-swap sa-l-s-swap sa-str= if 2 2 exit then
@@ -217,10 +254,10 @@
     \ sa-print-effects ( idx — ) — напечатать стек-эффект i-го слова
     \ ------------------------------------------------------------------
     : sa-print-effects ( idx -- )
-        64 * sa-kw-names +   \ адрес имени
-        sa-kw-lens + c@   \ длина имени
-        2dup type   \ напечатать имя
-        ."  -> "
+        dup sa-kw-lens + c@   \ (idx len)
+        >r   \ R: len, stack: (idx)
+        64 * sa-kw-names + r>   \ (addr len)
+        2dup type ."  -> "   \ напечатать имя
         sa-contract-by-name   \ (in out | -1)
         dup -1 = if
             2drop ." unknown (no ANS contract)" cr
@@ -237,32 +274,34 @@
     \ stack-analyze ( kern-a kern-u -- )
     \ ------------------------------------------------------------------
     : stack-analyze ( kern-a kern-u -- )
-        >r >r   \ r: kern-у kern-а (kern-а на верху r)
-        r> sa-ta !   \ sa-ta = kern-а (addr)
-        r> sa-tu !   \ sa-tu = kern-у (len)
-        sa-tu @ 65536 u< if
-            sa-ta @ sa-path-buf sa-tu @ cmove   \ скопировать путь в статический буфер
-            sa-path-buf sa-tu @ sa-read-file drop   \ читаем файл
-            sa-file-buf sa-src ! sa-file-l @ sa-len ! 0 sa-p !
-            0 sa-kw-n !
-            0 sa-last-s-a !   0 sa-last-s-u !
-            begin
-                sa-next-token sa-tok-f @ 0= if exit then
-                sa-ta @ sa-tu @ sa-s-dq sa-l-s-dq sa-str= if
-                    sa-next-token sa-tok-f @ 0= if exit then
-                    sa-ta sa-last-s-a !   sa-tu sa-last-s-u !
-                else
-                    sa-ta @ sa-tu @ sa-s-kword sa-l-s-kword sa-str= if
-                        sa-last-s-a @ sa-last-s-u @ sa-store-kw
-                    then
-                    sa-ta @ sa-tu @ sa-s-jbword sa-l-s-jbword sa-str= if
-                        sa-last-s-a @ sa-last-s-u @ sa-store-kw
+        swap sa-kern-a !   \ sa-kern-a = addr
+        sa-kern-u !   \ sa-kern-u = len
+        sa-kern-a @ sa-path-buf sa-kern-u @ cmove   \ скопировать путь
+        sa-path-buf sa-kern-u @ sa-read-file drop   \ читаем файл по статическому пути
+        sa-file-buf sa-src ! sa-file-l @ sa-len ! 0 sa-p !
+        0 sa-kw-n !
+        0 sa-last-s-a !   0 sa-last-s-u !
+        begin
+            sa-next-token 0= if exit then
+            sa-ta @ sa-tu @ sa-s-dq sa-l-s-dq sa-str= if
+                sa-next-token 0= if exit then
+                sa-last-s-u @ 0= if
+                    sa-ta @ sa-last-s-a !   sa-tu @ sa-last-s-u !
+                    sa-last-s-u @ 1- sa-last-s-a @ + c@ 34 = if
+                        sa-last-s-u @ 1- sa-last-s-u !
                     then
                 then
-            again
-        else
-            2drop
-        then
+            else
+                sa-ta @ sa-tu @ sa-s-kword sa-l-s-kword sa-str= if
+                    sa-last-s-a @ sa-last-s-u @ sa-store-kw
+                    0 sa-last-s-a !   0 sa-last-s-u !
+                then
+                sa-ta @ sa-tu @ sa-s-jbword sa-l-s-jbword sa-str= if
+                    sa-last-s-a @ sa-last-s-u @ sa-store-kw
+                    0 sa-last-s-a !   0 sa-last-s-u !
+                then
+            then
+        again
         ." Stack analysis report" cr
         ." ==================" cr
         sa-kw-n @ 0 ?do
@@ -272,4 +311,3 @@
         ;
 
     true constant stack-analyze-loaded
-[THEN]
