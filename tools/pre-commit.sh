@@ -10,6 +10,9 @@ set -euo pipefail
 
 root=$(cd "$(dirname "$0")/.." && pwd)
 cd "$root"
+# fsoc/paths.4th reads FSOC_HOME at load time and aborts without it:
+# keep the tests runnable when the hook environment has no FSOC_HOME.
+export FSOC_HOME="${FSOC_HOME:-$root}"
 # shellcheck source=long-core-select.sh
 source "$root/tools/long-core-select.sh"
 
