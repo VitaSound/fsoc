@@ -182,7 +182,7 @@ long_core_run_gate() {
 
     echo "* ${label}: short suite"
     export FSOC_SKIP_LONG=1
-    printf '%s\n' tests/*_test.4th | sort | long_core_run_parallel "${label}-short"
+    find tests -name "*_test.4th" | sort | long_core_run_parallel "${label}-short"
     unset FSOC_SKIP_LONG
 
     : "${FLINT_HOME:=$HOME/flint}"

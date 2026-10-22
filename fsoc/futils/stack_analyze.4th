@@ -70,7 +70,9 @@
     \ ------------------------------------------------------------------
     create sa-s-kword 6 allot   s" k-word"   sa-s-kword swap cmove   6 constant sa-l-s-kword
     create sa-s-jbword 6 allot  s" jb-word"  sa-s-jbword swap cmove  6 constant sa-l-s-jbword
-    create sa-s-dq    1 allot   34 sa-s-dq c!      1 constant sa-l-s-dq
+    \ маркер — токен `s"` (2 байта: s + "); в тексте ядер имя всегда
+    \ идёт отдельным токеном: `s" dup"` → токены `s"` и `dup"`
+    create sa-s-dq    2 allot   115 sa-s-dq c!   34 sa-s-dq 1+ c!   2 constant sa-l-s-dq
 
     create sa-s-dup    3 allot   s" dup"   sa-s-dup   swap cmove    3 constant sa-l-s-dup
     create sa-s-drop   4 allot   s" drop"  sa-s-drop  swap cmove    4 constant sa-l-s-drop
@@ -95,6 +97,9 @@
     : sa-store-kw ( name-a name-u -- )
         sa-tu !   \ sa-tu = name-u (TOS = len)
         sa-ta !   \ sa-ta = name-a (теперь TOS = addr)
+        \ защита: пустое pending-имя (например, строка `: k-word ...`
+        \ без s" на этой же строке) — не сохраняем и не читаем sa-ta-1
+        sa-tu @ 0= if exit then
         \ убрать закрывающий " если есть (токен вида dup")
         sa-tu @ 1- sa-ta @ + c@ 34 = if
             sa-tu @ 1- sa-tu !
@@ -125,22 +130,30 @@
         repeat ;
 
     : sa-skip-ws ( -- )
+        \ Пропускает весь пробельный текст (32/9/13/10) и комментарии `\`.
+        \ Раньше потреблялся только 32: на LF скан зацикливался (пустой
+        \ токен без продвижения sa-p). LF дополнительно сбрасывает
+        \ line-scoped pending-имя — паритет с построчным regex python.
         begin
             sa-p @ sa-len @ u< 0= if exit then   \ конец буфера
             sa-cpeek   \ ( c )
-            dup 32 = if   \ ( c flag ) — consume flag → ( c )
-                drop   \ () — whitespace
+            dup sa-is-ws if   \ ( c ) — пробельный символ
+                dup 10 = if   \ ( c ) — LF: конец строки
+                    drop
+                    0 sa-last-s-a !   0 sa-last-s-u !
+                else
+                    drop
+                then
                 1 sa-p +!
-            else   \ ( c ) — not whitespace
-                dup 92 =   \ ( c flag ) — consume flag → ( c )
-                if   \ ( c ) — комментарий (\)
-                    drop   \ ()
-                    sa-skip-comment   \ ()
-                else   \ ( c ) — токен найден
-                    drop   \ ()
-                    exit   \ выйти из sa-skip-ws
-                then   \ close dup 92 = if
-            then   \ close dup 32 = if
+            else   \ ( c ) — не пробел
+                dup 92 = if   \ ( c ) — комментарий `\`
+                    drop
+                    sa-skip-comment   \ остаётся на LF — его съест этот же цикл
+                else
+                    drop
+                    exit   \ начало токена
+                then
+            then
         again ;
 
     : sa-read-token ( -- a u f )
@@ -194,19 +207,18 @@
     \ Паттерн: s" name" N s" impl" k-pc k-word  (или jb-pc jb-word)
     \ Сохраняем ANS-имя (первое s"), а не имя реализации (второе s").
     \ ------------------------------------------------------------------
-    : sa-scan-kernel-file ( path-a path-u -- )
-        swap sa-kern-a !   \ sa-kern-a = addr
-        sa-kern-u !   \ sa-kern-u = len
-        sa-kern-a @ sa-path-buf sa-kern-u @ cmove   \ скопировать путь
-        sa-path-buf sa-kern-u @ sa-read-file drop   \ читаем файл по статическому пути
-        sa-file-buf sa-src ! sa-file-l @ sa-len ! 0 sa-p !
-        0 sa-kw-n !
-        0 sa-last-s-a !   0 sa-last-s-u !
+    \ ------------------------------------------------------------------
+    \ sa-scan-loop ( -- ) — основной цикл сканирования sa-file-buf.
+    \ Токен `s"` → следующий токен = ANS-имя (первое на строке, pending);
+    \ `k-word`/`jb-word` → сохранить pending и сбросить.
+    \ Сброс pending на LF живёт в sa-skip-ws (построчный паритет python).
+    \ ------------------------------------------------------------------
+    : sa-scan-loop ( -- )
         begin
             sa-next-token 0= if exit then
             sa-ta @ sa-tu @ sa-s-dq sa-l-s-dq sa-str= if
                 sa-next-token 0= if exit then
-                \ Сохраняем ANS-имя только если ещё не сохранено
+                \ ANS-имя = первое s" этой строки
                 sa-last-s-u @ 0= if
                     sa-ta @ sa-last-s-a !   sa-tu @ sa-last-s-u !
                     \ убрать закрывающий " если есть (токен вида dup")
@@ -225,6 +237,16 @@
                 then
             then
         again ;
+
+    : sa-scan-kernel-file ( path-a path-u -- )
+        swap sa-kern-a !   \ sa-kern-a = addr
+        sa-kern-u !   \ sa-kern-u = len
+        sa-kern-a @ sa-path-buf sa-kern-u @ cmove   \ скопировать путь
+        sa-path-buf sa-kern-u @ sa-read-file drop   \ читаем файл по статическому пути
+        sa-file-buf sa-src ! sa-file-l @ sa-len ! 0 sa-p !
+        0 sa-kw-n !
+        0 sa-last-s-a !   0 sa-last-s-u !
+        sa-scan-loop ;
 
     \ ------------------------------------------------------------------
     \ sa-contract-by-name ( name-a name-u -- in-count out-count | -1 )
@@ -274,34 +296,7 @@
     \ stack-analyze ( kern-a kern-u -- )
     \ ------------------------------------------------------------------
     : stack-analyze ( kern-a kern-u -- )
-        swap sa-kern-a !   \ sa-kern-a = addr
-        sa-kern-u !   \ sa-kern-u = len
-        sa-kern-a @ sa-path-buf sa-kern-u @ cmove   \ скопировать путь
-        sa-path-buf sa-kern-u @ sa-read-file drop   \ читаем файл по статическому пути
-        sa-file-buf sa-src ! sa-file-l @ sa-len ! 0 sa-p !
-        0 sa-kw-n !
-        0 sa-last-s-a !   0 sa-last-s-u !
-        begin
-            sa-next-token 0= if exit then
-            sa-ta @ sa-tu @ sa-s-dq sa-l-s-dq sa-str= if
-                sa-next-token 0= if exit then
-                sa-last-s-u @ 0= if
-                    sa-ta @ sa-last-s-a !   sa-tu @ sa-last-s-u !
-                    sa-last-s-u @ 1- sa-last-s-a @ + c@ 34 = if
-                        sa-last-s-u @ 1- sa-last-s-u !
-                    then
-                then
-            else
-                sa-ta @ sa-tu @ sa-s-kword sa-l-s-kword sa-str= if
-                    sa-last-s-a @ sa-last-s-u @ sa-store-kw
-                    0 sa-last-s-a !   0 sa-last-s-u !
-                then
-                sa-ta @ sa-tu @ sa-s-jbword sa-l-s-jbword sa-str= if
-                    sa-last-s-a @ sa-last-s-u @ sa-store-kw
-                    0 sa-last-s-a !   0 sa-last-s-u !
-                then
-            then
-        again
+        sa-scan-kernel-file
         ." Stack analysis report" cr
         ." ==================" cr
         sa-kw-n @ 0 ?do

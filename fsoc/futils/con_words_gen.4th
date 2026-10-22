@@ -1,14 +1,17 @@
-\ fsoc/futils/con_words_gen.4th — порт tools/con_words_gen.py
-\ Генерирует {CPU}_RUN / {CPU}_COLON / {CPU}_SKIP / {CPU}_CORE_HAS
-\ из kernel.4th + встроенных тестовых рецептов.
-\ Python-оригинал tools/con_words_gen.py сохранён без изменений.
+\ fsoc/futils/con_words_gen.4th — извлечение ANS-имён слов из kernel.4th
+\ (база tools/con_words_gen.py; python-оригинал сохранён без изменений).
+\ cwg-scan-kernel-file заполняет массивы cwg-kw-names / cwg-kw-lens-arr;
+\ con-words-gen сканирует kernel-файл и печатает список имён. Паритет
+\ построчного regex python: имя = первое s" на строке, pending сбрасывается
+\ на LF и после сохранения (k-word / jb-word).
+\
+\ WIP: каркас TEST_RECIPES / SKIP_PATTERNS (cwg-add-recipe / cwg-find-*)
+\ и вывод RUN/COLON/SKIP — заготовка, генерация Python-кода не реализована.
 \
 \ Использование:
-\   s" <cpu>" s" <kernel-dir>" con-words-gen ( -- )
-\   Печатает сгенерированный Python-код в stdout.
-\
+\   s" <cpu>" s" <kernel-path>" con-words-gen ( -- )
 \ Пример:
-\   s" bcpu" s" fsys/kernel/bcpu" con-words-gen
+\   s" bcpu" s" fsys/kernel/bcpu/kernel.4th" con-words-gen
 [IFUNDEF] con-words-gen-loaded
 
     require ../../forth-packages/fenum/0.1.1/fenum-bs.4th
@@ -34,7 +37,7 @@
     \ ------------------------------------------------------------------
     : cwg-str= ( a u b vb -- f )
         >r >r >r >r
-        r> cwg-vb !   r> cwg-b !   r> cwg-ua !   r> cwg-a !
+        r> cwg-a !   r> cwg-ua !   r> cwg-b !   r> cwg-vb !
         cwg-ua @ cwg-vb @ = if
             0 cwg-ci ! 1 cwg-cok !
             begin cwg-cok @ 1 and cwg-ci @ cwg-ua @ u< and while
@@ -47,7 +50,7 @@
 
     : cwg-starts-with ( a u b vb -- f )
         >r >r >r >r
-        r> cwg-vb !   r> cwg-b !   r> cwg-ua !   r> cwg-a !
+        r> cwg-a !   r> cwg-ua !   r> cwg-b !   r> cwg-vb !
         cwg-ua @ cwg-vb @ < if 0 exit then
         0 cwg-ci ! 1 cwg-cok !
         begin cwg-cok @ 1 and cwg-ci @ cwg-vb @ u< and while
@@ -62,16 +65,117 @@
     \ ------------------------------------------------------------------
     create cwg-s-kword 6 allot   s" k-word"   cwg-s-kword swap cmove   6 constant cwg-l-s-kword
     create cwg-s-jbword 6 allot  s" jb-word"  cwg-s-jbword swap cmove  6 constant cwg-l-s-jbword
-    create cwg-s-dq    1 allot   s" "        cwg-s-dq    swap cmove      1 constant cwg-l-s-dq
+    create cwg-s-dq    2 allot   115 cwg-s-dq c!   34 cwg-s-dq 1+ c!   2 constant cwg-l-s-dq   \ байты s"
 
     \ ------------------------------------------------------------------
     : cwg-store-kw ( name-a name-u -- )
-        cwg-kw-n @ 64 * cwg-kw-names + cwg-dst !   \ dst в переменную, стек (name-a name-u)
-        dup cwg-wlen !   \ (name-a) cwg-wlen = name-u
-        cwg-ta !   \ () cwg-ta = name-a — имя сохранено
-        cwg-ta @ cwg-dst @ cwg-wlen @ cmove   \ cmove(src=name-a, dst=адрес, n=name-u)
-        cwg-kw-n @ cwg-kw-lens-arr + cwg-wlen c!   \ сохранить длину
+        cwg-tu !   cwg-ta !
+        cwg-tu @ 0= if exit then            \ пустой pending (def-строка без s")
+        cwg-tu @ 1- cwg-ta @ + c@ 34 = if   \ strip закрывающей " (токен вида dup")
+            cwg-tu @ 1- cwg-tu !
+        then
+        cwg-ta @ cwg-kw-n @ 64 * cwg-kw-names + cwg-tu @ cmove
+        cwg-tu @ cwg-kw-n @ cwg-kw-lens-arr + c!
         1 cwg-kw-n +! ;
+
+    \ ------------------------------------------------------------------
+    \ Токенизатор (паритет stack_analyze): весь whitespace, комментарии `\`,
+    \ LF сбрасывает line-scoped pending-имя.
+    \ ------------------------------------------------------------------
+    : cwg-is-ws ( c -- f )
+        dup 32 = if drop 1 exit then
+        dup 9 = if drop 1 exit then
+        dup 13 = if drop 1 exit then
+        dup 10 = if drop 1 exit then
+        drop 0 ;
+
+    : cwg-cpeek ( -- c )
+        cwg-p @ cwg-src @ + c@ ;
+
+    : cwg-skip-comment ( -- )
+        begin
+            cwg-p @ cwg-len @ u< while
+                cwg-cpeek 10 = if exit then
+                1 cwg-p +!
+        repeat ;
+
+    : cwg-skip-ws ( -- )
+        begin
+            cwg-p @ cwg-len @ u< 0= if exit then
+            cwg-cpeek
+            dup cwg-is-ws if
+                dup 10 = if
+                    drop
+                    0 cwg-last-s-a !   0 cwg-last-s-u !
+                else
+                    drop
+                then
+                1 cwg-p +!
+            else
+                dup 92 = if
+                    drop
+                    cwg-skip-comment
+                else
+                    drop
+                    exit
+                then
+            then
+        again ;
+
+    : cwg-read-token ( -- a u f )
+        cwg-skip-ws
+        cwg-p @ cwg-len @ u< if
+            cwg-p @ cwg-ts !
+            begin
+                cwg-p @ cwg-len @ u< while
+                    cwg-cpeek
+                    dup cwg-is-ws if
+                        drop
+                        cwg-file-buf cwg-ts @ +
+                        cwg-p @ cwg-ts @ -
+                        1 exit
+                    then
+                    drop
+                    1 cwg-p +!
+                repeat
+                cwg-file-buf cwg-ts @ +
+                cwg-p @ cwg-ts @ -
+                1
+            else
+                0 0 0
+            then ;
+
+    : cwg-next-token ( -- f )
+        cwg-read-token
+        >r cwg-tu ! cwg-ta ! r> ;
+
+    \ ------------------------------------------------------------------
+    \ cwg-scan-loop ( -- ) — цикл сканирования cwg-file-buf:
+    \ токен `s"` → ANS-имя = первое s" этой строки (pending);
+    \ `k-word`/`jb-word` → сохранить pending и сбросить.
+    \ ------------------------------------------------------------------
+    : cwg-scan-loop ( -- )
+        begin
+            cwg-next-token 0= if exit then
+            cwg-ta @ cwg-tu @ cwg-s-dq cwg-l-s-dq cwg-str= if
+                cwg-next-token 0= if exit then
+                cwg-last-s-u @ 0= if
+                    cwg-ta @ cwg-last-s-a !   cwg-tu @ cwg-last-s-u !
+                    cwg-last-s-u @ 1- cwg-last-s-a @ + c@ 34 = if
+                        cwg-last-s-u @ 1- cwg-last-s-u !
+                    then
+                then
+            else
+                cwg-ta @ cwg-tu @ cwg-s-kword cwg-l-s-kword cwg-str= if
+                    cwg-last-s-a @ cwg-last-s-u @ cwg-store-kw
+                    0 cwg-last-s-a !   0 cwg-last-s-u !
+                then
+                cwg-ta @ cwg-tu @ cwg-s-jbword cwg-l-s-jbword cwg-str= if
+                    cwg-last-s-a @ cwg-last-s-u @ cwg-store-kw
+                    0 cwg-last-s-a !   0 cwg-last-s-u !
+                then
+            then
+        again ;
 
     \ ------------------------------------------------------------------
     \ Таблица TEST_RECIPES (fenum)
@@ -212,42 +316,33 @@
     \ Сканирование kernel.4th
     \ ------------------------------------------------------------------
     : cwg-scan-kernel-file ( path-a path-u -- )
-        cwg-file-buf swap 32768 u< if   \ path-u < 32768
-            cwg-file-buf swap cmove   \ cmove(src=path-a, dst=cwg-file-buf, n=path-u)
-            cwg-readwhole drop
-            cwg-file-buf cwg-src ! cwg-file-l @ cwg-len ! 0 cwg-p !
-            0 cwg-last-s-a !   0 cwg-last-s-u !
-            begin
-                cwg-next-token cwg-tok-f @ 0= if exit then
-                cwg-ta @ cwg-tu @ cwg-s-dq cwg-l-s-dq cwg-str= if
-                    cwg-next-token cwg-tok-f @ 0= if exit then
-                    cwg-ta cwg-last-s-a !   cwg-tu cwg-last-s-u !
-                else
-                    cwg-ta @ cwg-tu @ cwg-s-kword cwg-l-s-kword cwg-str= if
-                        cwg-last-s-a @ cwg-last-s-u @ cwg-store-kw
-                    then
-                    cwg-ta @ cwg-tu @ cwg-s-jbword cwg-l-s-jbword cwg-str= if
-                        cwg-last-s-a @ cwg-last-s-u @ cwg-store-kw
-                    then
-                then
-            again
-        else
-            2drop
-        then ;
+        cwg-readwhole drop              \ файл → cwg-file-buf; count не нужен
+        cwg-file-buf cwg-src ! cwg-file-l @ cwg-len ! 0 cwg-p !
+        0 cwg-kw-n !
+        0 cwg-last-s-a !   0 cwg-last-s-u !
+        cwg-scan-loop ;
+
+    \ ------------------------------------------------------------------
+    \ cwg-print-word ( idx -- ) / cwg-list-words ( -- )
+    \ ------------------------------------------------------------------
+    : cwg-print-word ( idx -- )
+        dup 64 * cwg-kw-names +      \ (idx name-a)
+        swap cwg-kw-lens-arr + c@    \ (name-a name-u)
+        type cr ;
+
+    : cwg-list-words ( -- )
+        cwg-kw-n @ 0 ?do
+            i cwg-print-word
+        loop ;
 
     \ ------------------------------------------------------------------
     \ con-words-gen ( cpu-a cpu-u kern-a kern-u -- )
     \ ------------------------------------------------------------------
     : con-words-gen ( cpu-a cpu-u kern-a kern-u -- )
-        >r >r >r >r
-        r> cwg-kern-u !
-        r> cwg-kern-a !
-        0 cwg-kw-n !
+        2swap cwg-cpu-u ! cwg-cpu-a !
+        cwg-kern-u ! cwg-kern-a !
         cwg-kern-a @ cwg-kern-u @ cwg-scan-kernel-file
-        cwg-list-words
-        ;
+        cwg-list-words ;
 
     true constant con-words-gen-loaded
 [THEN]
-FORTH_EOF
-echo "written"

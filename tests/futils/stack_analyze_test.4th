@@ -1,136 +1,35 @@
-\ tests/futils/stack_analyze_test.4th
-\ Тесты для fsoc/futils/stack_analyze.4th
+\ tests/futils/stack_analyze_test.4th — тест fsoc/futils/stack_analyze.4th
+\ Пути: include резолвится от каталога включающего файла, runtime-путь
+\ (stack-analyze → open-file) — от CWD (корень репо, pre-commit делает cd).
+\ Фикстура — реальное ядро bcpu: 64 строки формата `s" name" ... k-pc k-word`.
 
-    require ../../forth-packages/fenum/0.1.1/fenum-bs.4th
-    require ../../fsoc/futils/stack_analyze.4th
-    require ./helper.4th
+s" ../../fsoc/futils/stack_analyze.4th" included
+s" helper.4th" included
 
-    \ ------------------------------------------------------------------
-    \ Тестовые данные
-    \ ------------------------------------------------------------------
+\ sa-has ( na nu -- f ) — найдено ли имя среди извлечённых k-слов
+variable t-qa   variable t-qu   variable t-found
+: sa-has ( na nu -- f )
+    t-qu !   t-qa !   0 t-found !
+    sa-kw-n @ 0 ?do
+        t-found @ 0= if
+            i 64 * sa-kw-names +    \ (name-a)
+            i sa-kw-lens + c@       \ (name-a name-u)
+            t-qa @ t-qu @           \ (name-a name-u query-a query-u)
+            sa-str=                 \ (f)
+            if 1 t-found ! then
+        then
+    loop
+    t-found @ ;
 
-    \ Пример мини-ядра для тестирования
-    s" \\ A minimal kernel for testing\\n"
-    s" : test-word1 ( a u -- ) ." s" \\n"
-    s" : test-word2 ( -- n ) 123 ." s" \\n"
-    s" : k-word_test1 ( x y -- z ) + ." s" \\n"
-    s" : jb-word_test2 ( a b -- ) ." s" \\n"
-    s" \\ ( this is a comment )\\n"
-    s" : test-word3 ( -- ) cr ." s" \\n"
-    s" \\ end of file"
-    constant test-kern-data
-    variable test-kern-addr
-    variable test-kern-len
+\ FIXTURE: bcpu kernel.4th — печать отчёта + извлечение имён
+s" fsys/kernel/bcpu/kernel.4th" stack-analyze
 
-    \ ------------------------------------------------------------------
-    \ Создание временного файла с тестовыми данными
-    \ ------------------------------------------------------------------
-    : create-test-kernel ( -- )
-        test-kern-data count   \ ( a u )
-        >r >r                  \ R: u, a
-        tmp-dir-path dup s" /test_kernel.4th" append-path \ ( path-a path-u )
-        >r                     \ R: u, a, path-a
-        swap >r                \ R: u, a, path-a, path-u
-        count                  \ ( a u )
-        0 swap write-file throw \ ( ) — создали файл
-        r@ count               \ ( path-a path-u a u )
-        r>                     \ ( path-a path-u a u )
-        swap r>                \ ( path-a path-u a u )
-        r>                     \ ( path-a path-u a u )
-        swap >r                \ R: u, a, path-a
-        r@                     \ ( path-u )
-        r>                     \ ( path-u )
-        r>                     \ ( path-u )
-        r@                     \ ( path-u )
-        swap                   \ ( path-u path-u )
-        >r >r                  \ R: u, a, path-a, path-u
-        r@                     \ ( path-a )
-        r>                     \ ( path-a )
-        r>                     \ ( path-a )
-        r>                     \ ( path-a )
-        swap                   \ ( path-a path-u )
-        test-kern-addr ! test-kern-len !
-    ;
+\ Паритет с python: grep -cE '^s" .* k-pc k-word$' = 64
+sa-kw-n @ 64 Aeq
 
-    \ ------------------------------------------------------------------
-    \ Очистка временных файлов
-    \ ------------------------------------------------------------------
-    : cleanup-test-kernel ( -- )
-        test-kern-addr @ 0= if exit then
-        test-kern-addr @ test-kern-len @ delete-file drop
-        0 test-kern-addr ! 0 test-kern-len !
-    ;
+\ Символические и обычные имена присутствуют в массиве
+s" dup"  sa-has AtTrue
+s" drop" sa-has AtTrue
+s" +"    sa-has AtTrue
 
-    \ ------------------------------------------------------------------
-    \ Тестовый случай: базовое сканирование
-    \ ------------------------------------------------------------------
-    : test-basic-scan ( -- )
-        ." Running basic scan test..." cr
-        create-test-kernel
-        test-kern-addr @ test-kern-len @ stack-analyze
-        ." Basic scan test finished." cr
-        cleanup-test-kernel
-    ;
-
-    \ ------------------------------------------------------------------
-    \ Тестовый случай: сканирование с комментариями и кавычками
-    \ ------------------------------------------------------------------
-    s" \\ A kernel with comments\\n"
-    s" : k-word_comment ( x -- ) \\ comment\\n"
-    s" : jb-word_quoted \" this is quoted \" ( a -- ) ." s" \\n"
-    s" \\ another comment line\\n"
-    constant test-kern-data-comment
-    variable test-kern-addr-comment
-    variable test-kern-len-comment
-
-    : create-test-kernel-comment ( -- )
-        test-kern-data-comment count   \ ( a u )
-        >r >r
-        tmp-dir-path dup s" /test_kernel_comment.4th" append-path
-        >r
-        swap >r
-        count
-        0 swap write-file throw
-        r@ count
-        r>
-        swap r>
-        r>
-        swap >r
-        r@
-        r>
-        r>
-        r>
-        swap
-        >r >r
-        r@
-        r>
-        r>
-        r>
-        swap
-        test-kern-addr-comment ! test-kern-len-comment !
-    ;
-
-    : cleanup-test-kernel-comment ( -- )
-        test-kern-addr-comment @ 0= if exit then
-        test-kern-addr-comment @ test-kern-len-comment @ delete-file drop
-        0 test-kern-addr-comment ! 0 test-kern-len-comment !
-    ;
-
-    : test-comment-and-quotes ( -- )
-        ." Running comment and quotes test..." cr
-        create-test-kernel-comment
-        test-kern-addr-comment @ test-kern-len-comment @ stack-analyze
-        ." Comment and quotes test finished." cr
-        cleanup-test-kernel-comment
-    ;
-
-    \ ------------------------------------------------------------------
-    \ Основной тестовый блок
-    \ ------------------------------------------------------------------
-    : run-tests ( -- )
-        test-basic-scan
-        test-comment-and-quotes
-    ;
-
-\ Запуск тестов
-run-tests bye
+futils-test-finish
