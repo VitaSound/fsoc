@@ -10,11 +10,9 @@
         s" fsoc/futils/uart_check.4th" included
         s" fsoc/futils/iomap_check.4th" included
         s" fsoc/futils/region_check.4th" included
-        \ Будущие модули (раскомментировать по мере готовности):
-        \ s" fsoc/futils/region_check.4th" included
-        \ s" fsoc/futils/cross_lint.4th" included
-        \ s" fsoc/futils/con_words_gen.4th" included
-        \ s" fsoc/futils/stack_analyze.4th" included
+        s" fsoc/futils/cross_lint.4th" included
+        s" fsoc/futils/con_words_gen.4th" included
+        s" fsoc/futils/stack_analyze.4th" included
     ;
     true constant futils-loaded
 [THEN]
