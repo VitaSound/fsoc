@@ -3,9 +3,9 @@
 \ stdout, which tools/gen_golden.py parses into tests/golden/mcs51.json.
 \ External assembler (sdas8051) can produce an independent reference offline.
 
-s" /home/sea/fsoc/tests/test_common.4th" included
-s" /home/sea/fsoc/tests/fixture.4th" included
-s" /home/sea/fsoc/fsys/fasm/8051/fasm.4th" included
+s" ../../test_common.4th" included
+s" ../../fixture.4th" included
+s" ../../../fsys/fasm/8051/fasm.4th" included
 mcs-wl >order
 
 \ ( name-a name-u -- )  emit "IMAGE <name> " then the hex bytes.

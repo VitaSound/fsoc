@@ -14,6 +14,7 @@
         s" fsoc/futils/con_words_gen.4th" included
         s" fsoc/futils/stack_analyze.4th" included
         s" fsoc/futils/isa_to_fasm.4th" included
+        s" fsoc/futils/gen_golden.4th" included
     ;
     true constant futils-loaded
 [THEN]
