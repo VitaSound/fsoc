@@ -1,0 +1,66 @@
+\ fsys/fasm/mcs51/words.4th — MCS51 opcodes as comma words.
+\ Auto-generated from ISA spec. DO NOT EDIT MANUALLY.
+
+[IFUNDEF] mcs-wl
+wordlist constant mcs-wl
+get-current
+mcs-wl set-current
+mcs-wl >order
+
+\ Register/SFR constants.
+$00 constant r0
+$01 constant r1
+$02 constant r2
+$03 constant r3
+$04 constant r4
+$05 constant r5
+$06 constant r6
+$07 constant r7
+$80 constant P0
+$81 constant SP
+$82 constant DPL
+$83 constant DPH
+
+\ Bit address constants.
+$80 constant P0_0
+$81 constant P0_1
+$82 constant P0_2
+$83 constant P0_3
+$84 constant P0_4
+$85 constant P0_5
+$86 constant P0_6
+$87 constant P0_7
+
+: mcs-u8 ( u -- u )
+   dup 0 256 within 0= abort" mcs51: byte" ;
+
+: mcs-rn ( u -- u )
+   dup 0 8 within 0= abort" mcs51: Rn" ;
+
+: mcs-rel ( dest -- u )
+   fasm-pc @ 1+ -
+   dup -128 128 within 0= abort" mcs51: rel"
+   $FF and ;
+
+: db, ( u -- ) mcs-u8 fasm-emit ;
+: dw, ( u -- )
+   dup $FF and fasm-emit
+   8 rshift fasm-emit ;
+
+: mcs-op1 ( opc "name" -- )
+   create ,
+   does> ( -- ) @ fasm-emit ;
+
+\ Instruction comma words.
+$00 mcs-op1 nop,
+: mov-a-rn, ( rn -- )
+   $E8 fasm-emit swap mcs-rn fasm-emit ;
+: add-a-rn, ( rn -- )
+   $28 fasm-emit swap mcs-rn fasm-emit ;
+: lcall#, ( addr -- )
+   $12 fasm-emit dup 8 rshift $FF and fasm-emit ;
+: mcs-span ( c-addr u -- n )
+   2dup s" lcall," compare 0=
+   if 2drop 3 exit then
+   r> drop
+   2drop 1 ;
