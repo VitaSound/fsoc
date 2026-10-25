@@ -1,0 +1,68 @@
+\ fsys/fasm/msl16/words.4th — MSL16 opcodes as comma words.
+\ Auto-generated from ISA spec. DO NOT EDIT MANUALLY.
+
+[IFUNDEF] mcs-wl
+wordlist constant mcs-wl
+get-current
+mcs-wl set-current
+mcs-wl >order
+
+\ Register/SFR constants.
+$00 constant T
+$01 constant N
+$02 constant R
+$03 constant P
+
+: msl16-u8 ( u -- u )
+   dup 0 256 within 0= abort" msl16: byte" ;
+
+: msl16-rn ( u -- u )
+   dup 0 8 within 0= abort" msl16: Rn" ;
+
+: msl16-rel ( dest -- u )
+   fasm-pc @ 1+ -
+   dup -128 128 within 0= abort" msl16: rel"
+   $FF and ;
+
+: db, ( u -- ) msl16-u8 fasm-emit ;
+: dw, ( u -- )
+   dup $FF and fasm-emit
+   8 rshift fasm-emit ;
+
+: msl16-op1 ( opc "name" -- )
+   create ,
+   does> ( -- ) @ fasm-emit ;
+
+\ Instruction comma words.
+$00 msl16-op1 nop,
+$01 msl16-op1 and,
+$02 msl16-op1 xor,
+$03 msl16-op1 add,
+$04 msl16-op1 zer,
+$06 msl16-op1 halve,
+$07 msl16-op1 sub,
+$08 msl16-op1 dup,
+$09 msl16-op1 drop,
+$0A msl16-op1 goto,
+$0B msl16-op1 fromr,
+$0C msl16-op1 tor,
+$0D msl16-op1 fetch,
+$0E msl16-op1 store,
+$0F msl16-op1 swap,
+\ TODO: lit has a variable/complex encoding (2-byte)
+\         not auto-generated. See fsys/fasm/msl16/words.4th.
+: lit, (n -- )
+   \ TODO: implement lit ;
+\ TODO: call has a variable/complex encoding (2-byte)
+\         not auto-generated. See fsys/fasm/msl16/words.4th.
+: call, (dest -- )
+   \ TODO: implement call ;
+\ TODO: dcw has a variable/complex encoding (2-byte)
+\         not auto-generated. See fsys/fasm/msl16/words.4th.
+: dcw, (u -- )
+   \ TODO: implement dcw ;
+: msl16-span ( c-addr u -- n )
+   2dup s" lit," compare 0= r> or >r 2dup s" call," compare 0= r> or >r 2dup s" dcw," compare 0=
+   if 2drop 2 exit then
+   r> drop
+   2drop 1 ;

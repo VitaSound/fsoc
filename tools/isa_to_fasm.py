@@ -270,6 +270,12 @@ class FASMGenerator:
             names = by_bytes[byte_count]
             if byte_count == 1:
                 continue  # default span is 1
+            if not float(byte_count).is_integer():
+                # Forth span is integer-only: a 0.25 group (msl16 nibble
+                # encodings) would emit an invalid `0.25 exit`. Such words
+                # fall through to the default span, matching the Forth port
+                # (isa-fix-dfrac folds 0.25 to 0 in the shared loader).
+                continue
             conditions = []
             for name in names:
                 conditions.append(f'2dup s" {name}" compare 0=')

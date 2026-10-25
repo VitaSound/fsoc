@@ -336,14 +336,8 @@ variable isa-bytes
     ;
 
 \ сырой stack comment для stub: ( op op -- ) без замен
-: isa-emit-stack-comment-raw ( -- )
-    o-space [char] ( o-ch
-    isa-opcount @ 0 ?do
-        o-space
-        i isa-ops @ fjson.array-nth fjson.node-str@ o-type
-    loop
-    s"  -- )" o-type
-    ;
+\ (isa-emit-stack-comment-raw удалён: после переноса stub-ветки на собственный
+\ вывод комментария у слова не осталось вызовов.)
 
 \ кусок тела по операнду (паритет с _generate_instruction_word)
 variable op-a variable op-u
@@ -368,8 +362,16 @@ variable op-a variable op-u
         s" \         not auto-generated. See fsys/fasm/" o-type
         o-arch s" /words.4th." o-type o-cr
         s" : " o-type isa-hasimm @ isa-make-name o-type
-        isa-emit-stack-comment-raw o-cr
-        s"   \ TODO: implement " o-type isa-ma @ isa-ml @ o-type s" ;" o-type o-cr
+        \ python stub: " (" + " ".join(operands) + " -- )" — БЕЗ пробела после (
+        o-space [char] ( o-ch
+        isa-opcount @ 0 ?do
+            i 0 > if o-space then
+            i isa-ops @ fjson.array-nth fjson.node-str@ o-type
+        loop
+        s"  -- )" o-type o-cr
+        \ ведущий пробел в s" gforth съедает: контент должен быть
+        \ "   \ TODO: implement " (3sp) и " ;", как в python
+        s"    \ TODO: implement " o-type isa-ma @ isa-ml @ o-type s"  ;" o-type o-cr
         exit
     then
     isa-opcount @ 0= if
@@ -737,6 +739,9 @@ s"  add_r adc_r sub_r sbc_r and_r xor_r or_r cp_r inc_r dec_r inc_rp dec_rp add_
     drop
     r> close-file throw
     ic-src-l !
+    \ свежий парсер на каждый вызов (python: opcodes={} на каждый --check)
+    \ без этого ic-nop/ic-nunp накапливались через запятую по сеансу
+    0 ic-nop ! 0 ic-nunp !
     ;
 
 : ic-eol ( p -- e )                \ позиция \n после p либо конец
@@ -820,11 +825,13 @@ variable ic-hmin
     ic-nbuf ic-nbufn @ ;
 
 : ic-mnem ( word-a word-u -- b u )
-    \ base = word без хвостовых запятых (python rstrip(","))
-    begin dup 0> while
-         2dup 1- + c@ [char] , <> if exit then
-        1-
-    repeat
+    \ base = word без хвостовых запятых (python rstrip(","));
+    \ маппинг (#/-суффикс, z80_map, translit) выполняется ВСЕГДА, как в python.
+    \ Было `if exit` на первом не-',' — слово возвращалось без транслита,
+    \ ic-spec-find не находил mnemonic и дрейф не срабатывал никогда.
+    begin dup 0> if
+         2dup 1- + c@ [char] , = else 0
+    then while 1- repeat
     ic-tu ! ic-ta !
     \ '#'-суффикс: base[:-1].replace("-","_") + "_num"
     ic-tu @ 0> if ic-ta @ ic-tu @ 1- + c@ [char] # = if
@@ -1262,7 +1269,10 @@ variable ic-hmin
     ic-build-index
     ic-words-a @ ic-words-u @ ic-read-words
     ic-pass1 ic-pass2
-    \ подсчёт до печати (python: errors/missing вычислены до print)
+    \ подсчёт до печати (python: errors/missing вычислены до print);
+    \ счётчики свежие на каждый вызов — повторный ic-check в одном сеансе
+    \ обязан считать так же, как первый (run_all_tools зовёт его per-cpu)
+    0 ic-drift ! 0 ic-gap !
     0 ic-drift-run
     0 ic-gap-run
     \ header
