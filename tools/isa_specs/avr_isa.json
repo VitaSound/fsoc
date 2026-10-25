@@ -230,7 +230,7 @@
     },
     {
       "mnemonic": "ret",
-      "opcode": 38184,
+      "opcode": 38152,
       "operands": [],
       "bytes": 1,
       "cycles": 2,
