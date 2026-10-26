@@ -150,8 +150,7 @@
         cl-ua @ cl-vb @ = if
             0 cl-ci ! 1 cl-cok !
             begin cl-cok @ 1 and cl-ci @ cl-ua @ u< and while
-                cl-a @ cl-ci @ + c@ cl-b @ cl-ci @ + c@ =
-                if 1 else 0 cl-cok ! then
+                cl-a @ cl-ci @ + c@ cl-b @ cl-ci @ + c@ <> if 0 cl-cok ! then
                 1 cl-ci +!
             repeat
             cl-cok @
@@ -166,8 +165,7 @@
         cl-ua @ cl-vb @ < if 0 exit then
         0 cl-ci ! 1 cl-cok !
         begin cl-cok @ 1 and cl-ci @ cl-vb @ u< and while
-            cl-a @ cl-ci @ + c@ cl-b @ cl-ci @ + c@ =
-            if 1 else 0 cl-cok ! then
+            cl-a @ cl-ci @ + c@ cl-b @ cl-ci @ + c@ <> if 0 cl-cok ! then
             1 cl-ci +!
         repeat
         cl-cok @ ;
@@ -183,7 +181,7 @@
         begin cl-cok @ 1 and cl-ci @ cl-vb @ u< and while
             cl-a @ cl-ua @ cl-vb @ - + cl-ci @ + c@
             cl-b @ cl-ci @ + c@
-            = if 1 else 0 cl-cok ! then
+            <> if 0 cl-cok ! then
             1 cl-ci +!
         repeat
         cl-cok @ ;

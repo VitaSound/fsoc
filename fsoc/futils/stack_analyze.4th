@@ -46,8 +46,7 @@
         sa-ua @ sa-vb @ = if
             0 sa-ci ! 1 sa-cok !
             begin sa-cok @ 1 and sa-ci @ sa-ua @ u< and while
-                sa-a @ sa-ci @ + c@ sa-b @ sa-ci @ + c@ =
-                if 1 else 0 sa-cok ! then
+                sa-a @ sa-ci @ + c@ sa-b @ sa-ci @ + c@ <> if 0 sa-cok ! then
                 1 sa-ci +!
             repeat
             sa-cok @
@@ -59,8 +58,7 @@
         sa-ua @ sa-vb @ < if 0 exit then
         0 sa-ci ! 1 sa-cok !
         begin sa-cok @ 1 and sa-ci @ sa-vb @ u< and while
-            sa-a @ sa-ci @ + c@ sa-b @ sa-ci @ + c@ =
-            if 1 else 0 sa-cok ! then
+            sa-a @ sa-ci @ + c@ sa-b @ sa-ci @ + c@ <> if 0 sa-cok ! then
             1 sa-ci +!
         repeat
         sa-cok @ ;

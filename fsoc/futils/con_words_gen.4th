@@ -41,8 +41,7 @@
         cwg-ua @ cwg-vb @ = if
             0 cwg-ci ! 1 cwg-cok !
             begin cwg-cok @ 1 and cwg-ci @ cwg-ua @ u< and while
-                cwg-a @ cwg-ci @ + c@ cwg-b @ cwg-ci @ + c@ =
-                if 1 else 0 cwg-cok ! then
+                cwg-a @ cwg-ci @ + c@ cwg-b @ cwg-ci @ + c@ <> if 0 cwg-cok ! then
                 1 cwg-ci +!
             repeat
             cwg-cok @
@@ -54,8 +53,7 @@
         cwg-ua @ cwg-vb @ < if 0 exit then
         0 cwg-ci ! 1 cwg-cok !
         begin cwg-cok @ 1 and cwg-ci @ cwg-vb @ u< and while
-            cwg-a @ cwg-ci @ + c@ cwg-b @ cwg-ci @ + c@ =
-            if 1 else 0 cwg-cok ! then
+            cwg-a @ cwg-ci @ + c@ cwg-b @ cwg-ci @ + c@ <> if 0 cwg-cok ! then
             1 cwg-ci +!
         repeat
         cwg-cok @ ;

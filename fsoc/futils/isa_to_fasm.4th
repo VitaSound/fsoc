@@ -123,17 +123,12 @@ variable ic-fba variable ic-fln variable ic-fb variable ic-fe
     ;
 
 \ ------------------------------------------------------------------
-\ Доступ к полям JSON: (obj key-a key-u -- val|0) через rot
+\ Доступ к строковому полю JSON: (obj key-a key-u -- a u | 0 0) через rot
 \ ------------------------------------------------------------------
 : isa-get-str ( obj key-a key-u -- a u | 0 0 )
     rot fjson.object-get
     dup 0= if 2drop 0 0 exit then
     fjson.node-str@
-    ;
-: isa-get-num ( obj key-a key-u -- u | 0 )
-    rot fjson.object-get
-    dup 0= if drop 0 exit then
-    fjson.node-num@
     ;
 
 \ ------------------------------------------------------------------
