@@ -1068,6 +1068,2451 @@
       "requires": [
         "z80_core"
       ]
+    },
+    {
+      "mnemonic": "rla",
+      "opcode": 23,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 4,
+      "flags_affected": [
+        "C",
+        "H"
+      ],
+      "description": "Rotate A left through carry",
+      "encoding": "00010111",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "RLA",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "rra",
+      "opcode": 31,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 4,
+      "flags_affected": [
+        "C",
+        "H"
+      ],
+      "description": "Rotate A right through carry",
+      "encoding": "00011111",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "RRA",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "scf",
+      "opcode": 55,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 4,
+      "flags_affected": [
+        "C"
+      ],
+      "description": "Set carry flag",
+      "encoding": "00110111",
+      "categories": [
+        "control"
+      ],
+      "disasm": "SCF",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ccf",
+      "opcode": 63,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 4,
+      "flags_affected": [
+        "C",
+        "H"
+      ],
+      "description": "Complement carry flag",
+      "encoding": "00111111",
+      "categories": [
+        "control"
+      ],
+      "disasm": "CCF",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "exaf",
+      "opcode": 8,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 4,
+      "flags_affected": [],
+      "description": "Exchange AF with AF'",
+      "encoding": "00001000",
+      "categories": [
+        "control"
+      ],
+      "disasm": "EX AF,AF'",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "exde",
+      "opcode": 235,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 4,
+      "flags_affected": [],
+      "description": "Exchange DE and HL",
+      "encoding": "11101011",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "EX DE,HL",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "exsp",
+      "opcode": 227,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 19,
+      "flags_affected": [],
+      "description": "Exchange (SP) with HL",
+      "encoding": "11100011",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "EX (SP),HL",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "sphl",
+      "opcode": 249,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 10,
+      "flags_affected": [],
+      "description": "Load SP from HL",
+      "encoding": "11111001",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD SP,HL",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "jphl",
+      "opcode": 233,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 4,
+      "flags_affected": [],
+      "description": "Jump to (HL)",
+      "encoding": "11101001",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "JP (HL)",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ld",
+      "opcode": 64,
+      "operands": [
+        "rd",
+        "rs"
+      ],
+      "bytes": 1,
+      "cycles": 4,
+      "flags_affected": [],
+      "description": "Load register to register",
+      "encoding": "01dddsss",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD {d},{s}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "add",
+      "opcode": 128,
+      "operands": [
+        "r"
+      ],
+      "bytes": 1,
+      "cycles": 4,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Add register to A",
+      "encoding": "10000000 rrr",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "ADD A,{s}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "adc",
+      "opcode": 136,
+      "operands": [
+        "r"
+      ],
+      "bytes": 1,
+      "cycles": 4,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Add with carry register to A",
+      "encoding": "10001000 rrr",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "ADC A,{s}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "sub",
+      "opcode": 144,
+      "operands": [
+        "r"
+      ],
+      "bytes": 1,
+      "cycles": 4,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Subtract register from A",
+      "encoding": "10010000 rrr",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "SUB {s}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "sbc",
+      "opcode": 152,
+      "operands": [
+        "r"
+      ],
+      "bytes": 1,
+      "cycles": 4,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Subtract with carry register from A",
+      "encoding": "10011000 rrr",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "SBC A,{s}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "a_a_bc",
+      "opcode": 10,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 7,
+      "flags_affected": [],
+      "description": "Load A from (BC)",
+      "encoding": "00001010",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD A,(BC)",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "a_a_de",
+      "opcode": 26,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 7,
+      "flags_affected": [],
+      "description": "Load A from (DE)",
+      "encoding": "00011010",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD A,(DE)",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "bc!a",
+      "opcode": 2,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 7,
+      "flags_affected": [],
+      "description": "Store A to (BC)",
+      "encoding": "00000010",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD (BC),A",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "de!a",
+      "opcode": 18,
+      "operands": [],
+      "bytes": 1,
+      "cycles": 7,
+      "flags_affected": [],
+      "description": "Store A to (DE)",
+      "encoding": "00010010",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD (DE),A",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "inc",
+      "opcode": 3,
+      "operands": [
+        "rp"
+      ],
+      "bytes": 1,
+      "cycles": 6,
+      "flags_affected": [],
+      "description": "Increment register pair",
+      "encoding": "00pp0011",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "INC {reg16}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "dec",
+      "opcode": 11,
+      "operands": [
+        "rp"
+      ],
+      "bytes": 1,
+      "cycles": 6,
+      "flags_affected": [],
+      "description": "Decrement register pair",
+      "encoding": "00pp1011",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "DEC {reg16}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "add_num",
+      "opcode": 198,
+      "operands": [
+        "d8"
+      ],
+      "bytes": 2,
+      "cycles": 7,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Add immediate to A",
+      "encoding": "11000110 dddddddd",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "ADD A,{imm}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "adc_num",
+      "opcode": 206,
+      "operands": [
+        "d8"
+      ],
+      "bytes": 2,
+      "cycles": 7,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Add with carry immediate to A",
+      "encoding": "11001110 dddddddd",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "ADC A,{imm}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "sub_num",
+      "opcode": 214,
+      "operands": [
+        "d8"
+      ],
+      "bytes": 2,
+      "cycles": 7,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Subtract immediate from A",
+      "encoding": "11010110 dddddddd",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "SUB {imm}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "sbc_num",
+      "opcode": 222,
+      "operands": [
+        "d8"
+      ],
+      "bytes": 2,
+      "cycles": 7,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Subtract with carry immediate from A",
+      "encoding": "11011110 dddddddd",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "SBC A,{imm}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "and_num",
+      "opcode": 230,
+      "operands": [
+        "d8"
+      ],
+      "bytes": 2,
+      "cycles": 7,
+      "flags_affected": [
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "AND immediate with A",
+      "encoding": "11100110 dddddddd",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "AND {imm}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "xor_num",
+      "opcode": 238,
+      "operands": [
+        "d8"
+      ],
+      "bytes": 2,
+      "cycles": 7,
+      "flags_affected": [
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "XOR immediate with A",
+      "encoding": "11101110 dddddddd",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "XOR {imm}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "or_num",
+      "opcode": 246,
+      "operands": [
+        "d8"
+      ],
+      "bytes": 2,
+      "cycles": 7,
+      "flags_affected": [
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "OR immediate with A",
+      "encoding": "11110110 dddddddd",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "OR {imm}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "cp_num",
+      "opcode": 254,
+      "operands": [
+        "d8"
+      ],
+      "bytes": 2,
+      "cycles": 7,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Compare immediate with A",
+      "encoding": "11111110 dddddddd",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "CP {imm}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "jr",
+      "opcode": 24,
+      "operands": [
+        "d8"
+      ],
+      "bytes": 2,
+      "cycles": 12,
+      "flags_affected": [],
+      "description": "Relative jump",
+      "encoding": "00011000 dddddddd",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "JR {rel}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "jrnz",
+      "opcode": 32,
+      "operands": [
+        "d8"
+      ],
+      "bytes": 2,
+      "cycles": 12,
+      "flags_affected": [],
+      "description": "Relative jump if not zero",
+      "encoding": "00100000 dddddddd",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "JR NZ,{rel}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "jrz",
+      "opcode": 40,
+      "operands": [
+        "d8"
+      ],
+      "bytes": 2,
+      "cycles": 12,
+      "flags_affected": [],
+      "description": "Relative jump if zero",
+      "encoding": "00101000 dddddddd",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "JR Z,{rel}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "jrnc",
+      "opcode": 48,
+      "operands": [
+        "d8"
+      ],
+      "bytes": 2,
+      "cycles": 12,
+      "flags_affected": [],
+      "description": "Relative jump if not carry",
+      "encoding": "00110000 dddddddd",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "JR NC,{rel}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "jrc",
+      "opcode": 56,
+      "operands": [
+        "d8"
+      ],
+      "bytes": 2,
+      "cycles": 12,
+      "flags_affected": [],
+      "description": "Relative jump if carry",
+      "encoding": "00111000 dddddddd",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "JR C,{rel}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "djnz",
+      "opcode": 16,
+      "operands": [
+        "d8"
+      ],
+      "bytes": 2,
+      "cycles": 13,
+      "flags_affected": [],
+      "description": "Decrement B, jump if not zero",
+      "encoding": "00010000 dddddddd",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "DJNZ {rel}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ina",
+      "opcode": 219,
+      "operands": [
+        "d8"
+      ],
+      "bytes": 2,
+      "cycles": 12,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Input to A from port n",
+      "encoding": "11011011 dddddddd",
+      "categories": [
+        "io"
+      ],
+      "disasm": "IN A,({port})",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "outa",
+      "opcode": 211,
+      "operands": [
+        "d8"
+      ],
+      "bytes": 2,
+      "cycles": 12,
+      "flags_affected": [],
+      "description": "Output A to port n",
+      "encoding": "11010011 dddddddd",
+      "categories": [
+        "io"
+      ],
+      "disasm": "OUT ({port}),A",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ld_num",
+      "opcode": 6,
+      "operands": [
+        "r",
+        "d8"
+      ],
+      "bytes": 2,
+      "cycles": 7,
+      "flags_affected": [],
+      "description": "Load immediate to register",
+      "encoding": "00rrr110 dddddddd",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD {d},{imm}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ldw",
+      "opcode": 1,
+      "operands": [
+        "rp",
+        "d16"
+      ],
+      "bytes": 3,
+      "cycles": 10,
+      "flags_affected": [],
+      "description": "Load 16-bit immediate to pair",
+      "encoding": "00pp0001 nnnnnnnn nnnnnnnn",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD {reg16},{imm}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "jpcc",
+      "opcode": 194,
+      "operands": [
+        "cc",
+        "d16"
+      ],
+      "bytes": 3,
+      "cycles": 12,
+      "flags_affected": [],
+      "description": "Conditional jump",
+      "encoding": "11ccc010 nnnnnnnn nnnnnnnn",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "JP {cc},{addr}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "callcc",
+      "opcode": 196,
+      "operands": [
+        "cc",
+        "d16"
+      ],
+      "bytes": 3,
+      "cycles": 15,
+      "flags_affected": [],
+      "description": "Conditional call",
+      "encoding": "11ccc100 nnnnnnnn nnnnnnnn",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "CALL {cc},{addr}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ldix",
+      "opcode": 221,
+      "operands": [
+        "r",
+        "d8"
+      ],
+      "bytes": 3,
+      "cycles": 19,
+      "flags_affected": [],
+      "description": "Load (IX+d) to register",
+      "encoding": "11011101 01rrr110 dddddddd",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD {d},(IX+d)",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ldiy",
+      "opcode": 253,
+      "operands": [
+        "r",
+        "d8"
+      ],
+      "bytes": 3,
+      "cycles": 19,
+      "flags_affected": [],
+      "description": "Load (IY+d) to register",
+      "encoding": "11111101 01rrr110 dddddddd",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD {d},(IY+d)",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ixld",
+      "opcode": 221,
+      "operands": [
+        "r",
+        "d8"
+      ],
+      "bytes": 3,
+      "cycles": 19,
+      "flags_affected": [],
+      "description": "Store register to (IX+d)",
+      "encoding": "11011101 01110rrr dddddddd",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD (IX+d),{s}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "iyld",
+      "opcode": 253,
+      "operands": [
+        "r",
+        "d8"
+      ],
+      "bytes": 3,
+      "cycles": 19,
+      "flags_affected": [],
+      "description": "Store register to (IY+d)",
+      "encoding": "11111101 01110rrr dddddddd",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD (IY+d),{s}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "addix",
+      "opcode": 221,
+      "operands": [
+        "rp"
+      ],
+      "bytes": 2,
+      "cycles": 15,
+      "flags_affected": [
+        "C",
+        "H"
+      ],
+      "description": "Add register pair to IX",
+      "encoding": "11011101 00pp1001",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "ADD IX,{reg16}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "addiy",
+      "opcode": 253,
+      "operands": [
+        "rp"
+      ],
+      "bytes": 2,
+      "cycles": 15,
+      "flags_affected": [
+        "C",
+        "H"
+      ],
+      "description": "Add register pair to IY",
+      "encoding": "11111101 00pp1001",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "ADD IY,{reg16}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "rlc",
+      "opcode": 0,
+      "operands": [
+        "r"
+      ],
+      "bytes": 2,
+      "cycles": 8,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Rotate left circular",
+      "encoding": "11001011 00000rrr",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "RLC {r}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "rrc",
+      "opcode": 8,
+      "operands": [
+        "r"
+      ],
+      "bytes": 2,
+      "cycles": 8,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Rotate right circular",
+      "encoding": "11001011 00001rrr",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "RRC {r}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "rl",
+      "opcode": 16,
+      "operands": [
+        "r"
+      ],
+      "bytes": 2,
+      "cycles": 8,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Rotate left through carry",
+      "encoding": "11001011 00010rrr",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "RL {r}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "rr",
+      "opcode": 24,
+      "operands": [
+        "r"
+      ],
+      "bytes": 2,
+      "cycles": 8,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Rotate right through carry",
+      "encoding": "11001011 00011rrr",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "RR {r}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "sla",
+      "opcode": 32,
+      "operands": [
+        "r"
+      ],
+      "bytes": 2,
+      "cycles": 8,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Shift left arithmetic",
+      "encoding": "11001011 00100rrr",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "SLA {r}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "sra",
+      "opcode": 40,
+      "operands": [
+        "r"
+      ],
+      "bytes": 2,
+      "cycles": 8,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Shift right arithmetic",
+      "encoding": "11001011 00101rrr",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "SRA {r}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "srl",
+      "opcode": 56,
+      "operands": [
+        "r"
+      ],
+      "bytes": 2,
+      "cycles": 8,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Shift right logical",
+      "encoding": "11001011 00111rrr",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "SRL {r}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "bit",
+      "opcode": 203,
+      "operands": [
+        "b",
+        "r"
+      ],
+      "bytes": 2,
+      "cycles": 8,
+      "flags_affected": [
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Test bit",
+      "encoding": "11001011 01bbbrrr",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "BIT {b},{r}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "res",
+      "opcode": 203,
+      "operands": [
+        "b",
+        "r"
+      ],
+      "bytes": 2,
+      "cycles": 8,
+      "flags_affected": [],
+      "description": "Reset bit",
+      "encoding": "11001011 10bbbrrr",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "RES {b},{r}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "set",
+      "opcode": 203,
+      "operands": [
+        "b",
+        "r"
+      ],
+      "bytes": 2,
+      "cycles": 8,
+      "flags_affected": [],
+      "description": "Set bit",
+      "encoding": "11001011 11bbbrrr",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "SET {b},{r}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "retn",
+      "opcode": 69,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 14,
+      "flags_affected": [],
+      "description": "Return from NMI",
+      "encoding": "11101101 01000101",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "RETN",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "reti",
+      "opcode": 77,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 14,
+      "flags_affected": [],
+      "description": "Return from interrupt",
+      "encoding": "11101101 01001101",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "RETI",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "rrd",
+      "opcode": 103,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 18,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Rotate decimal right",
+      "encoding": "11101101 01100111",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "RRD",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "rld",
+      "opcode": 111,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 18,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Rotate decimal left",
+      "encoding": "11101101 01101111",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "RLD",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "im",
+      "opcode": 94,
+      "operands": [
+        "n"
+      ],
+      "bytes": 2,
+      "cycles": 8,
+      "flags_affected": [],
+      "description": "Set interrupt mode (0/1/2)",
+      "encoding": "11101101 01011110",
+      "categories": [
+        "control"
+      ],
+      "disasm": "IM {imm}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ldia",
+      "opcode": 71,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 9,
+      "flags_affected": [],
+      "description": "Load I from A",
+      "encoding": "11101101 01000111",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD I,A",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ldra",
+      "opcode": 79,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 9,
+      "flags_affected": [],
+      "description": "Load R from A",
+      "encoding": "11101101 01001111",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD R,A",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ldai",
+      "opcode": 87,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 9,
+      "flags_affected": [
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Load A from I",
+      "encoding": "11101101 01010111",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD A,I",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ldar",
+      "opcode": 95,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 9,
+      "flags_affected": [
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Load A from R",
+      "encoding": "11101101 01011111",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD A,R",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "in",
+      "opcode": 64,
+      "operands": [
+        "r"
+      ],
+      "bytes": 2,
+      "cycles": 12,
+      "flags_affected": [
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Input register from port (C)",
+      "encoding": "11101101 01rrr000",
+      "categories": [
+        "io"
+      ],
+      "disasm": "IN {d},(C)",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "out",
+      "opcode": 65,
+      "operands": [
+        "r"
+      ],
+      "bytes": 2,
+      "cycles": 12,
+      "flags_affected": [],
+      "description": "Output register to port (C)",
+      "encoding": "11101101 01rrr001",
+      "categories": [
+        "io"
+      ],
+      "disasm": "OUT (C),{s}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "sbchl",
+      "opcode": 66,
+      "operands": [
+        "rp"
+      ],
+      "bytes": 2,
+      "cycles": 15,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Subtract register pair from HL",
+      "encoding": "11101101 01pp0010",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "SBC HL,{reg16}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "adchl",
+      "opcode": 74,
+      "operands": [
+        "rp"
+      ],
+      "bytes": 2,
+      "cycles": 15,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Add register pair to HL with carry",
+      "encoding": "11101101 01pp1010",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "ADC HL,{reg16}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ldi",
+      "opcode": 160,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 16,
+      "flags_affected": [
+        "H",
+        "P"
+      ],
+      "description": "Load (DE) from (HL), increment",
+      "encoding": "11101101 10100000",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LDI",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ldir",
+      "opcode": 176,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 21,
+      "flags_affected": [
+        "H",
+        "P"
+      ],
+      "description": "Load (DE) from (HL), repeat",
+      "encoding": "11101101 10110000",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LDIR",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ldd",
+      "opcode": 168,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 16,
+      "flags_affected": [
+        "H",
+        "P"
+      ],
+      "description": "Load (DE) from (HL), decrement",
+      "encoding": "11101101 10101000",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LDD",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "lddr",
+      "opcode": 184,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 21,
+      "flags_affected": [
+        "H",
+        "P"
+      ],
+      "description": "Load (DE) from (HL), repeat",
+      "encoding": "11101101 10111000",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LDDR",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "cpi",
+      "opcode": 161,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 16,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Compare (HL) with A, increment",
+      "encoding": "11101101 10100001",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "CPI",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "cpir",
+      "opcode": 177,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 21,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Compare (HL) with A, repeat",
+      "encoding": "11101101 10110001",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "CPIR",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "cpd",
+      "opcode": 169,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 16,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Compare (HL) with A, decrement",
+      "encoding": "11101101 10101001",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "CPD",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "cpdr",
+      "opcode": 185,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 21,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Compare (HL) with A, repeat",
+      "encoding": "11101101 10111001",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "CPDR",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ini",
+      "opcode": 162,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 16,
+      "flags_affected": [
+        "Z",
+        "S",
+        "P"
+      ],
+      "description": "Input (HL) from port (C), increment",
+      "encoding": "11101101 10100010",
+      "categories": [
+        "io"
+      ],
+      "disasm": "INI",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "inir",
+      "opcode": 178,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 21,
+      "flags_affected": [
+        "Z",
+        "S",
+        "P"
+      ],
+      "description": "Input (HL) from port (C), repeat",
+      "encoding": "11101101 10110010",
+      "categories": [
+        "io"
+      ],
+      "disasm": "INIR",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ind",
+      "opcode": 170,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 16,
+      "flags_affected": [
+        "Z",
+        "S",
+        "P"
+      ],
+      "description": "Input (HL) from port (C), decrement",
+      "encoding": "11101101 10101010",
+      "categories": [
+        "io"
+      ],
+      "disasm": "IND",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "indr",
+      "opcode": 186,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 21,
+      "flags_affected": [
+        "Z",
+        "S",
+        "P"
+      ],
+      "description": "Input (HL) from port (C), repeat",
+      "encoding": "11101101 10111010",
+      "categories": [
+        "io"
+      ],
+      "disasm": "INDR",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "outi",
+      "opcode": 163,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 16,
+      "flags_affected": [
+        "Z",
+        "S",
+        "P"
+      ],
+      "description": "Output (HL) to port (C), increment",
+      "encoding": "11101101 10100011",
+      "categories": [
+        "io"
+      ],
+      "disasm": "OUTI",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "otir",
+      "opcode": 179,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 21,
+      "flags_affected": [
+        "Z",
+        "S",
+        "P"
+      ],
+      "description": "Output (HL) to port (C), repeat",
+      "encoding": "11101101 10110011",
+      "categories": [
+        "io"
+      ],
+      "disasm": "OTIR",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "outd",
+      "opcode": 171,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 16,
+      "flags_affected": [
+        "Z",
+        "S",
+        "P"
+      ],
+      "description": "Output (HL) to port (C), decrement",
+      "encoding": "11101101 10101011",
+      "categories": [
+        "io"
+      ],
+      "disasm": "OUTD",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "otdr",
+      "opcode": 187,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 21,
+      "flags_affected": [
+        "Z",
+        "S",
+        "P"
+      ],
+      "description": "Output (HL) to port (C), repeat",
+      "encoding": "11101101 10111011",
+      "categories": [
+        "io"
+      ],
+      "disasm": "OTDR",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "incix",
+      "opcode": 35,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 10,
+      "flags_affected": [],
+      "description": "Increment IX",
+      "encoding": "11011101 00100011",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "INC IX",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "inciy",
+      "opcode": 35,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 10,
+      "flags_affected": [],
+      "description": "Increment IY",
+      "encoding": "11111101 00100011",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "INC IY",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "decix",
+      "opcode": 43,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 10,
+      "flags_affected": [],
+      "description": "Decrement IX",
+      "encoding": "11011101 00101011",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "DEC IX",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "deciy",
+      "opcode": 43,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 10,
+      "flags_affected": [],
+      "description": "Decrement IY",
+      "encoding": "11111101 00101011",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "DEC IY",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "pushix",
+      "opcode": 229,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 15,
+      "flags_affected": [],
+      "description": "Push IX onto stack",
+      "encoding": "11011101 11100101",
+      "categories": [
+        "stack"
+      ],
+      "disasm": "PUSH IX",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "pushiy",
+      "opcode": 229,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 15,
+      "flags_affected": [],
+      "description": "Push IY onto stack",
+      "encoding": "11111101 11100101",
+      "categories": [
+        "stack"
+      ],
+      "disasm": "PUSH IY",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "popix",
+      "opcode": 225,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 10,
+      "flags_affected": [],
+      "description": "Pop IX from stack",
+      "encoding": "11011101 11100001",
+      "categories": [
+        "stack"
+      ],
+      "disasm": "POP IX",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "popiy",
+      "opcode": 225,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 10,
+      "flags_affected": [],
+      "description": "Pop IY from stack",
+      "encoding": "11111101 11100001",
+      "categories": [
+        "stack"
+      ],
+      "disasm": "POP IY",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "jpix",
+      "opcode": 233,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 8,
+      "flags_affected": [],
+      "description": "Jump to (IX)",
+      "encoding": "11011101 11101001",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "JP (IX)",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "jpiy",
+      "opcode": 233,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 8,
+      "flags_affected": [],
+      "description": "Jump to (IY)",
+      "encoding": "11111101 11101001",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "JP (IY)",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "spix",
+      "opcode": 249,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 10,
+      "flags_affected": [],
+      "description": "Load SP from IX",
+      "encoding": "11011101 11111001",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD SP,IX",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "spiy",
+      "opcode": 249,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 10,
+      "flags_affected": [],
+      "description": "Load SP from IY",
+      "encoding": "11111101 11111001",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD SP,IY",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "exspix",
+      "opcode": 227,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 23,
+      "flags_affected": [],
+      "description": "Exchange (SP) with IX",
+      "encoding": "11011101 11100011",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "EX (SP),IX",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "exspiy",
+      "opcode": 227,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 23,
+      "flags_affected": [],
+      "description": "Exchange (SP) with IY",
+      "encoding": "11111101 11100011",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "EX (SP),IY",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "a_a_",
+      "opcode": 58,
+      "operands": [
+        "d16"
+      ],
+      "bytes": 3,
+      "cycles": 13,
+      "flags_affected": [],
+      "description": "Load A from absolute address",
+      "encoding": "00111010 nnnnnnnn nnnnnnnn",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD A,({addr})",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "!a",
+      "opcode": 50,
+      "operands": [
+        "d16"
+      ],
+      "bytes": 3,
+      "cycles": 13,
+      "flags_affected": [],
+      "description": "Store A to absolute address",
+      "encoding": "00110010 nnnnnnnn nnnnnnnn",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD ({addr}),A",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "!hl",
+      "opcode": 34,
+      "operands": [
+        "d16"
+      ],
+      "bytes": 3,
+      "cycles": 16,
+      "flags_affected": [],
+      "description": "Store (HL) to absolute address",
+      "encoding": "00100010 nnnnnnnn nnnnnnnn",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD ({addr}),HL",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "hl_a_",
+      "opcode": 42,
+      "operands": [
+        "d16"
+      ],
+      "bytes": 3,
+      "cycles": 16,
+      "flags_affected": [],
+      "description": "Load (HL) from absolute address",
+      "encoding": "00101010 nnnnnnnn nnnnnnnn",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD HL,({addr})",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "addix_a_",
+      "opcode": 134,
+      "operands": [
+        "d8"
+      ],
+      "bytes": 3,
+      "cycles": 19,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Add (IX+d) to A",
+      "encoding": "11011101 10000110 dddddddd",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "ADD A,(IX+d)",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "addiy_a_",
+      "opcode": 134,
+      "operands": [
+        "d8"
+      ],
+      "bytes": 3,
+      "cycles": 19,
+      "flags_affected": [
+        "C",
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Add (IY+d) to A",
+      "encoding": "11111101 10000110 dddddddd",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "ADD A,(IY+d)",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "jp",
+      "opcode": 195,
+      "operands": [
+        "d16"
+      ],
+      "bytes": 3,
+      "cycles": 10,
+      "flags_affected": [],
+      "description": "Unconditional jump to address",
+      "encoding": "11000011 nnnnnnnn nnnnnnnn",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "JP {addr}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "call",
+      "opcode": 205,
+      "operands": [
+        "d16"
+      ],
+      "bytes": 3,
+      "cycles": 17,
+      "flags_affected": [],
+      "description": "Call subroutine",
+      "encoding": "11001101 nnnnnnnn nnnnnnnn",
+      "categories": [
+        "branch"
+      ],
+      "disasm": "CALL {addr}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "!rr",
+      "opcode": 237,
+      "operands": [
+        "rp",
+        "d16"
+      ],
+      "bytes": 4,
+      "cycles": 20,
+      "flags_affected": [],
+      "description": "Store register pair to absolute address",
+      "encoding": "11101101 01pp0011 nnnnnnnn nnnnnnnn",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD ({addr}),{reg16}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "rr_a_",
+      "opcode": 237,
+      "operands": [
+        "rp",
+        "d16"
+      ],
+      "bytes": 4,
+      "cycles": 20,
+      "flags_affected": [],
+      "description": "Load register pair from absolute address",
+      "encoding": "11101101 01pp1011 nnnnnnnn nnnnnnnn",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD {reg16},({addr})",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ldix_num",
+      "opcode": 54,
+      "operands": [
+        "d8",
+        "n"
+      ],
+      "bytes": 4,
+      "cycles": 19,
+      "flags_affected": [],
+      "description": "Store immediate to (IX+d)",
+      "encoding": "11011101 00110110 dddddddd dddddddd",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD (IX+d),{imm}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ldiy_num",
+      "opcode": 54,
+      "operands": [
+        "d8",
+        "n"
+      ],
+      "bytes": 4,
+      "cycles": 19,
+      "flags_affected": [],
+      "description": "Store immediate to (IY+d)",
+      "encoding": "11111101 00110110 dddddddd dddddddd",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD (IY+d),{imm}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ldixw",
+      "opcode": 33,
+      "operands": [
+        "d16"
+      ],
+      "bytes": 4,
+      "cycles": 14,
+      "flags_affected": [],
+      "description": "Load 16-bit immediate to IX",
+      "encoding": "11011101 00100001 nnnnnnnn nnnnnnnn",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD IX,{imm}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ldiyw",
+      "opcode": 33,
+      "operands": [
+        "d16"
+      ],
+      "bytes": 4,
+      "cycles": 14,
+      "flags_affected": [],
+      "description": "Load 16-bit immediate to IY",
+      "encoding": "11111101 00100001 nnnnnnnn nnnnnnnn",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD IY,{imm}",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "!ix",
+      "opcode": 34,
+      "operands": [
+        "d16"
+      ],
+      "bytes": 4,
+      "cycles": 20,
+      "flags_affected": [],
+      "description": "Store IX to absolute address",
+      "encoding": "11011101 00100010 nnnnnnnn nnnnnnnn",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD ({addr}),IX",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "!iy",
+      "opcode": 34,
+      "operands": [
+        "d16"
+      ],
+      "bytes": 4,
+      "cycles": 20,
+      "flags_affected": [],
+      "description": "Store IY to absolute address",
+      "encoding": "11111101 00100010 nnnnnnnn nnnnnnnn",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD ({addr}),IY",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "ix_a_",
+      "opcode": 42,
+      "operands": [
+        "d16"
+      ],
+      "bytes": 4,
+      "cycles": 20,
+      "flags_affected": [],
+      "description": "Load IX from absolute address",
+      "encoding": "11011101 00101010 nnnnnnnn nnnnnnnn",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD IX,({addr})",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "iy_a_",
+      "opcode": 42,
+      "operands": [
+        "d16"
+      ],
+      "bytes": 4,
+      "cycles": 20,
+      "flags_affected": [],
+      "description": "Load IY from absolute address",
+      "encoding": "11111101 00101010 nnnnnnnn nnnnnnnn",
+      "categories": [
+        "data_transfer"
+      ],
+      "disasm": "LD IY,({addr})",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "bitix",
+      "opcode": 203,
+      "operands": [
+        "b",
+        "d8"
+      ],
+      "bytes": 4,
+      "cycles": 20,
+      "flags_affected": [
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Test bit b of (IX+d)",
+      "encoding": "11011101 11001011 dddddddd 01bbb110",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "BIT {b},(IX+d)",
+      "requires": [
+        "z80_core"
+      ]
+    },
+    {
+      "mnemonic": "bitiy",
+      "opcode": 203,
+      "operands": [
+        "b",
+        "d8"
+      ],
+      "bytes": 4,
+      "cycles": 20,
+      "flags_affected": [
+        "Z",
+        "H",
+        "S",
+        "P"
+      ],
+      "description": "Test bit b of (IY+d)",
+      "encoding": "11111101 11001011 dddddddd 01bbb110",
+      "categories": [
+        "arithmetic"
+      ],
+      "disasm": "BIT {b},(IY+d)",
+      "requires": [
+        "z80_core"
+      ]
     }
   ],
   "chip_variants": {
