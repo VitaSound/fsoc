@@ -574,10 +574,19 @@ def load_spec(spec_path: Path) -> ISASpec:
     )
 
 
-def check_fasm(words_path: Path) -> Tuple[Dict[str, int], List[str]]:
+def check_fasm(words_path: Path) -> Tuple[Dict[str, int], List[str], Dict[str, int]]:
     """Extract opcodes from a hand-written fasm words.4th.
 
-    Returns (word -> opcode byte, list of unparseable comma-word names).
+    Returns (opcodes, unparseable, loose):
+      opcodes   — строгие: литерал рядом с самим emit-ом (`$XX fasm-emit`,
+                  `$XX or fasm-emit`, `$XX + fasm-emit`, `0 fasm-emit`);
+                  именно они участвуют в drift-сверке (spec_matches_fasm).
+      loose     — хелпер-формы, где тело не содержит fasm-emit вообще
+                  (`$9403 avr-one`, `$0C00 avr-alu`): последний $-литерал
+                  тела; участвует ТОЛЬКО в coverage (spec_missing),
+                  потому что составной путь (маски/guards вроде ajmp
+                  `$F800 and`) не является доверенным опкодом.
+      unparseable — остальные (делегаты `1 brbs,`, вычисляемые emit).
     Recognizes:
       $XX mcs-op1 name,            -- MCS-51 one-byte opcode (2 hex digits)
       $XXXX avr-op1 name,          -- AVR one-word opcode (4 hex digits)
@@ -585,6 +594,7 @@ def check_fasm(words_path: Path) -> Tuple[Dict[str, int], List[str]]:
     """
     content = words_path.read_text()
     opcodes: Dict[str, int] = {}
+    loose: Dict[str, int] = {}
     unparseable: List[str] = []
 
     # MCS-51: 2 hex digits (mcs-op1)
@@ -612,17 +622,28 @@ def check_fasm(words_path: Path) -> Tuple[Dict[str, int], List[str]]:
         if name in ("db,", "dw,") or name in opcodes:
             i = j
             continue
-        # Opcode = the first hex constant the word emits:
-        #   $XX fasm-emit ...            (direct)
-        #   ... swap $XX + fasm-emit     (base + Rn offset)
-        # MCS-51: 2 hex digits; AVR: 4 hex digits
-        om = re.search(r"[\$]([0-9A-Fa-f]{2,4})(?:\s+fasm-emit|\s+\+[ \t]*fasm-emit)", body)
+        # Строгий вид: литерал стоит перед самим fasm-emit — включая
+        # `$01 or fasm-emit` (вычисляемые битовые маски ajmp/acall/bset)
+        # и `swap $XX + fasm-emit` (base + Rn offset).
+        om = re.search(r"[\$]([0-9A-Fa-f]{2,4})(?:\s+(?:or|\+))*\s*fasm-emit", body)
         if om:
             opcodes[name] = int(om.group(1), 16)
+        elif re.search(r"(?:^|\s)0\s+fasm-emit", body):
+            # `0 fasm-emit` (nop) — нулевой литерал без $
+            opcodes[name] = 0
+        elif "fasm-emit" not in body:
+            # Хелпер-форма: emit живёт внутри helper-слова; для coverage
+            # берём последний $-литерал тела (lds/sts: последний путь —
+            # классический, а не tiny-ветка).
+            hx = re.findall(r"[\$]([0-9A-Fa-f]{2,4})", body)
+            if hx:
+                loose[name] = int(hx[-1], 16)
+            else:
+                unparseable.append(name)
         else:
             unparseable.append(name)
         i = j
-    return opcodes, unparseable
+    return opcodes, unparseable, loose
 
 def fasm_name_to_mnemonic(word: str) -> str:
     """Map a fasm comma-word name to the spec mnemonic it assembles."""
@@ -656,7 +677,8 @@ def spec_matches_fasm(spec: ISASpec, opcodes: Dict[str, int]) -> List[str]:
     return errors
 
 
-def spec_missing_in_fasm(spec: ISASpec, opcodes: Dict[str, int]) -> List[str]:
+def spec_missing_in_fasm(spec: ISASpec, opcodes: Dict[str, int],
+                         loose: Optional[Dict[str, int]] = None) -> List[str]:
     """Report spec instructions whose base opcode is not emitted by fasm.
 
     For single-byte spec instructions (bytes == 1):
@@ -668,7 +690,8 @@ def spec_missing_in_fasm(spec: ISASpec, opcodes: Dict[str, int]) -> List[str]:
     as colon macros and skipped.
     """
     fasm_ops = set(opcodes.values())
-    # Z80 macro-based instructions: implemented as colon macros, not z80-op1
+    if loose:
+        fasm_ops.update(loose.values())
     z80_macro_mnemonics = {
         "add_r", "adc_r", "sub_r", "sbc_r", "and_r", "xor_r", "or_r", "cp_r",
         "inc_r", "dec_r", "inc_rp", "dec_rp", "add_a_r", "sub_r", "and_r",
@@ -687,12 +710,10 @@ def spec_missing_in_fasm(spec: ISASpec, opcodes: Dict[str, int]) -> List[str]:
         opc = instr.opcode
         if spec.arch == "z80" and instr.mnemonic in z80_macro_mnemonics:
             continue  # Z80 macro-based, not checkable via opcode map
-        if opc <= 0xFF:
-            present = opc in fasm_ops
-        else:
-            # AVR branch-like: 16-bit opcode with condition in high byte
-            # Check if low byte is present in fasm
-            present = (opc & 0xFF) in fasm_ops
+        # Точное совпадение прежде всего: 16-битные AVR-опкоды сравниваются
+        # как полные слова (ret $9508 == spec 0x9508). Низкий байт остаётся
+        # запасным путём для branch-форм, где операндные биты в младшем байте.
+        present = opc in fasm_ops or (opc > 0xFF and (opc & 0xFF) in fasm_ops)
         if not present:
             missing.append(f"{instr.mnemonic} (0x{instr.opcode:04X})")
     return missing
@@ -709,9 +730,9 @@ def main():
     if sys.argv[1] == '--check':
         spec = load_spec(Path(sys.argv[2]))
         words_path = Path(sys.argv[3])
-        opcodes, unparseable = check_fasm(words_path)
+        opcodes, unparseable, loose = check_fasm(words_path)
         errors = spec_matches_fasm(spec, opcodes)
-        missing = spec_missing_in_fasm(spec, opcodes)
+        missing = spec_missing_in_fasm(spec, opcodes, loose)
         print(f"{words_path.name}: {len(opcodes)} comma words parsed, {len(unparseable)} without a leading opcode")
         for u in unparseable:
             print(f"  (no-opcode) {u}")

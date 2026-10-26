@@ -37,3 +37,6 @@ s" designs/blinky_top.4th" project@ project.design-or s" x" expect-str-eq
 
 expect-stack-clean
 cr ." project_test ok" cr
+
+\ finish: иначе expect-* печатает, но оставляет rc=0 (маскирование, см. tools_test)
+: fin-project #ERRORS @ 0<> if 1 (bye) then ; fin-project

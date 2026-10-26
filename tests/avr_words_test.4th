@@ -108,3 +108,6 @@ s" " s" --build" in-tmp-fsoc 0= expect-true
 s" fasm only" s" sim.log" tmp-grep? expect-true
 
 cr ." avr_words_test ok" cr
+
+\ finish: иначе expect-* печатает, но оставляет rc=0 (маскирование, см. tools_test)
+test-finish

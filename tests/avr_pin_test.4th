@@ -189,3 +189,6 @@ $17 pin-check
 s" attiny2313" pin-sim
 
 cr ." avr_pin_test ok" cr
+
+\ finish: иначе expect-* печатает, но оставляет rc=0 (маскирование, см. tools_test)
+test-finish

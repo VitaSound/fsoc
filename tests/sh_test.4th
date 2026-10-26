@@ -24,3 +24,6 @@ tmp-dir nip 0= expect-true
 
 expect-stack-clean
 cr ." sh_test ok" cr
+
+\ finish: иначе expect-* печатает, но оставляет rc=0 (маскирование, см. tools_test)
+test-finish

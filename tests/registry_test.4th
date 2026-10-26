@@ -51,3 +51,6 @@ trace @ 0 expect=
 
 expect-stack-clean
 cr ." registry_test ok" cr
+
+\ finish: иначе expect-* печатает, но оставляет rc=0 (маскирование, см. tools_test)
+: fin-registry #ERRORS @ 0<> if 1 (bye) then ; fin-registry

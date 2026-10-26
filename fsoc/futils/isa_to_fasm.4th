@@ -621,6 +621,8 @@ variable ic-nop
 create ic-ua ic-max cells allot     \ unparseable: адреса (в ic-src)
 create ic-ul ic-max allot           \ и длины
 variable ic-nunp
+create ic-lv ic-max cells allot     \ loose: значения хелпер-форм (только coverage, как python loose)
+variable ic-nlv
 create ic-body 8192 allot            \ тело colon-слова (склейка как python)
 variable ic-body-l
 create ic-nbuf 256 allot             \ рабочее имя / mnemonic / scratch
@@ -736,7 +738,7 @@ s"  add_r adc_r sub_r sbc_r and_r xor_r or_r cp_r inc_r dec_r inc_rp dec_rp add_
     ic-src-l !
     \ свежий парсер на каждый вызов (python: opcodes={} на каждый --check)
     \ без этого ic-nop/ic-nunp накапливались через запятую по сеансу
-    0 ic-nop ! 0 ic-nunp !
+    0 ic-nop ! 0 ic-nunp ! 0 ic-nlv !
     ;
 
 : ic-eol ( p -- e )                \ позиция \n после p либо конец
@@ -1042,6 +1044,24 @@ variable ic-hmin
             then
             ic-qs @ ic-q !
         then
+        \ альт3: \s+ or [ \t]* fasm-emit — вычисляемые маски ($01 or fasm-emit)
+        \ ajmp/acall/bset; python: (?:\s+(?:or|\+))*\s*fasm-emit
+        ic-bi @ 1 + ic-ll @ + ic-q !
+        ic-ws1 if
+            ic-q @ ic-qs !
+            ic-q @ 2 + ic-body-l @ < if
+                ic-body ic-q @ + 2 s" or" compare 0= if
+                    ic-q @ 2 + ic-body-l @ < if
+                        ic-body ic-q @ + 2 + c@ ic-ws? if
+                            2 ic-q +!
+                            ic-skipws-body
+                            ic-memit if ic-body ic-bi @ 1 + + ic-ll @ ic-hexval -1 exit then
+                        then
+                    then
+                then
+            then
+            ic-qs @ ic-q !
+        then
         -1 ic-ll +!
     repeat
     0 0 ;
@@ -1056,6 +1076,41 @@ variable ic-hmin
         1 ic-bi +!
     repeat
     0 0 ;
+
+: ic-unp-name ( -- )                \ имя [n0,ne) -> unparseable (паритет unparseable.append)
+    ic-ua ic-nunp @ cells + ic-src ic-n0 @ + swap !
+    ic-ne @ ic-n0 @ - ic-ul ic-nunp @ + c!
+    1 ic-nunp +! ;
+
+: ic-zero-emit? ( -- f )            \ "0 fasm-emit" (nop): 0 с ws-границей + fasm-emit
+    0 ic-bi !
+    begin ic-bi @ ic-body-l @ 1- < while
+        ic-body ic-bi @ + c@ [char] 0 = if
+            ic-bi @ 0= if -1 else ic-body ic-bi @ 1- + c@ ic-ws? then if
+                ic-bi @ 1 + ic-q !
+                ic-ws1 if ic-memit if -1 exit then then
+            then
+        then
+        1 ic-bi +!
+    repeat
+    0 ;
+
+: ic-find-lasthex ( -- u f )        \ последний $hex в body (loose; python findall()[-1])
+    0 ic-bi !
+    0 ic-opval !  0 ic-found !
+    begin ic-bi @ ic-body-l @ 1- < while
+        ic-body ic-bi @ + c@ [char] $ = if
+            ic-bi @ 1 + ic-q !
+            ic-hexrun-b
+            ic-l @ 4 min ic-ll !
+            ic-ll @ 2 >= if
+                ic-body ic-bi @ 1 + + ic-ll @ ic-hexval ic-opval !
+                -1 ic-found !
+            then
+        then
+        1 ic-bi +!
+    repeat
+    ic-found @ if ic-opval @ -1 else 0 0 then ;
 
 : ic-colon-body ( -- f )            \ тело от ic-q до конца строки с ';' (склейка python)
     ic-e @ ic-q @ - ic-body-l !
@@ -1083,11 +1138,16 @@ variable ic-hmin
     ic-z80skip ic-z80skip-l @ ic-nbuf ic-nbufn @ search
     if 2drop -1 else 2drop 0 then ;
 
-: ic-op-present? ( opc -- f )       \ opc есть среди значений opcodes
+: ic-op-present? ( opc -- f )       \ opc есть среди значений opcodes ∪ loose
     ic-opval !
     0 ic-pj !
     begin ic-pj @ ic-nop @ < while
         ic-nv ic-pj @ cells + @ ic-opval @ = if -1 exit then
+        1 ic-pj +!
+    repeat
+    0 ic-pj !
+    begin ic-pj @ ic-nlv @ < while
+        ic-lv ic-pj @ cells + @ ic-opval @ = if -1 exit then
         1 ic-pj +!
     repeat
     0 ;
@@ -1124,9 +1184,22 @@ variable ic-hmin
         ic-src ic-n0 @ + ic-ne @ ic-n0 @ - ic-opval @ ic-op-add
     else
         drop
-        ic-ua ic-nunp @ cells + ic-src ic-n0 @ + swap !
-        ic-ne @ ic-n0 @ - ic-ul ic-nunp @ + c!
-        1 ic-nunp +!
+        \ python-цепочка: strict-hex -> `0 fasm-emit` -> (есть fasm-emit?
+        \ unparseable : loose=последний $hex)
+        ic-zero-emit? if
+            ic-src ic-n0 @ + ic-ne @ ic-n0 @ - 0 ic-op-add
+        else
+            ic-body ic-body-l @ s" fasm-emit" search if
+                2drop ic-unp-name
+            else
+                2drop
+                ic-find-lasthex if
+                    ic-lv ic-nlv @ cells + !  1 ic-nlv +!
+                else
+                    ic-unp-name
+                then
+            then
+        then
     then
     ic-e @ 1 + ic-p ! ;
 
@@ -1230,15 +1303,20 @@ variable ic-hmin
                             drop
                         then
                     else
-                        dup 255 and ic-op-present? 0= if
-                            ic-vmode @ if
-                                s"   - " type
-                                ic-ia ic-i2 @ cells + @ ic-il ic-i2 @ cells + @ type
-                                s"  (0x" type
-                                4 ic-px
-                                [char] ) emit cr
+                        \ python: точное совпадение прежде; low-byte — fallback
+                        dup ic-op-present? 0= if
+                            dup 255 and ic-op-present? 0= if
+                                ic-vmode @ if
+                                    s"   - " type
+                                    ic-ia ic-i2 @ cells + @ ic-il ic-i2 @ cells + @ type
+                                    s"  (0x" type
+                                    4 ic-px
+                                    [char] ) emit cr
+                                else
+                                    drop 1 ic-gap +!
+                                then
                             else
-                                drop 1 ic-gap +!
+                                drop
                             then
                         else
                             drop

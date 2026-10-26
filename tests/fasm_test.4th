@@ -99,3 +99,6 @@ s" [asm] rshift, lshift, depths, 2duprshift, dup@, @, [endasm]" asm$ 2drop
 5 fasm@ $6c00 expect=
 
 cr ." fasm_test ok" cr
+
+\ finish: иначе expect-* печатает, но оставляет rc=0 (маскирование, см. tools_test)
+: fin-fasm #ERRORS @ 0<> if 1 (bye) then ; fin-fasm

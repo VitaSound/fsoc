@@ -18,3 +18,7 @@ s" python3 " fsoc-root fjson.str-concat s" /tools/isa_to_fasm.py --check" fsoc-c
 s"  " fsoc-cat+ fsoc-root fjson.str-concat s" /tools/isa_specs/mcs51_isa.json" fsoc-cat+
 s"  " fsoc-cat+ fsoc-root fjson.str-concat s" /fsys/fasm/8051/words.4th" fsoc-cat+
 2dup system fjson.str-free $? 0= expect-true
+
+\ test-finish: без него упавший expect-true лишь печатает и оставляет rc=0 —
+\ красный гейт маскировался (ttester #ERRORS -> exit 1, как в con_core_test).
+test-finish

@@ -748,7 +748,7 @@
     },
     {
       "mnemonic": "ldyi",
-      "opcode": 36877,
+      "opcode": 36873,
       "operands": [
         "rd"
       ],
@@ -784,7 +784,7 @@
     },
     {
       "mnemonic": "ldz",
-      "opcode": 36865,
+      "opcode": 32768,
       "operands": [
         "rd"
       ],
@@ -802,7 +802,7 @@
     },
     {
       "mnemonic": "ldzi",
-      "opcode": 36869,
+      "opcode": 36865,
       "operands": [
         "rd"
       ],
@@ -820,7 +820,7 @@
     },
     {
       "mnemonic": "ldzd",
-      "opcode": 36870,
+      "opcode": 36866,
       "operands": [
         "rd"
       ],
@@ -838,7 +838,7 @@
     },
     {
       "mnemonic": "stz",
-      "opcode": 37377,
+      "opcode": 33280,
       "operands": [
         "rr"
       ],
@@ -856,7 +856,7 @@
     },
     {
       "mnemonic": "stzi",
-      "opcode": 37381,
+      "opcode": 37377,
       "operands": [
         "rr"
       ],
@@ -874,7 +874,7 @@
     },
     {
       "mnemonic": "stzd",
-      "opcode": 37382,
+      "opcode": 37378,
       "operands": [
         "rr"
       ],
@@ -892,7 +892,7 @@
     },
     {
       "mnemonic": "inc",
-      "opcode": 37887,
+      "opcode": 37891,
       "operands": [
         "rd"
       ],
@@ -913,7 +913,7 @@
     },
     {
       "mnemonic": "dec",
-      "opcode": 38143,
+      "opcode": 37898,
       "operands": [
         "rd"
       ],
@@ -934,7 +934,7 @@
     },
     {
       "mnemonic": "lsl",
-      "opcode": 37888,
+      "opcode": 3072,
       "operands": [
         "rd"
       ],
@@ -956,7 +956,7 @@
     },
     {
       "mnemonic": "lsr",
-      "opcode": 38400,
+      "opcode": 37894,
       "operands": [
         "rd"
       ],
@@ -978,7 +978,7 @@
     },
     {
       "mnemonic": "asr",
-      "opcode": 38145,
+      "opcode": 37893,
       "operands": [
         "rd"
       ],
@@ -1001,7 +1001,7 @@
     },
     {
       "mnemonic": "rol",
-      "opcode": 37891,
+      "opcode": 7168,
       "operands": [
         "rd"
       ],
@@ -1024,7 +1024,7 @@
     },
     {
       "mnemonic": "ror",
-      "opcode": 38403,
+      "opcode": 37895,
       "operands": [
         "rd"
       ],
@@ -1113,7 +1113,7 @@
     },
     {
       "mnemonic": "push",
-      "opcode": 37375,
+      "opcode": 37391,
       "operands": [
         "r"
       ],
@@ -1131,7 +1131,7 @@
     },
     {
       "mnemonic": "pop",
-      "opcode": 36863,
+      "opcode": 36879,
       "operands": [
         "r"
       ],
@@ -1305,7 +1305,7 @@
     },
     {
       "mnemonic": "breq",
-      "opcode": 61696,
+      "opcode": 61440,
       "operands": [
         "k7"
       ],
@@ -1323,7 +1323,7 @@
     },
     {
       "mnemonic": "brne",
-      "opcode": 62720,
+      "opcode": 62464,
       "operands": [
         "k7"
       ],
@@ -1377,7 +1377,7 @@
     },
     {
       "mnemonic": "brmi",
-      "opcode": 61568,
+      "opcode": 61440,
       "operands": [
         "k7"
       ],
@@ -1395,7 +1395,7 @@
     },
     {
       "mnemonic": "brpl",
-      "opcode": 62592,
+      "opcode": 62464,
       "operands": [
         "k7"
       ],
@@ -1413,7 +1413,7 @@
     },
     {
       "mnemonic": "brlt",
-      "opcode": 61760,
+      "opcode": 61440,
       "operands": [
         "k7"
       ],
@@ -1431,7 +1431,7 @@
     },
     {
       "mnemonic": "brge",
-      "opcode": 62784,
+      "opcode": 62464,
       "operands": [
         "k7"
       ],
@@ -1449,7 +1449,7 @@
     },
     {
       "mnemonic": "brlo",
-      "opcode": 61472,
+      "opcode": 61440,
       "operands": [
         "k7"
       ],
@@ -1467,7 +1467,7 @@
     },
     {
       "mnemonic": "brsh",
-      "opcode": 62496,
+      "opcode": 62464,
       "operands": [
         "k7"
       ],
@@ -1485,7 +1485,7 @@
     },
     {
       "mnemonic": "sei",
-      "opcode": 38151,
+      "opcode": 37896,
       "operands": [],
       "bytes": 1,
       "cycles": 1,
@@ -1503,7 +1503,7 @@
     },
     {
       "mnemonic": "cli",
-      "opcode": 38407,
+      "opcode": 38024,
       "operands": [],
       "bytes": 1,
       "cycles": 1,

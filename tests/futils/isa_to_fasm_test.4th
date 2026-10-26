@@ -113,28 +113,29 @@ variable tc-rc variable tc-nop variable tc-unp variable tc-drift variable tc-gap
 \ t-check-msl16 — спека с 0.25-байтами (isa-fix-dfrac) в пути --check (python rc=0)
 : t-check-msl16 ( -- f )
     s" tools/isa_specs/msl16_isa.json" s" fsys/fasm/msl16/words.4th" t-check-run
-    tc-rc @ 0 Aeq tc-nop @ 0 Aeq tc-unp @ 4 Aeq
+    tc-rc @ 0 Aeq tc-nop @ 0 Aeq tc-unp @ 2 Aeq
     tc-drift @ 0 Aeq tc-gap @ 0 Aeq
     -1 ;
 
 \ t-check-mcs51 — полное покрытие (python rc=0, полная спека 54 КБ)
 : t-check-mcs51 ( -- f )
     s" tools/isa_specs/mcs51_isa.json" s" fsys/fasm/8051/words.4th" t-check-run
-    tc-rc @ 0 Aeq tc-nop @ 127 Aeq tc-unp @ 2 Aeq
+    tc-rc @ 0 Aeq tc-nop @ 129 Aeq tc-unp @ 0 Aeq
     tc-drift @ 0 Aeq tc-gap @ 0 Aeq
     -1 ;
 
-\ t-check-avr — python rc=1: SPEC COVERAGE GAP (67 unimplemented)
+\ t-check-avr — полное покрытие (python rc=0; до фикса спековых канонов было
+\ gap=67: спека хранила operand-экземпляры, а words — базы)
 : t-check-avr ( -- f )
     s" tools/isa_specs/avr_isa.json" s" fsys/fasm/avr/words.4th" t-check-run
-    tc-rc @ 1 Aeq tc-nop @ 13 Aeq tc-unp @ 132 Aeq
-    tc-drift @ 0 Aeq tc-gap @ 67 Aeq
+    tc-rc @ 0 Aeq tc-nop @ 21 Aeq tc-unp @ 59 Aeq
+    tc-drift @ 0 Aeq tc-gap @ 0 Aeq
     -1 ;
 
 \ t-check-z80 — python rc=0; z80-макро-имена пропускаются в gap (ic-zskip?)
 : t-check-z80 ( -- f )
     s" tools/isa_specs/z80_isa.json" s" fsys/fasm/z80/words.4th" t-check-run
-    tc-rc @ 0 Aeq tc-nop @ 76 Aeq tc-unp @ 71 Aeq
+    tc-rc @ 0 Aeq tc-nop @ 93 Aeq tc-unp @ 15 Aeq
     tc-drift @ 0 Aeq tc-gap @ 0 Aeq
     -1 ;
 
