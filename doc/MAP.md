@@ -52,8 +52,4 @@ s" lamp" s" 1" option:
 
 ## Правила покрытия fasm / ISA
 
-**D1 — полнота по уровню ISA.** `fsys/fasm/<id>/words.4th` обязан содержать все инструкции архитектурного уровня. Инструкция, исключённая намеренно, помечается `intentional-absent` с причиной (например, «только в XMEGA», «нет на AT89C52»). «Экономия» не причина.
-
-**D2 — подмножества через feature-gates.** Подмножественные синтезируемые ядра (AT1200-lite, j1abs без mul/div) описываются chip-profile + гейтами `isa-feat.4th` (`feat-define`, `have`, `need`). `words.4th` *не обрезается* под чип — гейты накладываются на полный spec.
-
-**Golden-датасеты offline.** `tools/gen_golden.py` (avr-gcc, z80asm, sdas) → закоммиченный `tests/golden/`. В CI/`fmix test` — ноль внешних зависимостей. Поле `generator` фиксирует версию toolchain'а.
+Канон **D1/D2** и golden — в [AGENTS.md](../AGENTS.md) (раздел ISA / fasm). Soft-AVR CI: [avr-soft.md](avr-soft.md). Утилиты: [UTILS_RU.md](UTILS_RU.md).

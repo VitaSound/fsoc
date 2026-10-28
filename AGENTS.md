@@ -56,7 +56,7 @@ If a build value has no source file, stop and ask — do not hardcode a stand-in
 
 **D2 — подмножества через feature-gates, не урезанием words.4th.** Синтезируемые ядра-подмножества (AT1200-lite, j1abs без mul/div) описываются chip-profile + `isa-feat.4th`-гейтами (`feat-define`, `have`, `need`). Файл `words.4th` *никогда* не обрезается под конкретный чип — гейты накладываются сверху на полный spec.
 
-**Golden-датасеты — offline only.** `tools/gen_golden.py` использует внешние ассемблеры (avr-gcc, z80asm, sdas) для генерации эталонных образов. В CI/`fmix test` используется статический `tests/golden/` (закоммичен). Зависимости от внешних toolchain'ов в рантайме тестов — ноль. Поле `generator` в golden-файле фиксирует версию toolchain'а.
+**Golden-датасеты — offline bootstrap.** Канон: `s" <arch>" gen-golden` (`fsoc/futils/gen_golden.4th`) из `tests/golden-src/<arch>/programs.4th`. В CI — статический `tests/golden/` (закоммичен). Внешние ассемблеры (`gen-golden-external` / `tools/gen_golden.py --external`) — опциональный offline parity, не CI.
 
 ## New CPU / MCU
 

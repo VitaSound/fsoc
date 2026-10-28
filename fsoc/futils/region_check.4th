@@ -326,13 +326,17 @@
                 drop
             else
                 begin
-                    rc-cpeek!
-                    rc-cw @ 44  =
-                    rc-cw @ 125 = or
-                    rc-cw @ 93  = or
-                    rc-cw @ 10  = or
-                    0=
-                    while
+                    rc-p @ rc-json-l @ u< if
+                        rc-cpeek!
+                        rc-cw @ 44  =
+                        rc-cw @ 125 = or
+                        rc-cw @ 93  = or
+                        rc-cw @ 10  = or
+                        0=
+                    else
+                        false
+                    then
+                while
                     rc-jmp
                 repeat
             then
@@ -342,10 +346,10 @@
     \ Извлечение значений
     \ ------------------------------------------------------------------
     \ ( -- )  ключ+значение ПЕРВОГО региона (rc-reg-seen = 0)
-        : rc-first-region-key ( -- )
+    : rc-first-region-key ( -- )
         rc-ba @ rc-sl @ rc-k-name rc-l-k-name rc-str=
         if
-            rc-parse-string
+            rc-parse-string 2drop
             1 rc-kflags +!
             rc-sl @ rc-regbuf rr-nlen !
             rc-ba @ rc-rname rc-sl @ rc-cmove
@@ -364,7 +368,7 @@
                 else
                     rc-ba @ rc-sl @ rc-k-mode rc-l-k-mode rc-str=
                     if
-                        rc-parse-string
+                        rc-parse-string 2drop
                         8 rc-kflags +!
                         rc-sl @ rc-regbuf rr-mlen !
                         rc-ba @ rc-rmode rc-sl @ rc-cmove
@@ -381,13 +385,12 @@
         rc-ba @ rc-sl @
         rc-k-name rc-l-k-name rc-str=
         if
-            rc-parse-string
+            rc-parse-string 2drop
             rc-ba @ rc-sl @
             rc-k-rom rc-l-k-rom rc-str=
-            or
             rc-ba @ rc-sl @
             rc-k-main rc-l-k-main rc-str=
-            and
+            or
             if
                 1 rc-reserved !
             then
@@ -396,10 +399,10 @@
         rc-skip-value ;
 
     \ ( -- )  ключ+значение устройства (ищем led)
-            : rc-dev-key ( -- )
+    : rc-dev-key ( -- )
         rc-ba @ rc-sl @ rc-k-name rc-l-k-name rc-str=
         if
-            rc-parse-string
+            rc-parse-string 2drop
             rc-ba @ rc-sl @ rc-k-led rc-l-k-led rc-str=
             if
                 1 rc-in-led !
@@ -409,12 +412,12 @@
             rc-ba @ rc-sl @ rc-k-addr rc-l-k-addr rc-str=
             if
                 rc-num
-                1 rc-in-led @ and if  rc-led-addr !  then
+                rc-in-led @ if  rc-led-addr !  else drop  then
             else
                 rc-ba @ rc-sl @ rc-k-bit rc-l-k-bit rc-str=
                 if
                     rc-skip-value
-                    1 rc-in-led @ and if  1 rc-led-hasbit !  then
+                    rc-in-led @ if  1 rc-led-hasbit !  then
                 else
                     rc-skip-value
                 then
@@ -516,7 +519,7 @@
                 rc-cw @ 91 = 0= if
                     1 rc-err +!
                 else
-                    rc-parse-array
+                    rc-parse-array drop   \ count unused (led walk already done)
                 then
             else
                 rc-skip-value
@@ -550,7 +553,7 @@
             and
             while
                 rc-skip-ws
-                rc-parse-string
+                rc-parse-string 2drop   \ key already in rc-ba/rc-sl for rc-parse-kv
                 rc-skip-ws
                 rc-cget drop
                 rc-jmp

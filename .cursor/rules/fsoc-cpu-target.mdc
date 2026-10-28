@@ -49,7 +49,7 @@ A new ISA with a Forth **console** kernel MUST join the shared REPL grid. A chip
 4. Every JSON name tagged in `tests/con_words.py` (`run` / `colon` / `skip` with a reason).
 5. Id-only words stay in a separate `*_test.4th` (see `tests/avr_con_test.4th`). Do not copy the shared echo/BS/`+`/`.s`/`: `/`words` lines.
 
-Run: `fmix test` from the repo root, or `cd tests && FSOC_HOME=<root> gforth con_core_test.4th`. AVR without simavr skips that slice. Spec: `openspec/specs/fsys/spec.md` (консольные тесты fsys).
+Run: `fmix test` from the repo root, or `cd tests && FSOC_HOME=<root> gforth con_core_test.4th`. AVR CI is soft Verilator (`doc/avr-soft.md`), not simavr. Spec: `openspec/specs/fsys/spec.md` (консольные тесты fsys). New fasm id MUST: `isa-gen-disasm`, `gen-golden`, asm↔disasm round-trip, `ic-check`.
 
 Same ISA, different body (j1abs, port j1a): do not add a `con_core` row. Run the port's word script on the new core. A core slower than one clock per instruction needs a profile UART gap and a cycle cap past 2^31; `FSOC_EMU_CYCLES` is `strtoull`. The hand launch does not export `FSOC_EMU_UART_GAP`: the panel buffers the line and Enter is `push_line`, the same as `FSOC_EMU_UART_IN`. A test that exports the gap is not that launch. Unset the variable and still require `3  ok`. Failures already solved: `.cursor/rules/j1abs-core.mdc`, `.cursor/rules/bcpu-console.mdc`.
 

@@ -247,6 +247,14 @@ nop,
 bootcfa:
 nop,
 
+\ Asm PB0 toggle for soft-AVR 'BOOT (colon blink hangs on this core).
+softblink:
+ddrb 0 sbi,
+sbloop:
+portb 0 sbi,
+portb 0 cbi,
+sbloop rjmp,
+
 dupw:
 r17 styd,
 r16 styd,

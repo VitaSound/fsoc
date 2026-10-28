@@ -10,8 +10,12 @@ s" env -u FSOC_EMU_UART_IN -u FSOC_EMU_UART_GAP FSOC_EMU_FAST=1 FSOC_EMU_CON=ter
 
 s" blink on" s" sim.log" tmp-grep? expect-true
 s" blink off" s" sim.log" tmp-grep? expect-true
-s" python3 " fsoc-root fjson.str-concat s" /tests/z80_blink_uart.py sim.log 3" fsoc-cat+
-2dup in-tmp-sh -rot fjson.str-free expect-true
+fsoc-root s" /fsoc/futils/uart_check.4th" fjson.str-concat
+2dup included fjson.str-free
+tmp-dir s" /sim.log" fjson.str-concat
+2dup 3 uart-blink-check >r
+fjson.str-free
+r> expect-true
 
 test-teardown
 test-finish

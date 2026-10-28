@@ -513,7 +513,7 @@ Z80_COLON = {
     ";": (": tsemi 9 . ; tsemi", ["9"]),
 }
 
-# Soft R8051 console: arithmetic and stack words; colon header link TBD.
+# Soft R8051 console: arithmetic/stack + colon (HERE advances after lit cells).
 MCS51_RUN = {
     "+": ("1 2 + .", ["3"]),
     "-": ("3 2 - .", ["1"]),
@@ -533,9 +533,12 @@ MCS51_RUN = {
     "c@": ("67 here c! here c@ .", ["67"]),
 }
 
+MCS51_COLON = {
+    ":": (": tplus 1 2 + . ; tplus", ["3"]),
+    ";": (": tsemi 9 . ; tsemi", ["9"]),
+}
+
 MCS51_SKIP = {
-    ":": "colon header TBD",
-    ";": "colon header TBD",
     "p1!": "pin side effect",
     "dly": "busy-wait side effect",
 }
@@ -621,6 +624,9 @@ def recipe(name, cpu):
     if cpu == "8051" and name in MCS51_RUN:
         line, has = MCS51_RUN[name]
         return ("run", line, has or [])
+    if cpu == "8051" and name in MCS51_COLON:
+        line, has = MCS51_COLON[name]
+        return ("colon", line, has or [])
     if cpu == "8051":
         return ("skip", "8051 image", [])
     if cpu == "j1b" and name in J1B_SKIP:
@@ -682,11 +688,10 @@ def write_input(cpu, path):
         b"1 2 3 .s\n",
         b"2drop drop\n",
     ]
-    if cpu != "8051":
-        lines += [
-            b": DOUBLE dup + ;\n",
-            b"21 DOUBLE .\n",
-        ]
+    lines += [
+        b": DOUBLE dup + ;\n",
+        b"21 DOUBLE .\n",
+    ]
     lines.append(b"words\n")
     limited = ("avr", "bcpu", "cd16", "msl16", "z80", "8051")
     if cpu not in limited:

@@ -10,11 +10,8 @@
 \   run-all-tools ( -- rc )     \ паритет `python3 tools/run_all_tools.py`
 \   run-all-cli   ( -- rc )     \ то же + argv: --dry-run, --only <list>,
 \                               \   --stack-report <path>
-\ Не портировано (см. doc/UTILS_RU.md):
-\   --json <path> — требует con_run/con_skip из con_words_gen (RUN/COLON/SKIP
-\   счётчики там WIP) — честный отказ с rc=1.
-\   --stack-report: side-effect файл python (/tmp/fsoc_stack_analysis.json)
-\   Forth не пишет — вывод и rc от этого не зависят.
+\ --json <path> — пишет отчёт (cpus + isa_specs); con_run/con_skip из cap.
+\ --stack-report: side-effect файл python; Forth принимает и игнорирует.
 \
 \ Стиль (уроки gen_golden/isa_to_fasm): без { }-локалов, переменные-параметры,
 \ cap-файл через outfile-execute (аналог capture_output), discovery сортируется
@@ -512,16 +509,45 @@ variable rat-kxt                       \ текущий xt перебора
 \ ------------------------------------------------------------------
 \ Этап 3 con: python con_words_gen.py <cpu> <KERNEL/cpu>
 \ ------------------------------------------------------------------
-: rat-con-do ( kern-a kern-u -- )
-    2>r
+create rat-con-run 64 allot  variable rat-con-run-u
+create rat-con-skip 64 allot variable rat-con-skip-u
+
+: rat-con-do ( -- )
+    rat-path-kernel-dir
     rat-cur @ r-na @ rat-cur @ r-nu @
-    2r> con-words-gen ;
-: rat-con-1 ( -- ) ['] rat-con-do rat-kern-each ;
+    rat-path@ con-words-gen ;
+
+: rat-pfx ( a u pre-a pre-u -- f )
+    2swap                           \ ( pre-a pre-u a u )
+    2over nip over < if 2drop 2drop 0 exit then
+    drop 2over nip                  \ ( pre-a pre-u a pu )
+    2swap compare 0= ;
+
+: rat-con-cap-take ( a u -- )
+    2dup s"  RUN:" rat-pfx if
+        dup 63 min rat-con-run-u !
+        rat-con-run swap move exit
+    then
+    2dup s"  SKIP:" rat-pfx if
+        dup 63 min rat-con-skip-u !
+        rat-con-skip swap move exit
+    then
+    2drop ;
+
+: rat-harvest-con ( -- )
+    0 rat-con-run-u ! 0 rat-con-skip-u !
+    rat-cap-read
+    rat-capbuf rat-capbufn @ rat-split-line
+    begin rat-lu @ while
+        rat-la @ rat-lu @ rat-con-cap-take
+        rat-ha @ rat-hu @ dup 0= if 2drop 0 rat-lu ! else rat-split-line then
+    repeat ;
 
 : rat-do-con ( -- )
     rat-cur @ r-dict @ 0= if 2 0 2 rat-st! exit then
-    ['] rat-con-1 rat-cap-run
-    dup if 3 swap 2 rat-st! else drop 1 0 2 rat-st! then ;
+    ['] rat-con-do rat-cap-run
+    dup if 3 swap 2 rat-st!
+    else drop 1 0 2 rat-st! rat-harvest-con then ;
 
 \ ------------------------------------------------------------------
 \ Этап 2 cross: python cross_lint.py <cross> <KERNEL/cpu>
@@ -685,6 +711,7 @@ variable rat-ba variable rat-bu variable rat-bl   \ scratch rat-bad-add (имя 
     rat-ba @ rat-bl @
     rat-badn @ 64 * rat-badnames +
     -rot move
+    rat-bl @ rat-badn @ rat-badlens + c!
     1 rat-badn +! ;
 
 \ обход tools/isa_specs/*.json: подсчёт checked/invalid + копии bad-имён
@@ -740,16 +767,94 @@ variable rat-ba variable rat-bu variable rat-bl   \ scratch rat-bad-add (имя 
 \ ------------------------------------------------------------------
 \ Ядро: цикл по cpu, отчёт, спеки, summary (порядок python main())
 \ ------------------------------------------------------------------
+\ ---- --json report (incremental via outfile-execute) ----
+create rat-json-path 512 allot
+variable rat-json-path-u
+variable rat-jfid
+variable rat-jfirst-cpu
+
+: rat-jwith ( xt -- )
+    rat-jfid @ outfile-execute ;
+
+: rat-json-st-emit ( t -- )
+    [char] " emit rat-st-type [char] " emit ;
+
+: rat-jq ( -- ) [char] " emit ;
+: rat-jkey ( a u -- ) rat-jq type rat-jq ." :" ;
+
+: rat-json-cpu-body ( -- )
+    rat-jfirst-cpu @ if [char] , emit then
+    -1 rat-jfirst-cpu !
+    rat-jq rat-cur @ r-na @ rat-cur @ r-nu @ type rat-jq ." :{"
+    rat-only @ 1 and if
+        s" stack" rat-jkey 0 rat-json-st-emit
+        rat-only @ 14 and if [char] , emit then
+    then
+    rat-only @ 2 and if
+        s" cross" rat-jkey 1 rat-json-st-emit
+        rat-only @ 12 and if [char] , emit then
+    then
+    rat-only @ 4 and if
+        s" con" rat-jkey 2 rat-json-st-emit
+        rat-con-run-u @ if
+            [char] , emit s" con_run" rat-jkey
+            rat-jq rat-con-run rat-con-run-u @ type rat-jq
+        then
+        rat-con-skip-u @ if
+            [char] , emit s" con_skip" rat-jkey
+            rat-jq rat-con-skip rat-con-skip-u @ type rat-jq
+        then
+        rat-only @ 8 and if [char] , emit then
+    then
+    rat-only @ 8 and if
+        s" isa" rat-jkey 3 rat-json-st-emit
+    then
+    [char] } emit ;
+
+: rat-json-cpu ( -- )
+    rat-jfid @ 0= if exit then
+    ['] rat-json-cpu-body rat-jwith ;
+
+: rat-json-hdr ( -- )
+    ." {" s" root" rat-jkey rat-jq ." ." rat-jq
+    ." ," s" cpus" rat-jkey ." {" ;
+
+: rat-json-open ( a u -- )
+    dup 512 min rat-json-path-u !
+    rat-json-path swap move
+    rat-json-path rat-json-path-u @ w/o create-file throw rat-jfid !
+    0 rat-jfirst-cpu !
+    ['] rat-json-hdr rat-jwith ;
+
+: rat-json-close-body ( -- )
+    ." }," s" isa_specs" rat-jkey ." {"
+    s" checked" rat-jkey rat-ispec @ 0 .r
+    ." ," s" bad" rat-jkey ." ["
+    rat-badn @ 0 ?do
+        i 0> if [char] , emit then
+        rat-jq rat-badnames i 64 * + rat-badlens i + c@ type rat-jq
+    loop
+    ." ]}}" ;
+
+: rat-json-close ( -- )
+    rat-jfid @ 0= if exit then
+    ['] rat-json-close-body rat-jwith
+    rat-jfid @ close-file drop
+    0 rat-jfid !
+    cr ." Report written to " rat-json-path rat-json-path-u @ type cr ;
+
 \ этапы одного cpu + console line + any_error/summary
 : rat-do-cpu ( rec -- )
     rat-cur !
     rat-st-clear
+    0 rat-con-run-u ! 0 rat-con-skip-u !
     rat-only @ 1 and if rat-do-stack then
     rat-only @ 2 and if rat-do-cross then
     rat-only @ 4 and if rat-do-con then
     rat-only @ 8 and if rat-do-isa then
     rat-cpu-line
-    rat-outcome ;
+    rat-outcome
+    rat-json-cpu ;
 : rat-run-core ( -- rc )
     rat-discover
     \ f"Discovered {n} CPUs with kernels: {a, b, ...}\n" + пустая строка
@@ -771,6 +876,7 @@ variable rat-ba variable rat-bu variable rat-bl   \ scratch rat-bad-add (имя 
     ." Tool summary:"
     4 0 do i rat-summary-line loop
     cr
+    rat-json-close
     rat-any-error @ if 1 else 0 then ;
 
 \ ------------------------------------------------------------------
@@ -779,14 +885,14 @@ variable rat-ba variable rat-bu variable rat-bl   \ scratch rat-bad-add (имя 
 : run-all-tools ( -- rc )
     15 rat-only !
     0 rat-dry !
+    0 rat-jfid !
     0 rat-any-error ! 0 rat-ispec ! 0 rat-iskip !
     12 0 do 0 i cells rat-cnt + ! loop
     rat-run-core ;
 
 \ ------------------------------------------------------------------
 \ CLI: --dry-run, --only <stack,cross,con,isa>, --stack-report <path>,
-\ --json <path> -> честный отказ rc=1 (con_run/con_skip WIP в
-\ con_words_gen; см. doc/UTILS_RU.md / шапку файла)
+\ --json <path> (cpus + isa_specs + con_run/con_skip when present)
 \ ------------------------------------------------------------------
 create rat-comma 44 c,                \ "," ASCII44
 variable rat-oa variable rat-ou             \ остаток --only-списка
@@ -826,6 +932,7 @@ variable rat-only-seen                      \ --only уже встречался
 : run-all-cli ( -- rc )
     15 rat-only !
     0 rat-dry !
+    0 rat-jfid !
     0 rat-only-seen !
     begin next-arg dup while
         2dup s" --dry-run" compare 0= if
@@ -833,17 +940,13 @@ variable rat-only-seen                      \ --only уже встречался
         else
             2dup s" --only" compare 0= if
                 2drop next-arg
-                \ парсинг списка: stack,cross,con,isa -> маска
                 rat-only-parse
             else
                 2dup s" --stack-report" compare 0= if
-                    2drop next-arg 2drop \ принимаем, side-effect не пишем
+                    2drop next-arg 2drop
                 else
                     2dup s" --json" compare 0= if
-                        2drop next-arg 2drop
-                        cr ." run_all_tools: --json needs con_run/con_skip"
-                        cr ." (con_words_gen WIP); refusing with rc=1" cr
-                        1 exit
+                        2drop next-arg rat-json-open
                     else
                         rat-cli-refused exit
                     then
@@ -851,7 +954,7 @@ variable rat-only-seen                      \ --only уже встречался
             then
         then
     repeat
-    2drop                       \ ( 0 0 ) от next-arg на конце аргументов
+    2drop
     0 rat-any-error ! 0 rat-ispec ! 0 rat-iskip !
     12 0 do 0 i cells rat-cnt + ! loop
     rat-run-core ;

@@ -25,7 +25,7 @@
         field: ucm-kind
     end-structure
 
-    create uc-markers 256 uc-marker% allot
+    create uc-markers 256 uc-marker% * allot
 
     \ ------------------------------------------------------------------
     \ File I/O (byte)

@@ -13,7 +13,7 @@
 
 - Gforth, `fmix packages.get`, `FSOC_HOME` и `PATH` (см. [feco shell-setup](https://github.com/VitaSound/feco/blob/main/docs/shell-setup.md))
 - **Verilator** (канон ниже)
-- **Не** нужны в первый час: Quartus, Yosys/nextpnr, Proteus, fhdlgen, simavr
+- **Не** нужны в первый час: Quartus, Yosys/nextpnr, Proteus, fhdlgen
 
 Полный прогон: `fmix test`. Пять терминов Day-1: [doc/GLOSSARY.md](doc/GLOSSARY.md). После Day-1 (платы, fit, остальные CPU): [doc/guide-detail-ru.md](doc/guide-detail-ru.md) — в первый час не открывайте.
 
@@ -72,12 +72,16 @@ FSOC_EMU_FAST=1 FSOC_EMU_UART_IN='1 2 + .' fsoc --build
 ### MCU (ATmega8)
 
 ```bash
-cd projects/baremetal/blinky_atmega && fsoc --build
-# Hardware atmega8(avr), firmware.hex
+# Soft-AVR Verilator (pin + UART console) — see doc/avr-soft.md
+cd projects/baremetal/blinky_avr_emul
+FSOC_EMU_CON=pin FSOC_EMU_EDGES=4 FSOC_EMU_FAST=1 fsoc --build
 
-cd ../../soc/soc_atmega8 && fsoc --build
-# HEX всегда; интерактив — simavr + libsimavr-dev:
-# ~/fsoc/tools/avr-con ./firmware.hex '1 2 + .'
+cd ../../soc/soc_avr
+FSOC_EMU_FAST=1 FSOC_EMU_UART_IN='1 2 + .' fsoc --build
+# → 3  ok
+
+# Proteus / hard HEX path (not CI):
+cd ../soc_atmega8 && fsoc --build
 ```
 
 ### Два микроядра (MPSoC)

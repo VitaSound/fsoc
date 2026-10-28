@@ -41,7 +41,7 @@ export FSOC_HOME="$HOME/fsoc"
 cd tests && gforth con_core_test.4th
 ```
 
-ATmega8 UART under simavr is optional for a clone. Packages: `simavr`, `libsimavr-dev`, `gcc`. Without them the AVR slice of `con_core_test` and [`tests/avr_con_test.4th`](../tests/avr_con_test.4th) skip. From a built project: `~/fsoc/tools/avr-con ./firmware.hex`. See [ATmega8](#atmega8). A new `cpu:` with an fsys kernel must extend this grid — [add-cpu-eng.md](add-cpu-eng.md).
+AVR in CI is soft Verilator ([avr-soft.md](avr-soft.md)); `con_core_test` and [`tests/avr_con_test.4th`](../tests/avr_con_test.4th) do not need simavr. Proteus / hard HEX — [ATmega8](#atmega8). A new `cpu:` with an fsys kernel must extend this grid — [add-cpu-eng.md](add-cpu-eng.md).
 
 ## Blinky
 
@@ -143,32 +143,24 @@ FSOC_EMU_CON=pin FSOC_EMU_FAST=1 FSOC_EMU_CYCLES=800000 fsoc --build
 
 `projects/soc/soc_atmega8` is a Forth console (`s" fsys" sys:`): kernel plus `fsys/avr/extra-min.4th` (`cr`, `type`, arithmetic helpers), no ports, Intel HEX. `projects/soc/soc_atmega8_blink` packs a **release** image: `s" image" s" release" option:` plus `firmware/blink.fs` (PB0 and USART text) on `fsys/avr/extra.4th`, not extra-min. `projects/baremetal/blinky_atmega` is the same **task** `blinky` as the FPGA copies, with `s" avr" cpu:`: fasm assembles `firmware/blink_avr.4th` (PB0), no kernel. The log prints `Hardware` / `atmega8(avr)` then `Software` / `image tool: fsys` or `fasm` / `firmware.hex: <used> bytes of 8192`. `fsoc --build` does not start Proteus. Clock, LED, and Virtual Terminal are in [atmega8-proteus.md](atmega8-proteus.md).
 
-Proteus with the release HEX: USART at 9600 on `PD1`/`PD0` prints `blink on` / `blink off` in the Virtual Terminal. The same text appears under `tools/avr-con`.
+Proteus with the release HEX: USART at 9600 on `PD1`/`PD0` prints `blink on` / `blink off` in the Virtual Terminal.
 
 ![ATmega8 Forth blink in Proteus: Virtual Terminal prints blink on / blink off](atmega8-proteus-blink.png)
 
 ```bash
-cd projects/soc/soc_atmega8 && fsoc --build
-cd projects/soc/soc_atmega8_blink && fsoc --build
-cd projects/baremetal/blinky_atmega && fsoc --build
+# Soft-AVR Verilator (CI / Day-1) — doc/avr-soft.md
+cd projects/baremetal/blinky_avr_emul
+FSOC_EMU_CON=pin FSOC_EMU_EDGES=4 FSOC_EMU_FAST=1 fsoc --build
+cd ../../soc/soc_avr
+FSOC_EMU_FAST=1 FSOC_EMU_UART_IN='1 2 + .' fsoc --build
+
+# Proteus / hard HEX
+cd ../soc_atmega8 && fsoc --build
+cd ../soc_atmega8_blink && fsoc --build
+cd ../../baremetal/blinky_atmega && fsoc --build
 ```
 
-On Linux, before Proteus, the UART console is [`tools/avr-con`](../tools/avr-con) (simavr). The stock `simavr` CLI does not feed the keyboard to USART, so after `ok` the image waits on `KEY` with no input. Install the packages, then run the wrapper from the project directory that holds `firmware.hex`. First launch compiles `tools/avr-con.bin` with `gcc`.
-
-```bash
-sudo apt install simavr libsimavr-dev gcc
-cd projects/soc/soc_atmega8 && fsoc --build
-~/fsoc/tools/avr-con ./firmware.hex
-```
-
-Type a Forth line and press Enter (sent as CR). Ctrl-D exits. Extra arguments are one-shot lines:
-
-```bash
-~/fsoc/tools/avr-con ./firmware.hex words
-~/fsoc/tools/avr-con ./firmware.hex '1 2 + .'
-```
-
-`simavr` provides `libsimavr.so.2`; `libsimavr-dev` is the headers (`/usr/include/simavr`). Without the -dev package the wrapper looks for headers in `/tmp/simavr-dev/usr/include/simavr`. The same schematic notes and GDB (`simavr -g`) are in [atmega8-proteus.md](atmega8-proteus.md).
+Schematic notes: [atmega8-proteus.md](atmega8-proteus.md).
 
 ## bcpu
 

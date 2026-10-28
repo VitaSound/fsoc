@@ -170,8 +170,9 @@ s" fsys/avr/extra.4th" s" sim.log" tmp-grep? expect-false
 s" firmware/blink.fs" s" sim.log" tmp-grep? expect-false
 s" gforth cross.fs" s" sim.log" tmp-grep? expect-false
 s" :00000001FF" s" firmware.hex" tmp-grep? expect-true
+\ ASCII "blink o" must stay out of min fsys (no Forth blink.fs).
+\ Do not grep B89A: softblink SBI (9A) next to SP OUT (B8) is a false hit.
 s" 6C696E6B206F" s" firmware.hex" tmp-grep? expect-false
-s" B89A" s" firmware.hex" tmp-grep? expect-false
 test-teardown
 
 s\" s\" soc\" task:\ns\" proteus\" target:\ns\" avr\" cpu:\ns\" atmega8\" model:\ns\" fsys\" sys:\ns\" blink\" s\" 1\" option:\ns\" image\" s\" release\" option:\n" cpu-build

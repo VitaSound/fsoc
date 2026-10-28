@@ -19,16 +19,7 @@ cd projects/baremetal/blinky_atmega && fsoc --build
 - Virtual Terminal, 9600 бод. TX терминала на `PD0` (RXD), RX терминала на `PD1` (TXD). Enter в VT100 — обычно CR (`13`); консоль принимает и CR, и LF.
 - Program File — свежий `firmware.hex` после `fsoc --build`. Если Proteus пишет `Read total of 2036 bytes`, это старый файл.
 
-На Linux до Proteus: **simavr** (`sudo apt install simavr`). Голый CLI USART на клавиатуру не сажает — после `ok` прошивка ждёт `KEY`. Консоль:
-
-```bash
-sudo apt install simavr libsimavr-dev   # headers: libsimavr-dev
-cd projects/soc/soc_atmega8 && fsoc --build
-"$FSOC_HOME/tools/avr-con" ./firmware.hex           # интерактив: строка + Enter
-"$FSOC_HOME/tools/avr-con" ./firmware.hex words 1   # одна или несколько команд
-```
-
-Без `libsimavr-dev` сборка ищет заголовки в `/tmp/simavr-dev/usr/include/simavr`. GDB: `simavr -g -m atmega8 -f 8000000 firmware.hex`, затем `avr-gdb` и `target remote :1234` (у HEX нет символов, PC в байтах). Ещё **simulavr** и **qemu-system-avr**.
+Для CI / консоли без Proteus используйте soft-AVR Verilator ([avr-soft.md](avr-soft.md)), не simavr. GDB на живом HEX по желанию: `avr-gdb` + внешний симулятор на ваш выбор.
 
 Сброс — включение питания в Proteus. Прерывания программа не включает, первая команда стоит по вектору сброса.
 

@@ -30,6 +30,18 @@ forth-package
     key-list flint-exclude fsys/kernel/msl16/
     key-list flint-exclude tests/futils/cross_lint_fixtures/
     key-list flint-exclude tests/futils/con_words_gen_fixtures/
+    \ Parallel ISA disasm/golden/round-trip fixtures share helper names by design.
+    key-list flint-exclude tests/avr_disasm_test.4th
+    key-list flint-exclude tests/z80_disasm_test.4th
+    key-list flint-exclude tests/avr_roundtrip_test.4th
+    key-list flint-exclude tests/z80_roundtrip_test.4th
+    key-list flint-exclude tests/mcs51_roundtrip_test.4th
+    key-list flint-exclude tests/avr_golden_test.4th
+    key-list flint-exclude tests/z80_golden_test.4th
+    key-list flint-exclude tests/golden/avr-golden.4th
+    key-list flint-exclude tests/golden/z80-golden.4th
+    key-list flint-exclude tests/golden-src/avr/
+    key-list flint-exclude tests/golden-src/z80/
     key-list flint-exclude fsys/msl16/
     key-list flint-exclude fsys/host/msl16-cross.4th
     key-list flint-exclude fsys/fasm/z80/

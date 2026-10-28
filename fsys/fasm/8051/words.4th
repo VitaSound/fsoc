@@ -72,13 +72,13 @@ $03 mcs-op1 rr-a,
 $13 mcs-op1 rrc-a,
 $04 mcs-op1 inca,
 $14 mcs-op1 deca,
-$84 mcs-op1 divab,
-$A4 mcs-op1 mulab,
+: divab, ( -- ) mcs-muldiv need $84 fasm-emit ;
+: mulab, ( -- ) mcs-muldiv need $A4 fasm-emit ;
 $C4 mcs-op1 swapa,
 $D4 mcs-op1 daa,
 $73 mcs-op1 jmp@a+dptr,
-$83 mcs-op1 movc@a+pc,
-$93 mcs-op1 movc@a+dptr,
+: movc@a+pc, ( -- ) mcs-movc need $83 fasm-emit ;
+: movc@a+dptr, ( -- ) mcs-movc need $93 fasm-emit ;
 $E0 mcs-op1 movxa@dptr,
 $F0 mcs-op1 movx@dptr-a,
 $E6 mcs-op1 mov-a-@r0,

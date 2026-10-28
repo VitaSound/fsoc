@@ -36,4 +36,3 @@ firmware/firmware.hex
 # Codewhale runtime state (not repo content).
 .codewhale/
 fsoc_stack_analysis.json
-fsys/fasm/avr/disasm.4th

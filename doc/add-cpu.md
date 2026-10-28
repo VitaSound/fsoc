@@ -60,7 +60,9 @@ cd tests && gforth con_core_test.4th
 fmix test
 ```
 
-Без simavr срез AVR пропускается. Тот же ISA, другое тело (например `j1abs` — порт `j1a`): ряд `con_core` не добавлять; прогнать скрипт словаря порта на новом ядре.
+AVR в CI — soft body Verilator ([avr-soft.md](avr-soft.md)), не simavr. Тот же ISA, другое тело (например `j1abs` — порт `j1a`): ряд `con_core` не добавлять; прогнать скрипт словаря порта на новом ядре.
+
+Новый fasm id MUST: автоген `disasm.4th` (`isa-gen-disasm`), golden (`gen-golden`), двусторонний round-trip (A→D walk + D→A same hex), `ic-check` coverage.
 
 ## Перед ревью: три сеанса эмуляции
 

@@ -10,7 +10,7 @@ mcs-wl >order
 
 \ ( name-a name-u -- )  emit "IMAGE <name> " then the hex bytes.
 : emit-image ( name-a name-u -- )
-    ." IMAGE " 2dup type ."  "
+    cr ." IMAGE " 2dup type ."  "
     base @ >r hex
     fasm-pc @ 0 ?do
         i fasm@ 0 <# # # #> type space

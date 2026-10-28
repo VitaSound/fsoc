@@ -558,7 +558,7 @@
       ],
       "disasm": "MUL R{d},{r}",
       "requires": [
-        "avr_core"
+        "avr_mul"
       ]
     },
     {
@@ -1602,7 +1602,1191 @@
       ],
       "disasm": "MOVW R{d},{r}",
       "requires": [
+        "avr_movw"
+      ]
+    },
+    {
+      "mnemonic": "cpc",
+      "opcode": 1024,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (cpc,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "CPC",
+      "requires": [
         "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "clr",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (clr,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "CLR",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "andi",
+      "opcode": 28672,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (andi,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "ANDI",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "ori",
+      "opcode": 24576,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (ori,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "ORI",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "subi",
+      "opcode": 20480,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (subi,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "SUBI",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "sbci",
+      "opcode": 16384,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (sbci,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "SBCI",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "sbr",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (sbr,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "SBR",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "cbr",
+      "opcode": 255,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (cbr,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "CBR",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "ser",
+      "opcode": 255,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (ser,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "SER",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "muls",
+      "opcode": 512,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (muls,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "MULS",
+      "requires": [
+        "avr_mul"
+      ]
+    },
+    {
+      "mnemonic": "mulsu",
+      "opcode": 768,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (mulsu,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "MULSU",
+      "requires": [
+        "avr_mul"
+      ]
+    },
+    {
+      "mnemonic": "fmul",
+      "opcode": 776,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (fmul,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "FMUL",
+      "requires": [
+        "avr_mul"
+      ]
+    },
+    {
+      "mnemonic": "fmuls",
+      "opcode": 896,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (fmuls,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "FMULS",
+      "requires": [
+        "avr_mul"
+      ]
+    },
+    {
+      "mnemonic": "fmulsu",
+      "opcode": 904,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (fmulsu,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "FMULSU",
+      "requires": [
+        "avr_mul"
+      ]
+    },
+    {
+      "mnemonic": "swap",
+      "opcode": 37890,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (swap,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "SWAP",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "ijmp",
+      "opcode": 37897,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (ijmp,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "IJMP",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "icall",
+      "opcode": 38153,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (icall,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "ICALL",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "eijmp",
+      "opcode": 37913,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (eijmp,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "EIJMP",
+      "requires": [
+        "avr_lpm_ext"
+      ]
+    },
+    {
+      "mnemonic": "eicall",
+      "opcode": 38169,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (eicall,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "EICALL",
+      "requires": [
+        "avr_lpm_ext"
+      ]
+    },
+    {
+      "mnemonic": "brvs",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (brvs,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "BRVS",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "brvc",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (brvc,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "BRVC",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "brhs",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (brhs,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "BRHS",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "brhc",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (brhc,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "BRHC",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "brts",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (brts,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "BRTS",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "brtc",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (brtc,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "BRTC",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "brie",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (brie,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "BRIE",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "brid",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (brid,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "BRID",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "ldx",
+      "opcode": 36876,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (ldx,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "LDX",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "ldxi",
+      "opcode": 36877,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (ldxi,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "LDXI",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "ldxd",
+      "opcode": 36878,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (ldxd,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "LDXD",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "ldyd",
+      "opcode": 36874,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (ldyd,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "LDYD",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "stx",
+      "opcode": 37388,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (stx,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "STX",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "stxi",
+      "opcode": 37389,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (stxi,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "STXI",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "stxd",
+      "opcode": 37390,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (stxd,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "STXD",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "styi",
+      "opcode": 37385,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (styi,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "STYI",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "styd",
+      "opcode": 37386,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (styd,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "STYD",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "lddy",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (lddy,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "LDDY",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "lddz",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (lddz,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "LDDZ",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "stdy",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (stdy,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "STDY",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "stdz",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (stdz,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "STDZ",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "sty",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (sty,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "STY",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "lpmz",
+      "opcode": 36868,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (lpmz,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "LPMZ",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "lpmzi",
+      "opcode": 36869,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (lpmzi,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "LPMZI",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "elpm",
+      "opcode": 38360,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (elpm,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "ELPM",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "elpmz",
+      "opcode": 36870,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (elpmz,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "ELPMZ",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "elpmzi",
+      "opcode": 36871,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (elpmzi,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "ELPMZI",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "spm",
+      "opcode": 38376,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (spm,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "SPM",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "spmi",
+      "opcode": 38392,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (spmi,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "SPMI",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "sbrc",
+      "opcode": 64512,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (sbrc,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "SBRC",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "sbrs",
+      "opcode": 65024,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (sbrs,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "SBRS",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "bld",
+      "opcode": 63488,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (bld,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "BLD",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "bst",
+      "opcode": 64000,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (bst,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "BST",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "bset",
+      "opcode": 37896,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (bset,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "BSET",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "bclr",
+      "opcode": 38024,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (bclr,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "BCLR",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "sec",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (sec,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "SEC",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "sez",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (sez,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "SEZ",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "sen",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (sen,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "SEN",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "sev",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (sev,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "SEV",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "ses",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (ses,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "SES",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "seh",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (seh,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "SEH",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "set",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (set,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "SET",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "clc",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (clc,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "CLC",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "clz",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (clz,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "CLZ",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "cln",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (cln,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "CLN",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "clv",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (clv,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "CLV",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "cls",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (cls,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "CLS",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "clh",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (clh,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "CLH",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "clt",
+      "opcode": null,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (clt,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "CLT",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "break",
+      "opcode": 38296,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (break,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "BREAK",
+      "requires": [
+        "avr_core"
+      ]
+    },
+    {
+      "mnemonic": "des",
+      "opcode": 37899,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (des,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "DES",
+      "requires": [
+        "avr_xmega"
+      ]
+    },
+    {
+      "mnemonic": "xch",
+      "opcode": 37380,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (xch,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "XCH",
+      "requires": [
+        "avr_xmega"
+      ]
+    },
+    {
+      "mnemonic": "las",
+      "opcode": 37381,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (las,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "LAS",
+      "requires": [
+        "avr_xmega"
+      ]
+    },
+    {
+      "mnemonic": "lac",
+      "opcode": 37382,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (lac,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "LAC",
+      "requires": [
+        "avr_xmega"
+      ]
+    },
+    {
+      "mnemonic": "lat",
+      "opcode": 37383,
+      "operands": [],
+      "bytes": 2,
+      "cycles": 1,
+      "flags_affected": [],
+      "description": "from fasm words.4th (lat,)",
+      "categories": [
+        "fasm"
+      ],
+      "disasm": "LAT",
+      "requires": [
+        "avr_xmega"
       ]
     }
   ],

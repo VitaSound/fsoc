@@ -422,17 +422,21 @@
                         then
                     repeat
             else
+                \ Number/atom: stop at delimiter. Do not leave flags under while.
                 begin
                     imap-err @ 0=
-                    imap-p @ imap-json-l @ u<
-                    and
-                    cpeek!
-                    imap-cw @ 44  =
-                    imap-cw @ 125 = or
-                    imap-cw @ 93  = or
-                    imap-cw @ 10  = or
-                    0=
-                    while
+                    imap-p @ imap-json-l @ u< and
+                    if
+                        cpeek!
+                        imap-cw @ 44  =
+                        imap-cw @ 125 = or
+                        imap-cw @ 93  = or
+                        imap-cw @ 10  = or
+                        0=
+                    else
+                        false
+                    then
+                while
                     jmp
                 repeat
             then

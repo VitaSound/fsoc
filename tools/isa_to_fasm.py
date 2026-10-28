@@ -677,6 +677,33 @@ def spec_matches_fasm(spec: ISASpec, opcodes: Dict[str, int]) -> List[str]:
     return errors
 
 
+# Assembler helpers / not ISA ops — never required in the spec mnemonic list.
+_FASM_HELPERS = {
+    "db,", "dw,", "z80-b,", "z80-w,", "incr,", "decr,",
+}
+
+
+def fasm_missing_in_spec(spec: ISASpec, opcodes: Dict[str, int],
+                         unparseable: Optional[List[str]] = None) -> List[str]:
+    """Report fasm comma-words with no matching mnemonic in the ISA spec.
+
+    Match either the mapped name (fasm_name_to_mnemonic) or the bare stem
+    (word without trailing comma) so MCS-51/Z80 punctuation maps stay soft.
+    """
+    by_mnemonic = {i.mnemonic for i in spec.instructions}
+    missing = []
+    words = set(opcodes) | set(unparseable or [])
+    for word in sorted(words):
+        if word in _FASM_HELPERS:
+            continue
+        stem = word.rstrip(",")
+        mnem = fasm_name_to_mnemonic(word)
+        if mnem in by_mnemonic or stem in by_mnemonic:
+            continue
+        missing.append(f"{word} → {mnem}")
+    return missing
+
+
 def spec_missing_in_fasm(spec: ISASpec, opcodes: Dict[str, int],
                          loose: Optional[Dict[str, int]] = None) -> List[str]:
     """Report spec instructions whose base opcode is not emitted by fasm.
@@ -733,20 +760,34 @@ def main():
         opcodes, unparseable, loose = check_fasm(words_path)
         errors = spec_matches_fasm(spec, opcodes)
         missing = spec_missing_in_fasm(spec, opcodes, loose)
-        print(f"{words_path.name}: {len(opcodes)} comma words parsed, {len(unparseable)} without a leading opcode")
+        orphan = fasm_missing_in_spec(spec, opcodes, unparseable)
+        print(
+            f"{words_path.name}: {len(opcodes)} comma words with opcode, "
+            f"{len(unparseable)} alias/helper (info, not errors)"
+        )
         for u in unparseable:
-            print(f"  (no-opcode) {u}")
+            print(f"  (alias) {u}")
         if errors:
-            print("\nSPEC/FASM DRIFT:")
+            print("\nFAIL SPEC/FASM DRIFT:")
             for e in errors:
                 print(f"  - {e}")
             sys.exit(1)
         if missing:
-            print(f"\nSPEC COVERAGE GAP ({len(missing)} unimplemented):")
+            print(f"\nFAIL SPEC COVERAGE GAP ({len(missing)} unimplemented):")
             for e in missing:
                 print(f"  - {e}")
             sys.exit(1)
-        print("spec matches fasm opcodes (full coverage)")
+        # Reverse drift is strict for AVR (words.4th is the truth after П0 expand).
+        # MCS-51/Z80 fasm names diverge from spec mnemonics (punctuation maps);
+        # keep forward coverage only until a shared alias table exists.
+        if orphan and spec.arch == "avr":
+            print(f"\nFASM ORPHANS (not in spec, {len(orphan)}):")
+            for e in orphan:
+                print(f"  - {e}")
+            sys.exit(1)
+        if orphan:
+            print(f"(note) {len(orphan)} fasm names unmatched in {spec.arch} spec — reverse check skipped")
+        print("OK spec matches fasm opcodes (full coverage)")
         return
 
     if sys.argv[1] == '--disasm':

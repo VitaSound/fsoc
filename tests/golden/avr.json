@@ -1,0 +1,18 @@
+{
+  "arch": "avr",
+  "generator": "bootstrap: fsoc fasm (gforth) \u2014 seed before external run",
+  "images": [
+    {
+      "name": "add",
+      "bytes": "E001E0120F01"
+    },
+    {
+      "name": "basic",
+      "bytes": "00009508"
+    },
+    {
+      "name": "branch",
+      "bytes": "950AF7F1"
+    }
+  ]
+}

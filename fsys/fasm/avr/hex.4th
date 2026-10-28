@@ -54,3 +54,35 @@ variable ihex-n
    path-a path-u ihex-buf ihex-n @ fsoc-write-file ;
 
 [THEN]
+
+\ Word hex for soft Verilator $readmemh into reg[15:0] PM.
+[IFUNDEF] fasm-whex
+
+variable whex-fid
+create whex-dig 4 allot
+
+: whex-nib ( u shift -- c )
+   rshift 15 and
+   dup 10 < if [char] 0 + else 10 - [char] A + then ;
+
+: whex-put ( u -- )
+   dup 12 whex-nib whex-dig c!
+   dup 8 whex-nib whex-dig 1+ c!
+   dup 4 whex-nib whex-dig 2 + c!
+   0 whex-nib whex-dig 3 + c!
+   whex-dig 4 whex-fid @ write-file throw
+   s\" \n" whex-fid @ write-file throw ;
+
+: fasm-whex ( path-a path-u -- )
+   w/o create-file throw whex-fid !
+   0
+   begin
+      dup fasm-pc @ u<
+   while
+      dup fasm@ whex-put
+      1+
+   repeat
+   drop
+   whex-fid @ close-file throw ;
+
+[THEN]

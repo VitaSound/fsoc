@@ -1,0 +1,12 @@
+Soft AVR CPU (nanamake/avr_cpu, MIT).
+
+Vendored from https://github.com/nanamake/avr_cpu (NAMAKE Nanamaru).
+Core files: ALU.v … TimDecode.v, RAM.v — see LICENSE.
+
+fsoc wrappers (top_blink.v, top_soc.v) and DmAdConv.v ATmega map
+(I/O $20..$5F, SRAM from $0060) are project code. Upstream used SRAM
+from $0100; do not revert without retargeting the fsys kernel.
+
+CALL/RET stack byte order in DmCont.v / PcAndIr.v is patched to match
+Proteus AVR and simavr 1.6 (first POP is PCH) so fsys litw/slit work.
+Do not restore upstream push/pop order without changing the kernel.

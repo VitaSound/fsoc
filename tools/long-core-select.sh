@@ -95,11 +95,13 @@ consider() {
             ;;
         fsys/kernel/avr/*|fsys/avr/*|fsys/fasm/avr/*|\
         fsys/host/avr-cross.4th|\
-        firmware/blink.fs|firmware/blink_avr.4th|tools/avr-con*)
+        firmware/blink.fs|firmware/blink_avr.4th|cpu/avr/*|\
+        fsoc/tasks/cg-f.4th)
             note tests/con_core_test.4th
             note tests/avr_con_test.4th
             note tests/avr_dict_test.4th
             note tests/avr_words_test.4th
+            note tests/avr_soft_blink_test.4th
             note tests/avr_pin_test.4th
             note tests/avr_soc_blink_test.4th
             ;;
@@ -112,7 +114,8 @@ consider() {
         tests/avr_words_test.4th)
             note tests/avr_words_test.4th
             ;;
-        tests/avr_pin_test.4th)
+        tests/avr_soft_blink_test.4th|tests/avr_pin_test.4th)
+            note tests/avr_soft_blink_test.4th
             note tests/avr_pin_test.4th
             ;;
         tests/avr_soc_blink_test.4th)

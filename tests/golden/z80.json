@@ -1,0 +1,18 @@
+{
+  "arch": "z80",
+  "generator": "bootstrap: fsoc fasm (gforth) \u2014 seed before external run",
+  "images": [
+    {
+      "name": "add",
+      "bytes": "3E0180"
+    },
+    {
+      "name": "basic",
+      "bytes": "00C9"
+    },
+    {
+      "name": "branch",
+      "bytes": "0520FD"
+    }
+  ]
+}

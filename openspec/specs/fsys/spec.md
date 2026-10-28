@@ -44,8 +44,8 @@
 - **WHEN** хост читает `fsys/kernel/avr/kernel.4th`
 - **THEN** в образе есть имя `quit` и имя `words`
 
-#### Scenario: Сеанс AVR через avr-con
-- **WHEN** манифест содержит `s" soc" task:`, `s" proteus" target:`, `s" avr" cpu:`, `s" fsys" sys:`, выполнен `fsoc --build` во временном каталоге, установлены `simavr` и `libsimavr-dev`, и `tools/avr-con` получает `1 2 + .`, затем отдельно `1 2 3` и `.s`
+#### Scenario: Сеанс AVR через soft Verilator
+- **WHEN** манифест содержит `s" soc" task:`, `s" emulation" target:`, `s" avr" cpu:`, `s" fsys" sys:`, выполнен `fsoc --build` во временном каталоге, и сеанс `FSOC_EMU_*` получает `1 2 + .`, затем отдельно `1 2 3` и `.s`
 - **THEN** первая передача содержит `3` и ` ok`, вторая содержит `<3> 1 2 3` и ` ok`, нет `PC past image`, и `11 .` печатает `11` (не `267`)
 
 ### Requirement: Accept стирает символ на каждом id
@@ -60,7 +60,7 @@
 - **THEN** передача содержит `13` и ` ok`
 
 #### Scenario: Стирание на avr
-- **WHEN** манифест содержит `s" avr" cpu:`, `s" fsys" sys:`, `s" proteus" target:`, и `avr-con` получает ту же последовательность
+- **WHEN** манифест содержит `s" avr" cpu:`, `s" fsys" sys:`, `s" emulation" target:`, и soft-AVR сеанс получает ту же последовательность
 - **THEN** передача содержит `13` и ` ok`
 
 ### Requirement: Общий сеанс консоли fsys
@@ -84,7 +84,7 @@
 ### Requirement: Консольные тесты fsys сопровождают каждый id
 `tests/con_core_test.4th` MUST гонять один сеанс `s" fsys" sys:` на каждом id с консольным kernel (`j1a`, `j1b`, `avr`, `bcpu` и любой следующий). Прогон MUST входить в `fmix test`. Новый id с `fsys` MUST: добавить манифест в `tests/con_session.4th`; включить его в `tests/con_core_test.4th`; завести эталон `doc/j1-word-graph/fsys-<id>*.json` через `doc/j1-word-graph/build.py`; пометить каждое имя в `tests/con_words.py` (`run` / `colon` / `skip` с причиной); обработать BS/DEL в `accept` этого kernel той же семантикой. Слова, уникальные для id, MUST жить в отдельном тесте (как `tests/avr_con_test.4th`) и MUST NOT дублировать общее ядро.
 
-Точечный прогон: из `tests/` при заданном `FSOC_HOME` — `gforth con_core_test.4th`. AVR без `simavr` / `libsimavr-dev` MUST пропускать свой кусок и MUST NOT валить набор.
+Точечный прогон: из `tests/` при заданном `FSOC_HOME` — `gforth con_core_test.4th`. AVR MUST идти через soft Verilator (`cpu/avr`, см. `doc/avr-soft.md`) и MUST NOT зависеть от simavr.
 
 #### Scenario: Новый fsys-id в сетке
 - **WHEN** в `fsoc/cpu.4th` появляется id с консольным kernel и `s" fsys" sys:`
@@ -226,7 +226,7 @@
 - **THEN** сдача не выполнена, пока нет повторного голого blink, повторного soc blink и ответа `words`
 
 ### Requirement: Следующая приёмка — плата и Proteus
-Три сеанса эмуляции из требования выше MUST быть пройдены до этой приёмки. Автотесты (`fmix test`, Verilator, `avr-con`) MUST подтверждать сборку и консоль и MUST NOT заменять эти три сеанса. Следующая приёмка после них MUST идти на железных FPGA-платах из `boards/` (Colorlight 5A-75E, Terasic DE0-Nano и последующие) и в Proteus для профиля `avr`. Успех Verilator или `avr-con` MUST NOT считаться заменой прогона на живой плате или в Proteus.
+Три сеанса эмуляции из требования выше MUST быть пройдены до этой приёмки. Автотесты (`fmix test`, Verilator soft-AVR) MUST подтверждать сборку и консоль и MUST NOT заменять эти три сеанса. Следующая приёмка после них MUST идти на железных FPGA-платах из `boards/` (Colorlight 5A-75E, Terasic DE0-Nano и последующие) и в Proteus для профиля `avr`. Успех Verilator MUST NOT считаться заменой прогона на живой плате или в Proteus.
 
 #### Scenario: AVR blink в Proteus
 - **WHEN** собран `projects/soc/soc_atmega8_blink` и HEX открыт в Proteus (ATMEGA8, 8 МГц, Virtual Terminal 9600)
@@ -235,3 +235,10 @@
 #### Scenario: FPGA на железе
 - **WHEN** пользователь шьёт проект с `target:` `quartus` или `yosys` на плату из `boards/`
 - **THEN** приёмка MUST включать наблюдение UART и/или светодиода на кристалле, не только лог эмуляции
+
+### Requirement: Консоль 8051 в con_core
+Профиль `8051` с kernel fsys MUST входить в `tests/con_core_test.4th` на soft-теле (Verilator). `accept` MUST стирать байты 8 и 127. Hard MAY проверяться через `tools/8051-con` (s51) с skip при отсутствии `s51`.
+
+#### Scenario: Soft con_core
+- **WHEN** в профилях есть `8051` и есть `fsys/kernel/8051`
+- **THEN** `tests/con_core_test.4th` гоняет сеанс soft `8051`

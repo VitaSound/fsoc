@@ -14,3 +14,14 @@ s" at89c52" mcs-part!
 [IFUNDEF] mcs-iram-vm
 0 value mcs-iram-vm
 [THEN]
+
+\ Feature gates (D2): mul/div and MOVC are MCS-52 / AT89C52 class.
+include ../common/isa-feat.4th
+[IFUNDEF] mcs-muldiv
+$0001 constant mcs-muldiv
+$0002 constant mcs-movc
+mcs-muldiv feat-define mcs_muldiv
+mcs-movc   feat-define mcs_movc
+\ Default part is at89c52 — both features on. Smaller cores clear via set-feats.
+mcs-muldiv mcs-movc or set-feats
+[THEN]

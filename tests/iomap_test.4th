@@ -24,9 +24,9 @@ s" IO-UART-DATA" s" csr.fs" tmp-grep? expect-true
 s" IO-UART-STATUS" s" csr.fs" tmp-grep? expect-true
 s" IO_LED_BIT = 10" s" iomap.vh" tmp-grep? expect-true
 s" IO_TIMER_BIT = 11" s" iomap.vh" tmp-grep? expect-true
-s" python3 -m json.tool csr.json > /dev/null" in-tmp-sh expect-true
-s" python3 " fsoc-root fjson.str-concat s" /tests/iomap_check.py" fsoc-cat+
-2dup in-tmp-sh -rot fjson.str-free expect-true
+fsoc-root s" /fsoc/futils/iomap_check.4th" fjson.str-concat
+2dup included fjson.str-free
+tmp-dir imap-check 0= expect-true
 
 s" yes 0000 | head -n 4096 > firmware.hex" in-tmp-sh expect-true
 s" cp " s" cpu/j1/j1a/j1_wrap.v" fsoc-path fjson.str-concat s"  ." fsoc-cat+ 2dup in-tmp-sh -rot fjson.str-free expect-true

@@ -45,14 +45,10 @@ mcs8051-fsys-manifest
 mcs8051-con-session
 test-teardown
 
-avr-con-ready? 0= [IF]
-   cr ." con_core_test avr skip: sudo apt install simavr libsimavr-dev gcc" cr
-[ELSE]
-   test-setup
-   avr-fsys-manifest
-   avr-con-session
-   test-teardown
-[THEN]
+test-setup
+avr-fsys-manifest
+avr-con-session
+test-teardown
 
 test-finish
 expect-stack-clean

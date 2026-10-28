@@ -11,7 +11,7 @@
 | `j1b` | 0 | `V-V-A-0-I` | V | V | I | `projects/soc/soc_emul` с `cpu: j1b` |
 | `bcpu` | 0 | `U-M-B-A-3-F` | U | B | F | `projects/soc/soc_bcpu` |
 | `msl16` | 0 | `U-S-A-M-3-F` | U | S | F | `projects/soc/soc_msl16` |
-| `avr` | 1 | `D-S-A-M-3-F` | D | S | F | `projects/soc/soc_atmega8` |
+| `avr` | 1 | `D-S-A-M-3-F` | D | S | F | soft Verilator `soc_avr` / `blinky_avr_emul` ([avr-soft.md](avr-soft.md)); hard HEX `soc_atmega8` |
 | `8051` | 1 | `D-S-A-M-3-F` | D | S | F | soft `soc_8051`; hard Proteus `blinky_8051` (tested) / `soc_at89c52` |
 | `cd16` | 1 | `D-S-A-M-3-F` | D | S | F | `projects/soc/soc_cd16` |
 | `stm8` | 1 | `D-S-A-M-4-E` | D | S | E | stub (нет hex) |

@@ -1,7 +1,7 @@
 \ firmware/blink_pin.4th — PB0 toggle and a software pause. No USART.
 
-\ One outer trip. The two inner counts are still 256. The simavr check
-\ watches both edges of PB0, not the wall-clock length of the pause.
+\ One outer trip. The two inner counts are still 256. Soft-AVR pin tests
+\ watch both edges of PB0, not the wall-clock length of the pause.
 [IFUNDEF] pin-laps
 1 constant pin-laps
 [THEN]

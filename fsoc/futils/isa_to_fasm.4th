@@ -607,8 +607,7 @@ variable isa-va variable isa-vu variable isa-vobj
 \ rc: 0 = full coverage; 1 = drift/gap. Throw вызывающий нормализует в 1
 \ (как traceback Python при битых файлах — без печати, как python).
 \ Порядок паритета: load spec -> парсер words.4th (op1-фаза, colon-фаза)
-\ -> подсчёт drift/gap -> печать header, (no-opcode), SPEC/FASM DRIFT
-\ (sorted по имени), SPEC COVERAGE GAP (порядок спеки) или full coverage.
+\ -> подсчёт drift/gap -> печать header, (alias) info, FAIL DRIFT/GAP или OK.
 \ ------------------------------------------------------------------
 512 constant ic-max                 \ слов в words.4th (max ~149)
 256 constant ic-imax                \ инструкций в спеке (max ~145)
@@ -1351,37 +1350,39 @@ variable ic-hmin
     \ header
     ic-words-a @ ic-words-u @ ic-basename type
     s" : " type ic-nop @ ic-pn
-    s"  comma words parsed, " type ic-nunp @ ic-pn
-    s"  without a leading opcode" type cr
+    s"  comma words with opcode, " type ic-nunp @ ic-pn
+    s"  alias/helper (info, not errors)" type cr
     ic-nunp @ 0 ?do
-        s"   (no-opcode) " type
+        s"   (alias) " type
         ic-ua i cells + @ ic-ul i + c@ type cr
     loop
     ic-drift @ 0> if
         ic-sort
-        cr ." SPEC/FASM DRIFT:" cr
+        cr ." FAIL SPEC/FASM DRIFT:" cr
         1 ic-drift-run
         1 exit
     then
     ic-gap @ 0> if
-        cr ." SPEC COVERAGE GAP (" ic-gap @ ic-pn
+        cr ." FAIL SPEC COVERAGE GAP (" ic-gap @ ic-pn
         ."  unimplemented):" cr
         1 ic-gap-run
         1 exit
     then
-    s" spec matches fasm opcodes (full coverage)" type cr
+    s" OK spec matches fasm opcodes (full coverage)" type cr
     0 ;
 
 \ ------------------------------------------------------------------
 \ Точка входа
 \ ------------------------------------------------------------------
+include disasm_gen.4th
+
 : isa-help
-    cr ." ISA-to-FASM utilities (port of tools/isa_to_fasm.py):"
     cr ." ISA-to-FASM utilities (port of tools/isa_to_fasm.py):"
     cr ."   Load spec: " [char] " emit s" <spec.json>" [char] " emit
     s" isa-load-spec" o-type cr
     cr ."   isa-gen-words4th  <out>/words.4th   ( -- )"
     cr ."   isa-gen-chip4th   <out>              ( -- )"
+    cr ."   isa-gen-disasm    <out>/disasm.4th  ( -- )"
     cr ."   isa-help                            ( -- )"
     ;
 

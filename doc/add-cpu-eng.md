@@ -60,7 +60,9 @@ cd tests && gforth con_core_test.4th
 fmix test
 ```
 
-Without simavr the AVR slice skips. Same ISA, different body (e.g. `j1abs`, port of `j1a`): do not add a `con_core` row; run the port word script on the new core.
+AVR in CI is the soft Verilator body ([avr-soft.md](avr-soft.md)), not simavr. Same ISA, different body (e.g. `j1abs`, port of `j1a`): do not add a `con_core` row; run the port word script on the new core.
+
+A new fasm id MUST: autogen `disasm.4th` (`isa-gen-disasm`), golden (`gen-golden`), bidirectional round-trip (A→D walk + D→A same hex), and `ic-check` coverage.
 
 ## Before review: three emulation sessions
 

@@ -8,8 +8,7 @@
 \     gforth с обычным shell-редиректом stdout.
 \   - run-all-cli --only con: паритет строк cpu и Tool summary при
 \     частичном наборе инструментов (и цикл next-arg аргументов).
-\   - run-all-cli --json: документированный отказ rc=1 + текст отказа
-\     (con_run/con_skip WIP в con_words_gen — см. шапку модуля).
+\   - run-all-cli --json: пишет отчёт, rc как у полного прогона.
 \   Харнес дочернего gforth пишется в /tmp: require с абсолютным путём
 \   (PWD), путь rc-файла берётся из argv через next-arg — во всём
 \   харнесе не нужны вложенные литералы строк.
@@ -150,19 +149,22 @@ create rt-lf 1 allot 10 rt-lf c!
     -1 ;
 
 \ ------------------------------------------------------------------
-\ t-json-refused ( -- f ) --json: отказ rc=1 + текст (документировано)
+\ t-json-ok ( -- f ) --json: файл создан, содержит "cpus"
 \ ------------------------------------------------------------------
-: t-json-refused ( -- f )
+: t-json-ok ( -- f )
     rt-clean
     s" --json /tmp/rt_t_x.json" rt-ft-cli
-    rt-ft-rc @ 1 Aeq
-    s" /tmp/rt_t_cliout.txt" rt-buf-a rt-read-to rt-len-a !
-    rt-buf-a rt-len-a @ s" refusing with rc=1" contains? AtTrue
+    s" /tmp/rt_t_x.json" r/o open-file 0= AtTrue >r
+    r@ if
+        pad 256 r@ read-file drop
+        pad swap s" cpus" contains? AtTrue
+        r> close-file drop
+    else rdrop then
     -1 ;
 
 rt-write-cli
 t-full-parity AtTrue
 t-only-con AtTrue
-t-json-refused AtTrue
+t-json-ok AtTrue
 
 futils-test-finish

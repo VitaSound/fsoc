@@ -35,8 +35,12 @@ k-lab kheader
    r3 mov-a-rn, DPH mov-di-a,
    r6 mov-a-rn, movx@dptr-a, incdp,
    r7 mov-a-rn, movx@dptr-a, incdp,
+   DPL mov-a-di, ACC push,
+   DPH mov-a-di, ACC push,
    VU >dp
    k-call xfetch
+   ACC pop, DPH mov-di-a,
+   ACC pop, DPL mov-di-a,
    r2 mov-a-rn, movx@dptr-a, incdp,
    clra, movx@dptr-a, incdp,
    DPL mov-a-di, r2 mov-rn-a,
@@ -279,11 +283,7 @@ k-lab kcomma
    r3 mov-a-rn, DPH mov-di-a,
    ACC pop, r3 mov-rn-a,
    ACC pop, r2 mov-rn-a,
-   DPL mov-a-di, ACC push,
-   DPH mov-a-di, ACC push,
    k-call xstore
-   ACC pop, DPH mov-di-a,
-   ACC pop, DPL mov-di-a,
    DPL mov-a-di, r2 mov-rn-a,
    DPH mov-a-di, r3 mov-rn-a,
    VHERE >dp
@@ -309,11 +309,7 @@ k-lab clit
    r3 mov-a-rn, DPH mov-di-a,
    ACC pop, r3 mov-rn-a,
    ACC pop, r2 mov-rn-a,
-   DPL mov-a-di, ACC push,
-   DPH mov-a-di, ACC push,
    k-call xstore
-   ACC pop, DPH mov-di-a,
-   ACC pop, DPL mov-di-a,
    DPL mov-a-di, r2 mov-rn-a,
    DPH mov-a-di, r3 mov-rn-a,
    VHERE >dp
@@ -559,11 +555,8 @@ k-lab intnum
    r3 mov-a-rn, DPH mov-di-a,
    ACC pop, r3 mov-rn-a,
    ACC pop, r2 mov-rn-a,
-   DPL mov-a-di, ACC push,
-   DPH mov-a-di, ACC push,
+   \ xstore advances DPTR by 2 — keep that as new HERE (do not rewind)
    k-call xstore
-   ACC pop, DPH mov-di-a,
-   ACC pop, DPL mov-di-a,
    DPL mov-a-di, r2 mov-rn-a,
    DPH mov-a-di, r3 mov-rn-a,
    VHERE >dp

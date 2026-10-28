@@ -1,6 +1,6 @@
 # Модели AVR для fasm
 
-Строки — пересечение Proteus VSM for AVR и `simavr --list-cores` (simavr 1.6). Пин-варианты (`32PIN`) и суффиксы L/PA не дублируются: один id — один файл `fsys/fasm/avr/<id>.4th`.
+Строки — пересечение Proteus VSM for AVR и исторических list-cores. Пин-варианты (`32PIN`) и суффиксы L/PA не дублируются: один id — один файл `fsys/fasm/avr/<id>.4th`. CI-эмулятор — soft-AVR Verilator ([avr-soft.md](avr-soft.md)), не simavr.
 
 Система команд — маска в [`fsys/fasm/avr/chip.4th`](../fsys/fasm/avr/chip.4th). Регистров у всех 23 моделей 32 (R0–R31).
 
@@ -20,7 +20,7 @@
 
 `avr.flash` — объём flash в словах (команда 16 бит). Столбец flash — те же байты: `avr.flash` × 2. Столбцы SRAM и EEPROM повторяют `avr.sram` и `avr.eeprom` в байтах.
 
-`baremetal blink tested` — `да` после прогона simavr: HEX этой модели, оба фронта `PB0`, без падения. Все 23 строки прогнаны `tests/avr_pin_test.4th` (`tools/avr-pin`).
+`baremetal blink tested` — исторически multi-part; в CI soft body — один прогон `tests/avr_pin_test.4th` / `avr_soft_blink_test.4th` (PB0). Part-файлы остаются для HEX/Proteus.
 
 Столбец `soc blink` — Forth-образ с `'BOOT` (`tests/avr_soc_blink_test.4th`). `да blink.fs` — консоль, строки уходят в аппаратный `UDR`. `да blink_soc.fs` — полки `pin` и `short`: тот же текст, в `UDR` если блок USART есть, иначе байты собираются на PB1. `да` стоит после обоих фронтов PB0; на чипах без USART ещё после байта `b` на PB1.
 

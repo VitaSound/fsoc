@@ -13,7 +13,7 @@ In the first hour you build a **blinky** under Verilator (`pin led 0` / `1`) and
 
 - Gforth, `fmix packages.get`, `FSOC_HOME` and `PATH` ([feco shell-setup](https://github.com/VitaSound/feco/blob/main/docs/shell-setup.md))
 - **Verilator** (canonical path below)
-- **Not** needed on day 1: Quartus, Yosys/nextpnr, Proteus, fhdlgen, simavr
+- **Not** needed on day 1: Quartus, Yosys/nextpnr, Proteus, fhdlgen
 
 Full suite: `fmix test`. Day-1 five terms: [doc/GLOSSARY.md](doc/GLOSSARY.md). After Day 1 (boards, fits, other CPUs): [doc/guide-detail-eng.md](doc/guide-detail-eng.md) — skip it in the first hour.
 
@@ -72,12 +72,16 @@ Later (not Day 1): `soc/soc_atmega8` (MCU HEX), `soc/soc_blink` (lamp on soft-CP
 ### MCU (ATmega8)
 
 ```bash
-cd projects/baremetal/blinky_atmega && fsoc --build
-# Hardware atmega8(avr), firmware.hex
+# Soft-AVR Verilator (pin + UART) — see doc/avr-soft.md
+cd projects/baremetal/blinky_avr_emul
+FSOC_EMU_CON=pin FSOC_EMU_EDGES=4 FSOC_EMU_FAST=1 fsoc --build
 
-cd ../../soc/soc_atmega8 && fsoc --build
-# HEX always; interactive needs simavr + libsimavr-dev:
-# ~/fsoc/tools/avr-con ./firmware.hex '1 2 + .'
+cd ../../soc/soc_avr
+FSOC_EMU_FAST=1 FSOC_EMU_UART_IN='1 2 + .' fsoc --build
+# → 3  ok
+
+# Proteus / hard HEX (not CI):
+cd ../soc_atmega8 && fsoc --build
 ```
 
 ### Two micro-cores (MPSoC)

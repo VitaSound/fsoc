@@ -25,8 +25,9 @@ region-count 1 expect=
 
 test-setup
 s" csr.json" tmp-file 2dup iomap-export-json fjson.str-free
-s" python3 " fsoc-root fjson.str-concat s" /tests/region_check.py" fsoc-cat+
-2dup in-tmp-sh -rot fjson.str-free expect-true
+fsoc-root s" /fsoc/futils/region_check.4th" fjson.str-concat
+2dup included fjson.str-free
+tmp-dir rc-check 0= expect-true
 test-teardown
 
 s" grep -q firmware.hex " s" cpu/j1/j1a/j1_wrap.v" fsoc-path fsoc-+cat
