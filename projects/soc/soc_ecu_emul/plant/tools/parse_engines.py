@@ -399,6 +399,34 @@ def parse_engine_file(path: Path, root: Path) -> dict | None:
             bank["journal_indices"].append(layer)
             bank["mounts"].append(mount)
 
+    # Per-bank flip_display from .set_cylinder_head(...) (esim default false).
+    # Same bank-cursor as .add_cylinder: b0.add_cylinder…set_cylinder_head → b0.
+    for b in banks:
+        b["flip_display"] = False
+    head_events: list[tuple[int, str, object]] = []
+    for bid in bank_by_id:
+        for m in re.finditer(
+            rf"(?<![A-Za-z0-9_]){re.escape(bid)}(?=\s*(?:\n\s*)?\.(?:add_cylinder|set_cylinder_head))",
+            text,
+        ):
+            head_events.append((m.start(), "bank", bid))
+    for m in re.finditer(r"\.set_cylinder_head\s*\(", text):
+        open_paren = m.end() - 1
+        end = find_balanced(text, open_paren)
+        if end is None:
+            continue
+        body = text[open_paren + 1 : end - 1]
+        fm = re.search(r"flip_display\s*:\s*(true|false)\b", body, re.I)
+        flip_val = fm.group(1).lower() == "true" if fm else None
+        head_events.append((m.start(), "head", flip_val))
+    head_events.sort(key=lambda e: e[0])
+    cur_bank: str | None = None
+    for _, typ, data in head_events:
+        if typ == "bank":
+            cur_bank = data  # type: ignore[assignment]
+        elif typ == "head" and cur_bank and cur_bank in bank_by_id and data is not None:
+            bank_by_id[cur_bank]["flip_display"] = bool(data)
+
     n_cyl = sum(len(b["journal_indices"]) for b in banks) or len(
         re.findall(r"\.add_cylinder\s*\(", text)
     )
@@ -467,6 +495,142 @@ def parse_engine_file(path: Path, root: Path) -> dict | None:
 
     cam_lobe = first_call(text, "harmonic_cam_lobe") or first_call(imported, "harmonic_cam_lobe") or {}
 
+    # Cam timing (crank-space LCA style, as passed to Camshaft::setLobeCenterline).
+    # Last assignment wins (node defaults then call-site overrides).
+    def _last_cam_kv(key: str) -> str | None:
+        val = None
+        pat = re.compile(rf"(?:input\s+)?{key}\s*:", re.M)
+        for src in (imported, text):
+            if not src:
+                continue
+            for m in pat.finditer(src):
+                i = m.end()
+                depth = 0
+                buf: list[str] = []
+                while i < len(src):
+                    ch = src[i]
+                    if ch == "(":
+                        depth += 1
+                    elif ch == ")":
+                        if depth == 0:
+                            break
+                        depth -= 1
+                    elif ch in ",;\n" and depth == 0:
+                        break
+                    buf.append(ch)
+                    i += 1
+                got = clean_expr("".join(buf))
+                # Skip unresolved self-refs like "advance: advance"
+                if got and got != key:
+                    val = got
+        return val
+
+    cam_timing = {
+        k: v
+        for k, v in {
+            "lobe_separation": _last_cam_kv("lobe_separation"),
+            "intake_lobe_center": _last_cam_kv("intake_lobe_center"),
+            "exhaust_lobe_center": _last_cam_kv("exhaust_lobe_center"),
+            "advance": _last_cam_kv("advance"),
+            "base_radius": _last_cam_kv("base_radius"),
+        }.items()
+        if v
+    }
+
+    # add_lobe(...) crank-space centerlines in file order (Camshaft::setLobeCenterline).
+    # Split evenly across banks; bank display uses lobe[0] of that bank's group
+    # (esim CylinderHeadObject → frontmost cylinder index 0).
+    def _label_deg(key: str) -> float | None:
+        for src in (cam_timing.get(key), labels.get(key)):
+            if not src:
+                continue
+            d = parse_angle_expr(str(src))
+            if d is not None:
+                return d
+            # "2 * 360 * units.deg" / "114 * units.deg"
+            try:
+                nums = [float(x) for x in re.findall(r"-?[\d.]+", str(src).split("units")[0])]
+                if not nums:
+                    continue
+                v = 1.0
+                for n in nums:
+                    v *= n
+                if math.isfinite(v):
+                    return v
+            except (TypeError, ValueError):
+                continue
+        return None
+
+    lobe_env = {
+        "cycle": _label_deg("cycle") or 720.0,
+        "rot360": _label_deg("rot360") or 360.0,
+        "rot180": _label_deg("rot180") or 180.0,
+        "rot90": _label_deg("rot90") or 90.0,
+        "rot": _label_deg("rot") or 90.0,
+        "lobe_separation": _label_deg("lobe_separation") or 110.0,
+    }
+    ic = _label_deg("intake_lobe_center")
+    ec = _label_deg("exhaust_lobe_center")
+    if ic is None:
+        ic = lobe_env["lobe_separation"]
+    if ec is None:
+        ec = lobe_env["lobe_separation"]
+    lobe_env["intake_lobe_center"] = ic
+    lobe_env["exhaust_lobe_center"] = ec
+
+    def _eval_lobe_crank_deg(expr: str) -> float | None:
+        s = clean_expr(expr)
+        for k, v in lobe_env.items():
+            s = re.sub(rf"(?<![A-Za-z0-9_]){k}(?![A-Za-z0-9_])", str(v), s)
+        s = s.replace("units.deg", "1").replace("constants.pi", str(math.pi))
+        s = re.sub(r"units\.[A-Za-z0-9_]+", "1", s)
+        if not re.fullmatch(r"[\d\s./+\-*()eE]+", s):
+            return None
+        try:
+            v = float(eval(s, {"__builtins__": {}}, {}))
+            return v if math.isfinite(v) else None
+        except Exception:
+            return None
+
+    intake_lobes_deg: list[float] = []
+    exhaust_lobes_deg: list[float] = []
+
+    def _collect_add_lobes(src: str) -> None:
+        for m in re.finditer(r"\.add_lobe\s*\(", src):
+            end = find_balanced(src, m.end() - 1)
+            if end is None:
+                continue
+            body = src[m.end() : end - 1].strip()
+            cm = re.match(r"centerline\s*:\s*(.+)", body, re.S)
+            if cm:
+                body = cm.group(1).strip()
+            deg = _eval_lobe_crank_deg(body)
+            if deg is None:
+                continue
+            low = body.lower()
+            if "exhaust_lobe_center" in low:
+                exhaust_lobes_deg.append(deg)
+            elif "intake_lobe_center" in low:
+                intake_lobes_deg.append(deg)
+            else:
+                intake_lobes_deg.append(deg)
+
+    _collect_add_lobes(text)
+    if not intake_lobes_deg and not exhaust_lobes_deg and imported:
+        _collect_add_lobes(imported)
+
+    n_b = max(1, len(banks))
+    if intake_lobes_deg and len(intake_lobes_deg) >= n_b:
+        per = len(intake_lobes_deg) // n_b
+        for bi, b in enumerate(banks):
+            b["intake_lobe_crank_deg"] = intake_lobes_deg[bi * per]
+            b["intake_lobes_crank_deg"] = intake_lobes_deg[bi * per : (bi + 1) * per]
+    if exhaust_lobes_deg and len(exhaust_lobes_deg) >= n_b:
+        per = len(exhaust_lobes_deg) // n_b
+        for bi, b in enumerate(banks):
+            b["exhaust_lobe_crank_deg"] = exhaust_lobes_deg[bi * per]
+            b["exhaust_lobes_crank_deg"] = exhaust_lobes_deg[bi * per : (bi + 1) * per]
+
     # ignition
     ign_mod = first_call(text, "ignition_module")  # rare
     timing = extract_timing_curve(text)
@@ -526,6 +690,7 @@ def parse_engine_file(path: Path, root: Path) -> dict | None:
         "exhaust_systems": exhausts,
         "head": head,
         "cam_lobe": {k: clean_expr(v) for k, v in cam_lobe.items()},
+        "cam_timing": cam_timing,
         "fuel": fuel,
         "ignition": {
             "rev_limit": rev_limit,

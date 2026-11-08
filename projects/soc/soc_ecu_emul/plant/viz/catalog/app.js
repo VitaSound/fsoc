@@ -1,7 +1,7 @@
 /** engine-sim catalog — meshes/params from server; draw loop fully local (no per-frame C++). */
 
 import { loadMeshes, fetchScene, paintDrawlist } from "./paint_drawlist.js?v=6";
-import { prepareScene, buildDrawlist, viewFromScene } from "./engine_draw_runtime.js?v=23";
+import { prepareScene, buildDrawlist, viewFromScene } from "./engine_draw_runtime.js?v=32";
 
 const $ = (id) => document.getElementById(id);
 const THEME = { background: "#0E1012" };
@@ -12,6 +12,41 @@ let meshes = null;
 let scene = null;
 let crankAngle = 0.35;
 let view = null;
+let baseView = null;
+let paused = false;
+
+const ZOOM_MIN = 0.35;
+const ZOOM_MAX = 8;
+
+function setPaused(next) {
+  paused = !!next;
+  const btn = $("btn-pause");
+  if (!btn) return;
+  btn.setAttribute("aria-pressed", paused ? "true" : "false");
+  btn.textContent = paused ? "▶ дальше" : "⏸ пауза";
+}
+
+/** Zoom view toward canvas bitmap point (sx, sy). */
+function zoomAt(sx, sy, factor) {
+  if (!view || !baseView) return;
+  const next = Math.min(
+    ZOOM_MAX,
+    Math.max(ZOOM_MIN, (view.scale / baseView.scale) * factor)
+  );
+  const newScale = baseView.scale * next;
+  const f = newScale / view.scale;
+  view = {
+    ...view,
+    scale: newScale,
+    cx: sx - (sx - view.cx) * f,
+    cy: sy - (sy - view.cy) * f,
+  };
+}
+
+function resetZoom() {
+  if (!baseView) return;
+  view = { ...baseView };
+}
 
 function engineName(e) {
   if (e.skipped) return `(skip) ${e.source}`;
@@ -115,6 +150,8 @@ async function loadSelectedScene() {
   const e = catalog.engines.find((x) => x.id === selectedId);
   if (!e || e.skipped) {
     scene = null;
+    baseView = null;
+    view = null;
     paint();
     return;
   }
@@ -133,11 +170,13 @@ async function loadSelectedScene() {
       canvas.width = 860;
       canvas.height = 520;
     }
-    view = viewFromScene(scene, canvas.width, canvas.height);
+    baseView = viewFromScene(scene, canvas.width, canvas.height);
+    view = { ...baseView };
     paint();
   } catch (err) {
     console.error(err);
     scene = null;
+    baseView = null;
     const canvas = $("stage");
     const ctx = canvas.getContext("2d");
     ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -187,7 +226,8 @@ function buildList(filter = "") {
 }
 
 function tick() {
-  crankAngle += 0.028;
+  // Screen +Y is up; decreasing θ is clockwise (math CCW would be +θ).
+  if (!paused) crankAngle -= 0.028;
   if (scene) paint();
   requestAnimationFrame(tick);
 }
@@ -205,6 +245,35 @@ async function main() {
     " · meshes: assets.ysce · draw runtime local (C++ formulas)";
   buildList();
   $("filter").addEventListener("input", (ev) => buildList(ev.target.value));
+  $("btn-pause").addEventListener("click", () => setPaused(!paused));
+  window.addEventListener("keydown", (ev) => {
+    if (ev.code !== "Space") return;
+    const tag = (ev.target && ev.target.tagName) || "";
+    if (tag === "INPUT" || tag === "TEXTAREA") return;
+    ev.preventDefault();
+    setPaused(!paused);
+  });
+
+  const stage = $("stage");
+  stage.addEventListener(
+    "wheel",
+    (ev) => {
+      if (!view || !baseView) return;
+      ev.preventDefault();
+      const rect = stage.getBoundingClientRect();
+      const sx = ((ev.clientX - rect.left) / rect.width) * stage.width;
+      const sy = ((ev.clientY - rect.top) / rect.height) * stage.height;
+      // deltaY > 0 → zoom out; smooth exponential step
+      const factor = Math.exp(-ev.deltaY * 0.0015);
+      zoomAt(sx, sy, factor);
+      paint();
+    },
+    { passive: false }
+  );
+  stage.addEventListener("dblclick", () => {
+    resetZoom();
+    paint();
+  });
 
   const prefer =
     catalog.engines.find((e) => /kohler/i.test(e.identity?.name || "")) ||

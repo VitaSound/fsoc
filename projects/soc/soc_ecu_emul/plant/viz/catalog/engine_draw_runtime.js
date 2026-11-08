@@ -106,8 +106,51 @@ function circle2d(xform, cx, cy, radius, color, cmds) {
   cmds.push({ op: "tris", color, xy });
 }
 
-function cam2d(xform, cx, cy, baseRadius, rollerRadius, liftAmp, color, cmds) {
-  const segs = 36;
+/** Wrap to (-π, π]. */
+function wrapPi(a) {
+  const twopi = Math.PI * 2;
+  a = ((a % twopi) + twopi) % twopi;
+  if (a > Math.PI) a -= twopi;
+  return a;
+}
+
+/**
+ * engine-sim GenerateHarmonicCamLobeNode:
+ *   angle = duration_at_50_thou / 4
+ *   s = (2*50thou/lift)^(1/gamma) - 1
+ *   k = acos(s)/angle;  extents = π/k
+ *   lift(x) = lift * (0.5+0.5*cos(k*|x|))^gamma
+ * duration is crank radians; sample x is cam radians.
+ */
+function harmonicLobeParams(liftAmp, durationRad, gamma) {
+  const lift = Math.max(liftAmp || 1e-6, 1e-6);
+  const g = gamma > 0 ? gamma : 1;
+  const dur = durationRad > 0 ? durationRad : (220 * Math.PI) / 180;
+  const angle = dur / 4;
+  const thou50 = 0.05 * 25.4; // 50 thou → mm (same units as cam_lift)
+  let s = Math.pow((2 * thou50) / lift, 1 / g) - 1;
+  s = Math.max(-1, Math.min(1, s));
+  const k = Math.acos(s) / Math.max(angle, 1e-6);
+  const extents = Math.PI / Math.max(k, 1e-6);
+  return { k, extents, gamma: g, lift };
+}
+
+function harmonicLiftAt(x, p) {
+  const ax = Math.abs(x);
+  if (ax >= p.extents) return 0;
+  return p.lift * Math.pow(0.5 + 0.5 * Math.cos(p.k * ax), p.gamma);
+}
+
+/**
+ * Valve lift from cam rotation. Lobe nose at a0=π (points at roller when
+ * camRotation=0); same profile cam2d extrudes.
+ */
+function valveLiftFromCam(camRotation, lobe) {
+  return harmonicLiftAt(wrapPi(-camRotation), lobe);
+}
+
+function cam2d(xform, cx, cy, baseRadius, rollerRadius, lobe, color, cmds) {
+  const segs = 48;
   const angleStep = (Math.PI * 2) / segs;
   const baseRoller = baseRadius + rollerRadius;
   const px = new Float64Array(segs);
@@ -118,11 +161,8 @@ function cam2d(xform, cx, cy, baseRadius, rollerRadius, liftAmp, color, cmds) {
     const a0 = angleStep * i;
     const x = Math.cos(a0 + Math.PI / 2);
     const y = Math.sin(a0 + Math.PI / 2);
-    let aa = a0 - Math.PI;
-    while (aa > Math.PI) aa -= Math.PI * 2;
-    while (aa < -Math.PI) aa += Math.PI * 2;
-    let lift = 0;
-    if (Math.abs(aa) < Math.PI / 3) lift = liftAmp * Math.cos((aa / (Math.PI / 3)) * (Math.PI / 2));
+    const aa = wrapPi(a0 - Math.PI);
+    const lift = harmonicLiftAt(aa, lobe);
     const rp = baseRoller + lift;
     const rx = cx + x * rp,
       ry = cy + y * rp;
@@ -241,7 +281,10 @@ export function prepareScene(raw) {
       raw.bank_display_depths && raw.bank_display_depths[i] != null
         ? raw.bank_display_depths[i]
         : 0.5,
-    flip: (raw.flip_display && raw.flip_display[i]) || i % 2,
+    // esim default false; do not use `|| i%2` — that treats explicit 0 as missing.
+    flip: Array.isArray(raw.flip_display) && raw.flip_display[i] != null
+      ? !!raw.flip_display[i]
+      : false,
   }));
   // ConnectingRod::getLayer() == crank rod-journal index (not cylinder ordinal).
   // Shared journals (V-twin / V8) → same layer → same brightness.
@@ -457,10 +500,34 @@ export function buildDrawlist(scene, crankAngle) {
     }
 
     const intakeValvePosition = bank.flip ? 0.5 : -0.5;
-    const intakeLift = scene.cam_lift * 0.35 * (0.5 + 0.5 * Math.sin(crankAngle * 2 + bank.angle));
-    const exhaustLift = scene.cam_lift * 0.35 * (0.5 + 0.5 * Math.sin(crankAngle * 2 + bank.angle + Math.PI));
+    // esim Camshaft::getAngle = (crankshaft.getAngle() + advance) * 0.5
+    // (same for every bank; bank/cyl phase is only add_lobe / getLobeCenterline).
+    const camRatio = scene.cam_ratio != null ? scene.cam_ratio : 0.5;
+    const camAngle = (crankAngle + (scene.cam_advance || 0)) * camRatio;
+    const lsaHalf = ((110 * Math.PI) / 180) / 2;
+    const bi = bank.index | 0;
+    const inLobes = scene.intake_lobe_cam_banks;
+    const exLobes = scene.exhaust_lobe_cam_banks;
+    const intakeLobe =
+      Array.isArray(inLobes) && inLobes[bi] != null
+        ? inLobes[bi]
+        : scene.intake_lobe_cam ?? Math.PI + lsaHalf;
+    const exhaustLobe =
+      Array.isArray(exLobes) && exLobes[bi] != null
+        ? exLobes[bi]
+        : scene.exhaust_lobe_cam ?? Math.PI - lsaHalf;
+    const intakeCamAngle = camAngle + intakeLobe;
+    const exhaustCamAngle = camAngle + exhaustLobe;
+    const lobeProf = harmonicLobeParams(
+      scene.cam_lift,
+      scene.cam_duration,
+      scene.cam_gamma
+    );
+    const intakeLift = valveLiftFromCam(intakeCamAngle, lobeProf);
+    const exhaustLift = valveLiftFromCam(exhaustCamAngle, lobeProf);
     const rr_local = rollerRadius_mm / s;
 
+    // engine-sim colors: blue = intake, yellow = exhaust (cylinder_head_object.cpp).
     const drawValve = (localX, color, lift) => {
       const Tv = mul(T_head, T(localX, -lift / s));
       cmds.push({ op: "mesh", mesh: "Valve", color, m: Tv });
@@ -472,14 +539,11 @@ export function buildDrawlist(scene, crankAngle) {
     drawValve(-intakeValvePosition, YELLOW, exhaustLift);
 
     const camY = rollerRadius_mm + 0.5 + 1.99 * s + scene.cam_base;
-    const T_inCam = mul(mul(T_headObject, T(intakeValvePosition * s, camY)), R(crankAngle * 2 + bank.angle));
-    cam2d(T_inCam, 0, 0, scene.cam_base, rollerRadius_mm, scene.cam_lift, BLUE, cmds);
+    const T_inCam = mul(mul(T_headObject, T(intakeValvePosition * s, camY)), R(intakeCamAngle));
+    cam2d(T_inCam, 0, 0, scene.cam_base, rollerRadius_mm, lobeProf, BLUE, cmds);
     circle2d(T_inCam, 0, 0, rollerRadius_mm * 0.25, BG, cmds);
-    const T_exCam = mul(
-      mul(T_headObject, T(-intakeValvePosition * s, camY)),
-      R(crankAngle * 2 + bank.angle + 0.3)
-    );
-    cam2d(T_exCam, 0, 0, scene.cam_base, rollerRadius_mm, scene.cam_lift, ORANGE, cmds);
+    const T_exCam = mul(mul(T_headObject, T(-intakeValvePosition * s, camY)), R(exhaustCamAngle));
+    cam2d(T_exCam, 0, 0, scene.cam_base, rollerRadius_mm, lobeProf, YELLOW, cmds);
     circle2d(T_exCam, 0, 0, rollerRadius_mm * 0.25, BG, cmds);
   }
 

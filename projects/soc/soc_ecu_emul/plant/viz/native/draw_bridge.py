@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import math
 import os
+import re
 import subprocess
 from pathlib import Path
 from typing import Any
@@ -98,10 +99,76 @@ def engine_to_draw_input(engine: dict, crank_angle: float = 0.0) -> dict:
             chamber_vol = v
     bore_m = bore / 1000.0
     chamber_h = (chamber_vol * 1e-6) / (math.pi * bore_m * bore_m / 4.0) * 1000.0
-    cam_lift = _to_mm(engine.get("cam_lobe", {}).get("lift"), labels) or bore * 0.08
-    cam_base = _to_mm(engine.get("cam_lobe", {}).get("base_radius"), labels) or bore * 0.15
+    cam_lobe = engine.get("cam_lobe") or {}
+    cam_lift = _to_mm(cam_lobe.get("lift"), labels) or bore * 0.08
+    # harmonic_cam_lobe: duration is crank-space (÷4 → half-angle in cam rad).
+    cam_duration = _to_rad(cam_lobe.get("duration_at_50_thou"), labels) or (
+        220.0 * math.pi / 180.0
+    )
+    try:
+        cam_gamma = float(str(cam_lobe.get("gamma") or "1").split()[0])
+    except (TypeError, ValueError):
+        cam_gamma = 1.0
+    if cam_gamma <= 0:
+        cam_gamma = 1.0
+    timing = engine.get("cam_timing") or {}
+    # Prefer camshaft base_radius from .mr; cam_lobe rarely has it.
+    cam_base = (
+        _to_mm(timing.get("base_radius"), labels)
+        or _to_mm(engine.get("cam_lobe", {}).get("base_radius"), labels)
+        or bore * 0.15
+    )
+    # labels.cycle: "2 * 360 * units.deg" → 4-stroke (cam half speed); 360 → 2-stroke (1:1)
+    cam_ratio = 0.5
+    cycle_expr = labels.get("cycle") or engine.get("cycle")
+    if cycle_expr:
+        try:
+            nums = [float(x) for x in re.findall(r"[\d.]+", str(cycle_expr).split("units")[0])]
+            cycle_deg = 1.0
+            for n in nums:
+                cycle_deg *= n
+            if cycle_deg > 0 and cycle_deg < 500:
+                cam_ratio = 1.0
+        except (TypeError, ValueError):
+            pass
+
+    # Lobe centers: .mr add_lobe(crank) → Camshaft::setLobeCenterline stores crank/2.
+    # Per-bank first lobe from parser (firing-order offsets); fallback rot360±LCA.
+    timing_labels = dict(labels)
+    for k, v in timing.items():
+        timing_labels[k] = v
+    lsa = _to_rad(timing.get("lobe_separation") or "110 * units.deg", timing_labels)
+    if lsa is None:
+        lsa = 110.0 * math.pi / 180.0
+    intake_crank = _to_rad(timing.get("intake_lobe_center"), timing_labels)
+    exhaust_crank = _to_rad(timing.get("exhaust_lobe_center"), timing_labels)
+    if intake_crank is None:
+        intake_crank = lsa
+    if exhaust_crank is None:
+        exhaust_crank = lsa
+    twopi = 2.0 * math.pi
+    intake_lobe_cam = (twopi + intake_crank) / 2.0
+    exhaust_lobe_cam = (twopi - exhaust_crank) / 2.0
+    cam_advance = _to_rad(timing.get("advance"), timing_labels) or 0.0
 
     banks = engine.get("banks") or []
+    intake_lobe_cam_banks: list[float] = []
+    exhaust_lobe_cam_banks: list[float] = []
+    for b in banks:
+        ic_deg = b.get("intake_lobe_crank_deg")
+        ec_deg = b.get("exhaust_lobe_crank_deg")
+        if ic_deg is not None:
+            intake_lobe_cam_banks.append(float(ic_deg) * math.pi / 180.0 / 2.0)
+        else:
+            intake_lobe_cam_banks.append(intake_lobe_cam)
+        if ec_deg is not None:
+            exhaust_lobe_cam_banks.append(float(ec_deg) * math.pi / 180.0 / 2.0)
+        else:
+            exhaust_lobe_cam_banks.append(exhaust_lobe_cam)
+    if intake_lobe_cam_banks:
+        intake_lobe_cam = intake_lobe_cam_banks[0]
+    if exhaust_lobe_cam_banks:
+        exhaust_lobe_cam = exhaust_lobe_cam_banks[0]
     bank_angles: list[float] = []
     bank_cylinders: list[int] = []
     bank_display_depths: list[float] = []
@@ -198,13 +265,30 @@ def engine_to_draw_input(engine: dict, crank_angle: float = 0.0) -> dict:
         "chamber_h": chamber_h,
         "cam_base": cam_base,
         "cam_lift": cam_lift,
+        "cam_duration": cam_duration,
+        "cam_gamma": cam_gamma,
+        "cam_ratio": cam_ratio,
+        "cam_advance": cam_advance,
+        "intake_lobe_cam": intake_lobe_cam,
+        "exhaust_lobe_cam": exhaust_lobe_cam,
+        "intake_lobe_cam_banks": intake_lobe_cam_banks or [intake_lobe_cam],
+        "exhaust_lobe_cam_banks": exhaust_lobe_cam_banks or [exhaust_lobe_cam],
         "bank_angles": bank_angles,
         "bank_cylinders": bank_cylinders,
         "bank_display_depths": bank_display_depths,
         "journals": journals,
         "cylinder_journals": cylinder_journals,
         "cylinder_mounts": cylinder_mounts,
-        "flip_display": [i % 2 for i in range(len(bank_angles))],
+        # CylinderHead::FlipDisplay from .mr per bank (esim default false).
+        "flip_display": [
+            (
+                1
+                if i < len(banks)
+                and (banks[i].get("flip_display") is True or banks[i].get("flip_display") == 1)
+                else 0
+            )
+            for i in range(len(bank_angles))
+        ],
         "crank_angle": crank_angle,
         "meshes_path": str(MESHES),
     }

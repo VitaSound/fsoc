@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>engine-sim catalog</title>
-  <link rel="stylesheet" href="/catalog/style.css?v=3" />
+  <link rel="stylesheet" href="/catalog/style.css?v=5" />
 </head>
 <body>
   <header>
@@ -25,7 +25,10 @@
     <section class="detail">
       <div class="stage-wrap">
         <canvas id="stage" width="860" height="520" aria-label="engine schematic"></canvas>
-        <p id="source" class="source"></p>
+        <div class="stage-bar">
+          <button type="button" id="btn-pause" class="stage-btn" aria-pressed="false" title="Space">⏸ пауза</button>
+          <p id="source" class="source"></p>
+        </div>
       </div>
       <div id="params" class="params">
         <p class="placeholder">выберите мотор слева</p>
@@ -37,6 +40,6 @@
     <p id="attr"></p>
   </footer>
 
-  <script src="/catalog/app.js?v=27" type="module"></script>
+  <script src="/catalog/app.js?v=39" type="module"></script>
 </body>
 </html>

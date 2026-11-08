@@ -59,6 +59,7 @@
               "index": 0
             }
           ],
+          "flip_display": false,
           "cylinders": 1
         }
       ],
@@ -112,6 +113,10 @@
         "gamma": "1.0",
         "lift": "200 * units.thou",
         "steps": "100"
+      },
+      "cam_timing": {
+        "lobe_separation": "100 * units.deg",
+        "base_radius": "500 * units.thou"
       },
       "fuel": {
         "max_burning_efficiency": "1.0"
@@ -205,6 +210,7 @@
               "index": 0
             }
           ],
+          "flip_display": false,
           "cylinders": 1
         },
         {
@@ -221,6 +227,7 @@
               "index": 0
             }
           ],
+          "flip_display": true,
           "cylinders": 1
         }
       ],
@@ -270,6 +277,10 @@
         "gamma": "1.1",
         "lift": "200 * units.thou",
         "steps": "100"
+      },
+      "cam_timing": {
+        "lobe_separation": "114 * units.deg",
+        "base_radius": "500 * units.thou"
       },
       "fuel": {},
       "ignition": {
@@ -372,6 +383,7 @@
               "index": 0
             }
           ],
+          "flip_display": false,
           "cylinders": 1
         },
         {
@@ -388,6 +400,7 @@
               "index": 0
             }
           ],
+          "flip_display": true,
           "cylinders": 1
         }
       ],
@@ -446,6 +459,10 @@
         "gamma": "0.9",
         "lift": "400 * units.thou",
         "steps": "100"
+      },
+      "cam_timing": {
+        "lobe_separation": "110 * units.deg",
+        "base_radius": "500 * units.thou"
       },
       "fuel": {},
       "ignition": {
@@ -578,7 +595,22 @@
               "index": 3
             }
           ],
-          "cylinders": 4
+          "flip_display": false,
+          "cylinders": 4,
+          "intake_lobe_crank_deg": 465.0,
+          "intake_lobes_crank_deg": [
+            465.0,
+            645.0,
+            1005.0,
+            825.0
+          ],
+          "exhaust_lobe_crank_deg": 260.0,
+          "exhaust_lobes_crank_deg": [
+            260.0,
+            440.0,
+            800.0,
+            620.0
+          ]
         }
       ],
       "bank_params": {
@@ -632,6 +664,13 @@
         "gamma": "1.2",
         "lift": "345 * units.thou",
         "steps": "100"
+      },
+      "cam_timing": {
+        "lobe_separation": "114 * units.deg",
+        "intake_lobe_center": "105 * units.deg",
+        "exhaust_lobe_center": "100 * units.deg",
+        "advance": "0 * units.deg",
+        "base_radius": "500 * units.thou"
       },
       "fuel": {
         "max_turbulence_effect": "5.5",
@@ -771,7 +810,22 @@
               "index": 3
             }
           ],
-          "cylinders": 4
+          "flip_display": false,
+          "cylinders": 4,
+          "intake_lobe_crank_deg": 260.0,
+          "intake_lobes_crank_deg": [
+            260.0,
+            -280.0,
+            80.0,
+            -100.0
+          ],
+          "exhaust_lobe_crank_deg": 460.0,
+          "exhaust_lobes_crank_deg": [
+            460.0,
+            -80.0,
+            280.0,
+            100.0
+          ]
         }
       ],
       "bank_params": {
@@ -833,6 +887,13 @@
         "gamma": "1.0",
         "lift": "6.9 * units.mm",
         "steps": "100"
+      },
+      "cam_timing": {
+        "lobe_separation": "110 * units.deg",
+        "intake_lobe_center": "100 * units.deg",
+        "exhaust_lobe_center": "100 * units.deg",
+        "advance": "0 * units.deg",
+        "base_radius": "500 * units.thou"
       },
       "fuel": {
         "max_turbulence_effect": "2.5",
@@ -967,7 +1028,18 @@
               "index": 3
             }
           ],
-          "cylinders": 2
+          "flip_display": true,
+          "cylinders": 2,
+          "intake_lobe_crank_deg": 477.0,
+          "intake_lobes_crank_deg": [
+            477.0,
+            657.0
+          ],
+          "exhaust_lobe_crank_deg": 248.0,
+          "exhaust_lobes_crank_deg": [
+            248.0,
+            428.0
+          ]
         },
         {
           "id": "b1",
@@ -988,7 +1060,18 @@
               "index": 2
             }
           ],
-          "cylinders": 2
+          "flip_display": false,
+          "cylinders": 2,
+          "intake_lobe_crank_deg": 837.0,
+          "intake_lobes_crank_deg": [
+            837.0,
+            1017.0
+          ],
+          "exhaust_lobe_crank_deg": 608.0,
+          "exhaust_lobes_crank_deg": [
+            608.0,
+            788.0
+          ]
         }
       ],
       "bank_params": {
@@ -1050,6 +1133,13 @@
         "gamma": "2.0",
         "lift": "9.78 * units.mm",
         "steps": "100"
+      },
+      "cam_timing": {
+        "lobe_separation": "114 * units.deg",
+        "intake_lobe_center": "117 * units.deg",
+        "exhaust_lobe_center": "112 * units.deg",
+        "advance": "0 * units.deg",
+        "base_radius": "(34.0 / 2) * units.mm"
       },
       "fuel": {
         "max_turbulence_effect": "2.5",
@@ -1203,7 +1293,24 @@
               "index": 4
             }
           ],
-          "cylinders": 5
+          "flip_display": false,
+          "cylinders": 5,
+          "intake_lobe_crank_deg": 476.0,
+          "intake_lobes_crank_deg": [
+            476.0,
+            4076.0,
+            14876.0,
+            7676.0,
+            11276.0
+          ],
+          "exhaust_lobe_crank_deg": 244.0,
+          "exhaust_lobes_crank_deg": [
+            244.0,
+            3844.0,
+            14644.0,
+            7444.0,
+            11044.0
+          ]
         }
       ],
       "bank_params": {
@@ -1265,6 +1372,13 @@
         "gamma": "2.0",
         "lift": "9.78 * units.mm",
         "steps": "100"
+      },
+      "cam_timing": {
+        "lobe_separation": "110.0 * units.deg",
+        "intake_lobe_center": "116 * units.deg",
+        "exhaust_lobe_center": "116 * units.deg",
+        "advance": "0.0 * units.deg",
+        "base_radius": "(34.0 / 2) * units.mm"
       },
       "fuel": {
         "max_turbulence_effect": "2.5",
@@ -1415,6 +1529,7 @@
               "index": 0
             }
           ],
+          "flip_display": false,
           "cylinders": 1
         },
         {
@@ -1431,6 +1546,7 @@
               "index": 1
             }
           ],
+          "flip_display": false,
           "cylinders": 1
         },
         {
@@ -1447,6 +1563,7 @@
               "index": 2
             }
           ],
+          "flip_display": false,
           "cylinders": 1
         },
         {
@@ -1463,6 +1580,7 @@
               "index": 3
             }
           ],
+          "flip_display": false,
           "cylinders": 1
         },
         {
@@ -1479,6 +1597,7 @@
               "index": 4
             }
           ],
+          "flip_display": false,
           "cylinders": 1
         }
       ],
@@ -1536,6 +1655,13 @@
         "gamma": "0.9",
         "lift": "800 * units.thou",
         "steps": "100"
+      },
+      "cam_timing": {
+        "lobe_separation": "114 * units.deg",
+        "intake_lobe_center": "lobe_separation",
+        "exhaust_lobe_center": "lobe_separation",
+        "advance": "0 * units.deg",
+        "base_radius": "1.0 * units.inch"
       },
       "fuel": {},
       "ignition": {
@@ -1673,7 +1799,18 @@
               "index": 3
             }
           ],
-          "cylinders": 2
+          "flip_display": true,
+          "cylinders": 2,
+          "intake_lobe_crank_deg": 477.0,
+          "intake_lobes_crank_deg": [
+            477.0,
+            657.0
+          ],
+          "exhaust_lobe_crank_deg": 248.0,
+          "exhaust_lobes_crank_deg": [
+            248.0,
+            428.0
+          ]
         },
         {
           "id": "b1",
@@ -1694,7 +1831,18 @@
               "index": 2
             }
           ],
-          "cylinders": 2
+          "flip_display": false,
+          "cylinders": 2,
+          "intake_lobe_crank_deg": 837.0,
+          "intake_lobes_crank_deg": [
+            837.0,
+            1017.0
+          ],
+          "exhaust_lobe_crank_deg": 608.0,
+          "exhaust_lobes_crank_deg": [
+            608.0,
+            788.0
+          ]
         }
       ],
       "bank_params": {
@@ -1752,6 +1900,13 @@
         "gamma": "2.0",
         "lift": "9.78 * units.mm",
         "steps": "100"
+      },
+      "cam_timing": {
+        "lobe_separation": "114 * units.deg",
+        "intake_lobe_center": "117 * units.deg",
+        "exhaust_lobe_center": "112 * units.deg",
+        "advance": "0 * units.deg",
+        "base_radius": "(34.0 / 2) * units.mm"
       },
       "fuel": {
         "max_burning_efficiency": "0.9",
@@ -1927,7 +2082,18 @@
               "index": 3
             }
           ],
-          "cylinders": 2
+          "flip_display": true,
+          "cylinders": 2,
+          "intake_lobe_crank_deg": 477.0,
+          "intake_lobes_crank_deg": [
+            477.0,
+            657.0
+          ],
+          "exhaust_lobe_crank_deg": 248.0,
+          "exhaust_lobes_crank_deg": [
+            248.0,
+            428.0
+          ]
         },
         {
           "id": "b1",
@@ -1948,7 +2114,18 @@
               "index": 2
             }
           ],
-          "cylinders": 2
+          "flip_display": false,
+          "cylinders": 2,
+          "intake_lobe_crank_deg": 837.0,
+          "intake_lobes_crank_deg": [
+            837.0,
+            1017.0
+          ],
+          "exhaust_lobe_crank_deg": 608.0,
+          "exhaust_lobes_crank_deg": [
+            608.0,
+            788.0
+          ]
         }
       ],
       "bank_params": {
@@ -2006,6 +2183,13 @@
         "gamma": "2.0",
         "lift": "9.78 * units.mm",
         "steps": "100"
+      },
+      "cam_timing": {
+        "lobe_separation": "114 * units.deg",
+        "intake_lobe_center": "117 * units.deg",
+        "exhaust_lobe_center": "112 * units.deg",
+        "advance": "0 * units.deg",
+        "base_radius": "(34.0 / 2) * units.mm"
       },
       "fuel": {
         "max_burning_efficiency": "0.9",
@@ -2211,7 +2395,26 @@
               "index": 5
             }
           ],
-          "cylinders": 6
+          "flip_display": false,
+          "cylinders": 6,
+          "intake_lobe_crank_deg": 476.0,
+          "intake_lobes_crank_deg": [
+            476.0,
+            17756.0,
+            9116.0,
+            22076.0,
+            4796.0,
+            13436.0
+          ],
+          "exhaust_lobe_crank_deg": 244.0,
+          "exhaust_lobes_crank_deg": [
+            244.0,
+            17524.0,
+            8884.0,
+            21844.0,
+            4564.0,
+            13204.0
+          ]
         }
       ],
       "bank_params": {
@@ -2274,6 +2477,13 @@
         "gamma": "1.1",
         "lift": "9.78 * units.mm",
         "steps": "100"
+      },
+      "cam_timing": {
+        "lobe_separation": "110.0 * units.deg",
+        "intake_lobe_center": "116 * units.deg",
+        "exhaust_lobe_center": "116 * units.deg",
+        "advance": "0.0 * units.deg",
+        "base_radius": "(34.0 / 2) * units.mm"
       },
       "fuel": {
         "max_burning_efficiency": "1.0"
@@ -2432,7 +2642,20 @@
               "index": 4
             }
           ],
-          "cylinders": 3
+          "flip_display": true,
+          "cylinders": 3,
+          "intake_lobe_crank_deg": 477.0,
+          "intake_lobes_crank_deg": [
+            477.0,
+            717.0,
+            957.0
+          ],
+          "exhaust_lobe_crank_deg": 248.0,
+          "exhaust_lobes_crank_deg": [
+            248.0,
+            488.0,
+            728.0
+          ]
         },
         {
           "id": "b1",
@@ -2458,7 +2681,20 @@
               "index": 5
             }
           ],
-          "cylinders": 3
+          "flip_display": false,
+          "cylinders": 3,
+          "intake_lobe_crank_deg": 597.0,
+          "intake_lobes_crank_deg": [
+            597.0,
+            837.0,
+            1077.0
+          ],
+          "exhaust_lobe_crank_deg": 368.0,
+          "exhaust_lobes_crank_deg": [
+            368.0,
+            608.0,
+            848.0
+          ]
         }
       ],
       "bank_params": {
@@ -2520,6 +2756,13 @@
         "gamma": "1.0",
         "lift": "400 * units.thou",
         "steps": "100"
+      },
+      "cam_timing": {
+        "lobe_separation": "114 * units.deg",
+        "intake_lobe_center": "117 * units.deg",
+        "exhaust_lobe_center": "112 * units.deg",
+        "advance": "0 * units.deg",
+        "base_radius": "0.75 * units.inch"
       },
       "fuel": {},
       "ignition": {
@@ -2643,7 +2886,20 @@
               "index": 2
             }
           ],
-          "cylinders": 3
+          "flip_display": false,
+          "cylinders": 3,
+          "intake_lobe_crank_deg": 477.0,
+          "intake_lobes_crank_deg": [
+            477.0,
+            957.0,
+            717.0
+          ],
+          "exhaust_lobe_crank_deg": 248.0,
+          "exhaust_lobes_crank_deg": [
+            248.0,
+            728.0,
+            488.0
+          ]
         },
         {
           "id": "b1",
@@ -2669,7 +2925,20 @@
               "index": 2
             }
           ],
-          "cylinders": 3
+          "flip_display": true,
+          "cylinders": 3,
+          "intake_lobe_crank_deg": 1107.0,
+          "intake_lobes_crank_deg": [
+            1107.0,
+            867.0,
+            627.0
+          ],
+          "exhaust_lobe_crank_deg": 878.0,
+          "exhaust_lobes_crank_deg": [
+            878.0,
+            638.0,
+            398.0
+          ]
         }
       ],
       "bank_params": {
@@ -2733,6 +3002,13 @@
         "gamma": "1.0",
         "lift": "400 * units.thou",
         "steps": "100"
+      },
+      "cam_timing": {
+        "lobe_separation": "114 * units.deg",
+        "intake_lobe_center": "117 * units.deg",
+        "exhaust_lobe_center": "112 * units.deg",
+        "advance": "0 * units.deg",
+        "base_radius": "0.75 * units.inch"
       },
       "fuel": {},
       "ignition": {
@@ -2875,7 +3151,20 @@
               "index": 4
             }
           ],
-          "cylinders": 3
+          "flip_display": false,
+          "cylinders": 3,
+          "intake_lobe_crank_deg": 477.0,
+          "intake_lobes_crank_deg": [
+            477.0,
+            957.0,
+            717.0
+          ],
+          "exhaust_lobe_crank_deg": 248.0,
+          "exhaust_lobes_crank_deg": [
+            248.0,
+            728.0,
+            488.0
+          ]
         },
         {
           "id": "b1",
@@ -2901,7 +3190,20 @@
               "index": 5
             }
           ],
-          "cylinders": 3
+          "flip_display": true,
+          "cylinders": 3,
+          "intake_lobe_crank_deg": 1077.0,
+          "intake_lobes_crank_deg": [
+            1077.0,
+            837.0,
+            597.0
+          ],
+          "exhaust_lobe_crank_deg": 848.0,
+          "exhaust_lobes_crank_deg": [
+            848.0,
+            608.0,
+            368.0
+          ]
         }
       ],
       "bank_params": {
@@ -2965,6 +3267,13 @@
         "gamma": "1.0",
         "lift": "400 * units.thou",
         "steps": "100"
+      },
+      "cam_timing": {
+        "lobe_separation": "114 * units.deg",
+        "intake_lobe_center": "117 * units.deg",
+        "exhaust_lobe_center": "112 * units.deg",
+        "advance": "0 * units.deg",
+        "base_radius": "0.75 * units.inch"
       },
       "fuel": {},
       "ignition": {
@@ -3104,7 +3413,22 @@
               "index": 3
             }
           ],
-          "cylinders": 4
+          "flip_display": false,
+          "cylinders": 4,
+          "intake_lobe_crank_deg": 476.0,
+          "intake_lobes_crank_deg": [
+            476.0,
+            1106.0,
+            926.0,
+            656.0
+          ],
+          "exhaust_lobe_crank_deg": 244.0,
+          "exhaust_lobes_crank_deg": [
+            244.0,
+            874.0,
+            694.0,
+            424.0
+          ]
         },
         {
           "id": "b1",
@@ -3135,7 +3459,22 @@
               "index": 3
             }
           ],
-          "cylinders": 4
+          "flip_display": true,
+          "cylinders": 4,
+          "intake_lobe_crank_deg": 746.0,
+          "intake_lobes_crank_deg": [
+            746.0,
+            1016.0,
+            836.0,
+            566.0
+          ],
+          "exhaust_lobe_crank_deg": 514.0,
+          "exhaust_lobes_crank_deg": [
+            514.0,
+            784.0,
+            604.0,
+            334.0
+          ]
         }
       ],
       "bank_params": {
@@ -3198,6 +3537,13 @@
         "gamma": "1.1",
         "lift": "551 * units.thou",
         "steps": "256"
+      },
+      "cam_timing": {
+        "lobe_separation": "114 * units.deg",
+        "intake_lobe_center": "116 * units.deg",
+        "exhaust_lobe_center": "116 * units.deg",
+        "advance": "0 * units.deg",
+        "base_radius": "1.0 * units.inch"
       },
       "fuel": {
         "max_burning_efficiency": "1.0",
@@ -3400,7 +3746,22 @@
               "index": 3
             }
           ],
-          "cylinders": 4
+          "flip_display": true,
+          "cylinders": 4,
+          "intake_lobe_crank_deg": 476.0,
+          "intake_lobes_crank_deg": [
+            476.0,
+            1016.0,
+            656.0,
+            836.0
+          ],
+          "exhaust_lobe_crank_deg": 244.0,
+          "exhaust_lobes_crank_deg": [
+            244.0,
+            784.0,
+            424.0,
+            604.0
+          ]
         },
         {
           "id": "b1",
@@ -3431,7 +3792,22 @@
               "index": 3
             }
           ],
-          "cylinders": 4
+          "flip_display": false,
+          "cylinders": 4,
+          "intake_lobe_crank_deg": 566.0,
+          "intake_lobes_crank_deg": [
+            566.0,
+            1106.0,
+            746.0,
+            926.0
+          ],
+          "exhaust_lobe_crank_deg": 334.0,
+          "exhaust_lobes_crank_deg": [
+            334.0,
+            874.0,
+            514.0,
+            694.0
+          ]
         }
       ],
       "bank_params": {
@@ -3494,6 +3870,13 @@
         "gamma": "0.9",
         "lift": "551 * units.thou",
         "steps": "256"
+      },
+      "cam_timing": {
+        "lobe_separation": "114 * units.deg",
+        "intake_lobe_center": "116 * units.deg",
+        "exhaust_lobe_center": "116 * units.deg",
+        "advance": "0 * units.deg",
+        "base_radius": "1.0 * units.inch"
       },
       "fuel": {
         "max_burning_efficiency": "1.0",
@@ -3712,6 +4095,7 @@
               "index": 0
             }
           ],
+          "flip_display": false,
           "cylinders": 1
         },
         {
@@ -3728,6 +4112,7 @@
               "index": 1
             }
           ],
+          "flip_display": false,
           "cylinders": 1
         },
         {
@@ -3744,6 +4129,7 @@
               "index": 2
             }
           ],
+          "flip_display": false,
           "cylinders": 1
         },
         {
@@ -3760,6 +4146,7 @@
               "index": 3
             }
           ],
+          "flip_display": false,
           "cylinders": 1
         },
         {
@@ -3776,6 +4163,7 @@
               "index": 4
             }
           ],
+          "flip_display": false,
           "cylinders": 1
         },
         {
@@ -3792,6 +4180,7 @@
               "index": 5
             }
           ],
+          "flip_display": false,
           "cylinders": 1
         },
         {
@@ -3808,6 +4197,7 @@
               "index": 6
             }
           ],
+          "flip_display": false,
           "cylinders": 1
         },
         {
@@ -3824,6 +4214,7 @@
               "index": 7
             }
           ],
+          "flip_display": false,
           "cylinders": 1
         },
         {
@@ -3840,6 +4231,7 @@
               "index": 8
             }
           ],
+          "flip_display": false,
           "cylinders": 1
         }
       ],
@@ -3898,6 +4290,13 @@
         "gamma": "0.9",
         "lift": "800 * units.thou",
         "steps": "100"
+      },
+      "cam_timing": {
+        "lobe_separation": "114 * units.deg",
+        "intake_lobe_center": "lobe_separation",
+        "exhaust_lobe_center": "lobe_separation",
+        "advance": "0 * units.deg",
+        "base_radius": "1.0 * units.inch"
       },
       "fuel": {},
       "ignition": {
@@ -4042,7 +4441,24 @@
               "index": 4
             }
           ],
-          "cylinders": 5
+          "flip_display": true,
+          "cylinders": 5,
+          "intake_lobe_crank_deg": 450.0,
+          "intake_lobes_crank_deg": [
+            450.0,
+            594.0,
+            1026.0,
+            738.0,
+            882.0
+          ],
+          "exhaust_lobe_crank_deg": 248.0,
+          "exhaust_lobes_crank_deg": [
+            248.0,
+            392.0,
+            824.0,
+            536.0,
+            680.0
+          ]
         },
         {
           "id": "b1",
@@ -4078,7 +4494,24 @@
               "index": 4
             }
           ],
-          "cylinders": 5
+          "flip_display": false,
+          "cylinders": 5,
+          "intake_lobe_crank_deg": 522.0,
+          "intake_lobes_crank_deg": [
+            522.0,
+            666.0,
+            1098.0,
+            810.0,
+            954.0
+          ],
+          "exhaust_lobe_crank_deg": 320.0,
+          "exhaust_lobes_crank_deg": [
+            320.0,
+            464.0,
+            896.0,
+            608.0,
+            752.0
+          ]
         }
       ],
       "bank_params": {
@@ -4141,6 +4574,13 @@
         "gamma": "1.1",
         "lift": "15.95 * units.mm",
         "steps": "100"
+      },
+      "cam_timing": {
+        "lobe_separation": "114 * units.deg",
+        "intake_lobe_center": "90 * units.deg",
+        "exhaust_lobe_center": "112 * units.deg",
+        "advance": "0 * units.deg",
+        "base_radius": "0.9 * units.inch"
       },
       "fuel": {
         "max_turbulence_effect": "10.0",
@@ -4315,7 +4755,26 @@
               "index": 5
             }
           ],
-          "cylinders": 6
+          "flip_display": true,
+          "cylinders": 6,
+          "intake_lobe_crank_deg": 460.5,
+          "intake_lobes_crank_deg": [
+            460.5,
+            700.5,
+            940.5,
+            580.5,
+            1060.5,
+            820.5
+          ],
+          "exhaust_lobe_crank_deg": 240.0,
+          "exhaust_lobes_crank_deg": [
+            240.0,
+            480.0,
+            720.0,
+            360.0,
+            840.0,
+            600.0
+          ]
         },
         {
           "id": "b1",
@@ -4356,7 +4815,26 @@
               "index": 5
             }
           ],
-          "cylinders": 6
+          "flip_display": false,
+          "cylinders": 6,
+          "intake_lobe_crank_deg": 880.5,
+          "intake_lobes_crank_deg": [
+            880.5,
+            1120.5,
+            640.5,
+            1000.5,
+            760.5,
+            520.5
+          ],
+          "exhaust_lobe_crank_deg": 660.0,
+          "exhaust_lobes_crank_deg": [
+            660.0,
+            900.0,
+            420.0,
+            780.0,
+            540.0,
+            300.0
+          ]
         }
       ],
       "bank_params": {
@@ -4419,6 +4897,13 @@
         "gamma": "0.8",
         "lift": "15.95 * units.mm",
         "steps": "100"
+      },
+      "cam_timing": {
+        "lobe_separation": "114 * units.deg",
+        "intake_lobe_center": "100.5 * units.deg",
+        "exhaust_lobe_center": "120 * units.deg",
+        "advance": "0 * units.deg",
+        "base_radius": "1.0 * units.inch"
       },
       "fuel": {
         "max_turbulence_effect": "10.0",
@@ -4576,7 +5061,26 @@
               "index": 5
             }
           ],
-          "cylinders": 6
+          "flip_display": true,
+          "cylinders": 6,
+          "intake_lobe_crank_deg": 450.0,
+          "intake_lobes_crank_deg": [
+            450.0,
+            930.0,
+            690.0,
+            1050.0,
+            570.0,
+            810.0
+          ],
+          "exhaust_lobe_crank_deg": 248.0,
+          "exhaust_lobes_crank_deg": [
+            248.0,
+            728.0,
+            488.0,
+            848.0,
+            368.0,
+            608.0
+          ]
         },
         {
           "id": "b1",
@@ -4617,7 +5121,26 @@
               "index": 5
             }
           ],
-          "cylinders": 6
+          "flip_display": false,
+          "cylinders": 6,
+          "intake_lobe_crank_deg": 525.0,
+          "intake_lobes_crank_deg": [
+            525.0,
+            1005.0,
+            765.0,
+            1125.0,
+            645.0,
+            885.0
+          ],
+          "exhaust_lobe_crank_deg": 323.0,
+          "exhaust_lobes_crank_deg": [
+            323.0,
+            803.0,
+            563.0,
+            923.0,
+            443.0,
+            683.0
+          ]
         }
       ],
       "bank_params": {
@@ -4680,6 +5203,13 @@
         "gamma": "0.8",
         "lift": "15.95 * units.mm",
         "steps": "512"
+      },
+      "cam_timing": {
+        "lobe_separation": "114 * units.deg",
+        "intake_lobe_center": "90 * units.deg",
+        "exhaust_lobe_center": "112 * units.deg",
+        "advance": "0 * units.deg",
+        "base_radius": "1.0 * units.inch"
       },
       "fuel": {
         "max_turbulence_effect": "10.0",
@@ -4871,7 +5401,24 @@
               "index": 4
             }
           ],
-          "cylinders": 5
+          "flip_display": false,
+          "cylinders": 5,
+          "intake_lobe_crank_deg": 470.0,
+          "intake_lobes_crank_deg": [
+            470.0,
+            4070.0,
+            14870.0,
+            7670.0,
+            11270.0
+          ],
+          "exhaust_lobe_crank_deg": 250.0,
+          "exhaust_lobes_crank_deg": [
+            250.0,
+            3850.0,
+            14650.0,
+            7450.0,
+            11050.0
+          ]
         }
       ],
       "bank_params": {
@@ -4921,6 +5468,13 @@
         "exhaust_camshaft": "camshaft.exhaust_cam"
       },
       "cam_lobe": {},
+      "cam_timing": {
+        "lobe_separation": "110.0 * units.deg",
+        "intake_lobe_center": "lobe_separation",
+        "exhaust_lobe_center": "lobe_separation",
+        "advance": "0.0 * units.deg",
+        "base_radius": "0.75 * units.inch"
+      },
       "fuel": {
         "max_turbulence_effect": "4.0",
         "burning_efficiency_randomness": "0.2",
@@ -5081,7 +5635,16 @@
               "index": 5
             }
           ],
-          "cylinders": 6
+          "flip_display": false,
+          "cylinders": 6,
+          "intake_lobe_crank_deg": 470.0,
+          "intake_lobes_crank_deg": [
+            470.0
+          ],
+          "exhaust_lobe_crank_deg": 255.0,
+          "exhaust_lobes_crank_deg": [
+            255.0
+          ]
         }
       ],
       "bank_params": {
@@ -5130,6 +5693,13 @@
         "gamma": "0.8",
         "lift": "9.0 * units.mm",
         "steps": "100"
+      },
+      "cam_timing": {
+        "lobe_separation": "110.0 * units.deg",
+        "intake_lobe_center": "lobe_separation",
+        "exhaust_lobe_center": "105.0 * units.deg",
+        "advance": "0.0 * units.deg",
+        "base_radius": "0.6 * units.inch"
       },
       "fuel": {
         "max_turbulence_effect": "4.0"
@@ -5275,6 +5845,7 @@
               "index": 3
             }
           ],
+          "flip_display": false,
           "cylinders": 4
         },
         {
@@ -5306,6 +5877,7 @@
               "index": 3
             }
           ],
+          "flip_display": true,
           "cylinders": 4
         }
       ],
@@ -5352,6 +5924,7 @@
       ],
       "head": {},
       "cam_lobe": {},
+      "cam_timing": {},
       "fuel": {
         "max_turbulence_effect": "3.0",
         "burning_efficiency_randomness": "0.5",
@@ -5479,6 +6052,7 @@
               "index": 3
             }
           ],
+          "flip_display": false,
           "cylinders": 4
         },
         {
@@ -5510,6 +6084,7 @@
               "index": 3
             }
           ],
+          "flip_display": true,
           "cylinders": 4
         }
       ],
@@ -5554,6 +6129,7 @@
       ],
       "head": {},
       "cam_lobe": {},
+      "cam_timing": {},
       "fuel": {
         "max_turbulence_effect": "3.0",
         "burning_efficiency_randomness": "0.5",
@@ -5648,6 +6224,7 @@
               "index": 0
             }
           ],
+          "flip_display": false,
           "cylinders": 1
         },
         {
@@ -5664,6 +6241,7 @@
               "index": 0
             }
           ],
+          "flip_display": true,
           "cylinders": 1
         }
       ],
@@ -5714,6 +6292,10 @@
         "gamma": "1.1",
         "lift": "200 * units.thou",
         "steps": "100"
+      },
+      "cam_timing": {
+        "lobe_separation": "114 * units.deg",
+        "base_radius": "500 * units.thou"
       },
       "fuel": {},
       "ignition": {
@@ -5837,7 +6419,30 @@
               "index": 3
             }
           ],
-          "cylinders": 4
+          "flip_display": false,
+          "cylinders": 4,
+          "intake_lobe_crank_deg": 479.5,
+          "intake_lobes_crank_deg": [
+            479.5,
+            1019.5,
+            659.5,
+            839.5,
+            2999.5,
+            3539.5,
+            3179.5,
+            3359.5
+          ],
+          "exhaust_lobe_crank_deg": 240.5,
+          "exhaust_lobes_crank_deg": [
+            240.5,
+            780.5,
+            420.5,
+            600.5,
+            2760.5,
+            3300.5,
+            2940.5,
+            3120.5
+          ]
         }
       ],
       "bank_params": {},
@@ -5880,6 +6485,13 @@
         "gamma": "1",
         "lift": "393.701 * units.thou",
         "steps": "100"
+      },
+      "cam_timing": {
+        "lobe_separation": "119.5 * units.deg",
+        "intake_lobe_center": "lobe_separation",
+        "exhaust_lobe_center": "lobe_separation",
+        "advance": "0 * units.deg",
+        "base_radius": "0.65 * units.inch"
       },
       "fuel": {
         "max_turbulence_effect": "4.0",

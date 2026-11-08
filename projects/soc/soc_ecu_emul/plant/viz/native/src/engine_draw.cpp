@@ -196,8 +196,24 @@ struct Emitter {
         trisLocal(v, idx);
     }
 
-    // geometry_generator.cpp generateCam — harmonic lift stand-in when no Function*
-    void cam(float cx, float cy, float baseRadius, float rollerRadius, float liftAmp, float maxEdge = 0.05f) {
+    // GenerateHarmonicCamLobeNode + geometry_generator::generateCam
+    static float harmonicLift(float x, float liftAmp, float duration, float gamma) {
+        float lift = std::max(liftAmp, 1e-6f);
+        float g = gamma > 0 ? gamma : 1.f;
+        float dur = duration > 0 ? duration : (220.f * PI / 180.f);
+        float angle = dur / 4.f;
+        const float thou50 = 0.05f * 25.4f;
+        float s = std::pow((2.f * thou50) / lift, 1.f / g) - 1.f;
+        s = std::max(-1.f, std::min(1.f, s));
+        float k = std::acos(s) / std::max(angle, 1e-6f);
+        float extents = PI / std::max(k, 1e-6f);
+        float ax = std::fabs(x);
+        if (ax >= extents) return 0.f;
+        return lift * std::pow(0.5f + 0.5f * std::cos(k * ax), g);
+    }
+
+    void cam(float cx, float cy, float baseRadius, float rollerRadius, float liftAmp,
+             float duration, float gamma, float maxEdge = 0.05f) {
         float angle = std::asin(std::min(0.99f, maxEdge / (2 * std::max(baseRadius, 1e-4f)))) * 2;
         angle = std::min(angle, PI - 0.05f);
         int segs = std::max(3, (int)std::ceil(TWO_PI / angle));
@@ -209,13 +225,10 @@ struct Emitter {
             float a0 = angleStep * i;
             float x = std::cos(a0 + PI / 2);
             float y = std::sin(a0 + PI / 2);
-            // crude lobe: lift near a0≈0
             float aa = a0 - PI;
             while (aa > PI) aa -= TWO_PI;
             while (aa < -PI) aa += TWO_PI;
-            float lift = 0;
-            if (std::fabs(aa) < PI / 3)
-                lift = liftAmp * std::cos(aa / (PI / 3) * (PI / 2));
+            float lift = harmonicLift(aa, liftAmp, duration, gamma);
             float rp = baseRoller + lift;
             float rx = cx + x * rp, ry = cy + y * rp;
             float dx = -1, dy = 0;
@@ -272,6 +285,15 @@ struct Input {
     float bore = 80, throwMm = 35, rod = 100, compH = 30, wristPin = 0;
     float deck = 160, chamberH = 5;
     float camBase = 12, camLift = 6;
+    float camDuration = 220.f * PI / 180.f; // crank rad @ 50 thou
+    float camGamma = 1.f;
+    float camRatio = 0.5f; // 4-stroke crank:cam = 2:1
+    float camAdvance = 0;
+    // ~110° LCA defaults → setLobeCenterline((2π ± LCA) / 2)
+    float intakeLobeCam = PI + (110.f * PI / 180.f) / 2.f;
+    float exhaustLobeCam = PI - (110.f * PI / 180.f) / 2.f;
+    std::vector<float> intakeLobeCamBanks;
+    std::vector<float> exhaustLobeCamBanks;
     float crankAngle = 0;
     std::vector<Bank> banks;
     std::vector<float> journals;
@@ -291,6 +313,17 @@ Input parseInput(const std::string &j) {
     in.chamberH = (float)readNumber(j, "chamber_h", 5);
     in.camBase = (float)readNumber(j, "cam_base", in.bore * 0.15);
     in.camLift = (float)readNumber(j, "cam_lift", in.bore * 0.08);
+    in.camDuration = (float)readNumber(j, "cam_duration", 220.0 * PI / 180.0);
+    in.camGamma = (float)readNumber(j, "cam_gamma", 1.0);
+    if (in.camGamma <= 0) in.camGamma = 1.f;
+    in.camRatio = (float)readNumber(j, "cam_ratio", 0.5);
+    in.camAdvance = (float)readNumber(j, "cam_advance", 0);
+    in.intakeLobeCam = (float)readNumber(j, "intake_lobe_cam", PI + (110.0 * PI / 180.0) / 2.0);
+    in.exhaustLobeCam = (float)readNumber(j, "exhaust_lobe_cam", PI - (110.0 * PI / 180.0) / 2.0);
+    for (double v : readArray(j, "intake_lobe_cam_banks"))
+        in.intakeLobeCamBanks.push_back((float)v);
+    for (double v : readArray(j, "exhaust_lobe_cam_banks"))
+        in.exhaustLobeCamBanks.push_back((float)v);
     in.crankAngle = (float)readNumber(j, "crank_angle", 0);
     in.meshesPath = readString(j, "meshes_path");
     auto angs = readArray(j, "bank_angles");
@@ -542,25 +575,26 @@ int main() {
         }
 
         float intakeValvePosition = in.flip[bi] ? 0.5f : -0.5f;
-        // visual lifts
-        float intakeLift = in.camLift * 0.35f * (0.5f + 0.5f * std::sin(in.crankAngle * 2 + bank.angle));
-        float exhaustLift = in.camLift * 0.35f * (0.5f + 0.5f * std::sin(in.crankAngle * 2 + bank.angle + PI));
-
-        auto drawValve = [&](float localX, Color col, float lift) {
-            Mat3 T_v = T_head * Mat3::T(localX, -lift / s);
-            em.setXform(T_v);
-            em.setColor(col);
-            em.mesh("Valve");
-            constexpr float rollerRadius = 0.3f * 0.0254f * 1000.f / 1000.f; // 300 thou in mm… use units
-            // units::distance(300, thou) in engine-sim = 0.00762 m = 7.62 mm; here we work in mm, s in mm
-            float rr = 7.62f; // mm
-            float rrLocal = rr / s;
-            em.circle2d(0, 1.99f, rrLocal); // roller in head-local (already in T_v which includes S(s)?)
-            // T_v includes S(s), so coords are in mesh units — rollerRadius/s as in source
-            em.setColor(BG);
-            em.circle2d(0, 1.99f, rrLocal * 0.25f);
+        // Same harmonic lobe as em.cam(): nose at a0=π touches roller when camAngle=0.
+        auto valveLiftFromCam = [&](float camAngle) {
+            float aa = -camAngle;
+            while (aa > PI) aa -= TWO_PI;
+            while (aa < -PI) aa += TWO_PI;
+            return Emitter::harmonicLift(aa, in.camLift, in.camDuration, in.camGamma);
         };
-        // Fix roller: source uses rollerRadius/s in local after T_head scale
+        // esim Camshaft::getAngle = (crank + advance) * 0.5; phase via per-bank lobe.
+        float camAngle = (in.crankAngle + in.camAdvance) * in.camRatio;
+        float inLobe = (bi < (int)in.intakeLobeCamBanks.size())
+            ? in.intakeLobeCamBanks[bi]
+            : in.intakeLobeCam;
+        float exLobe = (bi < (int)in.exhaustLobeCamBanks.size())
+            ? in.exhaustLobeCamBanks[bi]
+            : in.exhaustLobeCam;
+        float intakeCamAngle = camAngle + inLobe;
+        float exhaustCamAngle = camAngle + exLobe;
+        float intakeLift = valveLiftFromCam(intakeCamAngle);
+        float exhaustLift = valveLiftFromCam(exhaustCamAngle);
+
         float rollerRadius_mm = 7.62f;
         float rr_local = rollerRadius_mm / s;
 
@@ -570,30 +604,30 @@ int main() {
             em.setColor(col);
             em.mesh("Valve");
             em.setColor(BG);
-            em.circle2d(0.f, 1.99f, (rollerRadius_mm + 0.5f) / s); // shadow approx
+            em.circle2d(0.f, 1.99f, (rollerRadius_mm + 0.5f) / s);
             em.setColor(col);
             em.circle2d(0.f, 1.99f, rr_local);
             em.setColor(BG);
             em.circle2d(0.f, 1.99f, rr_local * 0.25f);
         };
+        // engine-sim: blue = intake, yellow = exhaust
         drawValve2(intakeValvePosition, BLUE, intakeLift);
         drawValve2(-intakeValvePosition, YELLOW, exhaustLift);
 
-        // cams in world mm (T_headObject space, not scaled)
         float camY = rollerRadius_mm + 0.5f + 1.99f * s + in.camBase;
         Mat3 T_inCam =
-            T_headObject * Mat3::T(intakeValvePosition * s, camY) * Mat3::R(in.crankAngle * 2 + bank.angle);
+            T_headObject * Mat3::T(intakeValvePosition * s, camY) * Mat3::R(intakeCamAngle);
         em.setXform(T_inCam);
         em.setColor(BLUE);
-        em.cam(0, 0, in.camBase, rollerRadius_mm, in.camLift);
+        em.cam(0, 0, in.camBase, rollerRadius_mm, in.camLift, in.camDuration, in.camGamma);
         em.setColor(BG);
         em.circle2d(0, 0, rollerRadius_mm * 0.25f);
 
-        Mat3 T_exCam = T_headObject * Mat3::T(-intakeValvePosition * s, camY) *
-                       Mat3::R(in.crankAngle * 2 + bank.angle + 0.3f);
+        Mat3 T_exCam =
+            T_headObject * Mat3::T(-intakeValvePosition * s, camY) * Mat3::R(exhaustCamAngle);
         em.setXform(T_exCam);
-        em.setColor(ORANGE);
-        em.cam(0, 0, in.camBase, rollerRadius_mm, in.camLift);
+        em.setColor(YELLOW);
+        em.cam(0, 0, in.camBase, rollerRadius_mm, in.camLift, in.camDuration, in.camGamma);
         em.setColor(BG);
         em.circle2d(0, 0, rollerRadius_mm * 0.25f);
     }
