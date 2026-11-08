@@ -1,7 +1,7 @@
 /** engine-sim catalog — meshes/params from server; draw loop fully local (no per-frame C++). */
 
-import { loadMeshes, fetchScene, paintDrawlist } from "./paint_drawlist.js?v=5";
-import { prepareScene, buildDrawlist, viewFromScene } from "./engine_draw_runtime.js?v=12";
+import { loadMeshes, fetchScene, paintDrawlist } from "./paint_drawlist.js?v=6";
+import { prepareScene, buildDrawlist, viewFromScene } from "./engine_draw_runtime.js?v=23";
 
 const $ = (id) => document.getElementById(id);
 const THEME = { background: "#0E1012" };
@@ -122,6 +122,17 @@ async function loadSelectedScene() {
     const raw = await fetchScene(e.id);
     scene = prepareScene(raw);
     const canvas = $("stage");
+    // Square bitmap for radials so circular geometry isn't letterboxed into a wide frame.
+    const radial =
+      !!(scene.slave_throw && (scene.banks?.length || 0) >= 3) || (scene.banks?.length || 0) >= 5;
+    const side = radial ? 720 : 0;
+    if (radial && (canvas.width !== side || canvas.height !== side)) {
+      canvas.width = side;
+      canvas.height = side;
+    } else if (!radial && (canvas.width !== 860 || canvas.height !== 520)) {
+      canvas.width = 860;
+      canvas.height = 520;
+    }
     view = viewFromScene(scene, canvas.width, canvas.height);
     paint();
   } catch (err) {

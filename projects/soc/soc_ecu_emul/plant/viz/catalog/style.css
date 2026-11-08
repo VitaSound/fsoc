@@ -135,10 +135,13 @@ main {
   border-bottom: 1px solid var(--line);
 }
 #stage {
-  width: 100%;
+  /* Preserve bitmap aspect (never stretch). Radials switch to a square canvas in JS. */
+  width: auto;
   height: auto;
+  max-width: 100%;
   max-height: 46vh;
   display: block;
+  margin: 0 auto;
   background: #0E1012;
   border-radius: 8px;
   border: 1px solid var(--line);

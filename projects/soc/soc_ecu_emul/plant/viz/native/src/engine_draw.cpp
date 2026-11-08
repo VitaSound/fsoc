@@ -265,7 +265,7 @@ struct Bank {
     float x = 0, y = 0;
     int cylinders = 1;
     int index = 0;
-    float displayDepth = 0.4f;
+    float displayDepth = 0.5f; // script cylinder_bank_parameters default
 };
 
 struct Input {
@@ -275,6 +275,7 @@ struct Input {
     float crankAngle = 0;
     std::vector<Bank> banks;
     std::vector<float> journals;
+    std::vector<int> cylinderJournals; // draw-order → journal index (= getLayer)
     std::vector<int> flip; // per bank
     std::string meshesPath;
 };
@@ -295,7 +296,10 @@ Input parseInput(const std::string &j) {
     auto angs = readArray(j, "bank_angles");
     auto ncyl = readArray(j, "bank_cylinders");
     auto flips = readArray(j, "flip_display");
+    auto ddepths = readArray(j, "bank_display_depths");
     for (double v : readArray(j, "journals")) in.journals.push_back((float)v);
+    for (double v : readArray(j, "cylinder_journals"))
+        in.cylinderJournals.push_back((int)v);
     if (angs.empty()) angs = {0};
     for (size_t i = 0; i < angs.size(); ++i) {
         Bank b;
@@ -304,7 +308,7 @@ Input parseInput(const std::string &j) {
         b.dx = std::cos(b.angle + PI / 2);
         b.dy = std::sin(b.angle + PI / 2);
         b.cylinders = (i < ncyl.size()) ? (int)ncyl[i] : 1;
-        b.displayDepth = 0.4f;
+        b.displayDepth = (i < ddepths.size()) ? (float)ddepths[i] : 0.5f;
         in.banks.push_back(b);
         in.flip.push_back((i < flips.size()) ? (int)flips[i] : (int)(i % 2));
     }
@@ -312,6 +316,14 @@ Input parseInput(const std::string &j) {
         int n = 0;
         for (auto &b : in.banks) n += b.cylinders;
         in.journals.assign(std::max(1, n), 0.f);
+    }
+    if (in.cylinderJournals.empty()) {
+        // Shared-journal V heuristic: cyl c on each bank → journal c
+        int nJ = std::max(1, (int)in.journals.size());
+        for (auto &b : in.banks) {
+            for (int c = 0; c < b.cylinders; ++c)
+                in.cylinderJournals.push_back(c % nJ);
+        }
     }
     return in;
 }
@@ -417,8 +429,9 @@ int main() {
     Color grey0 = mix(BG, FG, 0.7f);
     Color grey1 = mix(BG, FG, 0.6f);
     Color grey2 = mix(BG, FG, 0.2f);
-    for (size_t i = 0; i < in.journals.size(); ++i) {
-        Color col = tintByLayer(grey0, BG, (int)i);
+    // Far journals first (esim priority 0x32 - layer) so near/bright sits on top.
+    for (int i = (int)in.journals.size() - 1; i >= 0; --i) {
+        Color col = tintByLayer(grey0, BG, i);
         // setTransform(body, throw, 0, 0, journalAngle)
         float bodyTheta = in.crankAngle; // crank body angle
         Mat3 m = setTransform(0, 0, bodyTheta, in.throwMm, 0, 0, in.journals[i]);
@@ -438,44 +451,61 @@ int main() {
     // --- rods + pistons ---
     Color rodGrey0 = mix(BG, FG, 0.9333f);
     Color rodGrey1 = mix(BG, FG, 0.8667f);
-    int layer = 0;
     float bigEndLocal = -(in.rod / 2.f); // centerOfMass=0 → connecting_rod.cpp
     float littleEndLocal = in.rod / 2.f;
+    int nJ = std::max(1, (int)in.journals.size());
 
+    struct CylRef {
+        int bi, c, journalIndex, layer;
+    };
+    std::vector<CylRef> cyls;
+    int cylOrd = 0;
     for (size_t bi = 0; bi < in.banks.size(); ++bi) {
         const Bank &bank = in.banks[bi];
-        for (int c = 0; c < bank.cylinders; ++c, ++layer) {
-            float ja = in.journals[layer % in.journals.size()];
-            Pose pose = poseCylinder(in, bank, ja);
-
-            // connecting_rod_object::render
-            // setTransform(body, throw, 0, bigEndLocal)
-            Color rcol = (bank.index % 2 == 0) ? rodGrey0 : rodGrey1;
-            rcol = tintByLayer(rcol, BG, layer);
-            Mat3 rodM =
-                setTransform(pose.rodBodyX, pose.rodBodyY, pose.rodTheta, in.throwMm, 0, bigEndLocal);
-            em.setXform(rodM);
-            em.setColor(rcol);
-            em.mesh("ConnectingRod");
-
-            // generateGeometry rod body line — setTransform(body) identity scale
-            em.setXform(setTransform(pose.rodBodyX, pose.rodBodyY, pose.rodTheta, 1.f));
-            em.setColor(rcol);
-            em.line2d(0, bigEndLocal + in.throwMm * 0.6f, 0, littleEndLocal, in.throwMm * 0.5f);
-
-            // piston_object.cpp: setTransform(body, bore/2, 0, -(compH+wristPin))
-            Color pcol = tintByLayer(FG, BG, layer);
-            float ps = in.bore / 2.f;
-            Mat3 pisM = setTransform(pose.pistonBodyX, pose.pistonBodyY, pose.pistonTheta, ps, 0,
-                                    -(in.compH + in.wristPin));
-            em.setXform(pisM);
-            em.setColor(pcol);
-            em.mesh("Piston");
-            // wrist pin hole at body transform (scale 1)
-            em.setXform(setTransform(pose.pistonBodyX, pose.pistonBodyY, pose.pistonTheta, 1.f));
-            em.setColor(tintByLayer(BG, BG, layer));
-            em.circle2d(0, in.wristPin, (in.bore / 10.f) * 0.75f);
+        for (int c = 0; c < bank.cylinders; ++c, ++cylOrd) {
+            int journalIndex =
+                (cylOrd < (int)in.cylinderJournals.size())
+                    ? in.cylinderJournals[cylOrd] % nJ
+                    : c % nJ;
+            cyls.push_back({(int)bi, c, journalIndex, journalIndex});
         }
+    }
+    // Back→front so layer 0 (bright) is painted last / on top.
+    std::sort(cyls.begin(), cyls.end(),
+              [](const CylRef &a, const CylRef &b) { return a.layer > b.layer; });
+
+    for (const CylRef &cr : cyls) {
+        const Bank &bank = in.banks[cr.bi];
+        float ja = in.journals[cr.journalIndex];
+        Pose pose = poseCylinder(in, bank, ja);
+
+        // connecting_rod_object::render
+        // setTransform(body, throw, 0, bigEndLocal)
+        Color rcol = (bank.index % 2 == 0) ? rodGrey0 : rodGrey1;
+        rcol = tintByLayer(rcol, BG, cr.layer);
+        Mat3 rodM =
+            setTransform(pose.rodBodyX, pose.rodBodyY, pose.rodTheta, in.throwMm, 0, bigEndLocal);
+        em.setXform(rodM);
+        em.setColor(rcol);
+        em.mesh("ConnectingRod");
+
+        // generateGeometry rod body line — setTransform(body) identity scale
+        em.setXform(setTransform(pose.rodBodyX, pose.rodBodyY, pose.rodTheta, 1.f));
+        em.setColor(rcol);
+        em.line2d(0, bigEndLocal + in.throwMm * 0.6f, 0, littleEndLocal, in.throwMm * 0.5f);
+
+        // piston_object.cpp: setTransform(body, bore/2, 0, -(compH+wristPin))
+        Color pcol = tintByLayer(FG, BG, cr.layer);
+        float ps = in.bore / 2.f;
+        Mat3 pisM = setTransform(pose.pistonBodyX, pose.pistonBodyY, pose.pistonTheta, ps, 0,
+                                -(in.compH + in.wristPin));
+        em.setXform(pisM);
+        em.setColor(pcol);
+        em.mesh("Piston");
+        // wrist pin hole at body transform (scale 1)
+        em.setXform(setTransform(pose.pistonBodyX, pose.pistonBodyY, pose.pistonTheta, 1.f));
+        em.setColor(tintByLayer(BG, BG, cr.layer));
+        em.circle2d(0, in.wristPin, (in.bore / 10.f) * 0.75f);
     }
 
     // --- heads: cylinder_head_object.cpp render (per bank, foremost) ---

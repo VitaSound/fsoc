@@ -70,11 +70,18 @@ def engine_to_draw_input(engine: dict, crank_angle: float = 0.0) -> dict:
         if st is not None:
             throw = st / 2
     throw = throw or 35.0
-    rod = (
-        _to_mm(engine.get("connecting_rod", {}).get("length"), labels)
-        or _to_mm(labels.get("rod_length"), labels)
-        or throw * 3.2
-    )
+    slave_throw = _to_mm(labels.get("slave_throw"), labels)
+    rod_label = _to_mm(labels.get("rod_length"), labels)
+    rod_params = _to_mm(engine.get("connecting_rod", {}).get("length"), labels)
+    # Radial: cr_params.length is often (rod_length - slave_throw) for slaves;
+    # master / deck use full rod_length. Prefer label when slave_throw is set.
+    if slave_throw and rod_label:
+        rod = rod_label
+        slave_rod = max(1.0, rod_label - slave_throw)
+    else:
+        rod = rod_params or rod_label or throw * 3.2
+        slave_rod = rod
+        slave_throw = None
     comp_h = (
         _to_mm(engine.get("piston", {}).get("compression_height"), labels)
         or _to_mm(labels.get("compression_height"), labels)
@@ -82,10 +89,12 @@ def engine_to_draw_input(engine: dict, crank_angle: float = 0.0) -> dict:
     )
     wrist = _to_mm(engine.get("piston", {}).get("wrist_pin_position"), labels) or 0.0
     deck = _to_mm(engine.get("bank_params", {}).get("deck_height"), labels) or (throw + rod + comp_h)
+    # Chamber volume in cc from head.chamber_volume (parser resolves imports / input defaults).
     chamber_vol = 40.0
-    if engine.get("head", {}).get("chamber_volume"):
-        v = _to_mm(str(engine["head"]["chamber_volume"]).replace("units.cc", "1"), labels)
-        if v is not None:
+    cv_expr = (engine.get("head") or {}).get("chamber_volume")
+    if cv_expr:
+        v = _to_mm(cv_expr, labels)
+        if v is not None and v > 0:
             chamber_vol = v
     bore_m = bore / 1000.0
     chamber_h = (chamber_vol * 1e-6) / (math.pi * bore_m * bore_m / 4.0) * 1000.0
@@ -95,6 +104,38 @@ def engine_to_draw_input(engine: dict, crank_angle: float = 0.0) -> dict:
     banks = engine.get("banks") or []
     bank_angles: list[float] = []
     bank_cylinders: list[int] = []
+    bank_display_depths: list[float] = []
+    # Flat list matching draw order (bank0 cyls, bank1 cyls, …).
+    # layer = ConnectingRod::getLayer() (crank journal index; slaves → master).
+    cylinder_journals: list[int] = []
+    cylinder_mounts: list[dict] = []
+    # Script default (cylinder_bank_parameters.display_depth), not C++ ctor 0.4
+    params_dd = 0.5
+    bp = engine.get("bank_params") or {}
+    if bp.get("display_depth") not in (None, ""):
+        try:
+            params_dd = float(str(bp["display_depth"]).split()[0])
+        except (TypeError, ValueError):
+            pass
+
+    def _journal_angle(j: dict) -> float:
+        # Prefer expr (angle_deg may be stale if parser once multiplied nums)
+        if j.get("angle_expr"):
+            r = _to_rad(j["angle_expr"], labels)
+            if r is not None:
+                return r
+        if j.get("angle_deg") is not None:
+            return float(j["angle_deg"]) * math.pi / 180.0
+        return 0.0
+
+    raw_journals = engine.get("journals") or []
+    crank_js = [j for j in raw_journals if j.get("role") != "slave"]
+    slave_js = [j for j in raw_journals if j.get("role") == "slave"]
+    # If roles missing (old JSON), treat all as crank journals
+    if not crank_js and raw_journals:
+        crank_js = list(raw_journals)
+        slave_js = []
+
     for i, b in enumerate(banks):
         ang = None
         if b.get("angle_expr"):
@@ -102,25 +143,52 @@ def engine_to_draw_input(engine: dict, crank_angle: float = 0.0) -> dict:
         if ang is None and b.get("angle_deg") is not None:
             ang = float(b["angle_deg"]) * math.pi / 180.0
         bank_angles.append(ang or 0.0)
-        bank_cylinders.append(int(b.get("cylinders") or 0))
+        n = int(b.get("cylinders") or 0)
+        bank_cylinders.append(n)
+        dd = b.get("display_depth")
+        if dd is None:
+            dd = params_dd
+        bank_display_depths.append(float(dd))
+        mounts = b.get("mounts")
+        idxs = b.get("journal_indices")
+        if isinstance(mounts, list) and len(mounts) == n and n > 0:
+            for mnt in mounts:
+                role = mnt.get("role") or "crank"
+                idx = int(mnt.get("index") or 0)
+                layer = 0 if role == "slave" else idx
+                cylinder_journals.append(layer)
+                cylinder_mounts.append({"role": role, "index": idx, "layer": layer})
+        elif isinstance(idxs, list) and len(idxs) == n and n > 0:
+            for ji in idxs:
+                ji = int(ji)
+                cylinder_journals.append(ji)
+                cylinder_mounts.append({"role": "crank", "index": ji % max(1, len(crank_js) or 1), "layer": ji})
+        else:
+            n_j = max(1, len(crank_js) or n or 1)
+            for c in range(n):
+                cylinder_journals.append(c % n_j)
+                cylinder_mounts.append({"role": "crank", "index": c % n_j, "layer": c % n_j})
     if len(bank_angles) == 2 and all(abs(a) < 1e-9 for a in bank_angles):
         bank_angles = [-math.pi / 4, math.pi / 4]
     if not bank_angles:
         bank_angles = [0.0]
         bank_cylinders = [int(engine.get("n_cylinders") or 1)]
+        bank_display_depths = [params_dd]
+        cylinder_journals = list(range(bank_cylinders[0]))
+        cylinder_mounts = [
+            {"role": "crank", "index": i, "layer": i} for i in range(bank_cylinders[0])
+        ]
 
-    journals: list[float] = []
-    for i, j in enumerate(engine.get("journals") or []):
-        if j.get("angle_deg") is not None:
-            journals.append(float(j["angle_deg"]) * math.pi / 180.0)
-        elif j.get("angle_expr"):
-            journals.append(_to_rad(j["angle_expr"], labels) or 0.0)
-        else:
-            journals.append(0.0)
+    journals = [_journal_angle(j) for j in crank_js]
+    slave_journals = [_journal_angle(j) for j in slave_js]
     if not journals:
         journals = [0.0] * max(1, sum(bank_cylinders))
+        cylinder_journals = list(range(sum(bank_cylinders)))
+        cylinder_mounts = [
+            {"role": "crank", "index": i, "layer": i} for i in range(sum(bank_cylinders))
+        ]
 
-    return {
+    out = {
         "bore": bore,
         "throw": throw,
         "rod": rod,
@@ -132,11 +200,19 @@ def engine_to_draw_input(engine: dict, crank_angle: float = 0.0) -> dict:
         "cam_lift": cam_lift,
         "bank_angles": bank_angles,
         "bank_cylinders": bank_cylinders,
+        "bank_display_depths": bank_display_depths,
         "journals": journals,
+        "cylinder_journals": cylinder_journals,
+        "cylinder_mounts": cylinder_mounts,
         "flip_display": [i % 2 for i in range(len(bank_angles))],
         "crank_angle": crank_angle,
         "meshes_path": str(MESHES),
     }
+    if slave_throw is not None:
+        out["slave_throw"] = slave_throw
+        out["slave_rod"] = slave_rod
+        out["slave_journals"] = slave_journals
+    return out
 
 
 def draw(engine: dict, crank_angle: float = 0.0) -> dict:

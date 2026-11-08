@@ -26,15 +26,21 @@ export const THEME = {
 
 // --- theme helpers (ui_utilities mix / tintByLayer) ---
 
-function parseHex(hex) {
-  const v = parseInt(hex.slice(1), 16);
-  return [(v >> 16) & 255, (v >> 8) & 255, v & 255];
+/** Accept #RRGGBB or rgb(r,g,b) — mixHex() returns rgb(), tint must parse both. */
+function parseColor(c) {
+  if (typeof c === "string" && c[0] === "#") {
+    const v = parseInt(c.slice(1), 16);
+    return [(v >> 16) & 255, (v >> 8) & 255, v & 255];
+  }
+  const m = String(c).match(/(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+  if (m) return [+m[1], +m[2], +m[3]];
+  return [0, 0, 0];
 }
 function rgb([r, g, b]) {
   return `rgb(${r|0},${g|0},${b|0})`;
 }
 function mixHex(a, b, t) {
-  const A = parseHex(a), B = parseHex(b);
+  const A = parseColor(a), B = parseColor(b);
   return rgb([
     A[0] + (B[0] - A[0]) * t,
     A[1] + (B[1] - A[1]) * t,
@@ -42,9 +48,9 @@ function mixHex(a, b, t) {
   ]);
 }
 /** simulation_object.cpp tintByLayer — each layer: col*0.3 + bg*0.7 */
-function tintByLayer(hex, layers) {
-  let c = parseHex(hex);
-  const bg = parseHex(THEME.background);
+function tintByLayer(col, layers) {
+  let c = parseColor(col);
+  const bg = parseColor(THEME.background);
   for (let i = 0; i < layers; i++) {
     c = [
       c[0] * 0.3 + bg[0] * 0.7,
@@ -220,12 +226,14 @@ export function buildDrawModel(engine) {
       index: i,
       angle: ang,
       cylinders: b.cylinders || 0,
+      journal_indices: Array.isArray(b.journal_indices) ? b.journal_indices : null,
       // cylinder_bank.cpp
       dx: Math.cos(ang + Math.PI / 2),
       dy: Math.sin(ang + Math.PI / 2),
       x: 0,
       y: 0,
-      displayDepth: 0.4, // CylinderBank default
+      // Script default 0.5; per-bank / bank_params may override
+      displayDepth: b.display_depth != null ? b.display_depth : 0.5,
     };
   });
   if (banks.length === 2 && banks.every((b) => Math.abs(b.angle) < 1e-6)) {
@@ -245,7 +253,7 @@ export function buildDrawModel(engine) {
       dy: 1,
       x: 0,
       y: 0,
-      displayDepth: 0.4,
+      displayDepth: 0.5,
     });
   }
 
@@ -263,17 +271,20 @@ export function buildDrawModel(engine) {
   }
 
   const cylinders = [];
-  let ji = 0;
+  const nJ = Math.max(1, journals.length);
   for (const bank of banks) {
+    const mapped = Array.isArray(bank.journal_indices) ? bank.journal_indices : null;
     for (let c = 0; c < (bank.cylinders || 0); c++) {
+      // ConnectingRod::getLayer() == journal index (shared pins share brightness)
+      const journalIndex =
+        mapped && mapped[c] != null ? mapped[c] % nJ : c % nJ;
       cylinders.push({
         bank,
-        journalIndex: ji % journals.length,
-        layer: ji, // connecting_rod getLayer → journal index
+        journalIndex,
+        layer: journalIndex,
         cylinderIndex: c,
         flipDisplay: bank.index % 2 === 1,
       });
-      ji++;
     }
   }
   if (!cylinders.length) {
@@ -395,7 +406,8 @@ function drawCrankshaftObject(ctx, toS, model, crankAngle, viewLayer0, viewLayer
   generateCircle2d(ctx, ox, oy, throwR * 0.55 * toS.scale, grey1);
   generateCircle2d(ctx, ox, oy, throwR * 0.25 * toS.scale, grey2);
 
-  for (let i = 0; i < model.journals.length; i++) {
+  // Far journals first (esim draw priority 0x32 - layer) so near/bright sits on top.
+  for (let i = model.journals.length - 1; i >= 0; i--) {
     if (i < viewLayer0 || i > viewLayer1) continue;
     const col = tintByLayer(grey0, i - viewLayer0);
     // setTransform(body, throw, 0, 0, journalAngle) — mesh "Crankshaft"
@@ -606,7 +618,8 @@ export function drawEngineSim(ctx, canvas, model, crankAngleRad) {
 
   drawCrankshaftObject(ctx, toS, model, crankAngleRad, viewLayer0, viewLayer1);
 
-  const sorted = [...model.cylinders].sort((a, b) => a.layer - b.layer);
+  // Back→front (high layer first): matches esim 0x32-layer so bright front is visible.
+  const sorted = [...model.cylinders].sort((a, b) => b.layer - a.layer);
   for (const cyl of sorted) {
     const pose = poseCylinder(model, cyl, crankAngleRad);
     drawConnectingRodObject(ctx, toS, model, cyl, pose, viewLayer0);
@@ -615,7 +628,9 @@ export function drawEngineSim(ctx, canvas, model, crankAngleRad) {
 
   // Heads once per bank (foremost piston) — cylinder_head_object
   for (const bank of model.banks) {
-    const front = sorted.filter((c) => c.bank === bank).sort((a, b) => a.layer - b.layer)[0];
+    const front = [...model.cylinders]
+      .filter((c) => c.bank === bank)
+      .sort((a, b) => a.layer - b.layer)[0];
     if (front) {
       drawCylinderHeadObject(ctx, toS, model, bank, front.flipDisplay, crankAngleRad);
     }

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 import sys
 from pathlib import Path
@@ -186,13 +187,20 @@ def parse_angle_expr(expr: str) -> float | None:
     expr = expr.strip()
     m = re.search(r"(.+?)\s*\*\s*units\.deg", expr)
     if m:
-        nums = re.findall(r"-?\d+(?:\.\d+)?", m.group(1))
-        if nums:
-            prod = 1.0
-            for n in nums:
-                prod *= float(n)
-            return prod
-    if "constants.pi" in expr or "pi" in expr:
+        inner = m.group(1).strip()
+        # Evaluate (1/5.0)*360 etc. — do NOT multiply all numbers (that made 1800°).
+        safe = inner.replace("constants.pi", str(math.pi))
+        if re.fullmatch(r"[\d\s./+\-*()]+", safe):
+            try:
+                v = float(eval(safe, {"__builtins__": {}}, {}))
+                if math.isfinite(v):
+                    return v
+            except Exception:
+                pass
+        nums = re.findall(r"-?\d+(?:\.\d+)?", inner)
+        if len(nums) == 1:
+            return float(nums[0])
+    if "constants.pi" in expr or re.search(r"(?<![A-Za-z0-9_])pi(?![A-Za-z0-9_])", expr):
         # common: constants.pi → 180°, pi/2 → 90°
         if "/ 2" in expr or "/2" in expr:
             return -90.0 if expr.strip().startswith("-") else 90.0
@@ -213,8 +221,12 @@ def infer_layout(bank_angles: list[float], n_cyl: int, n_banks: int) -> str:
         return "unknown"
     # Many V engines in .mr keep bank angle at 0 (visual tilt elsewhere)
     uniq = sorted({round(a, 1) for a in bank_angles}) if bank_angles else [0.0]
-    if n_banks >= 5 and all(abs(a) < 1 for a in uniq):
-        return f"radial-{n_cyl}"
+    # Radial: many banks spaced around the circle (or all ~0 before angle fix)
+    if n_banks >= 5:
+        span = (uniq[-1] - uniq[0]) if len(uniq) >= 2 else 0.0
+        if span > 200 or all(abs(a) < 1 for a in uniq):
+            return f"radial-{n_cyl}"
+
     if n_banks == 1 or (len(uniq) == 1 and abs(uniq[0]) < 1.0 and n_banks == 1):
         return f"inline-{n_cyl}" if n_cyl else "inline"
     if len(uniq) >= 2:
@@ -230,9 +242,27 @@ def infer_layout(bank_angles: list[float], n_cyl: int, n_banks: int) -> str:
     return f"multi-{n_banks}bank-{n_cyl}"
 
 
+def _load_local_imports(path: Path, text: str) -> str:
+    """Concatenate same-folder import \"foo.mr\" bodies (skip engine_sim.mr)."""
+    parts: list[str] = []
+    seen: set[Path] = {path.resolve()}
+    for m in re.finditer(r'import\s+"([^"]+)"', text):
+        rel = m.group(1)
+        if rel.endswith("engine_sim.mr") or rel == "engine_sim.mr":
+            continue
+        cand = (path.parent / rel).resolve()
+        if not cand.is_file() or cand in seen:
+            continue
+        seen.add(cand)
+        parts.append(strip_comments(cand.read_text(encoding="utf-8", errors="replace")))
+    return "\n".join(parts)
+
+
 def parse_engine_file(path: Path, root: Path) -> dict | None:
     raw = path.read_text(encoding="utf-8", errors="replace")
     text = strip_comments(raw)
+    imported = _load_local_imports(path, text)
+    combined = text + ("\n" + imported if imported else "")
     rel = str(path.relative_to(root)) if path.is_relative_to(root) else str(path)
 
     # Skip pure helper libs (radial builders without engine name sometimes still have engines)
@@ -248,15 +278,43 @@ def parse_engine_file(path: Path, root: Path) -> dict | None:
     name = eng.get("name", "").strip().strip('"')
     labels = parse_labels(text)
 
+    # rod_journal rj0(angle: ...) — declaration order; role via add_rod/add_slave
     journals = []
-    for j in all_calls(text, "rod_journal"):
-        ang = j.get("angle")
-        entry = {"angle_expr": clean_expr(ang) if ang else None}
+    journal_ids: list[str] = []
+    journal_pat = re.compile(
+        r"(?<![A-Za-z0-9_])rod_journal\s+([A-Za-z_][A-Za-z0-9_]*)\s*\("
+    )
+    for m in journal_pat.finditer(text):
+        open_paren = m.end() - 1
+        end = find_balanced(text, open_paren)
+        if end is None:
+            continue
+        body = text[open_paren + 1 : end - 1]
+        pairs = kv_pairs(body)
+        ang = pairs.get("angle")
+        jid = m.group(1)
+        journal_ids.append(jid)
+        entry = {"id": jid, "angle_expr": clean_expr(ang) if ang else None, "role": "crank"}
         if ang:
             parsed = parse_angle_expr(ang)
             if parsed is not None:
                 entry["angle_deg"] = parsed
         journals.append(entry)
+
+    crank_jids = set(
+        m.group(1)
+        for m in re.finditer(r"\.add_rod_journal\s*\(\s*([A-Za-z_][A-Za-z0-9_]*)", text)
+    )
+    slave_jids = set(
+        m.group(1)
+        for m in re.finditer(r"\.add_slave_journal\s*\(\s*([A-Za-z_][A-Za-z0-9_]*)", text)
+    )
+    for entry in journals:
+        jid = entry["id"]
+        if jid in slave_jids:
+            entry["role"] = "slave"
+        elif jid in crank_jids:
+            entry["role"] = "crank"
 
     banks = []
     bank_angles: list[float] = []
@@ -275,26 +333,106 @@ def parse_engine_file(path: Path, root: Path) -> dict | None:
         if ang is None:
             ang = 0.0
         bank_angles.append(ang)
+        # es/objects.mr cylinder_bank_parameters.display_depth default = 0.5
+        # (C++ ctor 0.4 is overwritten by script params on initialize)
+        dd_expr = pairs.get("display_depth")
+        dd_val = None
+        if dd_expr:
+            try:
+                dd_val = float(
+                    re.sub(r"[^0-9.eE+-]", "", clean_expr(dd_expr).split()[0])
+                )
+            except (TypeError, ValueError, IndexError):
+                dd_val = None
         banks.append(
             {
                 "id": m.group(1),
                 "angle_expr": clean_expr(ang_expr) if ang_expr else "0",
                 "angle_deg": ang,
+                "display_depth": dd_val,
+                "journal_indices": [],
             }
         )
 
-    # cylinder counts per file
-    n_cyl = len(re.findall(r"\.add_cylinder\s*\(", text))
-    # assign cyl counts evenly if multiple banks (approx)
-    if banks and n_cyl:
+    # Map each .add_cylinder → bank + rod_journal (crank vs slave mount)
+    bank_by_id = {b["id"]: b for b in banks}
+    for b in banks:
+        b["mounts"] = []
+    crank_ids_ord = [j["id"] for j in journals if j.get("role") == "crank"]
+    slave_ids_ord = [j["id"] for j in journals if j.get("role") == "slave"]
+    crank_by_id = {jid: i for i, jid in enumerate(crank_ids_ord)}
+    slave_by_id = {jid: i for i, jid in enumerate(slave_ids_ord)}
+    journal_by_id = {jid: i for i, jid in enumerate(journal_ids)}
+    current_bank_id: str | None = None
+    events: list[tuple[int, str, str]] = []
+    for bid in bank_by_id:
+        for m in re.finditer(
+            rf"(?<![A-Za-z0-9_]){re.escape(bid)}(?=\s*(?:\n\s*)?\.add_cylinder)",
+            text,
+        ):
+            events.append((m.start(), "bank", bid))
+    for m in re.finditer(r"\.add_cylinder\s*\(", text):
+        open_paren = m.end() - 1
+        end = find_balanced(text, open_paren)
+        if end is None:
+            continue
+        pairs = kv_pairs(text[open_paren + 1 : end - 1])
+        rj = (pairs.get("rod_journal") or "").strip()
+        events.append((m.start(), "cyl", rj))
+    events.sort(key=lambda e: e[0])
+    for _, typ, data in events:
+        if typ == "bank":
+            current_bank_id = data
+        elif typ == "cyl" and current_bank_id and current_bank_id in bank_by_id:
+            bank = bank_by_id[current_bank_id]
+            if data in crank_by_id:
+                mount = {"role": "crank", "index": crank_by_id[data]}
+                layer = crank_by_id[data]
+            elif data in slave_by_id:
+                # ConnectingRod::getLayer → master journal (usually 0)
+                mount = {"role": "slave", "index": slave_by_id[data]}
+                layer = 0 if crank_ids_ord else slave_by_id[data]
+            else:
+                idx = journal_by_id.get(data, len(bank["journal_indices"]))
+                mount = {"role": "crank", "index": idx}
+                layer = idx
+            bank["journal_indices"].append(layer)
+            bank["mounts"].append(mount)
+
+    n_cyl = sum(len(b["journal_indices"]) for b in banks) or len(
+        re.findall(r"\.add_cylinder\s*\(", text)
+    )
+    for b in banks:
+        if b["journal_indices"]:
+            b["cylinders"] = len(b["journal_indices"])
+        else:
+            b["cylinders"] = 0
+    # Even split fallback when .add_cylinder wasn't tied to a bank id
+    if banks and n_cyl and not any(b["journal_indices"] for b in banks):
         base, rem = divmod(n_cyl, len(banks))
         for i, b in enumerate(banks):
             b["cylinders"] = base + (1 if i < rem else 0)
-    elif banks:
-        for b in banks:
-            b["cylinders"] = 0
+            # V / shared-journal heuristic: cylinder c → journal c (wrap)
+            n_j = max(1, len(journals))
+            b["journal_indices"] = [c % n_j for c in range(b["cylinders"])]
 
     bank_params = first_call(text, "cylinder_bank_parameters") or {}
+    # Resolve display_depth: per-bank override → bank_params → script default 0.5
+    params_dd = None
+    if bank_params.get("display_depth"):
+        try:
+            params_dd = float(
+                re.sub(
+                    r"[^0-9.eE+-]",
+                    "",
+                    clean_expr(bank_params["display_depth"]).split()[0],
+                )
+            )
+        except (TypeError, ValueError, IndexError):
+            params_dd = None
+    for b in banks:
+        if b.get("display_depth") is None:
+            b["display_depth"] = params_dd if params_dd is not None else 0.5
     piston = first_call(text, "piston_parameters") or {}
     rod = first_call(text, "connecting_rod_parameters") or {}
     crank = first_call(text, "crankshaft") or {}
@@ -306,11 +444,28 @@ def parse_engine_file(path: Path, root: Path) -> dict | None:
         exhausts.append({k: clean_expr(v) for k, v in ex.items()})
 
     # head chamber volume often in generic_cylinder_head / generic_small_engine_head
-    head = first_call(text, "generic_cylinder_head") or first_call(
-        text, "generic_small_engine_head"
-    ) or {}
+    # (may live in a same-folder import like radial.mr → radial_head).
+    head = (
+        first_call(text, "generic_cylinder_head")
+        or first_call(text, "generic_small_engine_head")
+        or first_call(imported, "generic_cylinder_head")
+        or first_call(imported, "generic_small_engine_head")
+        or {}
+    )
+    head = {k: clean_expr(v) for k, v in head.items()}
+    cv = head.get("chamber_volume")
+    if not cv or cv == "chamber_volume":
+        m_cv = re.search(
+            r"input\s+chamber_volume\s*:\s*([^;\n]+)",
+            combined,
+        ) or re.search(
+            r"chamber_volume\s*:\s*([0-9.]+\s*\*\s*units\.cc)",
+            combined,
+        )
+        if m_cv:
+            head["chamber_volume"] = clean_expr(m_cv.group(1))
 
-    cam_lobe = first_call(text, "harmonic_cam_lobe") or {}
+    cam_lobe = first_call(text, "harmonic_cam_lobe") or first_call(imported, "harmonic_cam_lobe") or {}
 
     # ignition
     ign_mod = first_call(text, "ignition_module")  # rare
@@ -369,7 +524,7 @@ def parse_engine_file(path: Path, root: Path) -> dict | None:
         "intake": {k: clean_expr(v) for k, v in intake.items()},
         "exhaust_params": {k: clean_expr(v) for k, v in es_params.items()},
         "exhaust_systems": exhausts,
-        "head": {k: clean_expr(v) for k, v in head.items()},
+        "head": head,
         "cam_lobe": {k: clean_expr(v) for k, v in cam_lobe.items()},
         "fuel": fuel,
         "ignition": {
