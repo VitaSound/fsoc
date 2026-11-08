@@ -1,15 +1,19 @@
-# engine-sim browser catalog (этап 1)
+# engine-sim browser catalog
 
-Каталог моторов из локального клона [engine-sim](../../../../../../../engine-sim): параметры из `.mr` + отрисовка **их** кодом/мешами. **Без** физики, ЭБУ и ДПКВ.
+Каталог моторов из локального клона [engine-sim](../../../../../../../engine-sim): параметры из `.mr` + отрисовка по формулам/мешам esim.  
+**Сейчас:** кинематический 2D-разрез (без physics / звука / дашборда Ange).
+
+Карта + roadmap (steam kb): `../../../../../../steam/kb/engine-sim-catalog.md`  
+(если клон рядом: `/home/sea/steam/kb/engine-sim-catalog.md`).
 
 ## Как рисуем
 
-Не переписываем геометрию «на глаз». Цепочка:
+1. Меши — из `engine-sim/assets/assets.ysce` → `native/meshes/meshes.json`.
+2. Параметры — `tools/parse_engines.py` → `engines.json` (`flip_display`, `add_lobe`, cam lobe…).
+3. `serve_catalog.py` — статика + `/api/scene` + `/api/meshes`.
+4. Браузер: `engine_draw_runtime.js` считает drawlist каждый кадр; `paint_drawlist.js` красит canvas.
 
-1. Меши `Piston` / `ConnectingRod` / `Crankshaft` / `CylinderHead` / `Valve` / … — из `engine-sim/assets/assets.ysce` (`native/extract_ysce_meshes.py` → `native/meshes/meshes.json`).
-2. C++ `native/engine_draw` — адаптированные формулы из `*_object.cpp` + `geometry_generator` (line/circle/cam), transforms как `simulation_object::setTransform`.
-3. Python `native/draw_bridge.py` вызывает бинарник; `serve_catalog.py` отдаёт `/api/draw` и `/api/meshes`.
-4. Браузер только красит drawlist (`catalog/paint_drawlist.js`).
+C++ `native/engine_draw` — тот же набор формул (проверка / запасной путь), не на каждый RAF.
 
 ## Быстрый старт
 
@@ -19,25 +23,38 @@ cd /home/sea/fsoc/projects/soc/soc_ecu_emul/plant
 python3 tools/parse_engines.py
 
 cd viz/native
-python3 extract_ysce_meshes.py          # один раз / после обновления assets.ysce
+python3 extract_ysce_meshes.py   # один раз / после обновления assets.ysce
 g++ -O2 -std=c++17 -o engine_draw src/engine_draw.cpp
 
 cd .. && python3 serve_catalog.py
 # → http://127.0.0.1:8765/
 ```
 
-Или из корня проекта: `make viz` (после ручной сборки `engine_draw`).
-
 ## Файлы
 
 | Путь | Назначение |
 |------|------------|
 | `tools/parse_engines.py` | `.mr` → `viz/engines.json` |
-| `viz/native/engine_draw` | C++ drawer (engine-sim objects) |
-| `viz/native/draw_bridge.py` | Python → C++ |
+| `viz/serve_catalog.py` | HTTP :8765 |
+| `viz/catalog/` | UI + локальная анимация |
+| `viz/native/draw_bridge.py` | сцена для `/api/scene` |
 | `viz/native/meshes/` | меши из `assets.ysce` |
-| `viz/catalog/` | UI |
-| `viz/serve_catalog.py` | static + `/api/draw` |
+
+## UI сейчас
+
+- Список моторов, параметры из `.mr`
+- Разрез: коленвал / шатуны / поршни / клапаны / кулачки
+- Пауза (Space), zoom колесом, dblclick — сброс zoom
+- Вращение по часовой
+
+## TODO (кратко → полный esim-like UI)
+
+1. **IGNITION circles** — поджиг свечей по порядку цилиндров  
+2. **Зажигание + дроссель / RPM** — управление оборотами, связь с plant  
+3. **Звук** — MVP от событий / RPM, затем ближе к esim exhaust  
+4. **Дашборд** — тахо, MAP/AFR, осциллограммы, остальные панели Ange  
+
+Детали чеклиста — в `steam/kb/engine-sim-catalog.md`.
 
 ## Attribution
 
