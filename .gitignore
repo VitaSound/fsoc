@@ -16,6 +16,18 @@ projects/soc/*
 !projects/soc/*/
 projects/soc/*/*
 !projects/soc/*/target.4th
+# soc_ecu_emul: track plant/viz + Makefile/README/tb (not --build tree)
+!projects/soc/soc_ecu_emul/
+!projects/soc/soc_ecu_emul/Makefile
+!projects/soc/soc_ecu_emul/README.md
+!projects/soc/soc_ecu_emul/plant/
+!projects/soc/soc_ecu_emul/plant/**
+!projects/soc/soc_ecu_emul/tb/
+!projects/soc/soc_ecu_emul/tb/**
+projects/soc/soc_ecu_emul/**/__pycache__/
+projects/soc/soc_ecu_emul/plant/viz/native/engine_draw
+projects/soc/soc_ecu_emul/plant/viz/native/mesh_probe/
+projects/soc/soc_ecu_emul/tb/tb_ecu
 projects/standalone/*
 !projects/standalone/*/
 projects/standalone/*/*

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>engine-sim catalog</title>
+  <link rel="stylesheet" href="/catalog/style.css" />
+</head>
+<body>
+  <header>
+    <h1>engine-sim <span>catalog</span></h1>
+    <p class="sub">параметры из <code>.mr</code> · меши <code>assets.ysce</code> · анимация локально · без физики</p>
+  </header>
+
+  <main>
+    <aside class="list-panel">
+      <label class="search">
+        <span>поиск</span>
+        <input id="filter" type="search" placeholder="hayabusa, priora, v8…" autocomplete="off" />
+      </label>
+      <ul id="engine-list" class="engine-list" aria-label="engines"></ul>
+      <p id="list-meta" class="meta"></p>
+    </aside>
+
+    <section class="detail">
+      <div class="stage-wrap">
+        <canvas id="stage" width="860" height="520" aria-label="engine schematic"></canvas>
+        <p id="source" class="source"></p>
+      </div>
+      <div id="params" class="params">
+        <p class="placeholder">выберите мотор слева</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p id="attr"></p>
+  </footer>
+
+  <script src="/catalog/app.js?v=16" type="module"></script>
+</body>
+</html>

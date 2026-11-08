@@ -247,7 +247,9 @@ variable flatten-n
 
 \ Application options. A new program is another flag here and a file in soc-release-files.
 : soc-app? ( project -- f )
-    s" lamp" rot project.opt@ s" 1" compare 0= ;
+    >r
+    s" lamp" r@ project.opt@ s" 1" compare 0=
+    s" ecu"  r> project.opt@ s" 1" compare 0= or ;
 
 : soc-release? ( project -- f )
     >r
@@ -287,6 +289,10 @@ variable flatten-n
     s" lamp" r@ project.opt@ s" 1" compare 0= if
         s"  " fjson.str-concat
         s" firmware/lamp.fs" fsoc-path fjson.str-concat
+    then
+    s" ecu" r@ project.opt@ s" 1" compare 0= if
+        s"  " fjson.str-concat
+        s" firmware/ecu_ctrl.fs" fsoc-path fjson.str-concat
     then
     rdrop
     s" release image" sh-run+ ;
@@ -362,6 +368,17 @@ variable flatten-n
         2dup s" lamp.fs" r@ project-copy-as
         fjson.str-free
         s" lamp.fs" r@ project.file
+        s" feed.fs" r@ project.file
+        2over 2over soc-flatten
+        soc-xc-load
+        fjson.str-free
+    then
+    s" ecu" r@ project.opt@ s" 1" compare 0= if
+        s" firmware/ecu_ctrl.fs" fsoc-path
+        2dup ."     " type cr
+        2dup s" ecu_ctrl.fs" r@ project-copy-as
+        fjson.str-free
+        s" ecu_ctrl.fs" r@ project.file
         s" feed.fs" r@ project.file
         2over 2over soc-flatten
         soc-xc-load

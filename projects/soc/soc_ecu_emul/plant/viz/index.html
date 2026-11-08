@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FPGA-ECU plant — realtime</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>FPGA-ECU <span>plant</span></h1>
+    <p class="sub">эмулятор мотора · без железа · j1b + HDL timing</p>
+  </header>
+
+  <main>
+    <canvas id="stage" width="860" height="500" aria-label="engine animation"
+      title="Слева: угол коленвала и 36-1. Справа: схема компоновки (рядный / V / оппозит) с поршнями; вспышка — искра на цилиндре."></canvas>
+
+    <aside class="panel">
+      <div class="readouts">
+        <div class="tip" data-tip="Текущие обороты коленвала в симуляции (об/мин).">
+          <label>RPM</label><strong id="rpm">—</strong>
+        </div>
+        <div class="tip" data-tip="Текущий угол коленвала, 0…360°.">
+          <label>угол</label><strong id="angle">—</strong>°
+        </div>
+        <div class="tip" data-tip="Тип цикла: 4T — искра раз в 720°, 2T — раз в 360°.">
+          <label>цикл</label><strong id="stroke">—</strong>
+        </div>
+        <div class="tip" data-tip="Число независимых каналов искр/форсунок (N цилиндров).">
+          <label>цил.</label><strong id="ncyl">—</strong>
+        </div>
+        <div class="tip" data-tip="Компоновка схемы: рядный / V60° / V90° / оппозит. Прошивка ECU (таблицы→MMIO) одна и та же even-fire модель.">
+          <label>компон.</label><strong id="layout">—</strong>
+        </div>
+        <div class="tip" data-tip="Опережение зажигания: градусы до верхней мёртвой точки (ВМТ).">
+          <label>BTDC</label><strong id="btdc">—</strong>°
+        </div>
+        <div class="tip" data-tip="Длительность впрыска (pulse width), микросекунды.">
+          <label>PW</label><strong id="pw">—</strong> µs
+        </div>
+        <div class="tip" data-tip="Счётчик сработавших искр с начала сессии.">
+          <label>искры</label><strong id="sparks">—</strong>
+        </div>
+        <div class="tip" data-tip="Синхронизация с меткой 36-1: ECU «видит» положение коленвала.">
+          <label>sync</label><strong id="sync">—</strong>
+        </div>
+      </div>
+
+      <fieldset>
+        <legend class="tip" data-tip="Ручная настройка plant. Меняется независимо от предустановок.">параметры</legend>
+        <label class="field tip" data-tip="4-такт: рабочий цикл 720° (два оборота). 2-такт: 360° — выше частота искр при тех же RPM.">
+          тип двигателя
+          <select id="ctrl-stroke">
+            <option value="4T">4-такт (4T)</option>
+            <option value="2T">2-такт (2T)</option>
+          </select>
+        </label>
+        <label class="field tip" data-tip="Сколько каналов spark/inj в HDL-модели. На MCU нагрузка ISR растёт с N; на FPGA — нет.">
+          цилиндры
+          <select id="ctrl-ncyl">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="6">6</option>
+            <option value="8">8</option>
+            <option value="10">10</option>
+            <option value="12">12</option>
+          </select>
+        </label>
+        <label class="field tip" data-tip="Схема блока. V60° — часто V6/V12; V90° — классика V8. Угол развала на even-fire тайминг ECU не меняет (меняется коленвал/фазы в железе).">
+          компоновка
+          <select id="ctrl-layout">
+            <option value="inline">рядный (I)</option>
+            <option value="v60">V 60°</option>
+            <option value="v90">V 90°</option>
+            <option value="boxer">оппозит (boxer)</option>
+          </select>
+        </label>
+        <label class="slider tip" data-tip="Заданный целевой RPM. Нагрузка и MAP чуть «просаживают» фактические обороты.">
+          целевой RPM
+          <input id="ctrl-rpm" type="range" min="600" max="18000" step="100" value="1200" />
+          <span id="ctrl-rpmv">1200</span>
+        </label>
+        <label class="slider tip" data-tip="Before Top Dead Center: на сколько градусов раньше ВМТ дать искру.">
+          BTDC °
+          <input id="ctrl-btdc" type="range" min="0" max="45" step="1" value="15" />
+          <span id="ctrl-btdcv">15</span>
+        </label>
+        <label class="slider tip" data-tip="Ширина импульса форсунки. Больше PW → больше топлива (упрощённо).">
+          PW µs
+          <input id="ctrl-pw" type="range" min="800" max="5000" step="50" value="2200" />
+          <span id="ctrl-pwv">2200</span>
+        </label>
+        <label class="slider tip" data-tip="Момент нагрузки на вал. Тянет RPM вниз относительно цели.">
+          нагрузка N·m
+          <input id="load" type="range" min="0" max="40" value="5" />
+          <span id="loadv">5</span>
+        </label>
+        <label class="slider tip" data-tip="Давление во впускном коллекторе (proxy дросселя). Выше MAP → ближе к целевому RPM.">
+          throttle / MAP кПа
+          <input id="map" type="range" min="30" max="100" value="80" />
+          <span id="mapv">80</span>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend class="tip" data-tip="Готовый набор: тип, Nцил, RPM, нагрузка, MAP, BTDC и PW одним кликом.">предустановка</legend>
+        <button type="button" data-preset="idle" class="tip" data-tip="Холостой ход: 4Т, 1 цил., ~900 об/мин, лёгкая нагрузка.">idle 4Т</button>
+        <button type="button" data-preset="cruise" class="tip" data-tip="Круиз: рядный 4Т I4, ~2800 об/мин.">cruise I4</button>
+        <button type="button" data-preset="stress2t" class="tip" data-tip="Стресс A: рядный 2Т @ 15 000 — зубья слишком частые для типичного MCU ISR.">2Т 15k</button>
+        <button type="button" data-preset="v8" class="tip" data-tip="V8 @ 6000, развал 90°, 8 каналов искр.">V8 90°</button>
+        <button type="button" data-preset="v12" class="tip" data-tip="V12 @ 7000, развал 60°, 12 каналов.">V12 60°</button>
+      </fieldset>
+
+      <fieldset>
+        <legend class="tip" data-tip="Синтез в браузере (Web Audio): гул по RPM + щелчки искр. Нужен клик — автоплей блокируется.">звук</legend>
+        <button type="button" id="sound-toggle" class="tip" data-tip="Включить / выключить синтез двигателя.">включить</button>
+        <label class="slider tip" data-tip="Общая громкость синтеза.">
+          громкость
+          <input id="sound-vol" type="range" min="0" max="100" value="45" />
+          <span id="sound-volv">45</span>%
+        </label>
+      </fieldset>
+
+      <p id="status" class="status tip" data-tip="Состояние SSE-потока с serve.py (телеметрия ~30 Гц).">подключение…</p>
+    </aside>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

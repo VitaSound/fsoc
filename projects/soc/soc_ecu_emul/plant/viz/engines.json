@@ -1,0 +1,4748 @@
+{
+  "meta": {
+    "source_root": "/home/sea/engine-sim",
+    "engine_count": 26,
+    "skipped_count": 2,
+    "file_count": 28,
+    "default_id": "assets__engines__atg-video-1__04_hayabusa",
+    "attribution": "Parameters extracted from Ange Yaghi Engine Simulator (.mr). MIT. Not for engineering/tuning accuracy."
+  },
+  "engines": [
+    {
+      "id": "assets__engines__atg-video-1__01_honda_trx520",
+      "source": "assets/engines/atg-video-1/01_honda_trx520.mr",
+      "skipped": false,
+      "identity": {
+        "name": "Honda TRX520 (ATV)",
+        "redline": "5000 * units.rpm",
+        "starter_torque": "50 * units.lb_ft",
+        "starter_speed": "500 * units.rpm",
+        "simulation_frequency": "40000",
+        "hf_gain": "0.00121",
+        "noise": "0.229",
+        "jitter": "0.42"
+      },
+      "labels": {},
+      "layout": "inline-1",
+      "n_cylinders": 1,
+      "n_banks": 1,
+      "crank": {
+        "throw": "71.5 * units.mm / 2",
+        "flywheel_mass": "5 * units.lb",
+        "mass": "5 * units.lb",
+        "friction_torque": "5.0 * units.lb_ft",
+        "moment_of_inertia": "0.22986844776863666 * 0.2",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "constants.pi / 2"
+      },
+      "journals": [
+        {
+          "angle_expr": "0.0",
+          "angle_deg": 0.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "0 * units.deg",
+          "angle_deg": 0.0,
+          "cylinders": 1
+        }
+      ],
+      "bank_params": {
+        "bore": "96 * units.mm",
+        "deck_height": "71.5 * units.mm / 2 + 6.0 * units.inch + 1.0 * units.inch"
+      },
+      "piston": {
+        "mass": "100 * units.g",
+        "compression_height": "1.0 * units.inch",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "100.0 * units.g",
+        "moment_of_inertia": "0.0015884918028487504",
+        "center_of_mass": "0.0",
+        "length": "6.0 * units.inch"
+      },
+      "intake": {
+        "plenum_volume": "1.5 * units.L",
+        "plenum_cross_section_area": "10.0 * units.cm2",
+        "intake_flow_rate": "k_carb(100.0)",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.993",
+        "velocity_decay": "0.5"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(500.0)",
+        "primary_tube_length": "20.0 * units.inch",
+        "primary_flow_rate": "k_carb(200.0)",
+        "velocity_decay": "0.5",
+        "volume": "5.0 * units.L"
+      },
+      "exhaust_systems": [
+        {
+          "audio_volume": "1.0",
+          "impulse_response": "ir_lib.mild_exhaust_0_reverb"
+        }
+      ],
+      "head": {
+        "chamber_volume": "60 * units.cc",
+        "intake_camshaft": "camshaft.intake_cam_0",
+        "exhaust_camshaft": "camshaft.exhaust_cam_0",
+        "flow_attenuation": "2.0",
+        "intake_runner_cross_section_area": "9.0 * units.cm2",
+        "exhaust_runner_cross_section_area": "9.0 * units.cm2"
+      },
+      "cam_lobe": {
+        "duration_at_50_thou": "180 * units.deg",
+        "gamma": "1.0",
+        "lift": "200 * units.thou",
+        "steps": "100"
+      },
+      "fuel": {
+        "max_burning_efficiency": "1.0"
+      },
+      "ignition": {
+        "rev_limit": "6000 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "20 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "35 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "35 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 0,
+      "raw_engine_keys": [
+        "fuel",
+        "hf_gain",
+        "jitter",
+        "name",
+        "noise",
+        "redline",
+        "simulation_frequency",
+        "starter_speed",
+        "starter_torque"
+      ]
+    },
+    {
+      "id": "assets__engines__atg-video-1__02_kohler_ch750",
+      "source": "assets/engines/atg-video-1/02_kohler_ch750.mr",
+      "skipped": false,
+      "identity": {
+        "name": "Kohler CH750",
+        "redline": "3600 * units.rpm",
+        "starter_torque": "50 * units.lb_ft",
+        "starter_speed": "500 * units.rpm",
+        "simulation_frequency": "30000",
+        "hf_gain": "0.01",
+        "noise": "1.0",
+        "jitter": "0.5"
+      },
+      "labels": {},
+      "layout": "v90-2",
+      "n_cylinders": 2,
+      "n_banks": 2,
+      "crank": {
+        "throw": "69 * units.mm / 2",
+        "flywheel_mass": "5 * units.lb",
+        "mass": "5 * units.lb",
+        "friction_torque": "10.0 * units.lb_ft",
+        "moment_of_inertia": "0.22986844776863666 * 0.5",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "constants.pi / 4"
+      },
+      "journals": [
+        {
+          "angle_expr": "0.0",
+          "angle_deg": 0.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "-45 * units.deg",
+          "angle_deg": -45.0,
+          "cylinders": 1
+        },
+        {
+          "id": "b1",
+          "angle_expr": "45.0 * units.deg",
+          "angle_deg": 45.0,
+          "cylinders": 1
+        }
+      ],
+      "bank_params": {
+        "bore": "83 * units.mm",
+        "deck_height": "(4.0 + 1) * units.inch + 69 * units.mm / 2"
+      },
+      "piston": {
+        "mass": "400 * units.g",
+        "compression_height": "1.0 * units.inch",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "300.0 * units.g",
+        "moment_of_inertia": "0.0015884918028487504",
+        "center_of_mass": "0.0",
+        "length": "4.0 * units.inch"
+      },
+      "intake": {
+        "plenum_volume": "1.0 * units.L",
+        "plenum_cross_section_area": "10.0 * units.cm2",
+        "intake_flow_rate": "k_carb(50.0)",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.96"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(300.0)",
+        "primary_tube_length": "10.0 * units.inch",
+        "primary_flow_rate": "k_carb(200.0)",
+        "velocity_decay": "1.0",
+        "volume": "20.0 * units.L"
+      },
+      "exhaust_systems": [
+        {
+          "audio_volume": "1.0",
+          "impulse_response": "ir_lib.default_0"
+        }
+      ],
+      "head": {
+        "chamber_volume": "50 * units.cc",
+        "intake_camshaft": "camshaft.intake_cam_0",
+        "exhaust_camshaft": "camshaft.exhaust_cam_0"
+      },
+      "cam_lobe": {
+        "duration_at_50_thou": "160 * units.deg",
+        "gamma": "1.1",
+        "lift": "200 * units.thou",
+        "steps": "100"
+      },
+      "fuel": {},
+      "ignition": {
+        "rev_limit": "5000 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "18 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "50 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "50 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "50 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 0,
+      "raw_engine_keys": [
+        "hf_gain",
+        "jitter",
+        "name",
+        "noise",
+        "redline",
+        "simulation_frequency",
+        "starter_speed",
+        "starter_torque",
+        "throttle"
+      ]
+    },
+    {
+      "id": "assets__engines__atg-video-1__03_harley_davidson_shovelhead",
+      "source": "assets/engines/atg-video-1/03_harley_davidson_shovelhead.mr",
+      "skipped": false,
+      "identity": {
+        "name": "Harley Davidson Shovelhead",
+        "redline": "5000 * units.rpm",
+        "starter_torque": "70 * units.lb_ft",
+        "starter_speed": "500 * units.rpm",
+        "simulation_frequency": "35000",
+        "hf_gain": "0.01",
+        "noise": "0.115",
+        "jitter": "0.136"
+      },
+      "labels": {
+        "stroke": "4.25 * units.inch",
+        "bore": "3.5 * units.inch",
+        "rod_length": "8 * units.inch",
+        "compression_height": "1.0 * units.inch",
+        "crank_mass": "9.39 * units.kg",
+        "flywheel_mass": "15 * units.kg",
+        "flywheel_radius": "6 * units.inch",
+        "crank_moment": "disk_moment_of_inertia(mass: crank_mass, radius: stroke / 2",
+        "flywheel_moment": "disk_moment_of_inertia(mass: flywheel_mass, radius: flywheel_radius",
+        "other_moment": "disk_moment_of_inertia(mass: 10 * units.kg, radius: 3.0 * units.cm"
+      },
+      "layout": "v45-2",
+      "n_cylinders": 2,
+      "n_banks": 2,
+      "crank": {
+        "throw": "stroke / 2",
+        "flywheel_mass": "flywheel_mass",
+        "mass": "crank_mass",
+        "friction_torque": "5.0 * units.lb_ft",
+        "moment_of_inertia": "crank_moment + flywheel_moment + other_moment",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "(90 - 0.5 * 45) * units.deg"
+      },
+      "journals": [
+        {
+          "angle_expr": "0.0",
+          "angle_deg": 0.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "-0.5 * 45 * units.deg",
+          "angle_deg": -22.5,
+          "cylinders": 1
+        },
+        {
+          "id": "b1",
+          "angle_expr": "0.5 * 45 * units.deg",
+          "angle_deg": 22.5,
+          "cylinders": 1
+        }
+      ],
+      "bank_params": {
+        "bore": "bore",
+        "deck_height": "stroke / 2 + rod_length + compression_height"
+      },
+      "piston": {
+        "mass": "500 * units.g",
+        "compression_height": "compression_height",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "500.0 * units.g",
+        "moment_of_inertia": "0.0015884918028487504",
+        "center_of_mass": "0.0",
+        "length": "rod_length"
+      },
+      "intake": {
+        "plenum_volume": "1.5 * units.L",
+        "plenum_cross_section_area": "10.0 * units.cm2",
+        "intake_flow_rate": "k_carb(100.0)",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.991",
+        "throttle_gamma": "1.0",
+        "velocity_decay": "1.0"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(100.0)",
+        "primary_tube_length": "70.0 * units.inch",
+        "primary_flow_rate": "k_carb(100.0)",
+        "velocity_decay": "0.75",
+        "volume": "10.0 * units.L"
+      },
+      "exhaust_systems": [
+        {
+          "audio_volume": "1.0 * 0.1",
+          "impulse_response": "ir_lib.minimal_muffling_01"
+        },
+        {
+          "audio_volume": "2.0 * 0.1",
+          "impulse_response": "ir_lib.minimal_muffling_01"
+        }
+      ],
+      "head": {
+        "chamber_volume": "100 * units.cc",
+        "intake_camshaft": "camshaft.intake_cam_0",
+        "exhaust_camshaft": "camshaft.exhaust_cam_0",
+        "flow_attenuation": "2.0",
+        "intake_runner_cross_section_area": "20.0 * units.cm2",
+        "exhaust_runner_cross_section_area": "20.0 * units.cm2"
+      },
+      "cam_lobe": {
+        "duration_at_50_thou": "210 * units.deg",
+        "gamma": "0.9",
+        "lift": "400 * units.thou",
+        "steps": "100"
+      },
+      "fuel": {},
+      "ignition": {
+        "rev_limit": "5500 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "18 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "18 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "40 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 0,
+      "raw_engine_keys": [
+        "hf_gain",
+        "jitter",
+        "name",
+        "noise",
+        "redline",
+        "simulation_frequency",
+        "starter_speed",
+        "starter_torque"
+      ]
+    },
+    {
+      "id": "assets__engines__atg-video-1__04_hayabusa",
+      "source": "assets/engines/atg-video-1/04_hayabusa.mr",
+      "skipped": false,
+      "identity": {
+        "name": "Suzuki Hayabusa I4",
+        "redline": "11000 * units.rpm",
+        "starter_torque": "70 * units.lb_ft",
+        "starter_speed": "500 * units.rpm",
+        "simulation_frequency": "20000",
+        "throttle_gamma": "2.0",
+        "hf_gain": "0.00407",
+        "noise": "0.292",
+        "jitter": "0.062"
+      },
+      "labels": {
+        "cycle": "2 * 360 * units.deg",
+        "rot180": "180 * units.deg",
+        "rot360": "360 * units.deg",
+        "stroke": "65 * units.mm",
+        "bore": "81 * units.mm",
+        "rod_length": "4.705 * units.inch",
+        "compression_height": "1.0 * units.inch"
+      },
+      "layout": "inline-4",
+      "n_cylinders": 4,
+      "n_banks": 1,
+      "crank": {
+        "throw": "stroke / 2",
+        "flywheel_mass": "10 * units.lb",
+        "mass": "24.8 * units.lb",
+        "friction_torque": "1.0 * units.lb_ft",
+        "moment_of_inertia": "0.22986844776863666 * 0.2",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "90 * units.deg"
+      },
+      "journals": [
+        {
+          "angle_expr": "0.0 * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "180.0 * units.deg",
+          "angle_deg": 180.0
+        },
+        {
+          "angle_expr": "180.0 * units.deg",
+          "angle_deg": 180.0
+        },
+        {
+          "angle_expr": "0.0 * units.deg",
+          "angle_deg": 0.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "0.0 * units.deg",
+          "angle_deg": 0.0,
+          "cylinders": 4
+        }
+      ],
+      "bank_params": {
+        "bore": "bore",
+        "deck_height": "stroke / 2 + rod_length + compression_height"
+      },
+      "piston": {
+        "mass": "303.5 * units.g",
+        "compression_height": "compression_height",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "395.837 * units.g",
+        "moment_of_inertia": "0.0015884918028487504",
+        "center_of_mass": "0.0",
+        "length": "rod_length"
+      },
+      "intake": {
+        "plenum_volume": "4.5 * units.L",
+        "plenum_cross_section_area": "10.0 * units.cm2",
+        "intake_flow_rate": "k_carb(800.0)",
+        "runner_flow_rate": "k_carb(300.0)",
+        "runner_length": "10.0 * units.inch",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.999",
+        "velocity_decay": "0.5"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(1000.0)",
+        "primary_tube_length": "40.0 * units.inch",
+        "primary_flow_rate": "k_carb(500.0)",
+        "velocity_decay": "1.0",
+        "volume": "10.0 * units.L"
+      },
+      "exhaust_systems": [
+        {
+          "audio_volume": "1.0 * 0.25",
+          "impulse_response": "ir_lib.minimal_muffling_03"
+        },
+        {
+          "audio_volume": "2.0 * 0.25",
+          "impulse_response": "ir_lib.minimal_muffling_03"
+        }
+      ],
+      "head": {},
+      "cam_lobe": {
+        "duration_at_50_thou": "240 * units.deg",
+        "gamma": "1.2",
+        "lift": "345 * units.thou",
+        "steps": "100"
+      },
+      "fuel": {
+        "max_turbulence_effect": "5.5",
+        "max_dilution_effect": "1000.0",
+        "max_burning_efficiency": "1.0",
+        "burning_efficiency_randomness": "0.0"
+      },
+      "ignition": {
+        "rev_limit": "11500 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "25 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "25 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "40 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 20,
+      "raw_engine_keys": [
+        "fuel",
+        "hf_gain",
+        "jitter",
+        "name",
+        "noise",
+        "redline",
+        "simulation_frequency",
+        "starter_speed",
+        "starter_torque",
+        "throttle_gamma"
+      ]
+    },
+    {
+      "id": "assets__engines__atg-video-1__05_honda_vtec",
+      "source": "assets/engines/atg-video-1/05_honda_vtec.mr",
+      "skipped": false,
+      "identity": {
+        "name": "Honda B18C5 [VTEC, I4]",
+        "redline": "8400 * units.rpm",
+        "starter_torque": "70 * units.lb_ft",
+        "starter_speed": "-500 * units.rpm",
+        "simulation_frequency": "20000",
+        "throttle_gamma": "2.0",
+        "hf_gain": "0.002",
+        "noise": "0.253",
+        "jitter": "0.195"
+      },
+      "labels": {
+        "cycle": "2 * 360 * units.deg",
+        "rot180": "180 * units.deg",
+        "rot360": "360 * units.deg",
+        "stroke": "87.2 * units.mm",
+        "bore": "81 * units.mm",
+        "rod_length": "5.430 * units.inch",
+        "compression_height": "1.0 * units.inch"
+      },
+      "layout": "inline-4",
+      "n_cylinders": 4,
+      "n_banks": 1,
+      "crank": {
+        "throw": "stroke / 2",
+        "flywheel_mass": "10 * units.lb",
+        "mass": "35.5 * units.lb",
+        "friction_torque": "1.0 * units.lb_ft",
+        "moment_of_inertia": "0.22986844776863666 * 0.5",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "90 * units.deg"
+      },
+      "journals": [
+        {
+          "angle_expr": "0.0 * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "180.0 * units.deg",
+          "angle_deg": 180.0
+        },
+        {
+          "angle_expr": "180.0 * units.deg",
+          "angle_deg": 180.0
+        },
+        {
+          "angle_expr": "0.0 * units.deg",
+          "angle_deg": 0.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "0.0 * units.deg",
+          "angle_deg": 0.0,
+          "cylinders": 4
+        }
+      ],
+      "bank_params": {
+        "bore": "bore",
+        "deck_height": "stroke / 2 + rod_length + compression_height"
+      },
+      "piston": {
+        "mass": "303.5 * units.g",
+        "compression_height": "compression_height",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "395.837 * units.g",
+        "moment_of_inertia": "0.0015884918028487504",
+        "center_of_mass": "0.0",
+        "length": "rod_length"
+      },
+      "intake": {
+        "plenum_volume": "1.325 * units.L",
+        "plenum_cross_section_area": "20.0 * units.cm2",
+        "intake_flow_rate": "k_carb(800.0)",
+        "runner_flow_rate": "k_carb(250.0)",
+        "runner_length": "7.0 * units.inch",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.9989",
+        "velocity_decay": "0.5"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(1000.0)",
+        "primary_tube_length": "10.0 * units.inch",
+        "primary_flow_rate": "k_carb(200.0)",
+        "velocity_decay": "1.0",
+        "volume": "100.0 * units.L"
+      },
+      "exhaust_systems": [
+        {
+          "audio_volume": "8 * 0.75",
+          "impulse_response": "ir_lib.mild_exhaust_0"
+        },
+        {
+          "audio_volume": "8 * 1.0",
+          "impulse_response": "ir_lib.mild_exhaust_0"
+        }
+      ],
+      "head": {
+        "chamber_volume": "chamber_volume",
+        "intake_runner_volume": "intake_runner_volume",
+        "intake_runner_cross_section_area": "intake_runner_cross_section_area",
+        "exhaust_runner_volume": "exhaust_runner_volume",
+        "exhaust_runner_cross_section_area": "exhaust_runner_cross_section_area",
+        "intake_port_flow": "intake_flow",
+        "exhaust_port_flow": "exhaust_flow",
+        "valvetrain": "vtec_valvetrain( vtec_intake_camshaft: camshaft_set.vtec_intake_cam, vtec_exhaust_camshaft: camshaft_set.vtec_exhaust_cam, intake_camshaft: camshaft_set.intake_cam, exhaust_camshaft: camshaft_set.exhaust_cam )",
+        "flip_display": "flip_display"
+      },
+      "cam_lobe": {
+        "duration_at_50_thou": "210 * units.deg",
+        "gamma": "1.0",
+        "lift": "6.9 * units.mm",
+        "steps": "100"
+      },
+      "fuel": {
+        "max_turbulence_effect": "2.5",
+        "max_burning_efficiency": "0.75"
+      },
+      "ignition": {
+        "rev_limit": "9400 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "-25 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "-25 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "-30 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "-40 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "-40 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 20,
+      "raw_engine_keys": [
+        "fuel",
+        "hf_gain",
+        "jitter",
+        "name",
+        "noise",
+        "redline",
+        "simulation_frequency",
+        "starter_speed",
+        "starter_torque",
+        "throttle_gamma"
+      ]
+    },
+    {
+      "id": "assets__engines__atg-video-1__06_subaru_ej25",
+      "source": "assets/engines/atg-video-1/06_subaru_ej25.mr",
+      "skipped": false,
+      "identity": {
+        "name": "Subaru EJ25",
+        "redline": "6500 * units.rpm",
+        "starter_torque": "70 * units.lb_ft",
+        "starter_speed": "500 * units.rpm",
+        "simulation_frequency": "20000",
+        "throttle_gamma": "2.0",
+        "hf_gain": "0.01",
+        "noise": "1.0",
+        "jitter": "0.5"
+      },
+      "labels": {
+        "cycle": "2 * 360 * units.deg",
+        "rot180": "180 * units.deg",
+        "rot360": "360 * units.deg",
+        "stroke": "79 * units.mm",
+        "bore": "99.5 * units.mm",
+        "rod_length": "5.142 * units.inch",
+        "rod_mass": "535 * units.g",
+        "compression_height": "1.0 * units.inch",
+        "crank_mass": "9.39 * units.kg",
+        "flywheel_mass": "6.8 * units.kg",
+        "flywheel_radius": "6 * units.inch",
+        "crank_moment": "disk_moment_of_inertia(mass: crank_mass, radius: stroke / 2",
+        "flywheel_moment": "disk_moment_of_inertia(mass: flywheel_mass, radius: flywheel_radius",
+        "other_moment": "disk_moment_of_inertia(mass: 10 * units.kg, radius: 6.0 * units.cm"
+      },
+      "layout": "boxer-4",
+      "n_cylinders": 4,
+      "n_banks": 2,
+      "crank": {
+        "throw": "stroke / 2",
+        "flywheel_mass": "flywheel_mass",
+        "mass": "crank_mass",
+        "friction_torque": "1.0 * units.lb_ft",
+        "moment_of_inertia": "crank_moment + flywheel_moment + other_moment",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "180 * units.deg"
+      },
+      "journals": [
+        {
+          "angle_expr": "0.0 * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "180.0 * units.deg",
+          "angle_deg": 180.0
+        },
+        {
+          "angle_expr": "0.0 * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "180.0 * units.deg",
+          "angle_deg": 180.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "90.0 * units.deg",
+          "angle_deg": 90.0,
+          "cylinders": 2
+        },
+        {
+          "id": "b1",
+          "angle_expr": "-90.0 * units.deg",
+          "angle_deg": -90.0,
+          "cylinders": 2
+        }
+      ],
+      "bank_params": {
+        "bore": "bore",
+        "deck_height": "stroke / 2 + rod_length + compression_height"
+      },
+      "piston": {
+        "mass": "(414 + 152) * units.g",
+        "compression_height": "compression_height",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "rod_mass",
+        "moment_of_inertia": "rod_moment_of_inertia( mass: rod_mass, length: rod_length )",
+        "center_of_mass": "0.0",
+        "length": "rod_length"
+      },
+      "intake": {
+        "plenum_volume": "1.325 * units.L",
+        "plenum_cross_section_area": "20.0 * units.cm2",
+        "intake_flow_rate": "k_carb(800.0)",
+        "runner_flow_rate": "k_carb(250.0)",
+        "runner_length": "12.0 * units.inch",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.9985",
+        "velocity_decay": "0.5"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(1000.0)",
+        "primary_tube_length": "10.0 * units.inch",
+        "primary_flow_rate": "k_carb(200.0)",
+        "velocity_decay": "1.0",
+        "volume": "100.0 * units.L"
+      },
+      "exhaust_systems": [
+        {
+          "audio_volume": "0.5 * 8",
+          "impulse_response": "ir_lib.mild_exhaust_0"
+        },
+        {
+          "audio_volume": "1.0 * 8",
+          "impulse_response": "ir_lib.mild_exhaust_0"
+        }
+      ],
+      "head": {
+        "chamber_volume": "chamber_volume",
+        "intake_runner_volume": "intake_runner_volume",
+        "intake_runner_cross_section_area": "intake_runner_cross_section_area",
+        "exhaust_runner_volume": "exhaust_runner_volume",
+        "exhaust_runner_cross_section_area": "exhaust_runner_cross_section_area",
+        "intake_port_flow": "intake_flow",
+        "exhaust_port_flow": "exhaust_flow",
+        "valvetrain": "standard_valvetrain( intake_camshaft: intake_camshaft, exhaust_camshaft: exhaust_camshaft )",
+        "flip_display": "flip_display"
+      },
+      "cam_lobe": {
+        "duration_at_50_thou": "232 * units.deg",
+        "gamma": "2.0",
+        "lift": "9.78 * units.mm",
+        "steps": "100"
+      },
+      "fuel": {
+        "max_turbulence_effect": "2.5",
+        "max_burning_efficiency": "0.75"
+      },
+      "ignition": {
+        "rev_limit": "6500 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "25 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "25 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "40 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 20,
+      "raw_engine_keys": [
+        "fuel",
+        "hf_gain",
+        "jitter",
+        "name",
+        "noise",
+        "redline",
+        "simulation_frequency",
+        "starter_speed",
+        "starter_torque",
+        "throttle_gamma"
+      ]
+    },
+    {
+      "id": "assets__engines__atg-video-1__07_audi_i5",
+      "source": "assets/engines/atg-video-1/07_audi_i5.mr",
+      "skipped": false,
+      "identity": {
+        "name": "Audi 2.3 inline 5",
+        "redline": "6000 * units.rpm",
+        "starter_torque": "200 * units.lb_ft",
+        "simulation_frequency": "17000",
+        "hf_gain": "0.01",
+        "noise": "1.0",
+        "jitter": "0.299"
+      },
+      "labels": {
+        "cycle": "2 * 360 * units.deg",
+        "rot": "2 * (360 / 5.0",
+        "rot360": "360 * units.deg",
+        "stroke": "79.5 * units.mm",
+        "bore": "86.4 * units.mm",
+        "rod_length": "5.142 * units.inch",
+        "rod_mass": "535 * units.g",
+        "compression_height": "32.8 * units.mm",
+        "crank_mass": "9.39 * units.kg",
+        "flywheel_mass": "6.8 * units.kg",
+        "flywheel_radius": "6 * units.inch",
+        "crank_moment": "disk_moment_of_inertia(mass: crank_mass, radius: stroke / 2",
+        "flywheel_moment": "disk_moment_of_inertia(mass: flywheel_mass, radius: flywheel_radius",
+        "other_moment": "disk_moment_of_inertia(mass: 20 * units.kg, radius: 8.0 * units.cm"
+      },
+      "layout": "inline-5",
+      "n_cylinders": 5,
+      "n_banks": 1,
+      "crank": {
+        "throw": "stroke / 2",
+        "flywheel_mass": "flywheel_mass",
+        "mass": "crank_mass",
+        "friction_torque": "5.0 * units.lb_ft",
+        "moment_of_inertia": "crank_moment + flywheel_moment + other_moment",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "constants.pi / 2"
+      },
+      "journals": [
+        {
+          "angle_expr": "(0.0 / 5.0) * 360 * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "(2.0 / 5.0) * 360 * units.deg",
+          "angle_deg": 3600.0
+        },
+        {
+          "angle_expr": "(3.0 / 5.0) * 360 * units.deg",
+          "angle_deg": 5400.0
+        },
+        {
+          "angle_expr": "(4.0 / 5.0) * 360 * units.deg",
+          "angle_deg": 7200.0
+        },
+        {
+          "angle_expr": "(1.0 / 5.0) * 360 * units.deg",
+          "angle_deg": 1800.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "0",
+          "angle_deg": 0.0,
+          "cylinders": 5
+        }
+      ],
+      "bank_params": {
+        "bore": "bore",
+        "deck_height": "stroke / 2 + rod_length + compression_height"
+      },
+      "piston": {
+        "mass": "(414 + 152) * units.g",
+        "blowby": "0",
+        "compression_height": "compression_height",
+        "wrist_pin_position": "0 * units.mm",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "rod_mass",
+        "moment_of_inertia": "rod_moment_of_inertia( mass: rod_mass, length: rod_length )",
+        "center_of_mass": "0.0",
+        "length": "rod_length"
+      },
+      "intake": {
+        "plenum_volume": "1.0 * units.L",
+        "plenum_cross_section_area": "10.0 * units.cm2",
+        "intake_flow_rate": "k_carb(350.0)",
+        "runner_flow_rate": "k_carb(175.0)",
+        "runner_length": "5.0 * units.inch",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.993"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(500.0)",
+        "primary_tube_length": "10.0 * units.inch",
+        "primary_flow_rate": "k_carb(100.0)",
+        "velocity_decay": "1.0",
+        "volume": "50.0 * units.L"
+      },
+      "exhaust_systems": [
+        {
+          "audio_volume": "1.0",
+          "impulse_response": "ir_lib.mild_exhaust_0"
+        },
+        {
+          "audio_volume": "0.8",
+          "impulse_response": "ir_lib.mild_exhaust_0"
+        }
+      ],
+      "head": {
+        "chamber_volume": "chamber_volume",
+        "intake_runner_volume": "intake_runner_volume",
+        "intake_runner_cross_section_area": "intake_runner_cross_section_area",
+        "exhaust_runner_volume": "exhaust_runner_volume",
+        "exhaust_runner_cross_section_area": "exhaust_runner_cross_section_area",
+        "intake_port_flow": "intake_flow",
+        "exhaust_port_flow": "exhaust_flow",
+        "valvetrain": "standard_valvetrain( intake_camshaft: intake_camshaft, exhaust_camshaft: exhaust_camshaft )",
+        "flip_display": "flip_display"
+      },
+      "cam_lobe": {
+        "duration_at_50_thou": "210 * units.deg",
+        "gamma": "2.0",
+        "lift": "9.78 * units.mm",
+        "steps": "100"
+      },
+      "fuel": {
+        "max_turbulence_effect": "2.5",
+        "max_burning_efficiency": "0.75"
+      },
+      "ignition": {
+        "rev_limit": "6500 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "20 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "26 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "5000 * units.rpm",
+            "advance": "34 * units.deg"
+          },
+          {
+            "rpm": "6000 * units.rpm",
+            "advance": "38 * units.deg"
+          },
+          {
+            "rpm": "7000 * units.rpm",
+            "advance": "38 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 20,
+      "raw_engine_keys": [
+        "fuel",
+        "hf_gain",
+        "jitter",
+        "name",
+        "noise",
+        "redline",
+        "simulation_frequency",
+        "starter_torque"
+      ]
+    },
+    {
+      "id": "assets__engines__atg-video-1__08_radial_5",
+      "source": "assets/engines/atg-video-1/08_radial_5.mr",
+      "skipped": false,
+      "identity": {
+        "name": "Radial 5",
+        "redline": "3000 * units.rpm",
+        "starter_torque": "150 * units.lb_ft",
+        "starter_speed": "500 * units.rpm",
+        "simulation_frequency": "12000",
+        "throttle_gamma": "2.0",
+        "hf_gain": "0.00121",
+        "noise": "0.623",
+        "jitter": "0.042"
+      },
+      "labels": {
+        "cycle": "2 * 360 * units.deg",
+        "slave_throw": "2.9 * units.inch",
+        "stroke": "5.5 * units.inch",
+        "bore": "5 * units.inch",
+        "rod_length": "12 * units.inch",
+        "compression_height": "1.0 * units.inch",
+        "rod_mass": "535 * units.g",
+        "crank_mass": "20.39 * units.kg",
+        "flywheel_mass": "100 * units.kg",
+        "flywheel_radius": "5 * units.inch",
+        "crank_moment": "disk_moment_of_inertia(mass: crank_mass, radius: stroke / 2",
+        "flywheel_moment": "disk_moment_of_inertia(mass: flywheel_mass, radius: flywheel_radius",
+        "other_moment": "disk_moment_of_inertia(mass: 10 * units.kg, radius: 2.0 * units.cm"
+      },
+      "layout": "v7200-5",
+      "n_cylinders": 5,
+      "n_banks": 5,
+      "crank": {
+        "throw": "stroke / 2",
+        "flywheel_mass": "10 * units.lb",
+        "mass": "10 * units.lb",
+        "friction_torque": "10.0 * units.lb_ft",
+        "moment_of_inertia": "crank_moment + flywheel_moment + other_moment",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "(90 - 0.5 * 45) * units.deg"
+      },
+      "journals": [
+        {
+          "angle_expr": "0.0",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "(0 / 5.0) * 360 * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "(1 / 5.0) * 360 * units.deg",
+          "angle_deg": 1800.0
+        },
+        {
+          "angle_expr": "(2 / 5.0) * 360 * units.deg",
+          "angle_deg": 3600.0
+        },
+        {
+          "angle_expr": "(3 / 5.0) * 360 * units.deg",
+          "angle_deg": 5400.0
+        },
+        {
+          "angle_expr": "(4 / 5.0) * 360 * units.deg",
+          "angle_deg": 7200.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "(0 / 5.0) * 360 * units.deg",
+          "angle_deg": 0.0,
+          "cylinders": 1
+        },
+        {
+          "id": "b1",
+          "angle_expr": "(1 / 5.0) * 360 * units.deg",
+          "angle_deg": 1800.0,
+          "cylinders": 1
+        },
+        {
+          "id": "b2",
+          "angle_expr": "(2 / 5.0) * 360 * units.deg",
+          "angle_deg": 3600.0,
+          "cylinders": 1
+        },
+        {
+          "id": "b3",
+          "angle_expr": "(3 / 5.0) * 360 * units.deg",
+          "angle_deg": 5400.0,
+          "cylinders": 1
+        },
+        {
+          "id": "b4",
+          "angle_expr": "(4 / 5.0) * 360 * units.deg",
+          "angle_deg": 7200.0,
+          "cylinders": 1
+        }
+      ],
+      "bank_params": {
+        "bore": "bore",
+        "deck_height": "stroke / 2 + rod_length + compression_height"
+      },
+      "piston": {
+        "mass": "200 * units.g",
+        "compression_height": "compression_height",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "100.0 * units.g",
+        "moment_of_inertia": "0.0015884918028487504",
+        "center_of_mass": "0.0",
+        "length": "rod_length - slave_throw"
+      },
+      "intake": {
+        "plenum_volume": "10.5 * units.L",
+        "plenum_cross_section_area": "10.0 * units.cm2",
+        "intake_flow_rate": "k_carb(1000.0)",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.995",
+        "velocity_decay": "1.0"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(1000.0)",
+        "primary_tube_length": "70.0 * units.inch",
+        "primary_flow_rate": "k_carb(300.0)",
+        "velocity_decay": "0.75",
+        "volume": "10.0 * units.L"
+      },
+      "exhaust_systems": [
+        {
+          "audio_volume": "1.0",
+          "impulse_response": "ir_lib.minimal_muffling_01"
+        },
+        {
+          "audio_volume": "0.2",
+          "impulse_response": "ir_lib.minimal_muffling_01"
+        }
+      ],
+      "head": {},
+      "cam_lobe": {
+        "duration_at_50_thou": "260 * units.deg",
+        "gamma": "0.9",
+        "lift": "800 * units.thou",
+        "steps": "100"
+      },
+      "fuel": {},
+      "ignition": {
+        "rev_limit": "3500 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "18 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "18 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "40 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 0,
+      "raw_engine_keys": [
+        "hf_gain",
+        "jitter",
+        "name",
+        "noise",
+        "redline",
+        "simulation_frequency",
+        "starter_speed",
+        "starter_torque",
+        "throttle_gamma"
+      ]
+    },
+    {
+      "id": "assets__engines__atg-video-1__radial",
+      "source": "assets/engines/atg-video-1/radial.mr",
+      "skipped": true,
+      "reason": "no engine(name: ...) found"
+    },
+    {
+      "id": "assets__engines__atg-video-2__01_subaru_ej25_eh",
+      "source": "assets/engines/atg-video-2/01_subaru_ej25_eh.mr",
+      "skipped": false,
+      "identity": {
+        "name": "Subaru EJ25",
+        "redline": "6500 * units.rpm",
+        "starter_torque": "70 * units.lb_ft",
+        "starter_speed": "500 * units.rpm",
+        "simulation_frequency": "20000",
+        "throttle_gamma": "2.0",
+        "hf_gain": "0.01",
+        "noise": "1.0",
+        "jitter": "0.5"
+      },
+      "labels": {
+        "cycle": "2 * 360 * units.deg",
+        "rot180": "180 * units.deg",
+        "rot360": "360 * units.deg",
+        "stroke": "79 * units.mm",
+        "bore": "99.5 * units.mm",
+        "rod_length": "5.142 * units.inch",
+        "rod_mass": "535 * units.g",
+        "compression_height": "1.0 * units.inch",
+        "crank_mass": "9.39 * units.kg",
+        "flywheel_mass": "6.8 * units.kg",
+        "flywheel_radius": "6 * units.inch",
+        "crank_moment": "disk_moment_of_inertia(mass: crank_mass, radius: stroke / 2",
+        "flywheel_moment": "disk_moment_of_inertia(mass: flywheel_mass, radius: flywheel_radius",
+        "other_moment": "disk_moment_of_inertia(mass: 10 * units.kg, radius: 6.0 * units.cm",
+        "car_mass": "2700 * units.lb"
+      },
+      "layout": "boxer-4",
+      "n_cylinders": 4,
+      "n_banks": 2,
+      "crank": {
+        "throw": "stroke / 2",
+        "flywheel_mass": "flywheel_mass",
+        "mass": "crank_mass",
+        "friction_torque": "1.0 * units.lb_ft",
+        "moment_of_inertia": "crank_moment + flywheel_moment + other_moment",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "180 * units.deg"
+      },
+      "journals": [
+        {
+          "angle_expr": "0.0 * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "180.0 * units.deg",
+          "angle_deg": 180.0
+        },
+        {
+          "angle_expr": "0.0 * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "180.0 * units.deg",
+          "angle_deg": 180.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "90.0 * units.deg",
+          "angle_deg": 90.0,
+          "cylinders": 2
+        },
+        {
+          "id": "b1",
+          "angle_expr": "-90.0 * units.deg",
+          "angle_deg": -90.0,
+          "cylinders": 2
+        }
+      ],
+      "bank_params": {
+        "bore": "bore",
+        "deck_height": "stroke / 2 + rod_length + compression_height"
+      },
+      "piston": {
+        "mass": "(414 + 152) * units.g",
+        "compression_height": "compression_height",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "rod_mass",
+        "moment_of_inertia": "rod_moment_of_inertia( mass: rod_mass, length: rod_length )",
+        "center_of_mass": "0.0",
+        "length": "rod_length"
+      },
+      "intake": {
+        "plenum_volume": "1.325 * units.L",
+        "plenum_cross_section_area": "20.0 * units.cm2",
+        "intake_flow_rate": "k_carb(400.0)",
+        "runner_flow_rate": "k_carb(100.0)",
+        "runner_length": "12.0 * units.inch",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.9978",
+        "velocity_decay": "1.0"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(1000.0)",
+        "primary_tube_length": "40.0 * units.inch",
+        "primary_flow_rate": "k_carb(400.0)",
+        "velocity_decay": "1.0"
+      },
+      "exhaust_systems": [
+        {
+          "length": "500 * units.mm",
+          "audio_volume": "0.5 * 0.02",
+          "impulse_response": "ir_lib.minimal_muffling_02"
+        }
+      ],
+      "head": {
+        "chamber_volume": "chamber_volume",
+        "intake_runner_volume": "intake_runner_volume",
+        "intake_runner_cross_section_area": "intake_runner_cross_section_area",
+        "exhaust_runner_volume": "exhaust_runner_volume",
+        "exhaust_runner_cross_section_area": "exhaust_runner_cross_section_area",
+        "intake_port_flow": "intake_flow",
+        "exhaust_port_flow": "exhaust_flow",
+        "valvetrain": "standard_valvetrain( intake_camshaft: intake_camshaft, exhaust_camshaft: exhaust_camshaft )",
+        "flip_display": "flip_display"
+      },
+      "cam_lobe": {
+        "duration_at_50_thou": "232 * units.deg",
+        "gamma": "2.0",
+        "lift": "9.78 * units.mm",
+        "steps": "100"
+      },
+      "fuel": {
+        "max_burning_efficiency": "0.9",
+        "turbulence_to_flame_speed_ratio": "turbulence_to_flame_speed_ratio()"
+      },
+      "ignition": {
+        "rev_limit": "6800 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0.0",
+            "advance": "1.0 * 3.0"
+          },
+          {
+            "rpm": "5.0",
+            "advance": "1.0 * 1.5 * 5.0"
+          },
+          {
+            "rpm": "10.0",
+            "advance": "1.0 * 1.5 * 10.0"
+          },
+          {
+            "rpm": "15.0",
+            "advance": "1.1 * 1.5 * 15.0"
+          },
+          {
+            "rpm": "20.0",
+            "advance": "1.25 * 1.5 * 20.0"
+          },
+          {
+            "rpm": "25.0",
+            "advance": "1.25 * 1.5 * 25.0"
+          },
+          {
+            "rpm": "30.0",
+            "advance": "1.25 * 1.5 * 30.0"
+          },
+          {
+            "rpm": "35.0",
+            "advance": "1.25 * 1.5 * 35.0"
+          },
+          {
+            "rpm": "40.0",
+            "advance": "1.25 * 1.5 * 40.0"
+          },
+          {
+            "rpm": "45.0",
+            "advance": "1.25 * 1.5 * 45.0"
+          },
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "25 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "25 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "40 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 20,
+      "raw_engine_keys": [
+        "fuel",
+        "hf_gain",
+        "jitter",
+        "name",
+        "noise",
+        "redline",
+        "simulation_frequency",
+        "starter_speed",
+        "starter_torque",
+        "throttle_gamma"
+      ]
+    },
+    {
+      "id": "assets__engines__atg-video-2__02_subaru_ej25_uh",
+      "source": "assets/engines/atg-video-2/02_subaru_ej25_uh.mr",
+      "skipped": false,
+      "identity": {
+        "name": "Subaru EJ25",
+        "redline": "6500 * units.rpm",
+        "starter_torque": "70 * units.lb_ft",
+        "starter_speed": "500 * units.rpm",
+        "simulation_frequency": "20000",
+        "throttle_gamma": "2.0",
+        "hf_gain": "0.01",
+        "noise": "1.0",
+        "jitter": "0.5"
+      },
+      "labels": {
+        "cycle": "2 * 360 * units.deg",
+        "rot180": "180 * units.deg",
+        "rot360": "360 * units.deg",
+        "stroke": "79 * units.mm",
+        "bore": "99.5 * units.mm",
+        "rod_length": "5.142 * units.inch",
+        "rod_mass": "535 * units.g",
+        "compression_height": "1.0 * units.inch",
+        "crank_mass": "9.39 * units.kg",
+        "flywheel_mass": "6.8 * units.kg",
+        "flywheel_radius": "6 * units.inch",
+        "crank_moment": "disk_moment_of_inertia(mass: crank_mass, radius: stroke / 2",
+        "flywheel_moment": "disk_moment_of_inertia(mass: flywheel_mass, radius: flywheel_radius",
+        "other_moment": "disk_moment_of_inertia(mass: 10 * units.kg, radius: 6.0 * units.cm",
+        "car_mass": "2700 * units.lb"
+      },
+      "layout": "boxer-4",
+      "n_cylinders": 4,
+      "n_banks": 2,
+      "crank": {
+        "throw": "stroke / 2",
+        "flywheel_mass": "flywheel_mass",
+        "mass": "crank_mass",
+        "friction_torque": "1.0 * units.lb_ft",
+        "moment_of_inertia": "crank_moment + flywheel_moment + other_moment",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "180 * units.deg"
+      },
+      "journals": [
+        {
+          "angle_expr": "0.0 * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "180.0 * units.deg",
+          "angle_deg": 180.0
+        },
+        {
+          "angle_expr": "0.0 * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "180.0 * units.deg",
+          "angle_deg": 180.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "90.0 * units.deg",
+          "angle_deg": 90.0,
+          "cylinders": 2
+        },
+        {
+          "id": "b1",
+          "angle_expr": "-90.0 * units.deg",
+          "angle_deg": -90.0,
+          "cylinders": 2
+        }
+      ],
+      "bank_params": {
+        "bore": "bore",
+        "deck_height": "stroke / 2 + rod_length + compression_height"
+      },
+      "piston": {
+        "mass": "(414 + 152) * units.g",
+        "compression_height": "compression_height",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "rod_mass",
+        "moment_of_inertia": "rod_moment_of_inertia( mass: rod_mass, length: rod_length )",
+        "center_of_mass": "0.0",
+        "length": "rod_length"
+      },
+      "intake": {
+        "plenum_volume": "1.325 * units.L",
+        "plenum_cross_section_area": "20.0 * units.cm2",
+        "intake_flow_rate": "k_carb(400.0)",
+        "runner_flow_rate": "k_carb(100.0)",
+        "runner_length": "12.0 * units.inch",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.9978",
+        "velocity_decay": "1.0"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(1000.0)",
+        "primary_tube_length": "24.0 * units.inch",
+        "primary_flow_rate": "k_carb(400.0)",
+        "velocity_decay": "1.0"
+      },
+      "exhaust_systems": [
+        {
+          "length": "500 * units.mm",
+          "audio_volume": "0.5 * 0.02",
+          "impulse_response": "ir_lib.minimal_muffling_02"
+        }
+      ],
+      "head": {
+        "chamber_volume": "chamber_volume",
+        "intake_runner_volume": "intake_runner_volume",
+        "intake_runner_cross_section_area": "intake_runner_cross_section_area",
+        "exhaust_runner_volume": "exhaust_runner_volume",
+        "exhaust_runner_cross_section_area": "exhaust_runner_cross_section_area",
+        "intake_port_flow": "intake_flow",
+        "exhaust_port_flow": "exhaust_flow",
+        "valvetrain": "standard_valvetrain( intake_camshaft: intake_camshaft, exhaust_camshaft: exhaust_camshaft )",
+        "flip_display": "flip_display"
+      },
+      "cam_lobe": {
+        "duration_at_50_thou": "232 * units.deg",
+        "gamma": "2.0",
+        "lift": "9.78 * units.mm",
+        "steps": "100"
+      },
+      "fuel": {
+        "max_burning_efficiency": "0.9",
+        "turbulence_to_flame_speed_ratio": "turbulence_to_flame_speed_ratio()"
+      },
+      "ignition": {
+        "rev_limit": "6800 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0.0",
+            "advance": "1.0 * 3.0"
+          },
+          {
+            "rpm": "5.0",
+            "advance": "1.0 * 1.5 * 5.0"
+          },
+          {
+            "rpm": "10.0",
+            "advance": "1.0 * 1.5 * 10.0"
+          },
+          {
+            "rpm": "15.0",
+            "advance": "1.1 * 1.5 * 15.0"
+          },
+          {
+            "rpm": "20.0",
+            "advance": "1.25 * 1.5 * 20.0"
+          },
+          {
+            "rpm": "25.0",
+            "advance": "1.25 * 1.5 * 25.0"
+          },
+          {
+            "rpm": "30.0",
+            "advance": "1.25 * 1.5 * 30.0"
+          },
+          {
+            "rpm": "35.0",
+            "advance": "1.25 * 1.5 * 35.0"
+          },
+          {
+            "rpm": "40.0",
+            "advance": "1.25 * 1.5 * 40.0"
+          },
+          {
+            "rpm": "45.0",
+            "advance": "1.25 * 1.5 * 45.0"
+          },
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "25 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "25 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "40 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 20,
+      "raw_engine_keys": [
+        "fuel",
+        "hf_gain",
+        "jitter",
+        "name",
+        "noise",
+        "redline",
+        "simulation_frequency",
+        "starter_speed",
+        "starter_torque",
+        "throttle_gamma"
+      ]
+    },
+    {
+      "id": "assets__engines__atg-video-2__03_2jz",
+      "source": "assets/engines/atg-video-2/03_2jz.mr",
+      "skipped": false,
+      "identity": {
+        "name": "2JZ [I6]",
+        "redline": "6000 * units.rpm",
+        "starter_torque": "200 * units.lb_ft",
+        "simulation_frequency": "10000",
+        "hf_gain": "0.01",
+        "noise": "1.0",
+        "jitter": "0.23"
+      },
+      "labels": {
+        "cycle": "2 * 360 * units.deg",
+        "rot": "2 * (360 / 6.0",
+        "rot360": "360 * units.deg",
+        "stroke": "86.0 * units.mm",
+        "bore": "86.0 * units.mm",
+        "rod_length": "142 * units.mm",
+        "rod_mass": "500 * units.g",
+        "compression_height": "32.8 * units.mm",
+        "crank_mass": "15 * units.kg",
+        "flywheel_mass": "10 * units.kg",
+        "flywheel_radius": "7 * units.inch",
+        "crank_moment": "disk_moment_of_inertia(mass: crank_mass, radius: stroke / 2",
+        "flywheel_moment": "disk_moment_of_inertia(mass: flywheel_mass, radius: flywheel_radius",
+        "other_moment": "disk_moment_of_inertia(mass: 20 * units.kg, radius: 8.0 * units.cm",
+        "spacing": "0.5 * units.inch"
+      },
+      "layout": "inline-6",
+      "n_cylinders": 6,
+      "n_banks": 1,
+      "crank": {
+        "throw": "stroke / 2",
+        "flywheel_mass": "flywheel_mass",
+        "mass": "crank_mass",
+        "friction_torque": "5.0 * units.lb_ft",
+        "moment_of_inertia": "crank_moment + flywheel_moment + other_moment",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "constants.pi / 2"
+      },
+      "journals": [
+        {
+          "angle_expr": "0 * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "480 * units.deg",
+          "angle_deg": 480.0
+        },
+        {
+          "angle_expr": "240 * units.deg",
+          "angle_deg": 240.0
+        },
+        {
+          "angle_expr": "600 * units.deg",
+          "angle_deg": 600.0
+        },
+        {
+          "angle_expr": "120 * units.deg",
+          "angle_deg": 120.0
+        },
+        {
+          "angle_expr": "360 * units.deg",
+          "angle_deg": 360.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "0",
+          "angle_deg": 0.0,
+          "cylinders": 6
+        }
+      ],
+      "bank_params": {
+        "bore": "bore",
+        "deck_height": "stroke / 2 + rod_length + compression_height"
+      },
+      "piston": {
+        "mass": "(200 + 50) * units.g",
+        "blowby": "0",
+        "compression_height": "compression_height",
+        "wrist_pin_position": "0 * units.mm",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "rod_mass",
+        "moment_of_inertia": "rod_moment_of_inertia( mass: rod_mass, length: rod_length )",
+        "center_of_mass": "0.0",
+        "length": "rod_length"
+      },
+      "intake": {
+        "plenum_volume": "1.0 * units.L",
+        "plenum_cross_section_area": "10.0 * units.cm2",
+        "intake_flow_rate": "k_carb(500.0)",
+        "runner_flow_rate": "k_carb(200.0)",
+        "runner_length": "40.0 * units.inch",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.9965"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(1000.0)",
+        "primary_tube_length": "40.0 * units.inch",
+        "primary_flow_rate": "k_carb(400.0)",
+        "velocity_decay": "1.0"
+      },
+      "exhaust_systems": [
+        {
+          "length": "100.0 * units.inch",
+          "audio_volume": "0.2",
+          "impulse_response": "ir_lib.mild_exhaust_0_reverb"
+        },
+        {
+          "length": "100.0 * units.inch",
+          "audio_volume": "0.2",
+          "impulse_response": "ir_lib.mild_exhaust_0_reverb"
+        }
+      ],
+      "head": {
+        "chamber_volume": "chamber_volume",
+        "intake_runner_volume": "intake_runner_volume",
+        "intake_runner_cross_section_area": "intake_runner_cross_section_area",
+        "exhaust_runner_volume": "exhaust_runner_volume",
+        "exhaust_runner_cross_section_area": "exhaust_runner_cross_section_area",
+        "intake_port_flow": "intake_flow",
+        "exhaust_port_flow": "exhaust_flow",
+        "valvetrain": "standard_valvetrain( intake_camshaft: intake_camshaft, exhaust_camshaft: exhaust_camshaft )",
+        "flip_display": "flip_display"
+      },
+      "cam_lobe": {
+        "duration_at_50_thou": "220 * units.deg",
+        "gamma": "1.1",
+        "lift": "9.78 * units.mm",
+        "steps": "100"
+      },
+      "fuel": {
+        "max_burning_efficiency": "1.0"
+      },
+      "ignition": {
+        "rev_limit": "6500 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "20 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "26 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "5000 * units.rpm",
+            "advance": "34 * units.deg"
+          },
+          {
+            "rpm": "6000 * units.rpm",
+            "advance": "38 * units.deg"
+          },
+          {
+            "rpm": "7000 * units.rpm",
+            "advance": "38 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 20,
+      "raw_engine_keys": [
+        "fuel",
+        "hf_gain",
+        "jitter",
+        "name",
+        "noise",
+        "redline",
+        "simulation_frequency",
+        "starter_torque"
+      ]
+    },
+    {
+      "id": "assets__engines__atg-video-2__04_60_degree_v6",
+      "source": "assets/engines/atg-video-2/04_60_degree_v6.mr",
+      "skipped": false,
+      "identity": {
+        "name": "Generic 60 deg. V6",
+        "redline": "5500 * units.rpm",
+        "starter_torque": "70 * units.lb_ft",
+        "starter_speed": "500 * units.rpm",
+        "throttle_gamma": "2.0"
+      },
+      "labels": {
+        "cycle": "2 * 360 * units.deg",
+        "rot180": "180 * units.deg",
+        "rot360": "360 * units.deg",
+        "stroke": "3.48 * units.inch",
+        "bore": "3.5 * units.inch",
+        "rod_length": "5.142 * units.inch",
+        "rod_mass": "535 * units.g",
+        "compression_height": "1.0 * units.inch",
+        "crank_mass": "50 * units.lb",
+        "flywheel_mass": "30 * units.lb",
+        "flywheel_radius": "7 * units.inch",
+        "crank_moment": "disk_moment_of_inertia(mass: crank_mass, radius: stroke",
+        "flywheel_moment": "disk_moment_of_inertia(mass: flywheel_mass, radius: flywheel_radius",
+        "other_moment": "disk_moment_of_inertia(mass: 10 * units.kg, radius: 1.0 * units.cm",
+        "spacing": "5.0 * units.inch",
+        "car_mass": "2700 * units.lb"
+      },
+      "layout": "v60-6",
+      "n_cylinders": 6,
+      "n_banks": 2,
+      "crank": {
+        "throw": "stroke / 2",
+        "flywheel_mass": "flywheel_mass",
+        "mass": "crank_mass",
+        "friction_torque": "20.0 * units.lb_ft",
+        "moment_of_inertia": "crank_moment + flywheel_moment + other_moment",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "(90 + 30) * units.deg"
+      },
+      "journals": [
+        {
+          "angle_expr": "0.0 * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "(0 + 60) * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "240.0 * units.deg",
+          "angle_deg": 240.0
+        },
+        {
+          "angle_expr": "(240.0 + 60) * units.deg",
+          "angle_deg": 14400.0
+        },
+        {
+          "angle_expr": "120.0 * units.deg",
+          "angle_deg": 120.0
+        },
+        {
+          "angle_expr": "(120.0 + 60) * units.deg",
+          "angle_deg": 7200.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "30.0 * units.deg",
+          "angle_deg": 30.0,
+          "cylinders": 3
+        },
+        {
+          "id": "b1",
+          "angle_expr": "-30.0 * units.deg",
+          "angle_deg": -30.0,
+          "cylinders": 3
+        }
+      ],
+      "bank_params": {
+        "bore": "bore",
+        "deck_height": "stroke / 2 + rod_length + compression_height"
+      },
+      "piston": {
+        "mass": "(414 + 152) * units.g",
+        "compression_height": "compression_height",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "rod_mass",
+        "moment_of_inertia": "rod_moment_of_inertia( mass: rod_mass, length: rod_length )",
+        "center_of_mass": "0.0",
+        "length": "rod_length"
+      },
+      "intake": {
+        "plenum_volume": "1.325 * units.L",
+        "plenum_cross_section_area": "20.0 * units.cm2",
+        "intake_flow_rate": "k_carb(400.0)",
+        "runner_flow_rate": "k_carb(250.0)",
+        "runner_length": "4.0 * units.inch",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.994",
+        "velocity_decay": "0.5"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(1000.0)",
+        "primary_tube_length": "20.0 * units.inch",
+        "primary_flow_rate": "k_carb(500.0)",
+        "velocity_decay": "1.0",
+        "length": "100.0 * units.inch"
+      },
+      "exhaust_systems": [
+        {
+          "audio_volume": "1.0",
+          "impulse_response": "ir_lib.mild_exhaust_0_reverb"
+        },
+        {
+          "audio_volume": "1.0",
+          "impulse_response": "ir_lib.mild_exhaust_0_reverb"
+        }
+      ],
+      "head": {
+        "chamber_volume": "chamber_volume",
+        "intake_runner_volume": "intake_runner_volume",
+        "intake_runner_cross_section_area": "intake_runner_cross_section_area",
+        "exhaust_runner_volume": "exhaust_runner_volume",
+        "exhaust_runner_cross_section_area": "exhaust_runner_cross_section_area",
+        "intake_port_flow": "intake_flow",
+        "exhaust_port_flow": "exhaust_flow",
+        "valvetrain": "standard_valvetrain( intake_camshaft: intake_camshaft, exhaust_camshaft: exhaust_camshaft )",
+        "flip_display": "flip_display"
+      },
+      "cam_lobe": {
+        "duration_at_50_thou": "222 * units.deg",
+        "gamma": "1.0",
+        "lift": "400 * units.thou",
+        "steps": "100"
+      },
+      "fuel": {},
+      "ignition": {
+        "rev_limit": "5600 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "20 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "25 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "30 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 20,
+      "raw_engine_keys": [
+        "name",
+        "redline",
+        "starter_speed",
+        "starter_torque",
+        "throttle_gamma"
+      ]
+    },
+    {
+      "id": "assets__engines__atg-video-2__05_odd_fire_v6",
+      "source": "assets/engines/atg-video-2/05_odd_fire_v6.mr",
+      "skipped": false,
+      "identity": {
+        "name": "Generic Odd-fire V6 (Common Rod Jnl.)",
+        "redline": "5500 * units.rpm",
+        "starter_torque": "70 * units.lb_ft",
+        "starter_speed": "500 * units.rpm",
+        "throttle_gamma": "2.0"
+      },
+      "labels": {
+        "cycle": "2 * 360 * units.deg",
+        "rot180": "180 * units.deg",
+        "rot360": "360 * units.deg",
+        "stroke": "3.48 * units.inch",
+        "bore": "3.5 * units.inch",
+        "rod_length": "5.142 * units.inch",
+        "rod_mass": "535 * units.g",
+        "compression_height": "1.0 * units.inch",
+        "crank_mass": "50 * units.lb",
+        "flywheel_mass": "30 * units.lb",
+        "flywheel_radius": "6 * units.inch",
+        "crank_moment": "disk_moment_of_inertia(mass: crank_mass, radius: stroke",
+        "flywheel_moment": "disk_moment_of_inertia(mass: flywheel_mass, radius: flywheel_radius",
+        "other_moment": "disk_moment_of_inertia(mass: 10 * units.kg, radius: 1.0 * units.cm",
+        "spacing": "5.0 * units.inch",
+        "car_mass": "2700 * units.lb"
+      },
+      "layout": "v90-6",
+      "n_cylinders": 6,
+      "n_banks": 2,
+      "crank": {
+        "throw": "stroke / 2",
+        "flywheel_mass": "flywheel_mass",
+        "mass": "crank_mass",
+        "friction_torque": "5.0 * units.lb_ft",
+        "moment_of_inertia": "crank_moment + flywheel_moment + other_moment",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "45 * units.deg"
+      },
+      "journals": [
+        {
+          "angle_expr": "0.0 * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "120.0 * units.deg",
+          "angle_deg": 120.0
+        },
+        {
+          "angle_expr": "240.0 * units.deg",
+          "angle_deg": 240.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "-45.0 * units.deg",
+          "angle_deg": -45.0,
+          "cylinders": 3
+        },
+        {
+          "id": "b1",
+          "angle_expr": "45.0 * units.deg",
+          "angle_deg": 45.0,
+          "cylinders": 3
+        }
+      ],
+      "bank_params": {
+        "bore": "bore",
+        "deck_height": "stroke / 2 + rod_length + compression_height"
+      },
+      "piston": {
+        "mass": "(414 + 152) * units.g",
+        "compression_height": "compression_height",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "rod_mass",
+        "moment_of_inertia": "rod_moment_of_inertia( mass: rod_mass, length: rod_length )",
+        "center_of_mass": "0.0",
+        "length": "rod_length"
+      },
+      "intake": {
+        "plenum_volume": "1.325 * units.L",
+        "plenum_cross_section_area": "20.0 * units.cm2",
+        "intake_flow_rate": "k_carb(400.0)",
+        "runner_flow_rate": "k_carb(250.0)",
+        "runner_length": "4.0 * units.inch",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.995",
+        "throttle_gamma": "2.0",
+        "velocity_decay": "0.5"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(1000.0)",
+        "primary_tube_length": "20.0 * units.inch",
+        "primary_flow_rate": "k_carb(600.0)",
+        "velocity_decay": "1.0"
+      },
+      "exhaust_systems": [
+        {
+          "length": "100 * units.inch",
+          "audio_volume": "1.0",
+          "impulse_response": "ir_lib.mild_exhaust_0_reverb"
+        },
+        {
+          "length": "172 * units.inch",
+          "audio_volume": "1.0",
+          "impulse_response": "ir_lib.mild_exhaust_0_reverb"
+        }
+      ],
+      "head": {
+        "chamber_volume": "chamber_volume",
+        "intake_runner_volume": "intake_runner_volume",
+        "intake_runner_cross_section_area": "intake_runner_cross_section_area",
+        "exhaust_runner_volume": "exhaust_runner_volume",
+        "exhaust_runner_cross_section_area": "exhaust_runner_cross_section_area",
+        "intake_port_flow": "intake_flow",
+        "exhaust_port_flow": "exhaust_flow",
+        "valvetrain": "standard_valvetrain( intake_camshaft: intake_camshaft, exhaust_camshaft: exhaust_camshaft )",
+        "flip_display": "flip_display"
+      },
+      "cam_lobe": {
+        "duration_at_50_thou": "222 * units.deg",
+        "gamma": "1.0",
+        "lift": "400 * units.thou",
+        "steps": "100"
+      },
+      "fuel": {},
+      "ignition": {
+        "rev_limit": "5600 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "20 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "25 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "30 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 20,
+      "raw_engine_keys": [
+        "fuel",
+        "name",
+        "redline",
+        "starter_speed",
+        "starter_torque",
+        "throttle_gamma"
+      ]
+    },
+    {
+      "id": "assets__engines__atg-video-2__06_even_fire_v6",
+      "source": "assets/engines/atg-video-2/06_even_fire_v6.mr",
+      "skipped": false,
+      "identity": {
+        "name": "Generic Even-fire V6 (Split Rod Jnl.)",
+        "redline": "5500 * units.rpm",
+        "starter_torque": "70 * units.lb_ft",
+        "starter_speed": "500 * units.rpm",
+        "throttle_gamma": "2.0"
+      },
+      "labels": {
+        "cycle": "2 * 360 * units.deg",
+        "rot180": "180 * units.deg",
+        "rot360": "360 * units.deg",
+        "stroke": "3.48 * units.inch",
+        "bore": "3.5 * units.inch",
+        "rod_length": "5.142 * units.inch",
+        "rod_mass": "535 * units.g",
+        "compression_height": "1.0 * units.inch",
+        "crank_mass": "50 * units.lb",
+        "flywheel_mass": "30 * units.lb",
+        "flywheel_radius": "6 * units.inch",
+        "crank_moment": "disk_moment_of_inertia(mass: crank_mass, radius: stroke",
+        "flywheel_moment": "disk_moment_of_inertia(mass: flywheel_mass, radius: flywheel_radius",
+        "other_moment": "disk_moment_of_inertia(mass: 10 * units.kg, radius: 1.0 * units.cm",
+        "spacing": "5.0 * units.inch",
+        "car_mass": "2700 * units.lb"
+      },
+      "layout": "v90-6",
+      "n_cylinders": 6,
+      "n_banks": 2,
+      "crank": {
+        "throw": "stroke / 2",
+        "flywheel_mass": "flywheel_mass",
+        "mass": "crank_mass",
+        "friction_torque": "5.0 * units.lb_ft",
+        "moment_of_inertia": "crank_moment + flywheel_moment + other_moment",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "45 * units.deg"
+      },
+      "journals": [
+        {
+          "angle_expr": "0.0 * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "(0.0 - 30) * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "120.0 * units.deg",
+          "angle_deg": 120.0
+        },
+        {
+          "angle_expr": "(120.0 - 30) * units.deg",
+          "angle_deg": 3600.0
+        },
+        {
+          "angle_expr": "240.0 * units.deg",
+          "angle_deg": 240.0
+        },
+        {
+          "angle_expr": "(240.0 - 30) * units.deg",
+          "angle_deg": 7200.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "-45.0 * units.deg",
+          "angle_deg": -45.0,
+          "cylinders": 3
+        },
+        {
+          "id": "b1",
+          "angle_expr": "45.0 * units.deg",
+          "angle_deg": 45.0,
+          "cylinders": 3
+        }
+      ],
+      "bank_params": {
+        "bore": "bore",
+        "deck_height": "stroke / 2 + rod_length + compression_height"
+      },
+      "piston": {
+        "mass": "(414 + 152) * units.g",
+        "compression_height": "compression_height",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "rod_mass",
+        "moment_of_inertia": "rod_moment_of_inertia( mass: rod_mass, length: rod_length )",
+        "center_of_mass": "0.0",
+        "length": "rod_length"
+      },
+      "intake": {
+        "plenum_volume": "1.325 * units.L",
+        "plenum_cross_section_area": "20.0 * units.cm2",
+        "intake_flow_rate": "k_carb(400.0)",
+        "runner_flow_rate": "k_carb(250.0)",
+        "runner_length": "4.0 * units.inch",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.995",
+        "velocity_decay": "0.5"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(1000.0)",
+        "primary_tube_length": "20.0 * units.inch",
+        "primary_flow_rate": "k_carb(300.0)",
+        "velocity_decay": "1.0",
+        "length": "100.0 * units.inch"
+      },
+      "exhaust_systems": [
+        {
+          "length": "100.0 * units.inch",
+          "audio_volume": "1.0",
+          "impulse_response": "ir_lib.mild_exhaust_0_reverb"
+        },
+        {
+          "length": "172.0 * units.inch",
+          "audio_volume": "1.0",
+          "impulse_response": "ir_lib.mild_exhaust_0_reverb"
+        }
+      ],
+      "head": {
+        "chamber_volume": "chamber_volume",
+        "intake_runner_volume": "intake_runner_volume",
+        "intake_runner_cross_section_area": "intake_runner_cross_section_area",
+        "exhaust_runner_volume": "exhaust_runner_volume",
+        "exhaust_runner_cross_section_area": "exhaust_runner_cross_section_area",
+        "intake_port_flow": "intake_flow",
+        "exhaust_port_flow": "exhaust_flow",
+        "valvetrain": "standard_valvetrain( intake_camshaft: intake_camshaft, exhaust_camshaft: exhaust_camshaft )",
+        "flip_display": "flip_display"
+      },
+      "cam_lobe": {
+        "duration_at_50_thou": "222 * units.deg",
+        "gamma": "1.0",
+        "lift": "400 * units.thou",
+        "steps": "100"
+      },
+      "fuel": {},
+      "ignition": {
+        "rev_limit": "5600 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "20 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "25 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "30 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 20,
+      "raw_engine_keys": [
+        "fuel",
+        "name",
+        "redline",
+        "starter_speed",
+        "starter_torque",
+        "throttle_gamma"
+      ]
+    },
+    {
+      "id": "assets__engines__atg-video-2__07_gm_ls",
+      "source": "assets/engines/atg-video-2/07_gm_ls.mr",
+      "skipped": false,
+      "identity": {
+        "name": "GM LS",
+        "redline": "6500 * units.rpm",
+        "starter_torque": "200 * units.lb_ft",
+        "starter_speed": "200 * units.rpm",
+        "simulation_frequency": "10000",
+        "throttle_gamma": "2.0",
+        "hf_gain": "0.01",
+        "noise": "1.0",
+        "jitter": "0.6"
+      },
+      "labels": {
+        "cycle": "2 * 360 * units.deg",
+        "rot": "90 * units.deg",
+        "rot360": "360 * units.deg",
+        "stroke": "3.622 * units.inch",
+        "bore": "3.78 * units.inch",
+        "rod_length": "160 * units.mm",
+        "rod_mass": "50 * units.g",
+        "compression_height": "1.0 * units.inch",
+        "crank_mass": "60 * units.lb",
+        "flywheel_mass": "30 * units.lb",
+        "flywheel_radius": "8 * units.inch",
+        "crank_moment": "1.5 * disk_moment_of_inertia(mass: crank_mass, radius: stroke",
+        "flywheel_moment": "disk_moment_of_inertia(mass: flywheel_mass, radius: flywheel_radius",
+        "other_moment": "disk_moment_of_inertia(mass: 1 * units.kg, radius: 1.0 * units.cm",
+        "v_angle": "90 * units.deg",
+        "spacing": "2 * units.inch"
+      },
+      "layout": "v90-8",
+      "n_cylinders": 8,
+      "n_banks": 2,
+      "crank": {
+        "throw": "stroke / 2",
+        "flywheel_mass": "flywheel_mass",
+        "mass": "crank_mass",
+        "friction_torque": "20.0 * units.lb_ft",
+        "moment_of_inertia": "crank_moment + flywheel_moment + other_moment",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "90 * units.deg - (v_angle / 2.0)"
+      },
+      "journals": [
+        {
+          "angle_expr": "0 * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "270 * units.deg",
+          "angle_deg": 270.0
+        },
+        {
+          "angle_expr": "90 * units.deg",
+          "angle_deg": 90.0
+        },
+        {
+          "angle_expr": "180 * units.deg",
+          "angle_deg": 180.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "-v_angle / 2.0",
+          "angle_deg": 0.0,
+          "cylinders": 4
+        },
+        {
+          "id": "b1",
+          "angle_expr": "v_angle / 2.0",
+          "angle_deg": 0.0,
+          "cylinders": 4
+        }
+      ],
+      "bank_params": {
+        "bore": "bore",
+        "deck_height": "stroke / 2 + rod_length + compression_height"
+      },
+      "piston": {
+        "mass": "(100) * units.g",
+        "compression_height": "compression_height",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "rod_mass",
+        "moment_of_inertia": "rod_moment_of_inertia( mass: rod_mass, length: rod_length )",
+        "center_of_mass": "0.0",
+        "length": "rod_length"
+      },
+      "intake": {
+        "plenum_volume": "1.325 * units.L",
+        "plenum_cross_section_area": "20.0 * units.cm2",
+        "intake_flow_rate": "k_carb(700.0)",
+        "runner_flow_rate": "k_carb(100.0)",
+        "runner_length": "12.0 * units.inch",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.996",
+        "velocity_decay": "0.5"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(1000.0)",
+        "primary_tube_length": "29.0 * units.inch",
+        "primary_flow_rate": "k_carb(500.0)",
+        "velocity_decay": "1.0"
+      },
+      "exhaust_systems": [
+        {
+          "audio_volume": "4.0",
+          "length": "100 * units.inch",
+          "impulse_response": "ir_lib.default_0"
+        },
+        {
+          "audio_volume": "4.0",
+          "length": "172 * units.inch",
+          "impulse_response": "ir_lib.default_0"
+        }
+      ],
+      "head": {
+        "chamber_volume": "chamber_volume",
+        "intake_runner_volume": "intake_runner_volume",
+        "intake_runner_cross_section_area": "intake_runner_cross_section_area",
+        "exhaust_runner_volume": "exhaust_runner_volume",
+        "exhaust_runner_cross_section_area": "exhaust_runner_cross_section_area",
+        "intake_port_flow": "intake_flow",
+        "exhaust_port_flow": "exhaust_flow",
+        "valvetrain": "standard_valvetrain( intake_camshaft: intake_camshaft, exhaust_camshaft: exhaust_camshaft )",
+        "flip_display": "flip_display"
+      },
+      "cam_lobe": {
+        "duration_at_50_thou": "234 * units.deg",
+        "gamma": "1.1",
+        "lift": "551 * units.thou",
+        "steps": "256"
+      },
+      "fuel": {
+        "max_burning_efficiency": "1.0",
+        "turbulence_to_flame_speed_ratio": "turbulence_to_flame_speed_ratio()"
+      },
+      "ignition": {
+        "rev_limit": "6800 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0.0",
+            "advance": "3.0"
+          },
+          {
+            "rpm": "5.0",
+            "advance": "1.5 * 5.0"
+          },
+          {
+            "rpm": "10.0",
+            "advance": "1.75 * 10.0"
+          },
+          {
+            "rpm": "15.0",
+            "advance": "2.0 * 15.0"
+          },
+          {
+            "rpm": "20.0",
+            "advance": "2.0 * 20.0"
+          },
+          {
+            "rpm": "25.0",
+            "advance": "2.0 * 25.0"
+          },
+          {
+            "rpm": "30.0",
+            "advance": "2.0 * 30.0"
+          },
+          {
+            "rpm": "35.0",
+            "advance": "2.0 * 35.0"
+          },
+          {
+            "rpm": "40.0",
+            "advance": "2.0 * 40.0"
+          },
+          {
+            "rpm": "45.0",
+            "advance": "2.0 * 45.0"
+          },
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "20 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "5000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "6000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "7000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "8000 * units.rpm",
+            "advance": "40 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 20,
+      "raw_engine_keys": [
+        "fuel",
+        "hf_gain",
+        "jitter",
+        "name",
+        "noise",
+        "redline",
+        "simulation_frequency",
+        "starter_speed",
+        "starter_torque",
+        "throttle_gamma"
+      ]
+    },
+    {
+      "id": "assets__engines__atg-video-2__08_ferrari_f136_v8",
+      "source": "assets/engines/atg-video-2/08_ferrari_f136_v8.mr",
+      "skipped": false,
+      "identity": {
+        "name": "Ferrari F136",
+        "redline": "9000 * units.rpm",
+        "starter_torque": "200 * units.lb_ft",
+        "starter_speed": "200 * units.rpm",
+        "simulation_frequency": "10000",
+        "throttle_gamma": "2.0",
+        "hf_gain": "0.01",
+        "noise": "1.0",
+        "jitter": "0.15"
+      },
+      "labels": {
+        "cycle": "2 * 360 * units.deg",
+        "rot": "90 * units.deg",
+        "rot360": "360 * units.deg",
+        "stroke": "81 * units.mm",
+        "bore": "94 * units.mm",
+        "rod_length": "160 * units.mm",
+        "rod_mass": "50 * units.g",
+        "compression_height": "1.0 * units.inch",
+        "crank_mass": "60 * units.lb",
+        "flywheel_mass": "30 * units.lb",
+        "flywheel_radius": "8 * units.inch",
+        "crank_moment": "1.5 * disk_moment_of_inertia(mass: crank_mass, radius: stroke",
+        "flywheel_moment": "disk_moment_of_inertia(mass: flywheel_mass, radius: flywheel_radius",
+        "other_moment": "disk_moment_of_inertia(mass: 1 * units.kg, radius: 1.0 * units.cm",
+        "v_angle": "90 * units.deg",
+        "spacing": "5 * units.inch"
+      },
+      "layout": "v90-8",
+      "n_cylinders": 8,
+      "n_banks": 2,
+      "crank": {
+        "throw": "stroke / 2",
+        "flywheel_mass": "flywheel_mass",
+        "mass": "crank_mass",
+        "friction_torque": "20.0 * units.lb_ft",
+        "moment_of_inertia": "crank_moment + flywheel_moment + other_moment",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "90 * units.deg + (v_angle / 2.0)"
+      },
+      "journals": [
+        {
+          "angle_expr": "0 * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "180 * units.deg",
+          "angle_deg": 180.0
+        },
+        {
+          "angle_expr": "180 * units.deg",
+          "angle_deg": 180.0
+        },
+        {
+          "angle_expr": "0 * units.deg",
+          "angle_deg": 0.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "v_angle / 2.0",
+          "angle_deg": 0.0,
+          "cylinders": 4
+        },
+        {
+          "id": "b1",
+          "angle_expr": "-v_angle / 2.0",
+          "angle_deg": 0.0,
+          "cylinders": 4
+        }
+      ],
+      "bank_params": {
+        "bore": "bore",
+        "deck_height": "stroke / 2 + rod_length + compression_height"
+      },
+      "piston": {
+        "mass": "(100) * units.g",
+        "compression_height": "compression_height",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "rod_mass",
+        "moment_of_inertia": "rod_moment_of_inertia( mass: rod_mass, length: rod_length )",
+        "center_of_mass": "0.0",
+        "length": "rod_length"
+      },
+      "intake": {
+        "plenum_volume": "1.325 * units.L",
+        "plenum_cross_section_area": "20.0 * units.cm2",
+        "intake_flow_rate": "k_carb(700.0)",
+        "runner_flow_rate": "k_carb(100.0)",
+        "runner_length": "12.0 * units.inch",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.995",
+        "velocity_decay": "0.5"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(1000.0)",
+        "primary_tube_length": "29.0 * units.inch",
+        "primary_flow_rate": "k_carb(600.0)",
+        "velocity_decay": "0.5"
+      },
+      "exhaust_systems": [
+        {
+          "audio_volume": "2.0 * 0.1",
+          "length": "100 * units.inch",
+          "impulse_response": "ir_lib.mild_exhaust_0_reverb"
+        },
+        {
+          "audio_volume": "2.0 * 0.09",
+          "length": "100 * units.inch",
+          "impulse_response": "ir_lib.mild_exhaust_0_reverb"
+        }
+      ],
+      "head": {
+        "chamber_volume": "chamber_volume",
+        "intake_runner_volume": "intake_runner_volume",
+        "intake_runner_cross_section_area": "intake_runner_cross_section_area",
+        "exhaust_runner_volume": "exhaust_runner_volume",
+        "exhaust_runner_cross_section_area": "exhaust_runner_cross_section_area",
+        "intake_port_flow": "intake_flow",
+        "exhaust_port_flow": "exhaust_flow",
+        "valvetrain": "standard_valvetrain( intake_camshaft: intake_camshaft, exhaust_camshaft: exhaust_camshaft )",
+        "flip_display": "flip_display"
+      },
+      "cam_lobe": {
+        "duration_at_50_thou": "230 * units.deg",
+        "gamma": "0.9",
+        "lift": "551 * units.thou",
+        "steps": "256"
+      },
+      "fuel": {
+        "max_burning_efficiency": "1.0",
+        "turbulence_to_flame_speed_ratio": "turbulence_to_flame_speed_ratio()"
+      },
+      "ignition": {
+        "rev_limit": "9300 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0.0",
+            "advance": "3.0"
+          },
+          {
+            "rpm": "5.0",
+            "advance": "1.5 * 5.0"
+          },
+          {
+            "rpm": "10.0",
+            "advance": "1.75 * 10.0"
+          },
+          {
+            "rpm": "15.0",
+            "advance": "2.0 * 15.0"
+          },
+          {
+            "rpm": "20.0",
+            "advance": "2.0 * 20.0"
+          },
+          {
+            "rpm": "25.0",
+            "advance": "2.0 * 25.0"
+          },
+          {
+            "rpm": "30.0",
+            "advance": "2.0 * 30.0"
+          },
+          {
+            "rpm": "35.0",
+            "advance": "2.0 * 35.0"
+          },
+          {
+            "rpm": "40.0",
+            "advance": "2.0 * 40.0"
+          },
+          {
+            "rpm": "45.0",
+            "advance": "2.0 * 45.0"
+          },
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "20 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "5000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "6000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "7000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "8000 * units.rpm",
+            "advance": "40 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 20,
+      "raw_engine_keys": [
+        "fuel",
+        "hf_gain",
+        "jitter",
+        "name",
+        "noise",
+        "redline",
+        "simulation_frequency",
+        "starter_speed",
+        "starter_torque",
+        "throttle_gamma"
+      ]
+    },
+    {
+      "id": "assets__engines__atg-video-2__09_radial_9",
+      "source": "assets/engines/atg-video-2/09_radial_9.mr",
+      "skipped": false,
+      "identity": {
+        "name": "Radial 9",
+        "redline": "3000 * units.rpm",
+        "starter_torque": "80 * units.lb_ft",
+        "starter_speed": "400 * units.rpm",
+        "simulation_frequency": "7500"
+      },
+      "labels": {
+        "cycle": "2 * 360 * units.deg",
+        "slave_throw": "3.5 * units.inch",
+        "stroke": "5.5 * units.inch",
+        "bore": "5 * units.inch",
+        "rod_length": "16 * units.inch",
+        "compression_height": "1.0 * units.inch",
+        "rod_mass": "535 * units.g",
+        "crank_mass": "20.39 * units.kg",
+        "flywheel_mass": "50 * units.kg",
+        "flywheel_radius": "12 * units.inch",
+        "crank_moment": "disk_moment_of_inertia(mass: crank_mass, radius: stroke / 2",
+        "flywheel_moment": "disk_moment_of_inertia(mass: flywheel_mass, radius: flywheel_radius",
+        "other_moment": "disk_moment_of_inertia(mass: 10 * units.kg, radius: 2.0 * units.cm",
+        "spacing": "10 * units.inch",
+        "car_mass": "2700 * units.lb"
+      },
+      "layout": "v25920-9",
+      "n_cylinders": 9,
+      "n_banks": 9,
+      "crank": {
+        "throw": "stroke / 2",
+        "flywheel_mass": "10 * units.lb",
+        "mass": "10 * units.lb",
+        "friction_torque": "10.0 * units.lb_ft",
+        "moment_of_inertia": "crank_moment + flywheel_moment + other_moment",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "(90 - 0.5 * 45) * units.deg"
+      },
+      "journals": [
+        {
+          "angle_expr": "0.0",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "(0 / 9.0) * 360 * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "(1 / 9.0) * 360 * units.deg",
+          "angle_deg": 3240.0
+        },
+        {
+          "angle_expr": "(2 / 9.0) * 360 * units.deg",
+          "angle_deg": 6480.0
+        },
+        {
+          "angle_expr": "(3 / 9.0) * 360 * units.deg",
+          "angle_deg": 9720.0
+        },
+        {
+          "angle_expr": "(4 / 9.0) * 360 * units.deg",
+          "angle_deg": 12960.0
+        },
+        {
+          "angle_expr": "(5 / 9.0) * 360 * units.deg",
+          "angle_deg": 16200.0
+        },
+        {
+          "angle_expr": "(6 / 9.0) * 360 * units.deg",
+          "angle_deg": 19440.0
+        },
+        {
+          "angle_expr": "(7 / 9.0) * 360 * units.deg",
+          "angle_deg": 22680.0
+        },
+        {
+          "angle_expr": "(8 / 9.0) * 360 * units.deg",
+          "angle_deg": 25920.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "(0 / 9.0) * 360 * units.deg",
+          "angle_deg": 0.0,
+          "cylinders": 1
+        },
+        {
+          "id": "b1",
+          "angle_expr": "(1 / 9.0) * 360 * units.deg",
+          "angle_deg": 3240.0,
+          "cylinders": 1
+        },
+        {
+          "id": "b2",
+          "angle_expr": "(2 / 9.0) * 360 * units.deg",
+          "angle_deg": 6480.0,
+          "cylinders": 1
+        },
+        {
+          "id": "b3",
+          "angle_expr": "(3 / 9.0) * 360 * units.deg",
+          "angle_deg": 9720.0,
+          "cylinders": 1
+        },
+        {
+          "id": "b4",
+          "angle_expr": "(4 / 9.0) * 360 * units.deg",
+          "angle_deg": 12960.0,
+          "cylinders": 1
+        },
+        {
+          "id": "b5",
+          "angle_expr": "(5 / 9.0) * 360 * units.deg",
+          "angle_deg": 16200.0,
+          "cylinders": 1
+        },
+        {
+          "id": "b6",
+          "angle_expr": "(6 / 9.0) * 360 * units.deg",
+          "angle_deg": 19440.0,
+          "cylinders": 1
+        },
+        {
+          "id": "b7",
+          "angle_expr": "(7 / 9.0) * 360 * units.deg",
+          "angle_deg": 22680.0,
+          "cylinders": 1
+        },
+        {
+          "id": "b8",
+          "angle_expr": "(8 / 9.0) * 360 * units.deg",
+          "angle_deg": 25920.0,
+          "cylinders": 1
+        }
+      ],
+      "bank_params": {
+        "bore": "bore",
+        "deck_height": "stroke / 2 + rod_length + compression_height"
+      },
+      "piston": {
+        "mass": "10 * units.g",
+        "compression_height": "compression_height",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "100.0 * units.g",
+        "moment_of_inertia": "0.0015884918028487504",
+        "center_of_mass": "0.0",
+        "length": "rod_length - slave_throw"
+      },
+      "intake": {
+        "plenum_volume": "10.5 * units.L",
+        "plenum_cross_section_area": "10.0 * units.cm2",
+        "intake_flow_rate": "k_carb(1000.0)",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.993",
+        "throttle_gamma": "1.0",
+        "velocity_decay": "1.0"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(2000.0)",
+        "primary_tube_length": "70.0 * units.inch",
+        "primary_flow_rate": "k_carb(1000.0)",
+        "velocity_decay": "0.75",
+        "length": "100 * units.inch"
+      },
+      "exhaust_systems": [
+        {
+          "audio_volume": "1.0",
+          "impulse_response": "ir_lib.mild_exhaust_0_reverb"
+        },
+        {
+          "audio_volume": "1.0",
+          "impulse_response": "ir_lib.mild_exhaust_0_reverb"
+        }
+      ],
+      "head": {},
+      "cam_lobe": {
+        "duration_at_50_thou": "260 * units.deg",
+        "gamma": "0.9",
+        "lift": "800 * units.thou",
+        "steps": "100"
+      },
+      "fuel": {},
+      "ignition": {
+        "rev_limit": "3500 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "18 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "18 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "40 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 0,
+      "raw_engine_keys": [
+        "fuel",
+        "name",
+        "redline",
+        "simulation_frequency",
+        "starter_speed",
+        "starter_torque"
+      ]
+    },
+    {
+      "id": "assets__engines__atg-video-2__10_lfa_v10",
+      "source": "assets/engines/atg-video-2/10_lfa_v10.mr",
+      "skipped": false,
+      "identity": {
+        "name": "1LR-GUE [V10]",
+        "redline": "9000 * units.rpm",
+        "starter_torque": "100 * units.lb_ft",
+        "starter_speed": "200 * units.rpm",
+        "simulation_frequency": "6500",
+        "throttle_gamma": "2.0",
+        "hf_gain": "0.01",
+        "noise": "1.0",
+        "jitter": "0.1"
+      },
+      "labels": {
+        "cycle": "2 * 360 * units.deg",
+        "rot": "72 * units.deg",
+        "rot360": "360 * units.deg",
+        "stroke": "79 * units.mm",
+        "bore": "88 * units.mm",
+        "rod_length": "130 * units.mm",
+        "rod_mass": "50 * units.g",
+        "compression_height": "1.0 * units.inch",
+        "crank_mass": "40 * units.lb",
+        "flywheel_mass": "30 * units.lb",
+        "flywheel_radius": "6.5 * units.inch",
+        "crank_moment": "disk_moment_of_inertia(mass: crank_mass, radius: stroke",
+        "flywheel_moment": "disk_moment_of_inertia(mass: flywheel_mass, radius: flywheel_radius",
+        "other_moment": "disk_moment_of_inertia(mass: 1 * units.kg, radius: 1.0 * units.cm",
+        "v_angle": "72 * units.deg"
+      },
+      "layout": "v90-10",
+      "n_cylinders": 10,
+      "n_banks": 2,
+      "crank": {
+        "throw": "stroke / 2",
+        "flywheel_mass": "flywheel_mass",
+        "mass": "crank_mass",
+        "friction_torque": "0.0 * units.lb_ft",
+        "moment_of_inertia": "crank_moment + flywheel_moment + other_moment",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "90 * units.deg + (v_angle / 2.0)"
+      },
+      "journals": [
+        {
+          "angle_expr": "0 * v_angle"
+        },
+        {
+          "angle_expr": "2 * v_angle"
+        },
+        {
+          "angle_expr": "3 * v_angle"
+        },
+        {
+          "angle_expr": "4 * v_angle"
+        },
+        {
+          "angle_expr": "1 * v_angle"
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "v_angle / 2.0",
+          "angle_deg": 0.0,
+          "cylinders": 5
+        },
+        {
+          "id": "b1",
+          "angle_expr": "-v_angle / 2.0",
+          "angle_deg": 0.0,
+          "cylinders": 5
+        }
+      ],
+      "bank_params": {
+        "bore": "bore",
+        "deck_height": "stroke / 2 + rod_length + compression_height"
+      },
+      "piston": {
+        "mass": "(100) * units.g",
+        "compression_height": "compression_height",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "rod_mass",
+        "moment_of_inertia": "rod_moment_of_inertia( mass: rod_mass, length: rod_length )",
+        "center_of_mass": "0.0",
+        "length": "rod_length"
+      },
+      "intake": {
+        "plenum_volume": "1.325 * units.L",
+        "plenum_cross_section_area": "20.0 * units.cm2",
+        "intake_flow_rate": "k_carb(1000.0)",
+        "runner_flow_rate": "k_carb(200.0)",
+        "runner_length": "4.0 * units.inch",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.998",
+        "velocity_decay": "0.5"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(2000.0)",
+        "primary_tube_length": "50.0 * units.inch",
+        "primary_flow_rate": "k_carb(1000.0)",
+        "velocity_decay": "1.0"
+      },
+      "exhaust_systems": [
+        {
+          "audio_volume": "2.0",
+          "length": "100 * units.inch",
+          "impulse_response": "ir_lib.mild_exhaust_0_reverb"
+        },
+        {
+          "audio_volume": "2.0",
+          "length": "100.5 * units.inch",
+          "impulse_response": "ir_lib.mild_exhaust_0_reverb"
+        }
+      ],
+      "head": {
+        "chamber_volume": "chamber_volume",
+        "intake_runner_volume": "intake_runner_volume",
+        "intake_runner_cross_section_area": "intake_runner_cross_section_area",
+        "exhaust_runner_volume": "exhaust_runner_volume",
+        "exhaust_runner_cross_section_area": "exhaust_runner_cross_section_area",
+        "intake_port_flow": "intake_flow",
+        "exhaust_port_flow": "exhaust_flow",
+        "valvetrain": "standard_valvetrain( intake_camshaft: intake_camshaft, exhaust_camshaft: exhaust_camshaft )",
+        "flip_display": "flip_display"
+      },
+      "cam_lobe": {
+        "duration_at_50_thou": "230 * units.deg",
+        "gamma": "1.1",
+        "lift": "15.95 * units.mm",
+        "steps": "100"
+      },
+      "fuel": {
+        "max_turbulence_effect": "10.0",
+        "max_dilution_effect": "20.0",
+        "burning_efficiency_randomness": "0.25",
+        "max_burning_efficiency": "1.0"
+      },
+      "ignition": {
+        "rev_limit": "9500 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "8000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "12000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "14000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "18000 * units.rpm",
+            "advance": "40 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 20,
+      "raw_engine_keys": [
+        "fuel",
+        "hf_gain",
+        "jitter",
+        "name",
+        "noise",
+        "redline",
+        "simulation_frequency",
+        "starter_speed",
+        "starter_torque",
+        "throttle_gamma"
+      ]
+    },
+    {
+      "id": "assets__engines__atg-video-2__11_merlin_v12",
+      "source": "assets/engines/atg-video-2/11_merlin_v12.mr",
+      "skipped": false,
+      "identity": {
+        "name": "Merlin V-1650-9 [V12] (NA)",
+        "redline": "3000 * units.rpm",
+        "starter_torque": "190 * units.lb_ft",
+        "starter_speed": "200 * units.rpm",
+        "simulation_frequency": "7000",
+        "throttle_gamma": "2.0",
+        "hf_gain": "0.004",
+        "noise": "0.35",
+        "jitter": "0.229"
+      },
+      "labels": {
+        "cycle": "2 * 360 * units.deg",
+        "rot180": "180 * units.deg",
+        "rot360": "360 * units.deg",
+        "stroke": "6 * units.inch",
+        "bore": "5.4 * units.inch",
+        "rod_length": "14 * units.inch",
+        "rod_mass": "2000 * units.g",
+        "compression_height": "1.0 * units.inch",
+        "crank_mass": "400 * units.lb",
+        "flywheel_mass": "200 * units.lb",
+        "flywheel_radius": "12 * units.inch",
+        "crank_moment": "disk_moment_of_inertia(mass: crank_mass, radius: stroke",
+        "flywheel_moment": "disk_moment_of_inertia(mass: flywheel_mass, radius: flywheel_radius",
+        "other_moment": "disk_moment_of_inertia(mass: 1 * units.kg, radius: 1.0 * units.cm",
+        "spacing": "6 * units.inch",
+        "car_mass": "2700 * units.lb"
+      },
+      "layout": "v90-12",
+      "n_cylinders": 12,
+      "n_banks": 2,
+      "crank": {
+        "throw": "stroke / 2",
+        "flywheel_mass": "flywheel_mass",
+        "mass": "crank_mass",
+        "friction_torque": "50.0 * units.lb_ft",
+        "moment_of_inertia": "crank_moment + flywheel_moment + other_moment",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "(90 + 30) * units.deg"
+      },
+      "journals": [
+        {
+          "angle_expr": "0 * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "240 * units.deg",
+          "angle_deg": 240.0
+        },
+        {
+          "angle_expr": "120 * units.deg",
+          "angle_deg": 120.0
+        },
+        {
+          "angle_expr": "120 * units.deg",
+          "angle_deg": 120.0
+        },
+        {
+          "angle_expr": "240 * units.deg",
+          "angle_deg": 240.0
+        },
+        {
+          "angle_expr": "0 * units.deg",
+          "angle_deg": 0.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "(60 / 2.0) * units.deg",
+          "angle_deg": 120.0,
+          "cylinders": 6
+        },
+        {
+          "id": "b1",
+          "angle_expr": "-(60 / 2.0) * units.deg",
+          "angle_deg": 120.0,
+          "cylinders": 6
+        }
+      ],
+      "bank_params": {
+        "bore": "bore",
+        "deck_height": "stroke / 2 + rod_length + compression_height"
+      },
+      "piston": {
+        "mass": "(1000) * units.g",
+        "compression_height": "compression_height",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "rod_mass",
+        "moment_of_inertia": "rod_moment_of_inertia( mass: rod_mass, length: rod_length )",
+        "center_of_mass": "0.0",
+        "length": "rod_length"
+      },
+      "intake": {
+        "plenum_volume": "1.325 * units.L",
+        "plenum_cross_section_area": "20.0 * units.cm2",
+        "intake_flow_rate": "k_carb(1400.0)",
+        "runner_flow_rate": "k_carb(200.0)",
+        "runner_length": "16.0 * units.inch",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.99",
+        "velocity_decay": "0.5"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(2000.0)",
+        "primary_tube_length": "50.0 * units.inch",
+        "primary_flow_rate": "k_carb(400.0)",
+        "velocity_decay": "1.0"
+      },
+      "exhaust_systems": [
+        {
+          "length": "30 * units.inch",
+          "audio_volume": "1.0 * 0.5",
+          "impulse_response": "ir_lib.minimal_muffling_01"
+        },
+        {
+          "length": "70 * units.inch",
+          "audio_volume": "1.0 * 0.5",
+          "impulse_response": "ir_lib.minimal_muffling_01"
+        }
+      ],
+      "head": {
+        "chamber_volume": "chamber_volume",
+        "intake_runner_volume": "intake_runner_volume",
+        "intake_runner_cross_section_area": "intake_runner_cross_section_area",
+        "exhaust_runner_volume": "exhaust_runner_volume",
+        "exhaust_runner_cross_section_area": "exhaust_runner_cross_section_area",
+        "intake_port_flow": "intake_flow",
+        "exhaust_port_flow": "exhaust_flow",
+        "valvetrain": "standard_valvetrain( intake_camshaft: intake_camshaft, exhaust_camshaft: exhaust_camshaft )",
+        "flip_display": "flip_display"
+      },
+      "cam_lobe": {
+        "duration_at_50_thou": "242 * units.deg",
+        "gamma": "0.8",
+        "lift": "15.95 * units.mm",
+        "steps": "100"
+      },
+      "fuel": {
+        "max_turbulence_effect": "10.0",
+        "max_dilution_effect": "5.0",
+        "burning_efficiency_randomness": "0.1",
+        "max_burning_efficiency": "1.0"
+      },
+      "ignition": {
+        "rev_limit": "3500 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "50 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 20,
+      "raw_engine_keys": [
+        "fuel",
+        "hf_gain",
+        "jitter",
+        "name",
+        "noise",
+        "redline",
+        "simulation_frequency",
+        "starter_speed",
+        "starter_torque",
+        "throttle_gamma"
+      ]
+    },
+    {
+      "id": "assets__engines__atg-video-2__12_ferrari_412_t2",
+      "source": "assets/engines/atg-video-2/12_ferrari_412_t2.mr",
+      "skipped": false,
+      "identity": {
+        "name": "Ferrari 412 T2 [V12]",
+        "redline": "18000 * units.rpm",
+        "starter_torque": "70 * units.lb_ft",
+        "starter_speed": "500 * units.rpm",
+        "simulation_frequency": "5000",
+        "throttle_gamma": "2.0",
+        "hf_gain": "0.01",
+        "noise": "1.0",
+        "jitter": "0.1"
+      },
+      "labels": {
+        "cycle": "2 * 360 * units.deg",
+        "rot180": "180 * units.deg",
+        "rot360": "360 * units.deg",
+        "stroke": "43 * units.mm",
+        "bore": "86 * units.mm",
+        "rod_length": "120 * units.mm",
+        "rod_mass": "50 * units.g",
+        "compression_height": "1.0 * units.inch",
+        "crank_mass": "20 * units.lb",
+        "flywheel_mass": "10 * units.lb",
+        "flywheel_radius": "5 * units.inch",
+        "crank_moment": "disk_moment_of_inertia(mass: crank_mass, radius: stroke",
+        "flywheel_moment": "disk_moment_of_inertia(mass: flywheel_mass, radius: flywheel_radius",
+        "other_moment": "disk_moment_of_inertia(mass: 1 * units.kg, radius: 1.0 * units.cm",
+        "spacing": "0.1"
+      },
+      "layout": "v90-12",
+      "n_cylinders": 12,
+      "n_banks": 2,
+      "crank": {
+        "throw": "stroke / 2",
+        "flywheel_mass": "flywheel_mass",
+        "mass": "crank_mass",
+        "friction_torque": "1.0 * units.lb_ft",
+        "moment_of_inertia": "crank_moment + flywheel_moment + other_moment",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "(90 + (75 / 2.0)) * units.deg"
+      },
+      "journals": [
+        {
+          "angle_expr": "0 * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "120 * units.deg",
+          "angle_deg": 120.0
+        },
+        {
+          "angle_expr": "240 * units.deg",
+          "angle_deg": 240.0
+        },
+        {
+          "angle_expr": "240 * units.deg",
+          "angle_deg": 240.0
+        },
+        {
+          "angle_expr": "120 * units.deg",
+          "angle_deg": 120.0
+        },
+        {
+          "angle_expr": "0 * units.deg",
+          "angle_deg": 0.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "(75 / 2.0) * units.deg",
+          "angle_deg": 150.0,
+          "cylinders": 6
+        },
+        {
+          "id": "b1",
+          "angle_expr": "-(75 / 2.0) * units.deg",
+          "angle_deg": 150.0,
+          "cylinders": 6
+        }
+      ],
+      "bank_params": {
+        "bore": "bore",
+        "deck_height": "stroke / 2 + rod_length + compression_height"
+      },
+      "piston": {
+        "mass": "(50) * units.g",
+        "compression_height": "compression_height",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "rod_mass",
+        "moment_of_inertia": "rod_moment_of_inertia( mass: rod_mass, length: rod_length )",
+        "center_of_mass": "0.0",
+        "length": "rod_length"
+      },
+      "intake": {
+        "plenum_volume": "1.325 * units.L",
+        "plenum_cross_section_area": "20.0 * units.cm2",
+        "intake_flow_rate": "k_carb(1400.0)",
+        "runner_flow_rate": "k_carb(200.0)",
+        "runner_length": "4.0 * units.inch",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.992",
+        "velocity_decay": "0.5"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(2000.0)",
+        "primary_tube_length": "20.0 * units.inch",
+        "primary_flow_rate": "k_carb(200.0)",
+        "velocity_decay": "0.5"
+      },
+      "exhaust_systems": [
+        {
+          "audio_volume": "1.0 * 0.004",
+          "length": "20 * units.inch",
+          "impulse_response": "ir_lib.minimal_muffling_01"
+        },
+        {
+          "audio_volume": "1.0 * 0.004",
+          "length": "56 * units.inch",
+          "impulse_response": "ir_lib.minimal_muffling_01"
+        }
+      ],
+      "head": {
+        "chamber_volume": "chamber_volume",
+        "intake_runner_volume": "intake_runner_volume",
+        "intake_runner_cross_section_area": "intake_runner_cross_section_area",
+        "exhaust_runner_volume": "exhaust_runner_volume",
+        "exhaust_runner_cross_section_area": "exhaust_runner_cross_section_area",
+        "intake_port_flow": "intake_flow",
+        "exhaust_port_flow": "exhaust_flow",
+        "valvetrain": "standard_valvetrain( intake_camshaft: intake_camshaft, exhaust_camshaft: exhaust_camshaft )",
+        "flip_display": "flip_display"
+      },
+      "cam_lobe": {
+        "duration_at_50_thou": "242 * units.deg",
+        "gamma": "0.8",
+        "lift": "15.95 * units.mm",
+        "steps": "512"
+      },
+      "fuel": {
+        "max_turbulence_effect": "10.0",
+        "max_dilution_effect": "5.0",
+        "burning_efficiency_randomness": "1.0",
+        "max_burning_efficiency": "1.0",
+        "turbulence_to_flame_speed_ratio": "turbulence_to_flame_speed_ratio()"
+      },
+      "ignition": {
+        "rev_limit": "18500 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0.0",
+            "advance": "2.0 * 3.0"
+          },
+          {
+            "rpm": "5.0",
+            "advance": "2.0 * 1.5 * 5.0"
+          },
+          {
+            "rpm": "10.0",
+            "advance": "2.5 * 1.5 * 10.0"
+          },
+          {
+            "rpm": "15.0",
+            "advance": "3.0 * 1.5 * 15.0"
+          },
+          {
+            "rpm": "20.0",
+            "advance": "3.0 * 1.5 * 20.0"
+          },
+          {
+            "rpm": "25.0",
+            "advance": "3.0 * 1.5 * 25.0"
+          },
+          {
+            "rpm": "30.0",
+            "advance": "3.0 * 1.5 * 30.0"
+          },
+          {
+            "rpm": "35.0",
+            "advance": "3.0 * 1.5 * 35.0"
+          },
+          {
+            "rpm": "40.0",
+            "advance": "3.0 * 1.5 * 40.0"
+          },
+          {
+            "rpm": "45.0",
+            "advance": "3.0 * 1.5 * 45.0"
+          },
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "8000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "12000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "14000 * units.rpm",
+            "advance": "40 * units.deg"
+          },
+          {
+            "rpm": "18000 * units.rpm",
+            "advance": "40 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 20,
+      "raw_engine_keys": [
+        "fuel",
+        "hf_gain",
+        "jitter",
+        "name",
+        "noise",
+        "redline",
+        "simulation_frequency",
+        "starter_speed",
+        "starter_torque",
+        "throttle_gamma"
+      ]
+    },
+    {
+      "id": "assets__engines__atg-video-2__radial",
+      "source": "assets/engines/atg-video-2/radial.mr",
+      "skipped": true,
+      "reason": "no engine(name: ...) found"
+    },
+    {
+      "id": "assets__engines__audi__i5",
+      "source": "assets/engines/audi/i5.mr",
+      "skipped": false,
+      "identity": {
+        "name": "Audi 2.2 inline 5",
+        "redline": "7500 * units.rpm",
+        "starter_torque": "200 * units.lb_ft"
+      },
+      "labels": {
+        "cycle": "2 * 360 * units.deg",
+        "rot": "2 * (360 / 5.0",
+        "rot360": "360 * units.deg"
+      },
+      "layout": "inline-5",
+      "n_cylinders": 5,
+      "n_banks": 1,
+      "crank": {
+        "throw": "0.5 * 86.4 * units.mm",
+        "flywheel_mass": "20 * units.lb",
+        "mass": "40 * units.lb",
+        "friction_torque": "10.0 * units.lb_ft",
+        "moment_of_inertia": "0.22986844776863666 * 0.9",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "constants.pi / 2"
+      },
+      "journals": [
+        {
+          "angle_expr": "(0.0 / 5.0) * 360 * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "(2.0 / 5.0) * 360 * units.deg",
+          "angle_deg": 3600.0
+        },
+        {
+          "angle_expr": "(3.0 / 5.0) * 360 * units.deg",
+          "angle_deg": 5400.0
+        },
+        {
+          "angle_expr": "(4.0 / 5.0) * 360 * units.deg",
+          "angle_deg": 7200.0
+        },
+        {
+          "angle_expr": "(1.0 / 5.0) * 360 * units.deg",
+          "angle_deg": 1800.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "0",
+          "angle_deg": 0.0,
+          "cylinders": 5
+        }
+      ],
+      "bank_params": {
+        "bore": "81 * units.mm",
+        "deck_height": "220 * units.mm"
+      },
+      "piston": {
+        "mass": "400 * units.g",
+        "blowby": "0",
+        "compression_height": "32.8 * units.mm",
+        "wrist_pin_position": "0 * units.mm",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "300.0 * units.g",
+        "moment_of_inertia": "0.0015884918028487504",
+        "center_of_mass": "0.0",
+        "length": "(220 - 0.5 * 86.4 - 32.8) * units.mm"
+      },
+      "intake": {
+        "plenum_volume": "5.0 * units.L",
+        "plenum_cross_section_area": "10.0 * units.cm2",
+        "intake_flow_rate": "k_carb(500.0)",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.995"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(200.0)",
+        "primary_tube_length": "10.0 * units.inch",
+        "primary_flow_rate": "k_carb(100.0)",
+        "velocity_decay": "0.5",
+        "volume": "50.0 * units.L"
+      },
+      "exhaust_systems": [
+        {
+          "audio_volume": "1.0",
+          "impulse_response": "ir_lib.default_0"
+        },
+        {
+          "audio_volume": "0.8",
+          "impulse_response": "ir_lib.default_0"
+        }
+      ],
+      "head": {
+        "chamber_volume": "50 * units.cc",
+        "intake_camshaft": "camshaft.intake_cam",
+        "exhaust_camshaft": "camshaft.exhaust_cam"
+      },
+      "cam_lobe": {},
+      "fuel": {
+        "max_turbulence_effect": "4.0",
+        "burning_efficiency_randomness": "0.2",
+        "max_burning_efficiency": "0.85"
+      },
+      "ignition": {
+        "rev_limit": "7500 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "20 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "26 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "5000 * units.rpm",
+            "advance": "34 * units.deg"
+          },
+          {
+            "rpm": "6000 * units.rpm",
+            "advance": "38 * units.deg"
+          },
+          {
+            "rpm": "7000 * units.rpm",
+            "advance": "38 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 0,
+      "raw_engine_keys": [
+        "fuel",
+        "name",
+        "redline",
+        "starter_torque"
+      ]
+    },
+    {
+      "id": "assets__engines__bmw__M52B28",
+      "source": "assets/engines/bmw/M52B28.mr",
+      "skipped": false,
+      "identity": {
+        "name": "BMW M52B28",
+        "redline": "7000 * units.rpm",
+        "starter_torque": "150 * units.lb_ft",
+        "starter_speed": "500 * units.rpm",
+        "throttle_gamma": "2.0"
+      },
+      "labels": {
+        "cycle": "2 * 360 * units.deg",
+        "rot60": "60 * units.deg",
+        "rot90": "90 * units.deg",
+        "rot120": "120 * units.deg",
+        "rot180": "180 * units.deg",
+        "rot360": "360 * units.deg"
+      },
+      "layout": "inline-6",
+      "n_cylinders": 6,
+      "n_banks": 1,
+      "crank": {
+        "throw": "84 * units.mm / 2",
+        "flywheel_mass": "5.9 * units.kg",
+        "mass": "5 * units.kg",
+        "friction_torque": "10.0 * units.lb_ft",
+        "moment_of_inertia": "0.22986844776863666 * 0.9",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "120.0 * units.deg"
+      },
+      "journals": [
+        {
+          "angle_expr": "0.0",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "120*units.deg",
+          "angle_deg": 120.0
+        },
+        {
+          "angle_expr": "240*units.deg",
+          "angle_deg": 240.0
+        },
+        {
+          "angle_expr": "240*units.deg",
+          "angle_deg": 240.0
+        },
+        {
+          "angle_expr": "120*units.deg",
+          "angle_deg": 120.0
+        },
+        {
+          "angle_expr": "0*units.deg",
+          "angle_deg": 0.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "0 * units.deg",
+          "angle_deg": 0.0,
+          "cylinders": 6
+        }
+      ],
+      "bank_params": {
+        "bore": "84 * units.mm",
+        "deck_height": "(210.0 + 1) * units.mm"
+      },
+      "piston": {
+        "mass": "280 * units.g",
+        "compression_height": "31.82 * units.mm",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "300.0 * units.g",
+        "moment_of_inertia": "0.0015884918028487504",
+        "center_of_mass": "0.0",
+        "length": "135.0 * units.mm"
+      },
+      "intake": {
+        "carburetor_cfm": "500.0",
+        "idle_flow_rate_cfm": "0.1",
+        "idle_throttle_plate_position": "0.994"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(1000.0)",
+        "primary_tube_length": "20.0 * units.inch",
+        "primary_flow_rate": "k_carb(200.0)",
+        "velocity_decay": "1.0",
+        "volume": "50.0 * units.L"
+      },
+      "exhaust_systems": [
+        {
+          "audio_volume": "0.5",
+          "impulse_response": "ir_lib.default_0"
+        },
+        {
+          "audio_volume": "1.0",
+          "impulse_response": "ir_lib.default_0"
+        }
+      ],
+      "head": {},
+      "cam_lobe": {
+        "duration_at_50_thou": "210 * units.deg",
+        "gamma": "0.8",
+        "lift": "9.0 * units.mm",
+        "steps": "100"
+      },
+      "fuel": {
+        "max_turbulence_effect": "4.0"
+      },
+      "ignition": {
+        "rev_limit": "8000 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "angle * units.deg",
+            "advance": "lift * units.thou"
+          },
+          {
+            "rpm": "-angle * units.deg",
+            "advance": "lift * units.thou"
+          },
+          {
+            "rpm": "lift * units.mm",
+            "advance": "k_28inH2O(flow"
+          },
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "10 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "10 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "5000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "6000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "7000 * units.rpm",
+            "advance": "30 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 26,
+      "raw_engine_keys": [
+        "fuel",
+        "name",
+        "redline",
+        "starter_speed",
+        "starter_torque",
+        "throttle_gamma"
+      ]
+    },
+    {
+      "id": "assets__engines__chevrolet__chev_truck_454",
+      "source": "assets/engines/chevrolet/chev_truck_454.mr",
+      "skipped": false,
+      "identity": {
+        "name": "Chev. 454 V8",
+        "redline": "5500 * units.rpm",
+        "starter_torque": "200 * units.lb_ft",
+        "throttle_gamma": "1.5"
+      },
+      "labels": {
+        "distance": "5.0 * units.inch"
+      },
+      "layout": "v90-8",
+      "n_cylinders": 8,
+      "n_banks": 2,
+      "crank": {
+        "throw": "2.0 * units.inch",
+        "flywheel_mass": "29 * 2 * units.lb",
+        "mass": "75 * units.lb",
+        "friction_torque": "10.0 * units.lb_ft",
+        "moment_of_inertia": "0.22986844776863666 * 2",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "constants.pi / 4"
+      },
+      "journals": [
+        {
+          "angle_expr": "0.0",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "-constants.pi / 2",
+          "angle_deg": -90.0
+        },
+        {
+          "angle_expr": "-3.0 * constants.pi / 2",
+          "angle_deg": -90.0
+        },
+        {
+          "angle_expr": "constants.pi",
+          "angle_deg": 180.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "-45 * units.deg",
+          "angle_deg": -45.0,
+          "cylinders": 4
+        },
+        {
+          "id": "b1",
+          "angle_expr": "45.0 * units.deg",
+          "angle_deg": 45.0,
+          "cylinders": 4
+        }
+      ],
+      "bank_params": {
+        "bore": "4.25 * units.inch",
+        "deck_height": "9.8 * units.inch"
+      },
+      "piston": {
+        "mass": "880 * units.g",
+        "blowby": "0",
+        "compression_height": "1.640 * units.inch",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "785.0 * units.g",
+        "moment_of_inertia": "0.0015884918028487504",
+        "center_of_mass": "0.0",
+        "length": "6.135 * units.inch"
+      },
+      "intake": {
+        "carburetor_cfm": "650.0",
+        "idle_flow_rate_cfm": "0.007",
+        "idle_throttle_plate_position": "0.991"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(550.0)",
+        "primary_tube_length": "10.0 * units.inch",
+        "primary_flow_rate": "k_carb(100.0)",
+        "velocity_decay": "1.0",
+        "length": "100.0 * units.inch"
+      },
+      "exhaust_systems": [
+        {
+          "length": "(180 + 72.0) * units.inch",
+          "audio_volume": "5.5",
+          "impulse_response": "ir_lib.default_0"
+        },
+        {
+          "length": "180.0 * units.inch",
+          "audio_volume": "5.5",
+          "impulse_response": "ir_lib.default_0"
+        }
+      ],
+      "head": {},
+      "cam_lobe": {},
+      "fuel": {
+        "max_turbulence_effect": "3.0",
+        "burning_efficiency_randomness": "0.5",
+        "max_burning_efficiency": "0.85"
+      },
+      "ignition": {
+        "rev_limit": "7000 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "20 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "38 * units.deg"
+          },
+          {
+            "rpm": "5000 * units.rpm",
+            "advance": "38 * units.deg"
+          },
+          {
+            "rpm": "6000 * units.rpm",
+            "advance": "38 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 0,
+      "raw_engine_keys": [
+        "fuel",
+        "name",
+        "redline",
+        "starter_torque",
+        "throttle_gamma"
+      ]
+    },
+    {
+      "id": "assets__engines__chevrolet__engine_03_for_e1",
+      "source": "assets/engines/chevrolet/engine_03_for_e1.mr",
+      "skipped": false,
+      "identity": {
+        "name": "Chev. 454 V8",
+        "redline": "5500 * units.rpm",
+        "starter_torque": "200 * units.lb_ft",
+        "throttle_gamma": "1.5"
+      },
+      "labels": {},
+      "layout": "v90-8",
+      "n_cylinders": 8,
+      "n_banks": 2,
+      "crank": {
+        "throw": "2.0 * units.inch",
+        "flywheel_mass": "29 * 2 * units.lb",
+        "mass": "75 * units.lb",
+        "friction_torque": "10.0 * units.lb_ft",
+        "moment_of_inertia": "0.22986844776863666 * 2",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "constants.pi / 4"
+      },
+      "journals": [
+        {
+          "angle_expr": "0.0",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "-constants.pi / 2",
+          "angle_deg": -90.0
+        },
+        {
+          "angle_expr": "-3.0 * constants.pi / 2",
+          "angle_deg": -90.0
+        },
+        {
+          "angle_expr": "constants.pi",
+          "angle_deg": 180.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "-45 * units.deg",
+          "angle_deg": -45.0,
+          "cylinders": 4
+        },
+        {
+          "id": "b1",
+          "angle_expr": "45.0 * units.deg",
+          "angle_deg": 45.0,
+          "cylinders": 4
+        }
+      ],
+      "bank_params": {
+        "bore": "4.25 * units.inch",
+        "deck_height": "9.8 * units.inch"
+      },
+      "piston": {
+        "mass": "880 * units.g",
+        "blowby": "0",
+        "compression_height": "1.640 * units.inch",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "785.0 * units.g",
+        "moment_of_inertia": "0.0015884918028487504",
+        "center_of_mass": "0.0",
+        "length": "6.135 * units.inch"
+      },
+      "intake": {
+        "carburetor_cfm": "950.0",
+        "idle_flow_rate_cfm": "0.007",
+        "idle_throttle_plate_position": "0.995"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(550.0)",
+        "primary_tube_length": "10.0 * units.inch",
+        "primary_flow_rate": "k_carb(90.0)",
+        "velocity_decay": "1.0",
+        "volume": "50.0 * units.L"
+      },
+      "exhaust_systems": [
+        {
+          "audio_volume": "1.0",
+          "impulse_response": "ir_lib.default_0"
+        },
+        {
+          "audio_volume": "0.1",
+          "impulse_response": "ir_lib.default_0"
+        }
+      ],
+      "head": {},
+      "cam_lobe": {},
+      "fuel": {
+        "max_turbulence_effect": "3.0",
+        "burning_efficiency_randomness": "0.5",
+        "max_burning_efficiency": "0.85"
+      },
+      "ignition": {
+        "rev_limit": "7000 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "12 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "20 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "38 * units.deg"
+          },
+          {
+            "rpm": "5000 * units.rpm",
+            "advance": "38 * units.deg"
+          },
+          {
+            "rpm": "6000 * units.rpm",
+            "advance": "38 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 0,
+      "raw_engine_keys": [
+        "fuel",
+        "name",
+        "redline",
+        "starter_torque",
+        "throttle_gamma"
+      ]
+    },
+    {
+      "id": "assets__engines__kohler__kohler_ch750",
+      "source": "assets/engines/kohler/kohler_ch750.mr",
+      "skipped": false,
+      "identity": {
+        "name": "Kohler CH750",
+        "redline": "3600 * units.rpm",
+        "starter_torque": "50 * units.lb_ft",
+        "starter_speed": "500 * units.rpm"
+      },
+      "labels": {},
+      "layout": "v90-2",
+      "n_cylinders": 2,
+      "n_banks": 2,
+      "crank": {
+        "throw": "69 * units.mm / 2",
+        "flywheel_mass": "5 * units.lb",
+        "mass": "5 * units.lb",
+        "friction_torque": "10.0 * units.lb_ft",
+        "moment_of_inertia": "0.22986844776863666 * 0.5",
+        "position_x": "0.0",
+        "position_y": "0.0",
+        "tdc": "constants.pi / 4"
+      },
+      "journals": [
+        {
+          "angle_expr": "0.0",
+          "angle_deg": 0.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b0",
+          "angle_expr": "-45 * units.deg",
+          "angle_deg": -45.0,
+          "cylinders": 1
+        },
+        {
+          "id": "b1",
+          "angle_expr": "45.0 * units.deg",
+          "angle_deg": 45.0,
+          "cylinders": 1
+        }
+      ],
+      "bank_params": {
+        "bore": "83 * units.mm",
+        "deck_height": "(4.0 + 1) * units.inch + 69 * units.mm / 2"
+      },
+      "piston": {
+        "mass": "400 * units.g",
+        "compression_height": "1.0 * units.inch",
+        "wrist_pin_position": "0.0",
+        "displacement": "0.0"
+      },
+      "connecting_rod": {
+        "mass": "300.0 * units.g",
+        "moment_of_inertia": "0.0015884918028487504",
+        "center_of_mass": "0.0",
+        "length": "4.0 * units.inch"
+      },
+      "intake": {
+        "plenum_volume": "1.0 * units.L",
+        "plenum_cross_section_area": "10.0 * units.cm2",
+        "intake_flow_rate": "k_carb(50.0)",
+        "idle_flow_rate": "k_carb(0.0)",
+        "idle_throttle_plate_position": "0.96",
+        "throttle_gamma": "1.0"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(300.0)",
+        "primary_tube_length": "10.0 * units.inch",
+        "primary_flow_rate": "k_carb(200.0)",
+        "velocity_decay": "1.0",
+        "volume": "20.0 * units.L"
+      },
+      "exhaust_systems": [
+        {
+          "audio_volume": "1.0",
+          "impulse_response": "ir_lib.default_0"
+        }
+      ],
+      "head": {
+        "chamber_volume": "50 * units.cc",
+        "intake_camshaft": "camshaft.intake_cam_0",
+        "exhaust_camshaft": "camshaft.exhaust_cam_0"
+      },
+      "cam_lobe": {
+        "duration_at_50_thou": "160 * units.deg",
+        "gamma": "1.1",
+        "lift": "200 * units.thou",
+        "steps": "100"
+      },
+      "fuel": {},
+      "ignition": {
+        "rev_limit": "5000 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "50 * units.deg"
+          },
+          {
+            "rpm": "1000 * units.rpm",
+            "advance": "50 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "50 * units.deg"
+          },
+          {
+            "rpm": "3000 * units.rpm",
+            "advance": "50 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "50 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 0,
+      "raw_engine_keys": [
+        "name",
+        "redline",
+        "starter_speed",
+        "starter_torque"
+      ]
+    },
+    {
+      "id": "assets__engines__community__Priora",
+      "source": "assets/engines/community/Priora.MR",
+      "skipped": false,
+      "identity": {
+        "name": "Lada Priora (VAZ - 2170)",
+        "redline": "5600 * units.rpm",
+        "starter_torque": "55.8 * units.Nm",
+        "starter_speed": "350 * units.rpm",
+        "throttle_gamma": "1.9",
+        "hf_gain": "0.8",
+        "noise": "1.0",
+        "jitter": "1.4"
+      },
+      "labels": {
+        "cycle": "4 * 180 * units.deg",
+        "rot360": "360 * units.deg",
+        "rot": "2 * (360 / 4.0"
+      },
+      "layout": "inline-4",
+      "n_cylinders": 4,
+      "n_banks": 1,
+      "crank": {
+        "throw": "75.6 * units.mm / 2",
+        "flywheel_mass": "7.9 * units.kg",
+        "mass": "12.3 * units.kg",
+        "friction_torque": "10 * units.lb_ft",
+        "moment_of_inertia": "0.22986844776863666",
+        "position_x": "0",
+        "position_y": "0",
+        "tdc": "90 * units.deg"
+      },
+      "journals": [
+        {
+          "angle_expr": "0 * units.deg",
+          "angle_deg": 0.0
+        },
+        {
+          "angle_expr": "0.5 * 360 * units.deg",
+          "angle_deg": 180.0
+        },
+        {
+          "angle_expr": "0.5 * 360 * units.deg",
+          "angle_deg": 180.0
+        },
+        {
+          "angle_expr": "0 * units.deg",
+          "angle_deg": 0.0
+        }
+      ],
+      "banks": [
+        {
+          "id": "b38",
+          "angle_expr": "0 * units.deg",
+          "angle_deg": 0.0,
+          "cylinders": 4
+        }
+      ],
+      "bank_params": {},
+      "piston": {
+        "mass": "244 * units.g",
+        "compression_height": "26.7 * units.mm",
+        "wrist_pin_position": "0",
+        "displacement": "0"
+      },
+      "connecting_rod": {
+        "mass": "414 * units.g",
+        "moment_of_inertia": "0.0015884918028487504 * 0.9",
+        "center_of_mass": "0.0",
+        "length": "133.32 * units.mm"
+      },
+      "intake": {
+        "intake_flow_rate": "k_carb(90)",
+        "idle_flow_rate": "k_carb(0)",
+        "idle_throttle_plate_position": "0.99",
+        "throttle_gamma": "1"
+      },
+      "exhaust_params": {
+        "outlet_flow_rate": "k_carb(700)",
+        "primary_tube_length": "50.2 * units.inch",
+        "primary_flow_rate": "k_carb(150)",
+        "velocity_decay": "0.9",
+        "volume": "15 * units.L"
+      },
+      "exhaust_systems": [
+        {
+          "audio_volume": "2.025",
+          "impulse_response": "ir_lib.default_0"
+        }
+      ],
+      "head": {},
+      "cam_lobe": {
+        "duration_at_50_thou": "244 * units.deg",
+        "gamma": "1",
+        "lift": "393.701 * units.thou",
+        "steps": "100"
+      },
+      "fuel": {
+        "max_turbulence_effect": "4.0",
+        "burning_efficiency_randomness": "0.1",
+        "max_dilution_effect": "10.0",
+        "max_burning_efficiency": "1.5"
+      },
+      "ignition": {
+        "rev_limit": "5600 * units.rpm",
+        "timing_curve": [
+          {
+            "rpm": "angle * units.deg",
+            "advance": "lift * units.thou"
+          },
+          {
+            "rpm": "-angle * units.deg",
+            "advance": "lift * units.thou"
+          },
+          {
+            "rpm": "lift * units.mm",
+            "advance": "k_28inH2O(flow"
+          },
+          {
+            "rpm": "0000 * units.rpm",
+            "advance": "1 * units.deg"
+          },
+          {
+            "rpm": "0220 * units.rpm",
+            "advance": "2 * units.deg"
+          },
+          {
+            "rpm": "0270 * units.rpm",
+            "advance": "4 * units.deg"
+          },
+          {
+            "rpm": "0270 * units.rpm",
+            "advance": "5 * units.deg"
+          },
+          {
+            "rpm": "0320 * units.rpm",
+            "advance": "6 * units.deg"
+          },
+          {
+            "rpm": "0340 * units.rpm",
+            "advance": "7 * units.deg"
+          },
+          {
+            "rpm": "0360 * units.rpm",
+            "advance": "8 * units.deg"
+          },
+          {
+            "rpm": "0370 * units.rpm",
+            "advance": "9 * units.deg"
+          },
+          {
+            "rpm": "0375 * units.rpm",
+            "advance": "13 * units.deg"
+          },
+          {
+            "rpm": "0390 * units.rpm",
+            "advance": "16 * units.deg"
+          },
+          {
+            "rpm": "0400 * units.rpm",
+            "advance": "19 * units.deg"
+          },
+          {
+            "rpm": "0800 * units.rpm",
+            "advance": "21 * units.deg"
+          },
+          {
+            "rpm": "1200 * units.rpm",
+            "advance": "22 * units.deg"
+          },
+          {
+            "rpm": "1600 * units.rpm",
+            "advance": "23 * units.deg"
+          },
+          {
+            "rpm": "2000 * units.rpm",
+            "advance": "24 * units.deg"
+          },
+          {
+            "rpm": "2300 * units.rpm",
+            "advance": "25 * units.deg"
+          },
+          {
+            "rpm": "2400 * units.rpm",
+            "advance": "26 * units.deg"
+          },
+          {
+            "rpm": "2800 * units.rpm",
+            "advance": "27 * units.deg"
+          },
+          {
+            "rpm": "3200 * units.rpm",
+            "advance": "28 * units.deg"
+          },
+          {
+            "rpm": "3600 * units.rpm",
+            "advance": "29 * units.deg"
+          },
+          {
+            "rpm": "4000 * units.rpm",
+            "advance": "30 * units.deg"
+          },
+          {
+            "rpm": "4400 * units.rpm",
+            "advance": "31 * units.deg"
+          },
+          {
+            "rpm": "4800 * units.rpm",
+            "advance": "32 * units.deg"
+          },
+          {
+            "rpm": "5200 * units.rpm",
+            "advance": "33 * units.deg"
+          },
+          {
+            "rpm": "5400 * units.rpm",
+            "advance": "34 * units.deg"
+          }
+        ]
+      },
+      "flow_samples_count": 26,
+      "raw_engine_keys": [
+        "fuel",
+        "hf_gain",
+        "jitter",
+        "name",
+        "noise",
+        "redline",
+        "starter_speed",
+        "starter_torque",
+        "throttle_gamma"
+      ]
+    }
+  ]
+}

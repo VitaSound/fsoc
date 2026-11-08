@@ -1,0 +1,201 @@
+:root {
+  /* engine-sim default.mr theme */
+  --bg: #0E1012;
+  --panel: #14171a;
+  --line: #2a2e33;
+  --text: #FFFFFF;
+  --muted: #8a9098;
+  --accent: #F394BE;
+  --warn: #F4802A;
+  --ok: #BDD869;
+  --blue: #77CEE0;
+  --mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, monospace;
+  --sans: "Segoe UI", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  font-family: var(--sans);
+  background:
+    radial-gradient(900px 420px at 10% -10%, #1a2740 0%, transparent 55%),
+    radial-gradient(700px 380px at 100% 0%, #1c1830 0%, transparent 50%),
+    var(--bg);
+  color: var(--text);
+}
+
+header, footer {
+  padding: 1rem 1.25rem 0.5rem;
+}
+header h1 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+}
+header h1 span { color: var(--accent); font-weight: 500; }
+.sub, .meta, .source, footer p {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.sub code {
+  font-family: var(--mono);
+  color: var(--warn);
+  font-size: 0.8rem;
+}
+
+main {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) 1fr;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem 1.5rem;
+  min-height: calc(100vh - 7rem);
+}
+
+.list-panel, .detail {
+  background: color-mix(in srgb, var(--panel) 92%, black);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.list-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem;
+  max-height: calc(100vh - 8rem);
+}
+
+.search {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+.search input {
+  font: inherit;
+  text-transform: none;
+  letter-spacing: 0;
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: #0c1016;
+  color: var(--text);
+}
+.search input:focus {
+  outline: 1px solid var(--accent);
+  border-color: var(--accent);
+}
+
+.engine-list {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  overflow: auto;
+  flex: 1;
+}
+.engine-list li button {
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  padding: 0.55rem 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+}
+.engine-list li button:hover { background: #1c2533; }
+.engine-list li button.active {
+  background: #1e3350;
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+.engine-list .name { display: block; font-size: 0.92rem; }
+.engine-list .tag {
+  display: block;
+  margin-top: 0.15rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+.engine-list .skip .name { color: var(--muted); text-decoration: line-through; }
+
+.detail {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.stage-wrap {
+  padding: 0.75rem 0.75rem 0.25rem;
+  border-bottom: 1px solid var(--line);
+}
+#stage {
+  width: 100%;
+  height: auto;
+  max-height: 46vh;
+  display: block;
+  background: #0E1012;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+.source {
+  padding: 0.4rem 0.15rem 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  word-break: break-all;
+}
+
+.params {
+  padding: 0.75rem 1rem 1.25rem;
+  overflow: auto;
+  max-height: calc(54vh);
+}
+.params .placeholder { color: var(--muted); }
+.params h2 {
+  margin: 1rem 0 0.4rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  font-weight: 600;
+}
+.params h2:first-child { margin-top: 0; }
+.params table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+}
+.params th, .params td {
+  text-align: left;
+  padding: 0.28rem 0.4rem;
+  border-bottom: 1px solid #1c2736;
+  vertical-align: top;
+}
+.params th {
+  width: 32%;
+  color: var(--muted);
+  font-weight: 500;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+}
+.params td {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  word-break: break-word;
+}
+.params .empty { color: #5a6a80; font-style: italic; }
+
+footer { padding-bottom: 1.5rem; }
+
+@media (max-width: 860px) {
+  main {
+    grid-template-columns: 1fr;
+  }
+  .list-panel { max-height: 40vh; }
+  .params { max-height: none; }
+}
